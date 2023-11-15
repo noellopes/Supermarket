@@ -8,7 +8,7 @@ using Supermarket.Data;
 using System;
 
 namespace Supermarket.Data.Migrations {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(FolgaDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
     partial class CreateIdentitySchema {
         protected override void BuildTargetModel(ModelBuilder modelBuilder) {
