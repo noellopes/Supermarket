@@ -11,8 +11,5 @@ namespace Supermarket.Models {
         public Task? Task { get; set; }
 
         public string? Observations { get; set; }
-
-        public ICollection<Student>? Students { get; set; }
-        public ICollection<Task>? Tasks { get; set; }
     }
 }
