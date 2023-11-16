@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations
+namespace Supermarket.Migrations
 {
     /// <inheritdoc />
-    public partial class Folgas : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,17 +14,18 @@ namespace Supermarket.Data.Migrations
                 name: "Folga",
                 columns: table => new
                 {
-                    folgaId = table.Column<int>(type: "int", nullable: false)
+                    FolgaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    dataPedido = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    dataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    dataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    motivo = table.Column<string>(type: "nvarchar(max)", nullable: false)
+    
+                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Motivo = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Folga", x => x.folgaId);
+                    table.PrimaryKey("PK_Folga", x => x.FolgaId);
                 });
+
         }
 
         /// <inheritdoc />

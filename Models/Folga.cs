@@ -6,15 +6,20 @@ namespace Supermarket.Models
     public class Folga
     {
         [Key]
-        public int folgaId { get; set; }
-        [DataType(DataType.Date)]
+        public int FolgaId { get; set; }
         
-        public DateTime dataPedido { get; set; }
+
+        
+        
+        [Required]
+
         [DataType(DataType.Date)]
-        public DateTime dataInicio { get; set; }
+        public DateTime DataInicio { get; set; }
+        
+        
         [DataType(DataType.Date)]
-        public DateTime dataFim { get; set; }
-        public string motivo { get; set; }
+        public DateTime DataFim { get; set; }
+        public string Motivo { get; set; }="";
         
     }
 }

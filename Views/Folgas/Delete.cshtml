@@ -11,34 +11,30 @@
     <h4>Folga</h4>
     <hr />
     <dl class="row">
+        
+        <
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.dataPedido)
+            @Html.DisplayNameFor(model => model.DataInicio)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.dataPedido)
+            @Html.DisplayFor(model => model.DataInicio)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.dataInicio)
+            @Html.DisplayNameFor(model => model.DataFim)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.dataInicio)
+            @Html.DisplayFor(model => model.DataFim)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.dataFim)
+            @Html.DisplayNameFor(model => model.Motivo)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.dataFim)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.motivo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.motivo)
+            @Html.DisplayFor(model => model.Motivo)
         </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="folgaId" />
+        <input type="hidden" asp-for="FolgaId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

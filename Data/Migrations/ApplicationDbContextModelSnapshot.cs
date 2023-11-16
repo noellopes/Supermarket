@@ -226,26 +226,23 @@ namespace Supermarket.Data.Migrations
 
             modelBuilder.Entity("Supermarket.Models.Folga", b =>
                 {
-                    b.Property<int>("folgaId")
+                    b.Property<int>("FolgaId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("folgaId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FolgaId"));
 
-                    b.Property<DateTime>("dataFim")
+                    b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("dataInicio")
+                    b.Property<DateTime>("DataInicio")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("dataPedido")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("motivo")
+                    b.Property<string>("Motivo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("folgaId");
+                    b.HasKey("FolgaId");
 
                     b.ToTable("Folga");
                 });

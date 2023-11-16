@@ -36,7 +36,7 @@ namespace Supermarket.Controllers
             }
 
             var folga = await _context.Folga
-                .FirstOrDefaultAsync(m => m.folgaId == id);
+                .FirstOrDefaultAsync(m => m.FolgaId == id);
             if (folga == null)
             {
                 return NotFound();
@@ -56,7 +56,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("folgaId,dataPedido,dataInicio,dataFim,motivo")] Folga folga)
+        public async Task<IActionResult> Create([Bind("FolgaId,DataInicio,DataFim,Motivo")] Folga folga)
         {
             if (ModelState.IsValid)
             {
@@ -88,9 +88,9 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("folgaId,dataPedido,dataInicio,dataFim,motivo")] Folga folga)
+        public async Task<IActionResult> Edit(int id, [Bind("FolgaId,DataInicio,DataFim,Motivo")] Folga folga)
         {
-            if (id != folga.folgaId)
+            if (id != folga.FolgaId)
             {
                 return NotFound();
             }
@@ -104,7 +104,7 @@ namespace Supermarket.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FolgaExists(folga.folgaId))
+                    if (!FolgaExists(folga.FolgaId))
                     {
                         return NotFound();
                     }
@@ -127,7 +127,7 @@ namespace Supermarket.Controllers
             }
 
             var folga = await _context.Folga
-                .FirstOrDefaultAsync(m => m.folgaId == id);
+                .FirstOrDefaultAsync(m => m.FolgaId == id);
             if (folga == null)
             {
                 return NotFound();
@@ -157,7 +157,7 @@ namespace Supermarket.Controllers
 
         private bool FolgaExists(int id)
         {
-          return (_context.Folga?.Any(e => e.folgaId == id)).GetValueOrDefault();
+          return (_context.Folga?.Any(e => e.FolgaId == id)).GetValueOrDefault();
         }
     }
 }
