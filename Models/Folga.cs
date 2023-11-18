@@ -7,10 +7,19 @@ namespace Supermarket.Models
     {
         [Key]
         public int FolgaId { get; set; }
-        
 
-        
-        
+        [Required]
+        public string Gestor { get; set; } = "";
+        public string Status { get; set; } = "";
+
+
+        [Required]
+
+        [DataType(DataType.Date)]
+        public DateTime DataPedido { get; set; }
+
+
+
         [Required]
 
         [DataType(DataType.Date)]
@@ -21,5 +30,11 @@ namespace Supermarket.Models
         public DateTime DataFim { get; set; }
         public string Motivo { get; set; }="";
         
+
+        public  Folga()
+        {
+            DataPedido = DateTime.Now;
+
+        }
     }
 }

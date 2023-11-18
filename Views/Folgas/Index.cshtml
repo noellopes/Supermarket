@@ -4,23 +4,35 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Folgas</h1>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert_success" role="alert">@TempData["SuccessMessage"]</div>
+}
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Criar novo pedido de folga</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            
             <th>
-                @Html.DisplayNameFor(model => model.DataInicio)
+                Gestor
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataFim)
+                Status
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Motivo)
+                Data Pedido
+            </th>
+            <th>
+                Início
+            </th>
+            <th>
+                Fim
+            </th>
+            <th>
+                Motivo
             </th>
             <th></th>
         </tr>
@@ -28,7 +40,15 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            
+            <td>
+                @Html.DisplayFor(modelItem => item.Gestor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataPedido)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DataInicio)
             </td>

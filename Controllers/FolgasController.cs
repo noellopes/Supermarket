@@ -56,12 +56,14 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FolgaId,DataInicio,DataFim,Motivo")] Folga folga)
+        public async Task<IActionResult> Create([Bind("FolgaId,Gestor,Status,DataPedido,DataInicio,DataFim,Motivo")] Folga folga)
         {
             if (ModelState.IsValid)
             {
+                folga.Status = "Pendente";
                 _context.Add(folga);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "A sua folga foi adicionada com sucesso. Brevemente iremos dar resposta ao seu pedido";
                 return RedirectToAction(nameof(Index));
             }
             return View(folga);
@@ -88,7 +90,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FolgaId,DataInicio,DataFim,Motivo")] Folga folga)
+        public async Task<IActionResult> Edit(int id, [Bind("FolgaId,Gestor,Status,DataPedido,DataInicio,DataFim,Motivo")] Folga folga)
         {
             if (id != folga.FolgaId)
             {
@@ -99,8 +101,10 @@ namespace Supermarket.Controllers
             {
                 try
                 {
+                    folga.Status = "Pendente";
                     _context.Update(folga);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "A sua folga foi adicionada com sucesso. Brevemente iremos dar resposta ao seu pedido";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -152,6 +156,8 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "A sua folga foi eliminada com sucesso.";
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -159,5 +165,33 @@ namespace Supermarket.Controllers
         {
           return (_context.Folga?.Any(e => e.FolgaId == id)).GetValueOrDefault();
         }
+
+        public IActionResult FolgasPendentes()
+        {
+            var FolgasPendentes = _context.Folga.Where(f => f.Status == "Pendente").ToList();
+            return View(FolgasPendentes);
+        }
+        //Método para aprovar ou rejeitar folga
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult>AprovarRejeitarFolga(int folgaId, bool aprovar)
+        {
+            var folga = await _context.Folga.FindAsync(folgaId);
+
+            if (folga == null)
+            {
+                return NotFound();
+            }
+            folga.Status = aprovar ? "Aprovada" : "Rejeitada";
+
+                await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(FolgasPendentes));
+        }
+        
+            
+
+        }
     }
-}
+

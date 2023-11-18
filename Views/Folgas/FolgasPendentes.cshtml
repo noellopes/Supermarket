@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewData["Title"] = "FolgasPendentes";
+}
+
+
+
+<h1>Folgas Pendentes de Aprovação</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Gestor</th>
+            <th>DataPedido</th>>
+            <th>DataInicio</th>
+            <th>Motivo</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var Folga in Model)
+        {
+
+
+            <tr>
+                <td>@Folga.Gestor</td>
+                <td>@Folga.DataPedido.ToShortDateString()</td>
+                <td>@Folga.DataInicio.ToShortDateString()</td>
+                <td>@Folga.Motivo</td>
+                <td>
+                    <form asp-action="AprovarRejeitarFolga" method="post">
+                        <input type="hidden" name="folgaId" value="@Folga.FolgaId" />
+                        <button type="submit" name="aprovar" value="true">Aprovar</button>
+                        <button type="submit" name="aprovar" value="false">Rejeitar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+        }
+
+
