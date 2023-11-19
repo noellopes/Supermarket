@@ -9,11 +9,31 @@
 <table>
     <thead>
         <tr>
-            <th>Gestor</th>
-            <th>DataPedido</th>>
-            <th>DataInicio</th>
+            
+            <th>Pedido</th>>
+            <th></th>
+            <th></th>
+            <th>Início</th>
+            <th></th>
+            <th></th>
+            <th> Fim</th>
+            <th></th>
+            <th></th>
             <th>Motivo</th>
-            <th>Ação</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            
+            
+            <th>Gestor</th>
+            
+            
+            
+            
+            
+            
         </tr>
     </thead>
 
@@ -23,13 +43,26 @@
 
 
             <tr>
-                <td>@Folga.Gestor</td>
+                
                 <td>@Folga.DataPedido.ToShortDateString()</td>
+                <td></td>
+                <td></td>
                 <td>@Folga.DataInicio.ToShortDateString()</td>
+                <td></td>
+                <td></td>
+                <td>@Folga.DataFim.ToShortDateString()</td>
+                <td></td>
+                <td></td>
                 <td>@Folga.Motivo</td>
+                <td></td>
+                <td></td>
+                <td>@Folga.Gestor</td>
+                <td></td>
+                <td></td>
                 <td>
                     <form asp-action="AprovarRejeitarFolga" method="post">
                         <input type="hidden" name="folgaId" value="@Folga.FolgaId" />
+                        <input type="text" name="Gestor" required />
                         <button type="submit" name="aprovar" value="true">Aprovar</button>
                         <button type="submit" name="aprovar" value="false">Rejeitar</button>
                     </form>

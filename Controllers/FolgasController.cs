@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -60,6 +61,7 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
+                folga.DataPedido = DateTime.Now;
                 folga.Status = "Pendente";
                 _context.Add(folga);
                 await _context.SaveChangesAsync();
@@ -101,6 +103,7 @@ namespace Supermarket.Controllers
             {
                 try
                 {
+                    folga.DataPedido = DateTime.Now;
                     folga.Status = "Pendente";
                     _context.Update(folga);
                     await _context.SaveChangesAsync();
@@ -175,7 +178,7 @@ namespace Supermarket.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult>AprovarRejeitarFolga(int folgaId, bool aprovar)
+        public async Task<IActionResult>AprovarRejeitarFolga(int folgaId, bool aprovar, string gestor)
         {
             var folga = await _context.Folga.FindAsync(folgaId);
 
@@ -183,6 +186,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            folga.Gestor = gestor;
             folga.Status = aprovar ? "Aprovada" : "Rejeitada";
 
                 await _context.SaveChangesAsync();
