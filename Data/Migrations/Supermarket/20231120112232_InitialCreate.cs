@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Supermarket.Migrations
+namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +17,9 @@ namespace Supermarket.Migrations
                 {
                     FolgaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-    
+                    Gestor = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataPedido = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Motivo = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -25,7 +28,6 @@ namespace Supermarket.Migrations
                 {
                     table.PrimaryKey("PK_Folga", x => x.FolgaId);
                 });
-
         }
 
         /// <inheritdoc />

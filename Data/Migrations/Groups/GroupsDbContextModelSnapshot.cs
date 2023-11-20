@@ -8,16 +8,16 @@ using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Migrations
+namespace Supermarket.Data.Migrations.Groups
 {
-    [DbContext(typeof(GroupContext))]
-    partial class GroupContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(GroupsDbContext))]
+    partial class GroupsDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.12")
+                .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);

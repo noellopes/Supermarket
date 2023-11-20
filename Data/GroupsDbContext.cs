@@ -7,9 +7,9 @@ using Supermarket.Models;
 
 namespace Supermarket.Data
 {
-    public class GroupContext : DbContext
+    public class GroupsDbContext : DbContext
     {
-        public GroupContext (DbContextOptions<GroupContext> options)
+        public GroupsDbContext (DbContextOptions<GroupsDbContext> options)
             : base(options)
         {
         }

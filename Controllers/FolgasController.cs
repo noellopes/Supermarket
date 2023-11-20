@@ -13,9 +13,9 @@ namespace Supermarket.Controllers
 {
     public class FolgasController : Controller
     {
-        private readonly FolgaDbContext _context;
+        private readonly SupermarketDbContext _context;
 
-        public FolgasController(FolgaDbContext context)
+        public FolgasController(SupermarketDbContext context)
         {
             _context = context;
         }
@@ -25,7 +25,7 @@ namespace Supermarket.Controllers
         {
               return _context.Folga != null ? 
                           View(await _context.Folga.ToListAsync()) :
-                          Problem("Entity set 'FolgaDbContext.Folga'  is null.");
+                          Problem("Entity set 'SupermarketDbContext.Folga'  is null.");
         }
 
         // GET: Folgas/Details/5
@@ -150,7 +150,7 @@ namespace Supermarket.Controllers
         {
             if (_context.Folga == null)
             {
-                return Problem("Entity set 'FolgaDbContext.Folga'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.Folga'  is null.");
             }
             var folga = await _context.Folga.FindAsync(id);
             if (folga != null)
@@ -189,13 +189,10 @@ namespace Supermarket.Controllers
             folga.Gestor = gestor;
             folga.Status = aprovar ? "Aprovada" : "Rejeitada";
 
-                await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(FolgasPendentes));
         }
-        
-            
 
-        }
     }
-
+}

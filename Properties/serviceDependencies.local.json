@@ -6,7 +6,11 @@
     },
     "mssql2": {
       "type": "mssql.local",
-      "connectionId": "ConnectionStrings:GroupContext"
+      "connectionId": "ConnectionStrings:GroupConnection"
+    },
+    "mssql3": {
+      "type": "mssql.local",
+      "connectionId": "ConnectionStrings:SupermarketConnection"
     }
   }
 }

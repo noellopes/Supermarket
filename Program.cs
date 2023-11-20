@@ -1,20 +1,23 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<GroupContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("GroupContext") ?? throw new InvalidOperationException("Connection string 'GroupContext' not found.")));
+builder.Services.AddDbContext<GroupsDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("GroupsConnection") ?? throw new InvalidOperationException("Connection string 'GroupsConnection' not found.")));
+
+builder.Services.AddDbContext<SupermarketDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SupermarketDbContext") ?? throw new InvalidOperationException("Connection string 'SupermarketDbContext' not found.")));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<FolgaDbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<FolgaDbContext>();
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

@@ -9,18 +9,18 @@ using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Migrations
+namespace Supermarket.Data.Migrations.Groups
 {
-    [DbContext(typeof(GroupContext))]
-    [Migration("20231116012522_Initial")]
-    partial class Initial
+    [DbContext(typeof(GroupsDbContext))]
+    [Migration("20231120111430_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.12")
+                .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
