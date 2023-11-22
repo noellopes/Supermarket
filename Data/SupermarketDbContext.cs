@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Supermarket.Models;
 
 namespace Supermarket.Data
@@ -14,6 +15,15 @@ namespace Supermarket.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
+        }
+
         public DbSet<Supermarket.Models.Folga> Folga { get; set; } = default!;
+
+        public DbSet<EmployeeEvaluation> avaliacaoFuncionarios { get; set; } = default!;
     }
 }

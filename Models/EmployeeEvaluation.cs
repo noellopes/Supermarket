@@ -1,12 +1,12 @@
 ﻿namespace Supermarket.Models
 {
-    public class AvaliacaoFuncionario
+    public class EmployeeEvaluation
     {
-        public int AvaliacaoFuncId { get; set; }
+        public int EmployeeEvaluationId { get; set; }
         
         public string? Description { get; set; }
         public int GradeNumber { get; set; }
 
-        public int FuncionarioId { get; set;}
+        //public int FuncionarioId { get; set;}
     }
 }
