@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models;
