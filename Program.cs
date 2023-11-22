@@ -8,7 +8,7 @@ builder.Services.AddDbContext<GroupsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GroupsConnection") ?? throw new InvalidOperationException("Connection string 'GroupsConnection' not found.")));
 
 builder.Services.AddDbContext<SupermarketDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SupermarketDbContext") ?? throw new InvalidOperationException("Connection string 'SupermarketDbContext' not found.")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SupermarketConnection") ?? throw new InvalidOperationException("Connection string 'SupermarketDbContext' not found.")));
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
