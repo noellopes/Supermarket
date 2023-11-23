@@ -15,5 +15,6 @@ namespace Supermarket.Data
         }
 
         public DbSet<Supermarket.Models.Folga> Folga { get; set; } = default!;
+
     }
 }
