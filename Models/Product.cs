@@ -30,6 +30,12 @@ namespace Supermarket.Models
 
         public bool Status { get; set; }
 
+        public ICollection<Shelft_ProductExhibition>? Shelf { get; set; }
+
+        public ICollection<WarehouseSection_Product>? WarehouseSection { get; set; }
+
+
+
 
     }
 }
