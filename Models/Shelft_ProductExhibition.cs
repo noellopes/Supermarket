@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models
 {
+    [PrimaryKey(nameof(ProductId), nameof(ShelfId))]
     public class Shelft_ProductExhibition
     {
         public int ProductId { get; set; }

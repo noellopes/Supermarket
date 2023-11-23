@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Runtime.ConstrainedExecution;
+using Microsoft.EntityFrameworkCore;
 
 namespace Supermarket.Models
 {
+    [PrimaryKey(nameof(ProductId), nameof(WarehouseSectionId))]
     public class WarehouseSection_Product
     {
         public int ProductId { get; set; }
