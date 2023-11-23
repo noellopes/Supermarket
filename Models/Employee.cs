@@ -54,7 +54,7 @@ namespace Supermarket.Models
         public required DateTime Employee_Time_Bank { get; set; }
 
         //Ligação de 1 para 1 com Meal_Card
-        
+        [Required]
         public Meal_Card Meal_Card { get; set; }
 
         //Ligação de 1 para 1 com Horario de atendimento (Schedule)
