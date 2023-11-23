@@ -92,7 +92,5 @@ namespace Supermarket.Models
 
 
 
-        //public ICollection<Book>? Books { get; set; }
-
     }
 }
