@@ -54,10 +54,26 @@ namespace Supermarket.Models
         public required DateTime Employee_Time_Bank { get; set; }
 
         //Ligação de 1 para 1 com Meal_Card
+        
         public Meal_Card Meal_Card { get; set; }
 
-        //Buscar a coleção das folgas 
+        //Ligação de 1 para 1 com Horario de atendimento (Schedule)
+        //public Schedule Schedule { get; set; }
+
+
+
+        //Buscar a coleção das folgas (1 para muitos)
         //public ICollection<Day_Off>? Days_Off { get; set;}
+
+        //Buscar a coleção das Escalas (1 para muitos)
+        //public ICollection<Scales>? Scales { get; set;}
+
+
+
+        //Reservas 
+
+        //Departamento_Funcionarios
+
 
 
         //public ICollection<Book>? Books { get; set; }
