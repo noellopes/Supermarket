@@ -8,7 +8,15 @@ namespace Supermarket.Models
         public int Card_Id { get; set; }
 
         [Required]
-        private int Balance { get; set; }
+        public int Balance { get; set; }
+
+        // Chave estrangeira para o funcionario
+        public int EmployeeId { get; set; }
+
+        // Propriedade de navegação para o funcionario associado a este cartão
+        public Employee Employee { get; set; }
+
+        public ICollection<Card_Movement> Movements { get; set; }
 
 
     }
