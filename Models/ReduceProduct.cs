@@ -16,9 +16,10 @@ namespace Supermarket.Models
 
         public int Quantity { get; set;}
 
-        public int EmployeeId { get; set; }
+        //Error when creating scaffolding of ReduceProduct 
+        //public int EmployeeId { get; set; }
 
-        public Employee? Employee { get; set; }
+        //public Employee? Employee { get; set; }
 
         public int ProductId { get; set; }
 

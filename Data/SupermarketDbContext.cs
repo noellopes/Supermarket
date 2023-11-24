@@ -28,5 +28,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Category> Category { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.ReduceProduct> ReduceProduct { get; set; } = default!;
+
     }
 }
