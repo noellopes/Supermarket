@@ -18,5 +18,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Hallway> Hallway { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Shelf> Shelf { get; set; } = default!;
+
     }
 }
