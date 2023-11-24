@@ -24,5 +24,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Shelft_ProductExhibition> Shelft_ProductExhibition { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Warehouse> Warehouse { get; set; } = default!;
+
     }
 }
