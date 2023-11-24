@@ -26,5 +26,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Brand> Brand { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Category> Category { get; set; } = default!;
+
     }
 }
