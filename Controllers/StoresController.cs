@@ -12,9 +12,9 @@ namespace Supermarket.Controllers
 {
     public class StoresController : Controller
     {
-        private readonly GroupsDbContext _context;
+        private readonly SupermarketDbContext _context;
 
-        public StoresController(GroupsDbContext context)
+        public StoresController(SupermarketDbContext context)
         {
             _context = context;
         }
@@ -24,7 +24,7 @@ namespace Supermarket.Controllers
         {
               return _context.Store != null ? 
                           View(await _context.Store.ToListAsync()) :
-                          Problem("Entity set 'GroupsDbContext.Store'  is null.");
+                          Problem("Entity set 'SupermarketDbContext.Store'  is null.");
         }
 
         // GET: Stores/Details/5
@@ -143,7 +143,7 @@ namespace Supermarket.Controllers
         {
             if (_context.Store == null)
             {
-                return Problem("Entity set 'GroupsDbContext.Store'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.Store'  is null.");
             }
             var store = await _context.Store.FindAsync(id);
             if (store != null)
