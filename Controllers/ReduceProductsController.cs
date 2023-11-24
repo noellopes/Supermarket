@@ -133,7 +133,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: ReduceProducts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        /*public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.ReduceProduct == null)
             {
@@ -152,7 +152,7 @@ namespace Supermarket.Controllers
 
             return View(reduceProduct);
         }
-
+            
         // POST: ReduceProducts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -170,7 +170,7 @@ namespace Supermarket.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
+        }*/
 
         private bool ReduceProductExists(int id)
         {
