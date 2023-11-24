@@ -26,5 +26,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Warehouse> Warehouse { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.WarehouseSection> WarehouseSection { get; set; } = default!;
+
     }
 }
