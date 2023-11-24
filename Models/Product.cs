@@ -19,7 +19,7 @@ namespace Supermarket.Models
         public required string Name { get; set; }
 
         [Required]
-        [StringLength(30, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 3)]
         public required string Description { get; set; }
 
         public int TotalQuantity { get; set; }
@@ -28,7 +28,9 @@ namespace Supermarket.Models
 
         public double UnitPrice { get; set; }
 
-        public bool Status { get; set; }
+        [Required]
+        [StringLength(15, MinimumLength = 3)]
+        public string Status { get; set; } = "Unavailable";
 
         public ICollection<Shelft_ProductExhibition>? Shelf { get; set; }
 
