@@ -1,7 +1,15 @@
 ﻿@model Supermarket.Models.Product
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Products Details";
+}
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Success</h4>
+        <p>@ViewBag.Message</p>
+    </div>
 }
 
 <h1>Details</h1>

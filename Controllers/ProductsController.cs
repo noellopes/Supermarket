@@ -63,9 +63,20 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool ProductExists = await _context.Product.AnyAsync(
+                b => b.Name == product.Name && b.Description == product.Description);
+
+                if (ProductExists)
+                {
+                    ModelState.AddModelError("", "Another Product with the same Name and Description already exists.");
+                }
+                else
+                {
+                    _context.Add(product);
+                    await _context.SaveChangesAsync();
+                    ViewBag.Message = "Product successfully created.";
+                    return View("Details", product);
+                }
             }
             ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "BrandId", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Name", product.CategoryId);
@@ -106,8 +117,38 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    var existingProduct = await _context.Product.FindAsync(id);
+
+                    if (existingProduct == null)
+                    {
+                        return NotFound();
+                    }
+
+                    if (existingProduct.Name != product.Name || existingProduct.Description != product.Description)
+                    {
+                        bool productWithSameNameAndDescriptionExists = await _context.Product
+                            .AnyAsync(p => p.ProductId != id && p.Name == product.Name && p.Description == product.Description);
+
+                        if (productWithSameNameAndDescriptionExists)
+                        {
+                            ModelState.AddModelError("", "Another product with the same Name and Description already exists.");
+                            ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "BrandId", "Name", product.BrandId);
+                            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Name", product.CategoryId);
+                            return View(product);
+                        }
+                    }
+                    existingProduct.CategoryId = product.CategoryId;
+                    existingProduct.BrandId = product.BrandId;
+                    existingProduct.TotalQuantity = product.TotalQuantity;
+                    existingProduct.MinimumQuantity = product.MinimumQuantity;
+                    existingProduct.UnitPrice = product.UnitPrice;
+                    existingProduct.Status = product.Status;
+
+                    _context.Update(existingProduct);
                     await _context.SaveChangesAsync();
+
+                    ViewBag.Message = "Product successfully edited.";
+                    return View("Details", existingProduct);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -120,7 +161,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
             }
             ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "BrandId", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Name", product.CategoryId);
