@@ -60,9 +60,20 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(store);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool StoreExists = await _context.Store.AnyAsync(
+                b => b.Name == store.Name && b.Adress == store.Adress);
+
+                if (StoreExists)
+                {
+                    ModelState.AddModelError("", "Another Store with the same Name and Adress already exists.");
+                }
+                else
+                {
+                    _context.Add(store);
+                    await _context.SaveChangesAsync();
+                    ViewBag.Message = "Store successfully created.";
+                    return View("Details", store);
+                }
             }
             return View(store);
         }
@@ -99,8 +110,21 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(store);
-                    await _context.SaveChangesAsync();
+                    bool StoreExists = await _context.Store.AnyAsync(
+                    b => b.Name == store.Name && b.Adress == store.Adress);
+
+                    if (StoreExists)
+                    {
+                     ModelState.AddModelError("", "Another Store with the same Name and Adress already exists.");
+                    }
+                    else
+                    {
+                        _context.Update(store);
+                        await _context.SaveChangesAsync();
+                        ViewBag.Message = "Store successfully edited.";
+                        return View("Details", store);
+                    }
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -113,7 +137,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+               // return RedirectToAction(nameof(Index));
             }
             return View(store);
         }
