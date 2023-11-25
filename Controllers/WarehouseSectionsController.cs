@@ -70,8 +70,7 @@ namespace Supermarket.Controllers
                 }
                 else { 
                     _context.Add(warehouseSection);
-                await _context.SaveChangesAsync();
-
+                    await _context.SaveChangesAsync();
                     ViewBag.Message = "Warehouse Section successfully created.";
                     warehouseSection.Warehouse = await _context.Warehouse.FindAsync(warehouseSection.WarehouseId);
 
@@ -115,8 +114,21 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(warehouseSection);
-                    await _context.SaveChangesAsync();
+                    bool WarehouseSectionExists = await _context.WarehouseSection.AnyAsync(
+                    b => b.Description == warehouseSection.Description && b.WarehouseId == warehouseSection.WarehouseId);
+
+                    if (WarehouseSectionExists)
+                    {
+                        ModelState.AddModelError("", "Another Warehouse Section with the same Description and Warehouse already exists.");
+                    }
+                    else
+                    {
+                        _context.Update(warehouseSection);
+                        await _context.SaveChangesAsync();
+                        ViewBag.Message = " Warehouse Section successfully edited.";
+                        warehouseSection.Warehouse = await _context.Warehouse.FindAsync(warehouseSection.WarehouseId);
+                        return View("Details", warehouseSection);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -129,7 +141,8 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+               
+                //return RedirectToAction(nameof(Index));
             }
             ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Adress", warehouseSection.WarehouseId);
             return View(warehouseSection);
