@@ -61,9 +61,22 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(shelf);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool ShelvesExists = await _context.Shelf.AnyAsync(
+               b => b.Name == shelf.Name && b.HallwayId == shelf.HallwayId);
+
+                if (ShelvesExists)
+                {
+                    ModelState.AddModelError("", "Another Shelf with the same Name and Hallway already exists.");
+                }
+                else
+                {
+                    _context.Add(shelf);
+                    await _context.SaveChangesAsync();
+
+                    ViewBag.Message = "Shelf successfully created.";
+                    shelf.Hallway = await _context.Hallway.FindAsync(shelf.HallwayId);
+                    return View("Details", shelf);
+                }
             }
             ViewData["HallwayId"] = new SelectList(_context.Hallway, "HallwayId", "Description", shelf.HallwayId);
             return View(shelf);
@@ -102,8 +115,24 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(shelf);
-                    await _context.SaveChangesAsync();
+                    bool ShelvesExists = await _context.Shelf.AnyAsync(
+                    b => b.Name == shelf.Name && b.HallwayId == shelf.HallwayId);
+
+
+
+                    if (ShelvesExists)
+                    {
+                        ModelState.AddModelError("", "Another Shelf with the same Name and Hallway already exists.");
+                    }
+                    else
+                    {
+                        _context.Update(shelf);
+                        await _context.SaveChangesAsync();
+                        ViewBag.Message = "Hallways successfully edited.";
+                        shelf.Hallway = await _context.Hallway.FindAsync(shelf.HallwayId);
+
+                        return View("Details", shelf);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,7 +145,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+              //  return RedirectToAction(nameof(Index));
             }
             ViewData["HallwayId"] = new SelectList(_context.Hallway, "HallwayId", "Description", shelf.HallwayId);
             return View(shelf);

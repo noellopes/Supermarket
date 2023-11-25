@@ -1,10 +1,17 @@
 ﻿@model Supermarket.Models.Shelf
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Shelf Details";
+}
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Success</h4>
+        <p>@ViewBag.Message</p>
+    </div>
 }
 
-<h1>Details</h1>
+<h1>Shelf Details</h1>
 
 <div>
     <h4>Shelf</h4>
