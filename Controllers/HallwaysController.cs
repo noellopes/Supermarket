@@ -61,9 +61,21 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(hallway);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool HallwaysExists = await _context.Hallway.AnyAsync(
+                b => b.Description == hallway.Description && b.StoreId == hallway.StoreId);
+
+                if (HallwaysExists)
+                {
+                    ModelState.AddModelError("", "Another hallway with the same description and store already exists.");
+                }
+                else{
+                    _context.Add(hallway);
+                    await _context.SaveChangesAsync();
+
+                    ViewBag.Message = "Hallways successfully created.";
+                    hallway.Store = await _context.Store.FindAsync(hallway.StoreId);
+                    return View("Details", hallway);
+                }
             }
             ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Adress", hallway.StoreId);
             return View(hallway);
