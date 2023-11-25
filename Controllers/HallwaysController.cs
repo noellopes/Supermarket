@@ -48,7 +48,7 @@ namespace Supermarket.Controllers
         // GET: Hallways/Create
         public IActionResult Create()
         {
-            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Adress");
+            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name");
             return View();
         }
 

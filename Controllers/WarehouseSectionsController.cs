@@ -48,7 +48,7 @@ namespace Supermarket.Controllers
         // GET: WarehouseSections/Create
         public IActionResult Create()
         {
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Adress");
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Name");
             return View();
         }
 
@@ -77,7 +77,7 @@ namespace Supermarket.Controllers
                     return View("Details", warehouseSection);
                 }
             }
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Adress", warehouseSection.WarehouseId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Name", warehouseSection.WarehouseId);
             return View(warehouseSection);
         }
 
@@ -94,7 +94,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Adress", warehouseSection.WarehouseId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Name", warehouseSection.WarehouseId);
             return View(warehouseSection);
         }
 
@@ -144,7 +144,7 @@ namespace Supermarket.Controllers
                
                 //return RedirectToAction(nameof(Index));
             }
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Adress", warehouseSection.WarehouseId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Name", warehouseSection.WarehouseId);
             return View(warehouseSection);
         }
 
