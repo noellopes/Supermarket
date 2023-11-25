@@ -1,10 +1,17 @@
 ﻿@model Supermarket.Models.WarehouseSection_Product
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Warehouse Section Details";
+}
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Success</h4>
+        <p>@ViewBag.Message</p>
+    </div>
 }
 
-<h1>Details</h1>
+<h1>Warehouse Section Details</h1>
 
 <div>
     <h4>WarehouseSection_Product</h4>

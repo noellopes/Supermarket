@@ -61,9 +61,22 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(warehouseSection);
+                bool WarehouseSectionExists = await _context.WarehouseSection.AnyAsync(
+                   b => b.Description == warehouseSection.Description && b.WarehouseId == warehouseSection.WarehouseId);
+
+                if (WarehouseSectionExists)
+                {
+                    ModelState.AddModelError("", "Another Warehouse Section with the same Description and Warehouse already exists.");
+                }
+                else { 
+                    _context.Add(warehouseSection);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                    ViewBag.Message = "Warehouse Section successfully created.";
+                    warehouseSection.Warehouse = await _context.Warehouse.FindAsync(warehouseSection.WarehouseId);
+
+                    return View("Details", warehouseSection);
+                }
             }
             ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Adress", warehouseSection.WarehouseId);
             return View(warehouseSection);
