@@ -77,7 +77,7 @@ namespace Supermarket.Controllers
                     return View("Details", hallway);
                 }
             }
-            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Adress", hallway.StoreId);
+            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
             return View(hallway);
         }
 
@@ -94,7 +94,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Adress", hallway.StoreId);
+            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
             return View(hallway);
         }
 
@@ -127,8 +127,8 @@ namespace Supermarket.Controllers
                         await _context.SaveChangesAsync();
 
                         ViewBag.Message = "Hallways successfully edited.";
+                       
                         hallway.Store = await _context.Store.FindAsync(hallway.StoreId);
-
                         return View("Details", hallway);
                     }
                 }
@@ -145,7 +145,7 @@ namespace Supermarket.Controllers
                 }
                // return RedirectToAction(nameof(Index));
             }
-            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Adress", hallway.StoreId);
+            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
             return View(hallway);
         }
 
