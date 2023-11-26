@@ -110,28 +110,21 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    var existingStore = await _context.Store.FindAsync(id);
+                    bool StoreExists = await _context.Store.AnyAsync(
+                    b => b.Name == store.Name && b.Adress == store.Adress&&b.StoreId!=store.StoreId);
 
-                    if (existingStore == null)
+                    if (StoreExists)
                     {
-                        return NotFound();
+                     ModelState.AddModelError("", "Another Store with the same Name and Adress already exists.");
                     }
-
-                    if (existingStore.Name != store.Name || existingStore.Adress != store.Adress)
+                    else
                     {
-                        bool StoreWithSameNameAndAdressExists = await _context.Store
-                            .AnyAsync(p => p.StoreId != id && p.Name == store.Name && p.Adress == store.Adress);
-
-                        if (StoreWithSameNameAndAdressExists)
-                        {
-                            ModelState.AddModelError("", "Another Store with the same Name and Adress already exists.");
-                            return View(store);
-                        }
+                        _context.Update(store);
+                        await _context.SaveChangesAsync();
+                        ViewBag.Message = "Store successfully edited.";
+                        return View("Details", store);
                     }
-                    _context.Update(existingStore);
-                    await _context.SaveChangesAsync();
-                    ViewBag.Message = "Store successfully edited.";
-                    return View("Details", store);
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

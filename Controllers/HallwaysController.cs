@@ -116,7 +116,7 @@ namespace Supermarket.Controllers
                 try
                 {
                     bool HallwaysExists = await _context.Hallway.AnyAsync(
-                    b => b.Description == hallway.Description && b.StoreId == hallway.StoreId);
+                    b => b.Description == hallway.Description && b.StoreId == hallway.StoreId && b.HallwayId!=hallway.HallwayId);
 
                     if (HallwaysExists)
                     {
