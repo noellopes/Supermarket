@@ -50,7 +50,7 @@ namespace Supermarket.Controllers
         // GET: Shelft_ProductExhibition/Create
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(_context.Shelf, "ProductId", "Name");
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name");
             return View();
         }
@@ -79,7 +79,7 @@ namespace Supermarket.Controllers
                     return View("Details", shelft_ProductExhibition);
                 }
             }
-            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Name", shelft_ProductExhibition.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", shelft_ProductExhibition.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", shelft_ProductExhibition.ShelfId);
             return View(shelft_ProductExhibition);
         }
