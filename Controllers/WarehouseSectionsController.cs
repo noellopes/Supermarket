@@ -62,7 +62,7 @@ namespace Supermarket.Controllers
             if (ModelState.IsValid)
             {
                 bool WarehouseSectionExists = await _context.WarehouseSection.AnyAsync(
-                   b => b.Description == warehouseSection.Description && b.WarehouseId == warehouseSection.WarehouseId);
+                   b => b.Description == warehouseSection.Description && b.WarehouseId == warehouseSection.WarehouseId && b.WarehouseSectionId!=warehouseSection.WarehouseSectionId);
 
                 if (WarehouseSectionExists)
                 {
