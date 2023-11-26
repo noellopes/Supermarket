@@ -116,10 +116,7 @@ namespace Supermarket.Controllers
                 try
                 {
                     bool ShelvesExists = await _context.Shelf.AnyAsync(
-                    b => b.Name == shelf.Name && b.HallwayId == shelf.HallwayId);
-
-
-
+                    b => b.Name == shelf.Name && b.HallwayId == shelf.HallwayId && b.ShelfId!=shelf.ShelfId);
                     if (ShelvesExists)
                     {
                         ModelState.AddModelError("", "Another Shelf with the same Name and Hallway already exists.");
