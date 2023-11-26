@@ -1,7 +1,14 @@
 ﻿@model Supermarket.Models.Shelft_ProductExhibition
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Shelft Product Exhibition Details";
+}
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Success</h4>
+        <p>@ViewBag.Message</p>
+    </div>
 }
 
 <h1>Details</h1>
@@ -37,6 +44,6 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Edit" asp-route-ProductId="@Model.ProductId" asp-route-shelftId="@Model.ShelfId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

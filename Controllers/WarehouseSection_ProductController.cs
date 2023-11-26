@@ -70,13 +70,13 @@ namespace Supermarket.Controllers
                 && w.WarehouseSectionId == warehouseSection_Product.WarehouseSectionId);
                 if (WarehouseSection_ProductExists)
                 {
-                    ModelState.AddModelError("", "Another WarehouseSection Product with the same Product and WarehouseSection already exists.");
+                    ModelState.AddModelError("", "Another Warehouse Section Product with the same Product and WarehouseSection already exists.");
                 }
                 else
                 {
                     _context.Add(warehouseSection_Product);
                     await _context.SaveChangesAsync();
-                    ViewBag.Message = "WarehouseSection_Product successfully created.";
+                    ViewBag.Message = "Warehouse Section Product successfully created.";
                     return View("Details", warehouseSection_Product);
                 }
             }
@@ -130,9 +130,8 @@ namespace Supermarket.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {// Verificar se já existe um WarehouseSection_Product com as mesmas propriedades
+                {
                     
-
                     if (warehouseSection_Product.ReservedQuantity > warehouseSection_Product.Quantity)
                     {
                         ModelState.AddModelError("", "The quantity must always be greater than or equal to the reserved quantity");
@@ -149,7 +148,7 @@ namespace Supermarket.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!WarehouseSection_ProductExists(warehouseSection_Product.ProductId))
+                    if (!WarehouseSection_ProductExists(warehouseSection_Product.ProductId, warehouseSection_Product.WarehouseSectionId))
                     {
                         return NotFound();
                     }
@@ -167,10 +166,7 @@ namespace Supermarket.Controllers
             return View(warehouseSection_Product);
         }
 
-        private bool WarehouseSection_ProductExists(int productId)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         // GET: WarehouseSection_Product/Delete/5
         public async Task<IActionResult> Delete(int? productId, int? warehouseSectionId)

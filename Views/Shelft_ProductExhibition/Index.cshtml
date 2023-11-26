@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Supermarket.Models.Shelft_ProductExhibition>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Shelft Product Exhibition List";
 }
 
-<h1>Index</h1>
+<h1>Shelft Product Exhibition List</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -31,7 +31,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Product.Description)
+                @Html.DisplayFor(modelItem => item.Product.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Shelf.Name)
@@ -43,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.MinimumQuantity)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a asp-action="Edit" asp-route-productId="@item.ProductId" asp-route-shelfId="@item.ShelfId">Edit</a> |
+                    <a asp-action="Details" asp-route-productId="@item.ProductId" asp-route-shelfId="@item.ShelfId">Details</a> |
+                    <a asp-action="Delete" asp-route-productId="@item.ProductId" asp-route-shelfId="@item.ShelfId">Delete</a>
             </td>
         </tr>
 }

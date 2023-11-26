@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -27,9 +28,9 @@ namespace Supermarket.Controllers
         }
 
         // GET: Shelft_ProductExhibition/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? productId, int? shelfId)
         {
-            if (id == null || _context.Shelft_ProductExhibition == null)
+            if (productId == null || shelfId == null || _context.Shelft_ProductExhibition == null)
             {
                 return NotFound();
             }
@@ -37,7 +38,7 @@ namespace Supermarket.Controllers
             var shelft_ProductExhibition = await _context.Shelft_ProductExhibition
                 .Include(s => s.Product)
                 .Include(s => s.Shelf)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+                .FirstOrDefaultAsync(m => m.ProductId == productId && m.ShelfId == shelfId); ;
             if (shelft_ProductExhibition == null)
             {
                 return NotFound();
@@ -49,7 +50,7 @@ namespace Supermarket.Controllers
         // GET: Shelft_ProductExhibition/Create
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description");
+            ViewData["ProductId"] = new SelectList(_context.Shelf, "ProductId", "Name");
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name");
             return View();
         }
@@ -63,29 +64,44 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(shelft_ProductExhibition);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool Shelft_ProductExhibitionExists = await _context.Shelft_ProductExhibition.AnyAsync(
+               s => s.ProductId == shelft_ProductExhibition.ProductId
+               && s.ShelfId == shelft_ProductExhibition.ShelfId);
+                if (Shelft_ProductExhibitionExists)
+                {
+                    ModelState.AddModelError("", "Another Shelft Product Exhibition Exists with the same Product and Shelf already exists.");
+                }
+                else
+                {
+                    _context.Add(shelft_ProductExhibition);
+                    await _context.SaveChangesAsync();
+                    ViewBag.Message = "Shelft Product Exhibition successfully created.";
+                    return View("Details", shelft_ProductExhibition);
+                }
             }
-            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", shelft_ProductExhibition.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Name", shelft_ProductExhibition.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", shelft_ProductExhibition.ShelfId);
             return View(shelft_ProductExhibition);
         }
 
         // GET: Shelft_ProductExhibition/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? productId, int? shelfId)
         {
-            if (id == null || _context.Shelft_ProductExhibition == null)
+            if (productId == null || shelfId == null || _context.Shelft_ProductExhibition == null)
             {
                 return NotFound();
             }
+            var shelft_ProductExhibition = await _context.Shelft_ProductExhibition
+               .Include(s => s.Product)
+               .Include(s => s.Shelf)
+               .FirstOrDefaultAsync(m => m.ProductId == productId && m.ShelfId == shelfId);
 
-            var shelft_ProductExhibition = await _context.Shelft_ProductExhibition.FindAsync(id);
+    
             if (shelft_ProductExhibition == null)
             {
                 return NotFound();
             }
-            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", shelft_ProductExhibition.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", shelft_ProductExhibition.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", shelft_ProductExhibition.ShelfId);
             return View(shelft_ProductExhibition);
         }
@@ -95,9 +111,14 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,ShelfId,Quantity,MinimumQuantity")] Shelft_ProductExhibition shelft_ProductExhibition)
+        public async Task<IActionResult> Edit(int productId, int shelfId, [Bind("ProductId,ShelfId,Quantity,MinimumQuantity")] Shelft_ProductExhibition shelft_ProductExhibition)
         {
-            if (id != shelft_ProductExhibition.ProductId)
+            if (productId == null || shelfId == null || shelft_ProductExhibition == null)
+            {
+                return NotFound();
+            }
+
+            if (productId != shelft_ProductExhibition.ProductId|| shelfId!= shelft_ProductExhibition.ShelfId)
             {
                 return NotFound();
             }
@@ -108,6 +129,9 @@ namespace Supermarket.Controllers
                 {
                     _context.Update(shelft_ProductExhibition);
                     await _context.SaveChangesAsync();
+
+                    ViewBag.Message = "Shelft Product Exhibition successfully edited.";
+                    return View("Details", shelft_ProductExhibition);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -120,17 +144,17 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+               // return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", shelft_ProductExhibition.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Name", shelft_ProductExhibition.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", shelft_ProductExhibition.ShelfId);
             return View(shelft_ProductExhibition);
         }
 
         // GET: Shelft_ProductExhibition/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? productId, int? shelfId)
         {
-            if (id == null || _context.Shelft_ProductExhibition == null)
+            if (productId == null || shelfId == null || _context.Shelft_ProductExhibition == null)
             {
                 return NotFound();
             }
@@ -138,7 +162,7 @@ namespace Supermarket.Controllers
             var shelft_ProductExhibition = await _context.Shelft_ProductExhibition
                 .Include(s => s.Product)
                 .Include(s => s.Shelf)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+                .FirstOrDefaultAsync(m => m.ProductId == productId && m.ShelfId == shelfId);
             if (shelft_ProductExhibition == null)
             {
                 return NotFound();
@@ -150,13 +174,14 @@ namespace Supermarket.Controllers
         // POST: Shelft_ProductExhibition/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int productId, int shelfId)
         {
             if (_context.Shelft_ProductExhibition == null)
             {
                 return Problem("Entity set 'SupermarketDbContext.Shelft_ProductExhibition'  is null.");
             }
-            var shelft_ProductExhibition = await _context.Shelft_ProductExhibition.FindAsync(id);
+            var shelft_ProductExhibition = await _context.Shelft_ProductExhibition.
+                FirstOrDefaultAsync(m => m.ProductId == productId && m.ShelfId == shelfId);
             if (shelft_ProductExhibition != null)
             {
                 _context.Shelft_ProductExhibition.Remove(shelft_ProductExhibition);
