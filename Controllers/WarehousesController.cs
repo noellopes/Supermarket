@@ -60,9 +60,20 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(warehouse);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool warehouseExists = await _context.Warehouse.AnyAsync(
+              b => b.Name == warehouse.Name && b.Adress == warehouse.Adress);
+
+                if (warehouseExists)
+                {
+                    ModelState.AddModelError("", "Another Warehouse with the same Name and Adress already exists.");
+                }
+                else
+                {
+                    _context.Add(warehouse);
+                    await _context.SaveChangesAsync();
+                    ViewBag.Message = "Warehouse successfully created.";
+                    return View("Details", warehouse);
+                }
             }
             return View(warehouse);
         }
@@ -99,8 +110,19 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(warehouse);
-                    await _context.SaveChangesAsync();
+                    bool WareHousesExists = await _context.Warehouse.AnyAsync(
+                    b => b.Name == warehouse.Name && b.Adress == warehouse.Adress && b.WarehouseId != warehouse.WarehouseId);
+                    if (WareHousesExists)
+                    {
+                        ModelState.AddModelError("", "Another Warehouse with the same Name and Adress already exists.");
+                    }
+                    else
+                    {
+                        _context.Update(warehouse);
+                        await _context.SaveChangesAsync();
+                        ViewBag.Message = "Warehouse successfully edited.";
+                        return View("Details", warehouse);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -113,7 +135,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+               // return RedirectToAction(nameof(Index));
             }
             return View(warehouse);
         }
