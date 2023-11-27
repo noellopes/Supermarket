@@ -154,6 +154,16 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            var sectionsAssociatedWithWarehouse = await _context.WarehouseSection
+            .Where(s => s.WarehouseId == id)
+            .ToListAsync();
+
+            if (sectionsAssociatedWithWarehouse.Count > 0)
+            {
+                ViewBag.ErrorMessage = "It is not possible to delete the warehouse as there are sections associated with it";
+                ViewBag.SectionsAssociatedWithWarehouse = sectionsAssociatedWithWarehouse;
+                return View("Delete");
+            }
 
             return View(warehouse);
         }

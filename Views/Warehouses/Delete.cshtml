@@ -3,6 +3,41 @@
 @{
     ViewData["Title"] = "Delete";
 }
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">Error</h4>
+        <p>@ViewBag.ErrorMessage</p>
+        <a asp-action="Index">Back to List</a>
+    </div>
+       @if (ViewBag.SectionsAssociatedWithWarehouse != null)
+    {
+        <div>
+            <h4>Associated Warehouse Sections</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var warehouseSection in ViewBag.SectionsAssociatedWithWarehouse)
+                    {
+                        <tr>
+                            <td>@warehouseSection.Description</td>
+                            <td>
+                                <a asp-action="Details" asp-controller="WarehouseSections" asp-route-id="@warehouseSection.WarehouseSectionId" class="btn btn-info">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+}
+else{
 
 <h1>Delete</h1>
 
@@ -31,3 +66,4 @@
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
+}
