@@ -156,6 +156,18 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            var hallwaysAssociatedWithStore = await _context.Hallway
+            .Where(h => h.StoreId == id)
+            .ToListAsync();
+
+            if (hallwaysAssociatedWithStore.Count > 0)
+            {
+                ViewBag.ErrorMessage = "It is not possible to delete the store as there are hallways associated with it";
+                ViewBag.AssociatedHallways = hallwaysAssociatedWithStore;
+                return View("Delete");
+            }
+
+            
 
             return View(store);
         }
@@ -174,7 +186,9 @@ namespace Supermarket.Controllers
             {
                 _context.Store.Remove(store);
             }
+
             
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

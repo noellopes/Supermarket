@@ -3,7 +3,42 @@
 @{
     ViewData["Title"] = "Delete";
 }
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <h4 class="alert-heading">Error</h4>
+        <p>@ViewBag.ErrorMessage</p>
+        <a asp-action="Index">Back to List</a>
+    </div>
+    @if (ViewBag.AssociatedHallways != null)
+    {
+        <div>
+            <h4>Associated Hallways</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var hallway in ViewBag.AssociatedHallways)
+                    {
+                        <tr>
+                            <td>@hallway.Description</td>
+                            <td>
+                                <a asp-action="Details" asp-controller="Hallways" asp-route-id="@hallway.HallwayId" class="btn btn-secondary">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+ 
+    }
 
+}
+else{
 <h1>Delete</h1>
 
 <h3>Are you sure you want to delete this?</h3>
@@ -31,3 +66,4 @@
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
+}
