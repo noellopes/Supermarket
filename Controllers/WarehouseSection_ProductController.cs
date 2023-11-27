@@ -186,6 +186,13 @@ namespace Supermarket.Controllers
                 .Include(w => w.WarehouseSection)
                 .FirstOrDefaultAsync(m => m.ProductId == productId && m.WarehouseSectionId == warehouseSectionId);
 
+            if (warehouseSection_Product.Quantity != 0)
+            {
+                ViewBag.Message = "Warehouse Section Product cannot be eliminated because it has a quantity greater than 0";
+                return View("Delete", warehouseSection_Product); // Nome da sua view que informa que não pode ser apagado
+            }
+
+
             if (warehouseSection_Product == null)
             {
                 return NotFound();
@@ -203,9 +210,8 @@ namespace Supermarket.Controllers
             {
                 return Problem("Entity set 'SupermarketDbContext.WarehouseSection_Product' is null.");
             }
-
             var warehouseSection_Product = await _context.WarehouseSection_Product
-                .FirstOrDefaultAsync(m => m.ProductId == productId && m.WarehouseSectionId == warehouseSectionId);
+            .FirstOrDefaultAsync(m => m.ProductId == productId && m.WarehouseSectionId == warehouseSectionId);
 
             if (warehouseSection_Product != null)
             {
