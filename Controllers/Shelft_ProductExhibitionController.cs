@@ -163,6 +163,12 @@ namespace Supermarket.Controllers
                 .Include(s => s.Product)
                 .Include(s => s.Shelf)
                 .FirstOrDefaultAsync(m => m.ProductId == productId && m.ShelfId == shelfId);
+
+            if (shelft_ProductExhibition.Quantity != 0)
+            {
+                ViewBag.Message = "Shelft Product Exhibition cannot be eliminated because it has a quantity greater than 0";
+                return View("Delete", shelft_ProductExhibition); 
+            }
             if (shelft_ProductExhibition == null)
             {
                 return NotFound();

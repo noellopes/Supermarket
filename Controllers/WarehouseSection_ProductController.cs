@@ -189,7 +189,7 @@ namespace Supermarket.Controllers
             if (warehouseSection_Product.Quantity != 0)
             {
                 ViewBag.Message = "Warehouse Section Product cannot be eliminated because it has a quantity greater than 0";
-                return View("Delete", warehouseSection_Product); // Nome da sua view que informa que não pode ser apagado
+                return View("Delete", warehouseSection_Product); 
             }
 
 
