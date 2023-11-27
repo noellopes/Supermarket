@@ -5,7 +5,7 @@ namespace Supermarket.Models
     public class ProductDiscount
     {
         public int ProductDiscountId { get; set; }
-        public int ProductId { get; set; }
+        //ICollection<Product> ProductId { get; set; }
         [Required]
         public required float Value { get; set; }
         [Required]
