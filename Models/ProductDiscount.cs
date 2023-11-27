@@ -9,8 +9,8 @@ namespace Supermarket.Models
         [Required]
         public required float Value { get; set; }
         [Required]
-        public required  DateOnly InicialTime { get; set; }
+        public required  DateOnly StartDate { get; set; }
         [Required]
-        public required DateOnly FinalTime { get; set; }
+        public required DateOnly EndDate { get; set; }
     }
 }
