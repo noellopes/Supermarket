@@ -44,6 +44,9 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
+            ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description");
+
             return View(warehouseSection_Product);
         }
 
@@ -134,7 +137,9 @@ namespace Supermarket.Controllers
                     
                     if (warehouseSection_Product.ReservedQuantity > warehouseSection_Product.Quantity)
                     {
+            
                         ModelState.AddModelError("", "The quantity must always be greater than or equal to the reserved quantity");
+                       
                     }
                     else
                     {
@@ -159,9 +164,9 @@ namespace Supermarket.Controllers
                 }
                // return RedirectToAction(nameof(Index));
             }
-      
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", warehouseSection_Product.ProductId);
-            ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description", warehouseSection_Product.WarehouseSectionId);
+            warehouseSection_Product.Product = await _context.Product.FindAsync(warehouseSection_Product.ProductId);
+            warehouseSection_Product.WarehouseSection = await _context.WarehouseSection.FindAsync(warehouseSection_Product.WarehouseSectionId);
+
 
             return View(warehouseSection_Product);
         }
