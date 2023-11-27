@@ -164,6 +164,16 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            var ShelfsAssociatedWithHallway = await _context.Shelf
+            .Where(s => s.HallwayId == id)
+            .ToListAsync();
+
+            if (ShelfsAssociatedWithHallway.Count > 0)
+            {
+                ViewBag.ErrorMessage = "It is not possible to delete the hallway as there are shelves associated with it";
+                ViewBag.ShelfsAssociatedWithHallway = ShelfsAssociatedWithHallway;
+                return View("Delete");
+            }
 
             return View(hallway);
         }
