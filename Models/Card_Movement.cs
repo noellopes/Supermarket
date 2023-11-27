@@ -1,7 +1,10 @@
-﻿using Microsoft.VisualBasic;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
+using System.Threading.Tasks;
 
 namespace Supermarket.Models
 {
+    [PrimaryKey(nameof(Card_Id), nameof(Movement_Id))]
     public class Card_Movement
     {
         public int Movement_Id { get; set; }
