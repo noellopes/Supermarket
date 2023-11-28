@@ -163,6 +163,19 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            var hasProductsAssociated = await _context.Shelft_ProductExhibition
+           .AnyAsync(wp => wp.ShelfId == id);
+
+            if (hasProductsAssociated)
+            {
+                ViewBag.ErrorMessage = "It is not possible to delete the shelfts  as there are products associated with it";
+                ViewBag.hasProductsAssociated = await _context.Shelft_ProductExhibition
+                    .Include(wp => wp.Product)
+                    .Where(wp => wp.ShelfId == id)
+                    .ToListAsync();
+
+                return View("Delete");
+            }
 
             return View(shelf);
         }
