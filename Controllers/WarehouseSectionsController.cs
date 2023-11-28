@@ -163,7 +163,19 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            var hasProductsAssociated = await _context.WarehouseSection_Product
+            .AnyAsync(wp => wp.WarehouseSectionId == id);
 
+            if (hasProductsAssociated)
+            {
+                ViewBag.ErrorMessage = "It is not possible to delete the warehouses  as there are products associated with it";
+                ViewBag.hasProductsAssociated = await _context.WarehouseSection_Product
+                    .Include(wp => wp.Product)
+                    .Where(wp => wp.WarehouseSectionId == id)
+                    .ToListAsync();
+
+                return View("Delete");
+            }
             return View(warehouseSection);
         }
 
