@@ -27,12 +27,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Product)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WarehouseSection)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Shelf)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -52,13 +46,7 @@
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Product.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WarehouseSection.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Shelf.Name)
+                @Html.DisplayFor(modelItem => item.Product.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ReduceProductId">Edit</a> |
