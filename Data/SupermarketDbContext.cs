@@ -20,5 +20,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Issues> Issues { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.ProductExpiration> ProductExpiration { get; set; } = default!;
+
     }
 }
