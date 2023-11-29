@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -11,9 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231122162917_EmployeeEvaluation")]
+    partial class EmployeeEvaluation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,9 +35,6 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
 
                     b.Property<int>("GradeNumber")
                         .HasColumnType("int");
@@ -76,29 +76,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasKey("FolgaId");
 
                     b.ToTable("Folga");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.Funcoes", b =>
-                {
-                    b.Property<int>("IdFuncao")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFuncao"));
-
-                    b.Property<string>("DescricaoFuncao")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("NomeFuncao")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("IdFuncao");
-
-                    b.ToTable("Funcoes");
                 });
 #pragma warning restore 612, 618
         }
