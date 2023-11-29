@@ -24,6 +24,8 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Folga> Folga { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Funcoes> Funcoes { get; set; } = default!;
+
         public DbSet<EmployeeEvaluation> avaliacaoFuncionarios { get; set; } = default!;
     }
 }
