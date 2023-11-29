@@ -35,8 +35,7 @@ namespace Supermarket.Models
         [Required]
         public required DateTime Employee_Admission_Date{ get; set; }
 
-        [Required]
-        public required DateTime Employee_Termination_Date { get; set; }
+        public  DateTime Employee_Termination_Date { get; set; }
 
         [Required]
         public required DateTime Standard_Check_In_Time { get; set; }

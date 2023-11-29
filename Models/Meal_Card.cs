@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace Supermarket.Models
 {
+    [PrimaryKey(nameof(EmployeeId), nameof(Card_Id))]
     public class Meal_Card
     {
 
