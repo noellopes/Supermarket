@@ -22,9 +22,10 @@ namespace Supermarket.Controllers
         // GET: EmployeeEvaluations
         public async Task<IActionResult> Index()
         {
-              return _context.AvaliacaoFuncionarios != null ? 
-                          View(await _context.AvaliacaoFuncionarios.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.avaliacaoFuncionarios'  is null.");
+            var Evaluations = _context.AvaliacaoFuncionarios;
+            return Evaluations != null ? 
+                          View(await Evaluations.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.AvaliacaoFuncionarios'  is null.");
         }
 
         // GET: EmployeeEvaluations/Details/5
