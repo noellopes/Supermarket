@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models
 {
-    public class Formation 
+    public class Formation
     {
         //PRIMARY KEY
         [Required]
