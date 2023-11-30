@@ -16,6 +16,6 @@ namespace Supermarket.Models
         [Required]
         public int EmployeeId { get; set;}
 
-        //public Employee? Employee { get; set;}
+        public Employee? Employee { get; set;}
     }
 }

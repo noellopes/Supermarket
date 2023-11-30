@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
+using Supermarket.Data.Migrations.Supermarket;
 using Supermarket.Models;
 
 namespace Supermarket.Controllers
@@ -22,7 +23,7 @@ namespace Supermarket.Controllers
         // GET: EmployeeEvaluations
         public async Task<IActionResult> Index()
         {
-            var Evaluations = _context.AvaliacaoFuncionarios;
+            var Evaluations = _context.AvaliacaoFuncionarios.Include(ee => ee.Employee);
             return Evaluations != null ? 
                           View(await Evaluations.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.AvaliacaoFuncionarios'  is null.");
@@ -37,18 +38,19 @@ namespace Supermarket.Controllers
             }
 
             var employeeEvaluation = await _context.AvaliacaoFuncionarios
+                .Include(ee => ee.Employee)
                 .FirstOrDefaultAsync(m => m.EmployeeEvaluationId == id);
             if (employeeEvaluation == null)
             {
                 return NotFound();
             }
-
             return View(employeeEvaluation);
         }
 
         // GET: EmployeeEvaluations/Create
         public IActionResult Create()
         {
+            ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
             return View();
         }
 
@@ -57,7 +59,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeEvaluationId,Description,GradeNumber,EmployeeId")] EmployeeEvaluation employeeEvaluation)
+        public async Task<IActionResult> Create([Bind("EmployeeEvaluationId,Description,GradeNumber,EmployeeId")] Supermarket.Models.EmployeeEvaluation employeeEvaluation)
         {
             if (ModelState.IsValid)
             {
@@ -81,6 +83,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
             return View(employeeEvaluation);
         }
 
@@ -89,7 +92,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeEvaluationId,Description,GradeNumber,EmployeeId")] EmployeeEvaluation employeeEvaluation)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeEvaluationId,Description,GradeNumber,EmployeeId")] Models.EmployeeEvaluation employeeEvaluation)
         {
             if (id != employeeEvaluation.EmployeeEvaluationId)
             {
@@ -128,6 +131,7 @@ namespace Supermarket.Controllers
             }
 
             var employeeEvaluation = await _context.AvaliacaoFuncionarios
+                .Include(ee => ee.Employee)
                 .FirstOrDefaultAsync(m => m.EmployeeEvaluationId == id);
             if (employeeEvaluation == null)
             {
