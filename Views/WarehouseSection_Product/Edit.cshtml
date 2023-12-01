@@ -5,8 +5,6 @@
 }
 
 <h1>Edit</h1>
-<h5>Product: @Model.Product.Name</h5>
-<h5>Warehouse Section :  @Model.WarehouseSection.Description</h5>
 
 <h4>Warehouse Section Product</h4>
 
@@ -17,6 +15,16 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ProductId" />
             <input type="hidden" asp-for="WarehouseSectionId" />
+            
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label">Product</label>
+                <span asp-for="ProductId" class="form-control" readonly> @Model.Product.Name</span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="WarehouseSectionId" class="control-label">Warehouse Section</label>
+                <span asp-for="WarehouseSectionId" class="form-control" readonly>@Model.WarehouseSection.Description</span>
+            </div>
             <div class="form-group">
                 <label asp-for="Quantity" class="control-label"></label>
                 <input asp-for="Quantity" class="form-control" />
