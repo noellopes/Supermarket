@@ -7,6 +7,7 @@ namespace Supermarket.Models
         public int ReduceProductId { get; set; }
 
         [Required(ErrorMessage = "Please introduce a valid reason to Reduce this Product")]
+        [StringLength(80, MinimumLength = 3, ErrorMessage = "Please enter your Reason, must be minimum 3 leters length")]
         public required string Reason { get; set; }
 
         [Required]
@@ -15,6 +16,7 @@ namespace Supermarket.Models
 
         public DateTime Date { get; set;} = DateTime.Now;
 
+        [Range(0, 999, ErrorMessage = "The quantity must be greater than zero")]
         public int Quantity { get; set;}
 
         //Error when creating scaffolding of ReduceProduct 
