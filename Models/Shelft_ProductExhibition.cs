@@ -12,10 +12,10 @@ namespace Supermarket.Models
         public int ShelfId { get; set; }
         public Shelf? Shelf { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "The quantity must be greater than zero")]
+        [Range(0, 99999, ErrorMessage = "The quantity must be greater than zero")]
         public int Quantity { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "The minimum quantity must be greater than zero")]
+        [Range(1, 99999, ErrorMessage = "The minimum quantity must be greater than zero")]
         public int MinimumQuantity { get; set; }
     }
 }

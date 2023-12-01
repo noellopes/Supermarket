@@ -22,15 +22,16 @@ namespace Supermarket.Models
         [StringLength(100, MinimumLength = 3)]
         public required string Description { get; set; }
 
+        [Range(0, 99999, ErrorMessage = "The Total Quantity must be greater than zero")]
         public int TotalQuantity { get; set; }
 
+        [Range(0, 99999, ErrorMessage = "The Minimum Quantity must be greater than zero")]
         public int MinimumQuantity { get; set; }
 
         public double UnitPrice { get; set; }
 
         [Required]
-        [StringLength(15, MinimumLength = 3)]
-        public string Status { get; set; } = "Unavailable";
+        public required string Status { get; set; } = "Unavailable";
 
         public ICollection<Shelft_ProductExhibition>? Shelf { get; set; }
 

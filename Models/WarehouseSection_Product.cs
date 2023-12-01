@@ -13,10 +13,10 @@ namespace Supermarket.Models
         public int WarehouseSectionId { get; set; }
         public WarehouseSection? WarehouseSection { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "The Quantity must be greater than zero")]
+        [Range(0, 99999, ErrorMessage = "The Quantity must be greater than zero")]
         public int Quantity { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "he Reserved Quantity must be greater than zero")]
+        [Range(0, 99999, ErrorMessage = "he Reserved Quantity must be greater than zero")]
         public int ReservedQuantity { get; set; } = 0;
 
     }
