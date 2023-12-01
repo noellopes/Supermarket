@@ -78,6 +78,13 @@ namespace Supermarket.Controllers
                 else
                 {
                     _context.Add(warehouseSection_Product);
+                    await _context.Entry(warehouseSection_Product)
+                    .Reference(wp => wp.Product)
+                    .LoadAsync();
+                    await _context.Entry(warehouseSection_Product)
+                    .Reference(wp => wp.WarehouseSection)
+                    .LoadAsync();
+
                     await _context.SaveChangesAsync();
                     ViewBag.Message = "Warehouse Section Product successfully created.";
                     return View("Details", warehouseSection_Product);
@@ -91,7 +98,7 @@ namespace Supermarket.Controllers
         // GET: WarehouseSection_Product/Edit/5
         public async Task<IActionResult> Edit(int? productId, int? warehouseSectionId)
         {
-            if (productId == null || warehouseSectionId == null || _context.WarehouseSection_Product == null)
+            if (productId == null || warehouseSectionId == null )
             {
                 return NotFound();
             }
@@ -106,6 +113,7 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
             
+
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", warehouseSection_Product.ProductId);
             ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description", warehouseSection_Product.WarehouseSectionId);
 
@@ -148,7 +156,7 @@ namespace Supermarket.Controllers
 
 
                         ViewBag.Message = "Warehouse Section Product successfully edited.";
-                        return View("Details", warehouseSection_Product);
+                        return RedirectToAction("Details", new { productId = warehouseSection_Product.ProductId, warehouseSectionId = warehouseSection_Product.WarehouseSectionId });
                     }
                 }
                 catch (DbUpdateConcurrencyException)

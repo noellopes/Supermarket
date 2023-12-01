@@ -74,6 +74,13 @@ namespace Supermarket.Controllers
                 else
                 {
                     _context.Add(shelft_ProductExhibition);
+                    _context.Add(shelft_ProductExhibition);
+                    await _context.Entry(shelft_ProductExhibition)
+                    .Reference(wp => wp.Product)
+                    .LoadAsync();
+                    await _context.Entry(shelft_ProductExhibition)
+                    .Reference(wp => wp.Shelf)
+                    .LoadAsync();
                     await _context.SaveChangesAsync();
                     ViewBag.Message = "Shelft Product Exhibition successfully created.";
                     return View("Details", shelft_ProductExhibition);
@@ -131,7 +138,7 @@ namespace Supermarket.Controllers
                     await _context.SaveChangesAsync();
 
                     ViewBag.Message = "Shelft Product Exhibition successfully edited.";
-                    return View("Details", shelft_ProductExhibition);
+                    return RedirectToAction("Details", new { productId = shelft_ProductExhibition.ProductId, shelfId = shelft_ProductExhibition.ShelfId });
                 }
                 catch (DbUpdateConcurrencyException)
                 {
