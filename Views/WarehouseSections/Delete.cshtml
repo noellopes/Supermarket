@@ -30,7 +30,7 @@
                     <tr>
                         <td>@productAssociated.Product.Name</td>
                         <td>@productAssociated.Quantity</td>
-                        <td><a asp-controller="Shelft_ProductExhibition" asp-action="Details" asp-route-WarehouseSectionId="@productAssociated.WarehouseSectionId" asp-route-ProductId="@productAssociated.ProductId" class="btn btn-info">Details</a></td>
+                        <td><a asp-controller="WarehouseSection_Product" asp-action="Details" asp-route-WarehouseSectionId="@productAssociated.WarehouseSectionId" asp-route-ProductId="@productAssociated.ProductId" class="btn btn-info">Details</a></td>
                     </tr>
                 }
             </tbody>
