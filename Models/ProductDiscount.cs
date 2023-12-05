@@ -6,11 +6,12 @@ namespace Supermarket.Models
     {
         public int ProductDiscountId { get; set; }
         //ICollection<Product> ProductId { get; set; }
+        //ICollection<Card> CardNumber { get; set; }
+        public float Value { get; set; }
         [Required]
-        public required float Value { get; set; }
+        public required DateTime StartDate { get; set; }
         [Required]
-        public required  DateOnly StartDate { get; set; }
-        [Required]
-        public required DateOnly EndDate { get; set; }
+        public required DateTime EndDate { get; set; }
     }
 }
+    
