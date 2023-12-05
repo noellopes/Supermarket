@@ -1,0 +1,37 @@
+﻿@model Supermarket.Models.SubsidySetup
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "sqlServer";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>SubsidySetup</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HorasMinTrabalhadas)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HorasMinTrabalhadas)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.valorSubsidioDiario)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.valorSubsidioDiario)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DataPagamentoMensal)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DataPagamentoMensal)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.SubsidySetupId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
