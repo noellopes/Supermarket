@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Models;
+
 
 namespace Supermarket.Data
 {
@@ -14,6 +12,18 @@ namespace Supermarket.Data
         {
         }
 
-        public DbSet<Supermarket.Models.Folga> Folga { get; set; } = default!;
+       public DbSet<Supermarket.Models.Folga> Folga { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.Employee> Employee { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.ConfigSubsidio> ConfigSubsidio { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.SubsidySetup> SubsidySetup { get; set; } = default!;
+
+
+
+
+
+
     }
 }
