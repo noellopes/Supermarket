@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Supermarket.Models.EmployeeEvaluation>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <h2>Success</h2>
+        <p>@TempData["Message"]</p>
+    </div>
+}
+@if (TempData["MessageError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <h2>Error</h2>
+        <p>@TempData["MessageError"]</p>
+    </div>
+}
+
+
+<h1>Employee Evaluations</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee.Employee_Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GradeNumber)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GradeNumber)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.EmployeeEvaluationId" class="btn btn-primary btn-sm">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.EmployeeEvaluationId" class="btn btn-info btn-sm">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.EmployeeEvaluationId" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
