@@ -14,7 +14,7 @@ namespace Supermarket.Models
         public int Balance { get; set; }
 
         // Chave estrangeira para o funcionario
-        [DisplayName("Empregado")]
+        [DisplayName("Employee")]
         public int EmployeeId { get; set; }
 
         // Propriedade de navegação para o funcionario associado a este cartão
