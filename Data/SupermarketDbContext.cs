@@ -16,9 +16,5 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Folga> Folga { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.MealCard> MealCard { get; set; } = default!;
-
-        public DbSet<Supermarket.Models.Employee> Employee { get; set; } = default!;
-
     }
 }
