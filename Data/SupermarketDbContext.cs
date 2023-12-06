@@ -25,11 +25,19 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Folga> Folga { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.IssueType> IssueType { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.Issues> Issues { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.ProductExpiration> ProductExpiration { get; set; } = default!;
+
         public DbSet<Supermarket.Models.Funcoes> Funcoes { get; set; } = default!;
 
         public DbSet<EmployeeEvaluation> AvaliacaoFuncionarios { get; set; } = default!;
 
         public DbSet<Employee> Funcionarios { get; set; } = default!;
+
         public DbSet<ProductDiscount> ProductDiscount { get; internal set; }
+
     }
 }
