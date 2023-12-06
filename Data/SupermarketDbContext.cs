@@ -36,5 +36,7 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Schedule> Schedule { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Tickets> Tickets { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.Departments> Departments { get; set; } = default!;
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -11,9 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231206152301_Group5Dept")]
+    partial class Group5Dept
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,68 +277,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Schedule");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.Schedule", b =>
-                {
-                    b.Property<int>("ScheduleID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScheduleID"));
-
-                    b.Property<DateTime>("DailyFinishTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DailyStartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Id_Departments")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ScheduleID");
-
-                    b.ToTable("Schedule");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.Tickets", b =>
-                {
-                    b.Property<int>("TicketId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
-
-                    b.Property<int>("ClientCard")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DepartmentsId_Departments")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PrintDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TicketNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TicketState")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TicketId");
-
-                    b.HasIndex("DepartmentsId_Departments");
-
-                    b.ToTable("Tickets");
-                });
-
             modelBuilder.Entity("Supermarket.Models.Card_Movement", b =>
                 {
                     b.HasOne("Supermarket.Models.Meal_Card", "Meal_Card")
@@ -378,17 +319,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsRequired();
 
                     b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.Tickets", b =>
-                {
-                    b.HasOne("Supermarket.Models.Departments", "Departments")
-                        .WithMany()
-                        .HasForeignKey("DepartmentsId_Departments")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
