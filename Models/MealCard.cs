@@ -20,7 +20,7 @@ namespace Supermarket.Models
         // Propriedade de navegação para o funcionario associado a este cartão
         public Employee? Employee { get; set; }
 
-        public ICollection<Card_Movement>? Movements { get; set; }
+        public ICollection<CardMovement>? Movements { get; set; }
 
 
     }

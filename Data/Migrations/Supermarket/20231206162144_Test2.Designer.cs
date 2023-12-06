@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -11,9 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231206162144_Test2")]
+    partial class Test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,10 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MealCardId")
+                    b.Property<int>("Meal_CardCard_Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Meal_CardEmployeeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Movement_Date")
@@ -49,7 +55,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasKey("Card_Id", "Movement_Id");
 
-                    b.HasIndex("MealCardId");
+                    b.HasIndex("Meal_CardEmployeeId", "Meal_CardCard_Id");
 
                     b.ToTable("Card_Movement");
                 });
@@ -153,44 +159,41 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Folga");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.MealCard", b =>
+            modelBuilder.Entity("Supermarket.Models.Meal_Card", b =>
                 {
-                    b.Property<int>("MealCardId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MealCardId"));
+                    b.Property<int>("Card_Id")
+                        .HasColumnType("int");
 
                     b.Property<int>("Balance")
                         .HasColumnType("int");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MealCardId");
+                    b.HasKey("EmployeeId", "Card_Id");
 
                     b.HasIndex("EmployeeId")
                         .IsUnique();
 
-                    b.ToTable("MealCard");
+                    b.ToTable("Meal_Card");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Card_Movement", b =>
                 {
-                    b.HasOne("Supermarket.Models.MealCard", "MealCard")
+                    b.HasOne("Supermarket.Models.Meal_Card", "Meal_Card")
                         .WithMany("Movements")
-                        .HasForeignKey("MealCardId")
+                        .HasForeignKey("Meal_CardEmployeeId", "Meal_CardCard_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("MealCard");
+                    b.Navigation("Meal_Card");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.MealCard", b =>
+            modelBuilder.Entity("Supermarket.Models.Meal_Card", b =>
                 {
                     b.HasOne("Supermarket.Models.Employee", "Employee")
                         .WithOne("Meal_Card")
-                        .HasForeignKey("Supermarket.Models.MealCard", "EmployeeId")
+                        .HasForeignKey("Supermarket.Models.Meal_Card", "EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -202,7 +205,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("Meal_Card");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.MealCard", b =>
+            modelBuilder.Entity("Supermarket.Models.Meal_Card", b =>
                 {
                     b.Navigation("Movements");
                 });
