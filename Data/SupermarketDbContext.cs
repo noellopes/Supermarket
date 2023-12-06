@@ -37,5 +37,7 @@ namespace Supermarket.Data
 
         public DbSet<Employee> Funcionarios { get; set; } = default!;
 
+        public DbSet<ProductDiscount> ProductDiscount { get; internal set; }
+
     }
 }
