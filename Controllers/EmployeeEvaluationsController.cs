@@ -125,7 +125,6 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(employeeEvaluation);
         }
@@ -174,6 +173,42 @@ namespace Supermarket.Controllers
         private bool EmployeeEvaluationExists(int id)
         {
           return (_context.AvaliacaoFuncionarios?.Any(e => e.EmployeeEvaluationId == id)).GetValueOrDefault();
+        }
+
+        // GET: EmployeeEvaluations/EmployeeView
+        public async Task<IActionResult> EmployeeView()
+        {
+            var Employees = _context.Funcionarios.Include(f=>EmployeeGradeAsync(f.EmployeeId));
+
+            return Employees != null ?
+                          View(await Employees.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.AvaliacaoFuncionarios'  is null.");
+        }
+
+        private float EmployeeGradeAsync(int? EmployeeId)
+        {
+            if (EmployeeId == null || _context.Funcionarios == null)
+            {
+                //The employee doesn't exist!
+                return 0;
+            }
+
+            var Employee =  _context.Funcionarios.Find(EmployeeId);
+            if (Employee == null)
+            {
+                //The employee doesn't exist!
+                return 0;
+            }
+
+            var Evaluations = _context.AvaliacaoFuncionarios.Where(af => af.EmployeeId==Employee.EmployeeId).ToList();
+            var sum = 0;
+            foreach (var evaluation in Evaluations) 
+            {
+                sum += evaluation.GradeNumber;
+            }
+
+            var mean = sum/ Evaluations.Count;
+            return mean;
         }
     }
 }
