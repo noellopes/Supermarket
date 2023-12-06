@@ -5,7 +5,12 @@
 }
 
 <h1>Details</h1>
-
+@if (ViewBag.Mensagem != null)
+{
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        @ViewBag.Mensagem
+    </div>
+}
 <div>
     <h4>Funcoes</h4>
     <hr />
