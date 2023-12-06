@@ -28,21 +28,8 @@
                 <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
                 <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
-            <!-- 
-            @if (ViewBag.reduceProductWithProduct != null)
-            {
-               <div>
-                    @foreach (var Product in ViewBag.reduceProductWithProduct)
-                    {
-                        <div class="form-group">
-                            <label asp-for="Product.Description" class="control-label"></label>
-                            <p class="form-control">@Product.Description</p>
-                        </div>
-                    }
-                </div>
-            }
-            -->
-                                    <div class="form-group">
+
+            <div class="form-group">
                 <label asp-for="WarehouseSectionId" class="control-label"></label>
                 <select asp-for="WarehouseSectionId" class="form-control" asp-items="ViewBag.WarehouseSectionId"></select>
                 <span asp-validation-for="WarehouseSectionId" class="text-danger"></span>
