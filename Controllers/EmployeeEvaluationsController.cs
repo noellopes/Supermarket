@@ -42,7 +42,8 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.EmployeeEvaluationId == id);
             if (employeeEvaluation == null)
             {
-                return NotFound();
+                TempData["MessageError"] = "The employee evaluation has already been deleted!";
+                return RedirectToAction(nameof(Index));
             }
             return View(employeeEvaluation);
         }
@@ -65,7 +66,10 @@ namespace Supermarket.Controllers
             {
                 _context.Add(employeeEvaluation);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                ViewBag.Message = "The evaluation has successfully been created!";
+                employeeEvaluation.Employee = await _context.Funcionarios.FindAsync(employeeEvaluation.EmployeeId);
+                return View("Details", employeeEvaluation);
             }
             return View(employeeEvaluation);
         }
@@ -81,7 +85,8 @@ namespace Supermarket.Controllers
             var employeeEvaluation = await _context.AvaliacaoFuncionarios.FindAsync(id);
             if (employeeEvaluation == null)
             {
-                return NotFound();
+                TempData["MessageError"] = "The employee evaluation has already been deleted!";
+                return RedirectToAction(nameof(Index));
             }
             ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
             return View(employeeEvaluation);
@@ -105,6 +110,9 @@ namespace Supermarket.Controllers
                 {
                     _context.Update(employeeEvaluation);
                     await _context.SaveChangesAsync();
+
+                    ViewBag.Message = "The evaluation has successfully been edited!";
+                    return View("Details", employeeEvaluation);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -135,7 +143,8 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.EmployeeEvaluationId == id);
             if (employeeEvaluation == null)
             {
-                return NotFound();
+                TempData["MessageError"] = "The employee evaluation has already been deleted!";
+                return RedirectToAction(nameof(Index));
             }
 
             return View(employeeEvaluation);
@@ -157,6 +166,8 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
+
+            TempData["Message"] = "The employee evaluation has successfully been deleted!";
             return RedirectToAction(nameof(Index));
         }
 
