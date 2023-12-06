@@ -6,14 +6,13 @@ namespace Supermarket.Models
     {
         public int WarehouseId { get; set; }
 
-        [Required]
-        [StringLength(30, MinimumLength = 3)]
+        [Required(ErrorMessage = "Please enter a Warehouse Name")]
+        [StringLength(30, MinimumLength = 3, ErrorMessage = "Please enter your Warehouse Name bigger than 3 leters")]
         public required string Name { get; set; }
 
-        [Required]
-        [StringLength(30, MinimumLength = 3)]
+        [Required(ErrorMessage = "Please enter a Warehouse Adress")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Please enter your Warehouse Adress bigger than 3 leters")]
         public required string Adress { get; set; }
 
-        public ICollection<WarehouseSection>? WarehouseSection { get; set; }
     }
 }

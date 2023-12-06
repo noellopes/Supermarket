@@ -6,8 +6,8 @@ namespace Supermarket.Models
     {
         public int ShelfId { get; set; }
 
-        [Required]
-        [StringLength(30, MinimumLength = 3)]
+        [Required(ErrorMessage = "Please enter a Shelf Name")]
+        [StringLength(30, MinimumLength = 3, ErrorMessage = "Please enter your Shelf Name bigger than 3 leters")]
         public required string Name { get; set; }
 
 
