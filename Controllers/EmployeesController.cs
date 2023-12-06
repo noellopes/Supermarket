@@ -22,9 +22,9 @@ namespace Supermarket.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-              return _context.Employee != null ? 
-                          View(await _context.Employee.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
+            return _context.Employee != null ?
+                        View(await _context.Employee.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
         }
 
         // GET: Employees/Details/5
@@ -150,14 +150,14 @@ namespace Supermarket.Controllers
             {
                 _context.Employee.Remove(employee);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EmployeeExists(int id)
         {
-          return (_context.Employee?.Any(e => e.EmployeeId == id)).GetValueOrDefault();
+            return (_context.Employee?.Any(e => e.EmployeeId == id)).GetValueOrDefault();
         }
     }
 }
