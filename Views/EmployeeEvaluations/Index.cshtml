@@ -4,10 +4,26 @@
     ViewData["Title"] = "Index";
 }
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <h2>Success</h2>
+        <p>@TempData["Message"]</p>
+    </div>
+}
+@if (TempData["MessageError"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <h2>Error</h2>
+        <p>@TempData["MessageError"]</p>
+    </div>
+}
+
+
 <h1>Employee Evaluations</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -37,9 +53,9 @@
                 @Html.DisplayFor(modelItem => item.GradeNumber)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.EmployeeEvaluationId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EmployeeEvaluationId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EmployeeEvaluationId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.EmployeeEvaluationId" class="btn btn-primary btn-sm">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.EmployeeEvaluationId" class="btn btn-info btn-sm">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.EmployeeEvaluationId" class="btn btn-danger btn-sm">Delete</a>
             </td>
         </tr>
 }
