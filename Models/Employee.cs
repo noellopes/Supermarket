@@ -58,7 +58,7 @@ namespace Supermarket.Models
 
 
         //Ligação de 1 para 1 com Meal_Card
-        public Meal_Card? Meal_Card { get; set; }
+        public MealCard? MealCard { get; set; }
 
 
         //Ligação de 1 para 1 com Horario de atendimento (Schedule)
