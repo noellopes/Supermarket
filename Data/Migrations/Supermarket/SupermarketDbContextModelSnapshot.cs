@@ -136,642 +136,644 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("AvaliacaoFuncionarios");
-                    
-            modelBuilder.Entity("Supermarket.Models.Brand", b =>
-                {
-                    b.Property<int>("BrandId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrandId"));
+                    modelBuilder.Entity("Supermarket.Models.Brand", b =>
+                        {
+                            b.Property<int>("BrandId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrandId"));
 
-                    b.HasKey("BrandId");
+                            b.Property<string>("Name")
+                                .IsRequired()
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)");
 
-                    b.ToTable("Brand");
-                });
+                            b.HasKey("BrandId");
 
-            modelBuilder.Entity("Supermarket.Models.Category", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.ToTable("Brand");
+                        });
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+                    modelBuilder.Entity("Supermarket.Models.Category", b =>
+                        {
+                            b.Property<int>("CategoryId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
 
-                    b.HasKey("CategoryId");
+                            b.Property<string>("Name")
+                                .IsRequired()
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)");
 
-                    b.ToTable("Category");
+                            b.HasKey("CategoryId");
 
-                });
+                            b.ToTable("Category");
 
-            modelBuilder.Entity("Supermarket.Models.Folga", b =>
-                {
-                    b.Property<int>("FolgaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        });
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FolgaId"));
+                    modelBuilder.Entity("Supermarket.Models.Folga", b =>
+                        {
+                            b.Property<int>("FolgaId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<DateTime?>("DataFim")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FolgaId"));
 
-                    b.Property<DateTime?>("DataInicio")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
+                            b.Property<DateTime?>("DataFim")
+                                .IsRequired()
+                                .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DataPedido")
-                        .HasColumnType("datetime2");
+                            b.Property<DateTime?>("DataInicio")
+                                .IsRequired()
+                                .HasColumnType("datetime2");
 
-                    b.Property<string>("Gestor")
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<DateTime?>("DataPedido")
+                                .HasColumnType("datetime2");
 
-                    b.Property<string>("Motivo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("Gestor")
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("Motivo")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("FolgaId");
+                            b.Property<string>("Status")
+                                .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Folga");
-                });
+                            b.HasKey("FolgaId");
 
-            modelBuilder.Entity("Supermarket.Models.IssueType", b =>
-                {
-                    b.Property<int>("IssueTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.ToTable("Folga");
+                        });
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IssueTypeId"));
+                    modelBuilder.Entity("Supermarket.Models.IssueType", b =>
+                        {
+                            b.Property<int>("IssueTypeId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<string>("IssueDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IssueTypeId"));
 
-                    b.Property<int?>("IssueTypeId1")
-                        .HasColumnType("int");
+                            b.Property<string>("IssueDescription")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                            b.Property<int?>("IssueTypeId1")
+                                .HasColumnType("int");
 
-                    b.HasKey("IssueTypeId");
+                            b.Property<string>("Name")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
 
-                    b.HasIndex("IssueTypeId1");
+                            b.HasKey("IssueTypeId");
 
-                    b.ToTable("IssueType");
-                });
+                            b.HasIndex("IssueTypeId1");
 
-            modelBuilder.Entity("Supermarket.Models.Issues", b =>
-                {
-                    b.Property<int>("IssueId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.ToTable("IssueType");
+                        });
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IssueId"));
+                    modelBuilder.Entity("Supermarket.Models.Issues", b =>
+                        {
+                            b.Property<int>("IssueId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IssueId"));
 
-                    b.Property<DateTime>("IssueRegisterDate")
-                        .HasColumnType("datetime2");
+                            b.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IssueTypeId")
-                        .HasColumnType("int");
+                            b.Property<DateTime>("IssueRegisterDate")
+                                .HasColumnType("datetime2");
 
-                    b.Property<int>("Severity")
-                        .HasColumnType("int");
+                            b.Property<int>("IssueTypeId")
+                                .HasColumnType("int");
 
-                    b.HasKey("IssueId");
+                            b.Property<int>("Severity")
+                                .HasColumnType("int");
 
-                    b.HasIndex("IssueTypeId");
+                            b.HasKey("IssueId");
 
-                    b.ToTable("Issues");
-                });
+                            b.HasIndex("IssueTypeId");
 
-            modelBuilder.Entity("Supermarket.Models.ProductExpiration", b =>
-                {
-                    b.Property<int>("BatchId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.ToTable("Issues");
+                        });
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BatchId"));
+                    modelBuilder.Entity("Supermarket.Models.ProductExpiration", b =>
+                        {
+                            b.Property<int>("BatchId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<string>("BatchNumber")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BatchId"));
 
-                    b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("datetime2");
+                            b.Property<string>("BatchNumber")
+                                .IsRequired()
+                                .HasMaxLength(5)
+                                .HasColumnType("nvarchar(5)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                            b.Property<DateTime>("ExpirationDate")
+                                .HasColumnType("datetime2");
 
-                    b.HasKey("BatchId");
+                            b.Property<int>("Quantity")
+                                .HasColumnType("int");
 
-                    b.ToTable("ProductExpiration");
-                });
+                            b.HasKey("BatchId");
 
-            modelBuilder.Entity("Supermarket.Models.IssueType", b =>
-                {
-                    b.HasOne("Supermarket.Models.IssueType", null)
-                        .WithMany("IssueTypes")
-                        .HasForeignKey("IssueTypeId1");
-                });
+                            b.ToTable("ProductExpiration");
+                        });
 
-            modelBuilder.Entity("Supermarket.Models.Issues", b =>
-                {
-                    b.HasOne("Supermarket.Models.IssueType", "IssueType")
-                        .WithMany()
-                        .HasForeignKey("IssueTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("Supermarket.Models.IssueType", b =>
+                        {
+                            b.HasOne("Supermarket.Models.IssueType", null)
+                                .WithMany("IssueTypes")
+                                .HasForeignKey("IssueTypeId1");
+                        });
 
-                    b.Navigation("IssueType");
-                });
+                    modelBuilder.Entity("Supermarket.Models.Issues", b =>
+                        {
+                            b.HasOne("Supermarket.Models.IssueType", "IssueType")
+                                .WithMany()
+                                .HasForeignKey("IssueTypeId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-           modelBuilder.Entity("Supermarket.Models.IssueType", b =>
-                {
-                    b.Navigation("IssueTypes");
-                });
+                            b.Navigation("IssueType");
+                        });
 
-            modelBuilder.Entity("Supermarket.Models.Funcoes", b =>
-                {
-                    b.Property<int>("IdFuncao")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    modelBuilder.Entity("Supermarket.Models.IssueType", b =>
+                         {
+                             b.Navigation("IssueTypes");
+                         });
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFuncao"));
+                    modelBuilder.Entity("Supermarket.Models.Funcoes", b =>
+                        {
+                            b.Property<int>("IdFuncao")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<string>("DescricaoFuncao")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFuncao"));
 
-                    b.Property<string>("NomeFuncao")
-                    
-            modelBuilder.Entity("Supermarket.Models.Hallway", b =>
-                {
-                    b.Property<int>("HallwayId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.Property<string>("DescricaoFuncao")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HallwayId"));
+                            b.Property<string>("NomeFuncao");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                            modelBuilder.Entity("Supermarket.Models.Hallway", b =>
+                        {
+                            b.Property<int>("HallwayId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<int>("StoreId")
-                        .HasColumnType("int");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HallwayId"));
 
-                    b.HasKey("HallwayId");
+                            b.Property<string>("Description")
+                                .IsRequired()
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)");
 
-                    b.HasIndex("StoreId");
+                            b.Property<int>("StoreId")
+                                .HasColumnType("int");
 
-                    b.ToTable("Hallway");
-                });
+                            b.HasKey("HallwayId");
 
-            modelBuilder.Entity("Supermarket.Models.Product", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.HasIndex("StoreId");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
+                            b.ToTable("Hallway");
+                        });
 
-                    b.Property<int>("BrandId")
-                        .HasColumnType("int");
+                            modelBuilder.Entity("Supermarket.Models.Product", b =>
+                        {
+                            b.Property<int>("ProductId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                            b.Property<int>("BrandId")
+                                .HasColumnType("int");
 
-                    b.Property<int>("MinimumQuantity")
-                        .HasColumnType("int");
+                            b.Property<int>("CategoryId")
+                                .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                            b.Property<string>("Description")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                            b.Property<int>("MinimumQuantity")
+                                .HasColumnType("int");
 
-                    b.Property<int>("TotalQuantity")
-                        .HasColumnType("int");
+                            b.Property<string>("Name")
+                                .IsRequired()
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)");
 
-                    b.Property<double>("UnitPrice")
-                        .HasColumnType("float");
+                            b.Property<string>("Status")
+                                .IsRequired()
+                                .HasMaxLength(15)
+                                .HasColumnType("nvarchar(15)");
 
-                    b.HasKey("ProductId");
+                            b.Property<int>("TotalQuantity")
+                                .HasColumnType("int");
 
-                    b.HasIndex("BrandId");
+                            b.Property<double>("UnitPrice")
+                                .HasColumnType("float");
 
-                    b.HasIndex("CategoryId");
+                            b.HasKey("ProductId");
 
-                    b.ToTable("Product");
-                });
+                            b.HasIndex("BrandId");
 
-            modelBuilder.Entity("Supermarket.Models.ReduceProduct", b =>
-                {
-                    b.Property<int>("ReduceProductId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.HasIndex("CategoryId");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReduceProductId"));
+                            b.ToTable("Product");
+                        });
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                            modelBuilder.Entity("Supermarket.Models.ReduceProduct", b =>
+                        {
+                            b.Property<int>("ReduceProductId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReduceProductId"));
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                            b.Property<DateTime>("Date")
+                                .HasColumnType("datetime2");
 
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<int>("ProductId")
+                                .HasColumnType("int");
 
-                    b.Property<int?>("ShelfId")
-                        .HasColumnType("int");
+                            b.Property<int>("Quantity")
+                                .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<string>("Reason")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("WarehouseSectionId")
-                        .HasColumnType("int");
+                            b.Property<int?>("ShelfId")
+                                .HasColumnType("int");
 
-                    b.HasKey("ReduceProductId");
+                            b.Property<string>("Status")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("ProductId");
+                            b.Property<int?>("WarehouseSectionId")
+                                .HasColumnType("int");
 
-                    b.HasIndex("ShelfId");
+                            b.HasKey("ReduceProductId");
 
-                    b.HasIndex("WarehouseSectionId");
+                            b.HasIndex("ProductId");
 
-                    b.ToTable("ReduceProduct");
-                });
+                            b.HasIndex("ShelfId");
 
-            modelBuilder.Entity("Supermarket.Models.Shelf", b =>
-                {
-                    b.Property<int>("ShelfId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.HasIndex("WarehouseSectionId");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShelfId"));
+                            b.ToTable("ReduceProduct");
+                        });
 
-                    b.Property<int>("HallwayId")
-                        .HasColumnType("int");
+                            modelBuilder.Entity("Supermarket.Models.Shelf", b =>
+                        {
+                            b.Property<int>("ShelfId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShelfId"));
 
-                    b.HasKey("ShelfId");
+                            b.Property<int>("HallwayId")
+                                .HasColumnType("int");
 
-                    b.HasIndex("HallwayId");
+                            b.Property<string>("Name")
+                                .IsRequired()
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)");
 
-                    b.ToTable("Shelf");
-                });
+                            b.HasKey("ShelfId");
 
-            modelBuilder.Entity("Supermarket.Models.Shelft_ProductExhibition", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                            b.HasIndex("HallwayId");
 
-                    b.Property<int>("ShelfId")
-                        .HasColumnType("int");
+                            b.ToTable("Shelf");
+                        });
 
-                    b.Property<int>("MinimumQuantity")
-                        .HasColumnType("int");
+                            modelBuilder.Entity("Supermarket.Models.Shelft_ProductExhibition", b =>
+                        {
+                            b.Property<int>("ProductId")
+                                .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                            b.Property<int>("ShelfId")
+                                .HasColumnType("int");
 
-                    b.HasKey("ProductId", "ShelfId");
+                            b.Property<int>("MinimumQuantity")
+                                .HasColumnType("int");
 
-                    b.HasIndex("ShelfId");
+                            b.Property<int>("Quantity")
+                                .HasColumnType("int");
 
-                    b.ToTable("Shelft_ProductExhibition");
-                });
+                            b.HasKey("ProductId", "ShelfId");
 
-            modelBuilder.Entity("Supermarket.Models.Store", b =>
-                {
-                    b.Property<int>("StoreId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.HasIndex("ShelfId");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StoreId"));
+                            b.ToTable("Shelft_ProductExhibition");
+                        });
 
-                    b.Property<string>("Adress")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                            modelBuilder.Entity("Supermarket.Models.Store", b =>
+                        {
+                            b.Property<int>("StoreId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StoreId"));
 
-                    b.HasKey("StoreId");
+                            b.Property<string>("Adress")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
 
-                    b.ToTable("Store");
-                });
+                            b.Property<string>("Name")
+                                .IsRequired()
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)");
 
-            modelBuilder.Entity("Supermarket.Models.Warehouse", b =>
-                {
-                    b.Property<int>("WarehouseId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.HasKey("StoreId");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WarehouseId"));
+                            b.ToTable("Store");
+                        });
 
-                    b.Property<string>("Adress")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                            modelBuilder.Entity("Supermarket.Models.Warehouse", b =>
+                        {
+                            b.Property<int>("WarehouseId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WarehouseId"));
 
-                    b.HasKey("IdFuncao");
+                            b.Property<string>("Adress")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
 
-                    b.ToTable("Funcoes");
-                });
+                            b.Property<string>("Name")
+                                .IsRequired()
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)");
 
-            modelBuilder.Entity("Supermarket.Models.Meal_Card", b =>
-                {
-                    b.Property<int>("Card_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.HasKey("IdFuncao");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Card_Id"));
+                            b.ToTable("Funcoes");
+                        });
 
-                    b.Property<int>("Balance")
-                        .HasColumnType("int");
+                            modelBuilder.Entity("Supermarket.Models.Meal_Card", b =>
+                        {
+                            b.Property<int>("Card_Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Card_Id"));
 
-                    b.HasKey("Card_Id");
+                            b.Property<int>("Balance")
+                                .HasColumnType("int");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
+                            b.Property<int>("EmployeeId")
+                                .HasColumnType("int");
 
-                    b.ToTable("Meal_Card");
-                });
+                            b.HasKey("Card_Id");
 
-            modelBuilder.Entity("Supermarket.Models.Card_Movement", b =>
-                {
-                    b.HasOne("Supermarket.Models.Meal_Card", "Meal_Card")
-                        .WithMany("Movements")
-                        .HasForeignKey("Card_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasIndex("EmployeeId")
+                                .IsUnique();
 
-                    b.Navigation("Meal_Card");
-                });
+                            b.ToTable("Meal_Card");
+                        });
 
-            modelBuilder.Entity("Supermarket.Models.EmployeeEvaluation", b =>
-                {
-                    b.HasOne("Supermarket.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            modelBuilder.Entity("Supermarket.Models.Card_Movement", b =>
+                        {
+                            b.HasOne("Supermarket.Models.Meal_Card", "Meal_Card")
+                                .WithMany("Movements")
+                                .HasForeignKey("Card_Id")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Employee");
-                });
+                            b.Navigation("Meal_Card");
+                        });
 
-            modelBuilder.Entity("Supermarket.Models.Meal_Card", b =>
-                {
-                    b.HasOne("Supermarket.Models.Employee", "Employee")
-                        .WithOne("Meal_Card")
-                        .HasForeignKey("Supermarket.Models.Meal_Card", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            modelBuilder.Entity("Supermarket.Models.EmployeeEvaluation", b =>
+                        {
+                            b.HasOne("Supermarket.Models.Employee", "Employee")
+                                .WithMany()
+                                .HasForeignKey("EmployeeId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Employee");
-                });
+                            b.Navigation("Employee");
+                        });
 
-            modelBuilder.Entity("Supermarket.Models.Employee", b =>
-                {
-                    b.Navigation("Meal_Card")
-                        .IsRequired();
-                });
+                            modelBuilder.Entity("Supermarket.Models.Meal_Card", b =>
+                        {
+                            b.HasOne("Supermarket.Models.Employee", "Employee")
+                                .WithOne("Meal_Card")
+                                .HasForeignKey("Supermarket.Models.Meal_Card", "EmployeeId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-            modelBuilder.Entity("Supermarket.Models.Meal_Card", b =>
-                {
-                    b.Navigation("Movements");
-                    
-                    b.HasKey("WarehouseId");
+                            b.Navigation("Employee");
+                        });
 
-                    b.ToTable("Warehouse");
-                });
+                            modelBuilder.Entity("Supermarket.Models.Employee", b =>
+                        {
+                            b.Navigation("Meal_Card")
+                                .IsRequired();
+                        });
 
-            modelBuilder.Entity("Supermarket.Models.WarehouseSection", b =>
-                {
-                    b.Property<int>("WarehouseSectionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            modelBuilder.Entity("Supermarket.Models.Meal_Card", b =>
+                        {
+                            b.Navigation("Movements");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WarehouseSectionId"));
+                            b.HasKey("WarehouseId");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                            b.ToTable("Warehouse");
+                        });
 
-                    b.Property<int>("WarehouseId")
-                        .HasColumnType("int");
+                            modelBuilder.Entity("Supermarket.Models.WarehouseSection", b =>
+                        {
+                            b.Property<int>("WarehouseSectionId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.HasKey("WarehouseSectionId");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WarehouseSectionId"));
 
-                    b.HasIndex("WarehouseId");
+                            b.Property<string>("Description")
+                                .IsRequired()
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)");
 
-                    b.ToTable("WarehouseSection");
-                });
+                            b.Property<int>("WarehouseId")
+                                .HasColumnType("int");
 
-            modelBuilder.Entity("Supermarket.Models.WarehouseSection_Product", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                            b.HasKey("WarehouseSectionId");
 
-                    b.Property<int>("WarehouseSectionId")
-                        .HasColumnType("int");
+                            b.HasIndex("WarehouseId");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                            b.ToTable("WarehouseSection");
+                        });
 
-                    b.Property<int>("ReservedQuantity")
-                        .HasColumnType("int");
+                            modelBuilder.Entity("Supermarket.Models.WarehouseSection_Product", b =>
+                        {
+                            b.Property<int>("ProductId")
+                                .HasColumnType("int");
 
-                    b.HasKey("ProductId", "WarehouseSectionId");
+                            b.Property<int>("WarehouseSectionId")
+                                .HasColumnType("int");
 
-                    b.HasIndex("WarehouseSectionId");
+                            b.Property<int>("Quantity")
+                                .HasColumnType("int");
 
-                    b.ToTable("WarehouseSection_Product");
-                });
+                            b.Property<int>("ReservedQuantity")
+                                .HasColumnType("int");
 
-            modelBuilder.Entity("Supermarket.Models.Hallway", b =>
-                {
-                    b.HasOne("Supermarket.Models.Store", "Store")
-                        .WithMany()
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasKey("ProductId", "WarehouseSectionId");
 
-                    b.Navigation("Store");
-                });
+                            b.HasIndex("WarehouseSectionId");
 
-            modelBuilder.Entity("Supermarket.Models.Product", b =>
-                {
-                    b.HasOne("Supermarket.Models.Brand", "Brand")
-                        .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.ToTable("WarehouseSection_Product");
+                        });
 
-                    b.HasOne("Supermarket.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            modelBuilder.Entity("Supermarket.Models.Hallway", b =>
+                        {
+                            b.HasOne("Supermarket.Models.Store", "Store")
+                                .WithMany()
+                                .HasForeignKey("StoreId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Brand");
+                            b.Navigation("Store");
+                        });
 
-                    b.Navigation("Category");
-                });
+                            modelBuilder.Entity("Supermarket.Models.Product", b =>
+                        {
+                            b.HasOne("Supermarket.Models.Brand", "Brand")
+                                .WithMany()
+                                .HasForeignKey("BrandId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-            modelBuilder.Entity("Supermarket.Models.ReduceProduct", b =>
-                {
-                    b.HasOne("Supermarket.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("Supermarket.Models.Category", "Category")
+                                .WithMany()
+                                .HasForeignKey("CategoryId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.HasOne("Supermarket.Models.Shelf", "Shelf")
-                        .WithMany()
-                        .HasForeignKey("ShelfId");
+                            b.Navigation("Brand");
 
-                    b.HasOne("Supermarket.Models.WarehouseSection", "WarehouseSection")
-                        .WithMany()
-                        .HasForeignKey("WarehouseSectionId");
+                            b.Navigation("Category");
+                        });
 
-                    b.Navigation("Product");
+                            modelBuilder.Entity("Supermarket.Models.ReduceProduct", b =>
+                        {
+                            b.HasOne("Supermarket.Models.Product", "Product")
+                                .WithMany()
+                                .HasForeignKey("ProductId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Shelf");
+                            b.HasOne("Supermarket.Models.Shelf", "Shelf")
+                                .WithMany()
+                                .HasForeignKey("ShelfId");
 
-                    b.Navigation("WarehouseSection");
-                });
+                            b.HasOne("Supermarket.Models.WarehouseSection", "WarehouseSection")
+                                .WithMany()
+                                .HasForeignKey("WarehouseSectionId");
 
-            modelBuilder.Entity("Supermarket.Models.Shelf", b =>
-                {
-                    b.HasOne("Supermarket.Models.Hallway", "Hallway")
-                        .WithMany()
-                        .HasForeignKey("HallwayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.Navigation("Product");
 
-                    b.Navigation("Hallway");
-                });
+                            b.Navigation("Shelf");
 
-            modelBuilder.Entity("Supermarket.Models.Shelft_ProductExhibition", b =>
-                {
-                    b.HasOne("Supermarket.Models.Product", "Product")
-                        .WithMany("Shelf")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.Navigation("WarehouseSection");
+                        });
 
-                    b.HasOne("Supermarket.Models.Shelf", "Shelf")
-                        .WithMany("Product")
-                        .HasForeignKey("ShelfId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            modelBuilder.Entity("Supermarket.Models.Shelf", b =>
+                        {
+                            b.HasOne("Supermarket.Models.Hallway", "Hallway")
+                                .WithMany()
+                                .HasForeignKey("HallwayId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Product");
+                            b.Navigation("Hallway");
+                        });
 
-                    b.Navigation("Shelf");
-                });
+                            modelBuilder.Entity("Supermarket.Models.Shelft_ProductExhibition", b =>
+                        {
+                            b.HasOne("Supermarket.Models.Product", "Product")
+                                .WithMany("Shelf")
+                                .HasForeignKey("ProductId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-            modelBuilder.Entity("Supermarket.Models.WarehouseSection", b =>
-                {
-                    b.HasOne("Supermarket.Models.Warehouse", "Warehouse")
-                        .WithMany()
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasOne("Supermarket.Models.Shelf", "Shelf")
+                                .WithMany("Product")
+                                .HasForeignKey("ShelfId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Warehouse");
-                });
+                            b.Navigation("Product");
 
-            modelBuilder.Entity("Supermarket.Models.WarehouseSection_Product", b =>
-                {
-                    b.HasOne("Supermarket.Models.Product", "Product")
-                        .WithMany("WarehouseSection")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.Navigation("Shelf");
+                        });
 
-                    b.HasOne("Supermarket.Models.WarehouseSection", "WarehouseSection")
-                        .WithMany("Products")
-                        .HasForeignKey("WarehouseSectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            modelBuilder.Entity("Supermarket.Models.WarehouseSection", b =>
+                        {
+                            b.HasOne("Supermarket.Models.Warehouse", "Warehouse")
+                                .WithMany()
+                                .HasForeignKey("WarehouseId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Product");
+                            b.Navigation("Warehouse");
+                        });
 
-                    b.Navigation("WarehouseSection");
-                });
+                            modelBuilder.Entity("Supermarket.Models.WarehouseSection_Product", b =>
+                        {
+                            b.HasOne("Supermarket.Models.Product", "Product")
+                                .WithMany("WarehouseSection")
+                                .HasForeignKey("ProductId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-            modelBuilder.Entity("Supermarket.Models.Product", b =>
-                {
-                    b.Navigation("Shelf");
+                            b.HasOne("Supermarket.Models.WarehouseSection", "WarehouseSection")
+                                .WithMany("Products")
+                                .HasForeignKey("WarehouseSectionId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("WarehouseSection");
-                });
+                            b.Navigation("Product");
 
-            modelBuilder.Entity("Supermarket.Models.Shelf", b =>
-                {
-                    b.Navigation("Product");
-                });
+                            b.Navigation("WarehouseSection");
+                        });
 
-            modelBuilder.Entity("Supermarket.Models.WarehouseSection", b =>
-                {
-                    b.Navigation("Products");
+                            modelBuilder.Entity("Supermarket.Models.Product", b =>
+                        {
+                            b.Navigation("Shelf");
 
-                });
+                            b.Navigation("WarehouseSection");
+                        });
+
+                            modelBuilder.Entity("Supermarket.Models.Shelf", b =>
+                        {
+                            b.Navigation("Product");
+                        });
+
+                            modelBuilder.Entity("Supermarket.Models.WarehouseSection", b =>
+                        {
+                            b.Navigation("Products");
+
+                        });
 #pragma warning restore 612, 618
+                        });
+                });
         }
     }
 }
