@@ -78,7 +78,8 @@ namespace Supermarket.Controllers
             var funcoes = await _context.Funcoes.FindAsync(id);
             if (funcoes == null)
             {
-                return NotFound();
+                TempData["mensagem"] = "A funcao nao existe";
+                return RedirectToAction(nameof(Index));
             }
             return View(funcoes);
         }
@@ -95,12 +96,35 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) //valida no lado do cliente e o do servidosr [neste caso no cliente]
             {
                 try
                 {
-                    _context.Update(funcoes);
-                    await _context.SaveChangesAsync();
+                    bool funcaoExiste = await _context.Funcoes.AnyAsync(
+                        f => f.NomeFuncao == funcoes.NomeFuncao || f.IdFuncao == funcoes.IdFuncao);
+
+                    bool funcaoIgual = await _context.Funcoes.AnyAsync(
+                        f => (f.NomeFuncao == funcoes.NomeFuncao || f.IdFuncao == funcoes.IdFuncao) && f.DescricaoFuncao == funcoes.DescricaoFuncao);
+                    if (funcaoExiste)
+                    {
+                        if (!funcaoIgual) {
+                            _context.Update(funcoes);
+                            await _context.SaveChangesAsync();
+                            TempData["MensagemPositiva"] = "Edicao de uma funcao ja existente com sucesso";
+                            return RedirectToAction(nameof(Index));
+                        }
+                        else
+                        {
+                            TempData["Mensagem"] = "funcao identica";
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
+                    else{
+                        _context.Update(funcoes);
+                        await _context.SaveChangesAsync();
+                        TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
+                        return View("Details", funcoes);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
