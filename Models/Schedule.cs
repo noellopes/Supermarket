@@ -4,7 +4,8 @@ namespace Supermarket.Models
 {
     public class Schedule
     {
-        public int ScheduleId { get; set; }
+        [Required]
+        public int ScheduleID { get; set; }
         [Required(ErrorMessage = "The Start Date is mandatory.")]
         public DateTime StartDate { get; set; }
         [Required(ErrorMessage = "The End Date is mandatory.")]
@@ -13,7 +14,7 @@ namespace Supermarket.Models
         public DateTime DailyStartTime {  get; set; }
         [Required(ErrorMessage = "The Daily Finish Date is mandatory.")]
         public DateTime DailyFinishTime { get; set; }
-        public int DeptID { get; set; }
-        public Departments Department { get; set; }
+        public int Id_Departments { get; set; }
+        public Departments? Department { get; set; }
     }
 }

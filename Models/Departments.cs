@@ -6,7 +6,8 @@ namespace Supermarket.Models
     public class Departments
     {
         // Chave primária
-        public required int ID_Departments { get; set; }
+        [Required] 
+        public int Id_Departments { get; set; }
 
         // Nome do Departamento
         [Required(ErrorMessage = "The Department Name field is mandatory.")]
@@ -18,7 +19,7 @@ namespace Supermarket.Models
         public required string Description_Departments { get; set; }
 
         // Chave estrangeira para o ID_Horario
-        public int ID_Schedule { get; set; }
+        public int ScheduleID { get; set; }
 
         // Propriedade de navegação para o Horario relacionado
         public Schedule? Schedule { get; set; }
