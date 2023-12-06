@@ -36,8 +36,12 @@ namespace Supermarket.Controllers
 
             var reduceProduct = await _context.ReduceProduct
                 .Include(r => r.Product)
+                .Include(r => r.Product.Brand)
                 .Include(r => r.Shelf)
+                .Include(r => r.Shelf.Hallway)
+                .Include(r => r.Shelf.Hallway.Store)
                 .Include(r => r.WarehouseSection)
+                .Include(r => r.WarehouseSection.Warehouse)
                 .FirstOrDefaultAsync(m => m.ReduceProductId == id);
             if (reduceProduct == null)
             {
