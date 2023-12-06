@@ -19,7 +19,7 @@ namespace Supermarket.Models
 
         public int Card_Id { get; set; }
 
-        public Meal_Card Meal_Card { get; set; }
+        public MealCard MealCard { get; set; }
 
     }
 }

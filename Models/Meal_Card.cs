@@ -1,19 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace Supermarket.Models
 {
-    [PrimaryKey(nameof(EmployeeId), nameof(Card_Id))]
-    public class Meal_Card
+    public class MealCard
     {
-
-        public int Card_Id { get; set; }
+        
+        public int MealCardId { get; set; }
 
         [Required]
         public int Balance { get; set; }
 
         // Chave estrangeira para o funcionario
+        [DisplayName("Empregado")]
         public int EmployeeId { get; set; }
 
         // Propriedade de navegação para o funcionario associado a este cartão
