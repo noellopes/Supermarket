@@ -2,7 +2,8 @@
 {
     public class Tickets
     {
-        public int TicketId { get; set; }
+       
+        public required int TicketId { get; set; }
 
         public DateTime PrintDate { get; set; }
 
