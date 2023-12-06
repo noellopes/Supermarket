@@ -30,13 +30,13 @@ namespace Supermarket.Models
         public required string Employee_Address { get; set; }
 
         [Required]
-        public required DateOnly Employee_Birth_Date { get; set; }
+        public required DateTime Employee_Birth_Date { get; set; }
 
         [Required]
-        public required DateOnly Employee_Admission_Date{ get; set; }
+        public required DateTime Employee_Admission_Date{ get; set; }
 
         [Required]
-        public required DateOnly Employee_Termination_Date { get; set; }
+        public required DateTime Employee_Termination_Date { get; set; }
 
         [Required]
         public required DateTime Standard_Check_In_Time { get; set; }
