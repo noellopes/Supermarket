@@ -5,7 +5,7 @@ namespace Supermarket.Models
     public class ProductDiscount
     {
         public int ProductDiscountId { get; set; }
-        //ICollection<Product> ProductId { get; set; }
+        ICollection<Product> ProductId { get; set; }
         //ICollection<Card> CardNumber { get; set; }
         public float Value { get; set; }
         [Required]
