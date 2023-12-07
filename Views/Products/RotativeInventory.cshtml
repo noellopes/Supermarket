@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Rotative Inventory";
+}
+
+<h1>Rotative Inventory</h1>
+
+@{
+    var warehouseSections = ViewData["WarehouseSections"] as IEnumerable<Supermarket.Models.WarehouseSection>;
+    int warehouseSectionId;
+    var selectedWarehouseSection = (Supermarket.Models.WarehouseSection)null;
+
+    if (int.TryParse(Context.Request.Query["WarehouseSectionId"], out warehouseSectionId) && warehouseSectionId > 0)
+    {
+        selectedWarehouseSection = warehouseSections?.FirstOrDefault(w => w.WarehouseSectionId == warehouseSectionId);
+    }
+}
+
+<form asp-controller="Products" asp-action="RotativeProducts" method="get">
+    <div class="form-group">
+        <label for="WarehouseSectionId">Selecione a Secção do Armazém:</label>
+        <select name="WarehouseSectionId" class="form-control">
+            <option value="">-- Todas as Secções do Armazém --</option>
+            @if (warehouseSections != null)
+            {
+                foreach (var warehouseSection in warehouseSections)
+                {
+                    <option value="@warehouseSection.WarehouseSectionId">@warehouseSection.Description</option>
+                }
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submeter</button>
+</form>
+
+@if (warehouseSectionId > 0 && selectedWarehouseSection != null)
+{
+    <h2>Secção do Armazém Selecionada: @selectedWarehouseSection.Description</h2>
+
+    @if (selectedWarehouseSection.Products != null && selectedWarehouseSection.Products.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name Produto</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var warehouseSectionProduct in selectedWarehouseSection.Products)
+                {
+                    <tr>
+                        <td>
+                            @if (warehouseSectionProduct.Product != null)
+                            {
+                                @warehouseSectionProduct.Product.Name
+                            }
+                            else
+                            {
+                                <span style="color: red;">Erro: Produto não disponível</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Nenhum produto disponível nesta seção do armazém.</p>
+    }
+}
+else
+{
+    <p>Selecione uma seção do armazém para exibir os produtos correspondentes.</p>
+}

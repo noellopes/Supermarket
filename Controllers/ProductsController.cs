@@ -207,6 +207,31 @@ namespace Supermarket.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> RotativeProducts(int warehouseSectionId = 0)
+        {
+            var query = _context.WarehouseSection.AsQueryable();
+
+            if (warehouseSectionId > 0)
+            {
+                query = query.Include(ws => ws.Products)
+                             .ThenInclude(wsp => wsp.Product)
+                             .Where(ws => ws.WarehouseSectionId == warehouseSectionId);
+            }
+            else
+            {
+                query = query.Include(ws => ws.Products)
+                             .ThenInclude(wsp => wsp.Product);
+            }
+
+            var warehouseSections = await query.ToListAsync();
+            ViewData["WarehouseSections"] = warehouseSections;
+
+            var selectedWarehouseSection = warehouseSections.FirstOrDefault(ws => ws.WarehouseSectionId == warehouseSectionId);
+            ViewData["SelectedWarehouseSection"] = selectedWarehouseSection;
+
+            return View("RotativeInventory");
+        }
+
         private bool ProductExists(int id)
         {
           return (_context.Product?.Any(e => e.ProductId == id)).GetValueOrDefault();
