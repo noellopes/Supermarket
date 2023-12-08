@@ -214,8 +214,11 @@ namespace Supermarket.Controllers
             if (warehouseSectionId > 0)
             {
                 query = query.Include(ws => ws.Products)
-                             .ThenInclude(wsp => wsp.Product)
-                             .Where(ws => ws.WarehouseSectionId == warehouseSectionId);
+                .Include(ws => ws.Products)
+                .ThenInclude(wsp => wsp.Product.Category)
+                .Include(ws => ws.Products)
+                .ThenInclude(wsp => wsp.Product.Brand)
+                .Where(ws => ws.WarehouseSectionId == warehouseSectionId);
             }
             else
             {

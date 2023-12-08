@@ -17,9 +17,9 @@
 
 <form asp-controller="Products" asp-action="RotativeProducts" method="get">
     <div class="form-group">
-        <label for="WarehouseSectionId">Selecione a Secção do Armazém:</label>
+        <label for="WarehouseSectionId">Select Warehouse Section:</label>
         <select name="WarehouseSectionId" class="form-control">
-            <option value="">-- Todas as Secções do Armazém --</option>
+            <option value="">-- All Warehouse Sections --</option>
             @if (warehouseSections != null)
             {
                 foreach (var warehouseSection in warehouseSections)
@@ -34,14 +34,19 @@
 
 @if (warehouseSectionId > 0 && selectedWarehouseSection != null)
 {
-    <h2>Secção do Armazém Selecionada: @selectedWarehouseSection.Description</h2>
+    <h2>Selected Warehouse Section: @selectedWarehouseSection.Description</h2>
 
     @if (selectedWarehouseSection.Products != null && selectedWarehouseSection.Products.Any())
     {
         <table class="table">
             <thead>
                 <tr>
-                    <th>Name Produto</th>
+                    <th>Name Product</th>
+                    <th>Description</th>
+                    <th>Brand</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Product count </th>
                 </tr>
             </thead>
             <tbody>
@@ -55,20 +60,38 @@
                             }
                             else
                             {
-                                <span style="color: red;">Erro: Produto não disponível</span>
+                                <span style="color: red;">Erro: Product not available</span>
                             }
+                        </td>
+                        <td>
+                            @warehouseSectionProduct.Product.Description
+                        </td>
+                        <td>
+                            @warehouseSectionProduct.Product.Brand.Name
+                        </td>
+                        <td>
+                            @warehouseSectionProduct.Product.Category.Name
+                        </td>
+                        <td>
+                            @warehouseSectionProduct.Quantity
+                        </td>
+                        <td>
+                            <input type="number" name="quantities[@warehouseSectionProduct.ProductId]" min="0" max="99999" value="0" />
                         </td>
                     </tr>
                 }
             </tbody>
+           
         </table>
     }
     else
     {
-        <p>Nenhum produto disponível nesta seção do armazém.</p>
+        <p>
+            No products available in this section of the warehouse.
+        </p>
     }
 }
 else
 {
-    <p>Selecione uma seção do armazém para exibir os produtos correspondentes.</p>
+    <p>Select a warehouse section to display corresponding products.</p>
 }
