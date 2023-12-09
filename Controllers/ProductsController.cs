@@ -209,22 +209,12 @@ namespace Supermarket.Controllers
 
         public async Task<IActionResult> RotativeProducts(int warehouseSectionId = 0)
         {
-            var query = _context.WarehouseSection.AsQueryable();
-
-            if (warehouseSectionId > 0)
-            {
-                query = query.Include(ws => ws.Products)
+            var query = _context.WarehouseSection
+                .Include(ws => ws.Warehouse)
                 .Include(ws => ws.Products)
                 .ThenInclude(wsp => wsp.Product.Category)
                 .Include(ws => ws.Products)
-                .ThenInclude(wsp => wsp.Product.Brand)
-                .Where(ws => ws.WarehouseSectionId == warehouseSectionId);
-            }
-            else
-            {
-                query = query.Include(ws => ws.Products)
-                             .ThenInclude(wsp => wsp.Product);
-            }
+                .ThenInclude(wsp => wsp.Product.Brand);
 
             var warehouseSections = await query.ToListAsync();
             ViewData["WarehouseSections"] = warehouseSections;

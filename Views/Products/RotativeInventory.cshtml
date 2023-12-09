@@ -24,74 +24,81 @@
             {
                 foreach (var warehouseSection in warehouseSections)
                 {
-                    <option value="@warehouseSection.WarehouseSectionId">@warehouseSection.Description</option>
+                    <option value="@warehouseSection.WarehouseSectionId">@warehouseSection.Description,  @warehouseSection.Warehouse.Name</option>
                 }
             }
         </select>
     </div>
+    <div style ="margin-top: 5px;">
     <button type="submit" class="btn btn-primary">Submeter</button>
+    </div>
 </form>
 
-@if (warehouseSectionId > 0 && selectedWarehouseSection != null)
-{
-    <h2>Selected Warehouse Section: @selectedWarehouseSection.Description</h2>
-
-    @if (selectedWarehouseSection.Products != null && selectedWarehouseSection.Products.Any())
+<div style="margin-top: 20px;">
+   
+    @if (warehouseSectionId > 0 && selectedWarehouseSection != null)
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Name Product</th>
-                    <th>Description</th>
-                    <th>Brand</th>
-                    <th>Category</th>
-                    <th>Quantity</th>
-                    <th>Product count </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var warehouseSectionProduct in selectedWarehouseSection.Products)
-                {
+        <h2>Selected Warehouse Section: @selectedWarehouseSection.Description</h2>
+        <p>Belongs to Warehouse: @selectedWarehouseSection.Warehouse.Name</p>
+
+        @if (selectedWarehouseSection.Products != null && selectedWarehouseSection.Products.Any())
+        {
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>
-                            @if (warehouseSectionProduct.Product != null)
-                            {
-                                @warehouseSectionProduct.Product.Name
-                            }
-                            else
-                            {
-                                <span style="color: red;">Erro: Product not available</span>
-                            }
-                        </td>
-                        <td>
-                            @warehouseSectionProduct.Product.Description
-                        </td>
-                        <td>
-                            @warehouseSectionProduct.Product.Brand.Name
-                        </td>
-                        <td>
-                            @warehouseSectionProduct.Product.Category.Name
-                        </td>
-                        <td>
-                            @warehouseSectionProduct.Quantity
-                        </td>
-                        <td>
-                            <input type="number" name="quantities[@warehouseSectionProduct.ProductId]" min="0" max="99999" value="0" />
-                        </td>
+                        <th>Name Product</th>
+                        <th>Description</th>
+                        <th>Brand</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Product count </th>
                     </tr>
-                }
-            </tbody>
-           
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var warehouseSectionProduct in selectedWarehouseSection.Products)
+                    {
+                        <tr>
+                            <td>
+                                @if (warehouseSectionProduct.Product != null)
+                                {
+                                    @warehouseSectionProduct.Product.Name
+                                }
+                                else
+                                {
+                                    <span style="color: red;">Erro: Product not available</span>
+                                }
+                            </td>
+                            <td>
+                                @warehouseSectionProduct.Product.Description
+                            </td>
+                            <td>
+                                @warehouseSectionProduct.Product.Brand.Name
+                            </td>
+                            <td>
+                                @warehouseSectionProduct.Product.Category.Name
+                            </td>
+                            <td>
+                                @warehouseSectionProduct.Quantity
+                            </td>
+                            <td>
+                                <input type="number" name="quantities[@warehouseSectionProduct.ProductId]" min="0" max="99999" value="0" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>
+                No products available in this section of the warehouse.
+            </p>
+        }
     }
     else
     {
-        <p>
-            No products available in this section of the warehouse.
-        </p>
+        <p>Select a warehouse section to display corresponding products.</p>
     }
-}
-else
-{
-    <p>Select a warehouse section to display corresponding products.</p>
-}
+</div>
+
+
