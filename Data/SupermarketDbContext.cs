@@ -21,6 +21,12 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.SubsidySetup> SubsidySetup { get; set; } = default!;
 
 
+        public DbSet<Supermarket.Models.MealCard> MealCard { get; set; } = default!;
+
+
+        public DbSet<Supermarket.Models.CardMovement> CardMovement { get; set; } = default!;
+
+
 
 
 
