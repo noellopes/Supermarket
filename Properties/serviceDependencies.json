@@ -4,19 +4,13 @@
       "type": "mssql",
       "connectionId": "ConnectionStrings:DefaultConnection"
     },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:GroupsConnection"
+    },
     "mssql3": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:SupermarketConnection"
-    },
-    "mssql2": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:GroupConnection",
-      "dynamicId": null
-    },
-    "mssql4": {
-      "type": "mssql",
-      "connectionId": "ConnectionStrings:GroupsConnection",
-      "dynamicId": null
     }
   }
 }
