@@ -1,17 +1,24 @@
-﻿@model IEnumerable<Supermarket.Models.Funcoes>
+@model IEnumerable<Supermarket.Models.Funcoes>
 
 @{
     ViewData["Title"] = "Funcoes";
 }
-<h2>
+
+  <h3>
     @if (TempData["Mensagem"] != null)
     {
         <div class="alert alert-danger" role="alert">
-            @TempData["Mensagem"]
+                @TempData["Mensagem"]
         </div>
     }
-</h2>
-
+    else if(TempData["MensagemPositiva"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["MensagemPositiva"]
+        </div>
+    }
+</h3>
+  
 <h1>@ViewData["Title"]</h1>
 
 <p>
@@ -38,11 +45,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.DescricaoFuncao)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdFuncao">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdFuncao">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdFuncao">Delete</a>
-            </td>
+            <div class="row justify-content-end">
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.IdFuncao" class="btn btn-warning btn-sm">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.IdFuncao" class="btn btn-info btn-sm">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdFuncao" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </div>    
         </tr>
 }
     </tbody>
