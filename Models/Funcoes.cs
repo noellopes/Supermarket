@@ -3,10 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models
 {
-    [PrimaryKey(nameof(IdFuncao))]
+    //[PrimaryKey(nameof(IdFuncao))]
     public class Funcoes
     {
-        [Required]
+        //[Required]
+        [Key]
         public required int IdFuncao { get; set; }
         [Required]
         [StringLength(30, MinimumLength = 3)]
