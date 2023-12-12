@@ -1,4 +1,49 @@
-﻿@model Supermarket.Models.Reserve
+﻿@model IEnumerable<Supermarket.Models.Reserve_Department>
 @{
     ViewData["Title"] = "Index";
 }
+<h1>Reserves</h1>
+
+<p>
+    <a asp-action="Create">Create a new reserve</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                EmployeeId
+            </th>
+            <th>
+                DepartmentsId
+            </th>
+            <th>
+                NumeroDeFunc
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeId)
+                </td>                     
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartmentsId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumeroDeFunc)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ReserveId">Alterar</a>
+                    <a asp-action="Delete" asp-route-id="@item.ReserveId">Eliminar</a>
+                </td>
+            </tr>
+            
+        }
+
+    </tbody>
+
+</table>

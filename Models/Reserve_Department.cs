@@ -4,7 +4,13 @@ namespace Supermarket.Models
 {
     public class  Reserve_Department
     {
-        
+        // FK RESERVE
+        [Required]
+        public int ReserveId { get; set; }
+
+        [Required]
+        public Reserve? Reserve { get; set; }
+
         // FK EMPLOYEE
         [Required]
         public int EmployeeId { get; set; }
