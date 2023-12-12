@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 namespace Supermarket.Models
 {
-    [PrimaryKey(nameof(Card_Id), nameof(Movement_Id))]
-    public class Card_Movement
+
+    public class CardMovement
     {
-        public int Movement_Id { get; set; }
+        public int CardMovementId { get; set; }
 
         public DateTime Movement_Date { get; set; }
 
@@ -15,11 +15,11 @@ namespace Supermarket.Models
 
         public string Description { get; set; }
 
-        public string Type {  get; set; } 
+        public string Type { get; set; }
 
-        public int Card_Id { get; set; }
+        public int MealCardId { get; set; }
 
-        public Meal_Card Meal_Card { get; set; }
+        public MealCard MealCard { get; set; }
 
     }
 }
