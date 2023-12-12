@@ -10,16 +10,16 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class PontoesController : Controller
+    public class PontosController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public PontoesController(SupermarketDbContext context)
+        public PontosController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: Pontoes
+        // GET: Pontos
         public async Task<IActionResult> Index()
         {
               return _context.Ponto != null ? 
@@ -27,7 +27,7 @@ namespace Supermarket.Controllers
                           Problem("Entity set 'SupermarketDbContext.Ponto'  is null.");
         }
 
-        // GET: Pontoes/Details/5
+        // GET: Pontos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Ponto == null)
@@ -45,13 +45,13 @@ namespace Supermarket.Controllers
             return View(ponto);
         }
 
-        // GET: Pontoes/Create
+        // GET: Pontos/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Pontoes/Create
+        // POST: Pontos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -67,7 +67,7 @@ namespace Supermarket.Controllers
             return View(ponto);
         }
 
-        // GET: Pontoes/Edit/5
+        // GET: Pontos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Ponto == null)
@@ -83,7 +83,7 @@ namespace Supermarket.Controllers
             return View(ponto);
         }
 
-        // POST: Pontoes/Edit/5
+        // POST: Pontos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -118,7 +118,7 @@ namespace Supermarket.Controllers
             return View(ponto);
         }
 
-        // GET: Pontoes/Delete/5
+        // GET: Pontos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Ponto == null)
@@ -136,7 +136,7 @@ namespace Supermarket.Controllers
             return View(ponto);
         }
 
-        // POST: Pontoes/Delete/5
+        // POST: Pontos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
