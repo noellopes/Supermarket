@@ -4,6 +4,7 @@ namespace Supermarket.Models
 {
     public class  Reserve_Department
     {
+        
         // FK EMPLOYEE
         [Required]
         public int EmployeeId { get; set; }
@@ -19,6 +20,9 @@ namespace Supermarket.Models
         [Required]
         public Departments? Departments { get; set; }
 
+        // NUMERO DE FUNCIONARIOS NA RESERVA
+        [Required]
+        public int NumeroDeFunc { get; set; }
 
         /* FK Ticket
           public int TicketID { get; set; }
