@@ -20,7 +20,6 @@ namespace Supermarket.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
-            modelBuilder.Entity<Meal_Card>().HasKey(MC => MC.Card_Id);
         }
 
         public DbSet<Supermarket.Models.Folga> Folga { get; set; } = default!;
@@ -61,6 +60,8 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.WarehouseSection_Product> WarehouseSection_Product { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.ClientCard> ClientCard { get; set; } = default!;
 
 
     }
