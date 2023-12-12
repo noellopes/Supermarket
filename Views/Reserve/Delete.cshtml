@@ -1,4 +1,38 @@
-﻿@model Supermarket.Models.Reserve
+﻿@model Supermarket.Models.Reserve_Department
 @{
     ViewData["Title"] = "Delete";
 }
+<h1>Eliminate Reserve</h1>
+
+<h3>Do you wanna delete this reserve?</h3>
+
+<div>
+    <h4>Group</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ReserveId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReserveId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EmployeeId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NumeroDeFunc)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NumeroDeFunc)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ReserveId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
