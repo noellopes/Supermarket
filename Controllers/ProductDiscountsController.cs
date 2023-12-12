@@ -22,9 +22,8 @@ namespace Supermarket.Controllers
         // GET: ProductDiscounts
         public async Task<IActionResult> Index()
         {
-              return _context.ProductDiscount != null ? 
-                          View(await _context.ProductDiscount.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ProductDiscount'  is null.");
+            var supermarketDbContext = _context.ProductDiscount.Include(p => p.Product);
+            return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: ProductDiscounts/Details/5
@@ -36,6 +35,7 @@ namespace Supermarket.Controllers
             }
 
             var productDiscount = await _context.ProductDiscount
+                .Include(p => p.Product)
                 .FirstOrDefaultAsync(m => m.ProductDiscountId == id);
             if (productDiscount == null)
             {
@@ -48,6 +48,7 @@ namespace Supermarket.Controllers
         // GET: ProductDiscounts/Create
         public IActionResult Create()
         {
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description");
             return View();
         }
 
@@ -56,7 +57,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductDiscountId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
+        public async Task<IActionResult> Create([Bind("ProductDiscountId,ProductId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +65,7 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", productDiscount.ProductId);
             return View(productDiscount);
         }
 
@@ -80,6 +82,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", productDiscount.ProductId);
             return View(productDiscount);
         }
 
@@ -88,7 +91,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductDiscountId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductDiscountId,ProductId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (id != productDiscount.ProductDiscountId)
             {
@@ -115,6 +118,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", productDiscount.ProductId);
             return View(productDiscount);
         }
 
@@ -127,6 +131,7 @@ namespace Supermarket.Controllers
             }
 
             var productDiscount = await _context.ProductDiscount
+                .Include(p => p.Product)
                 .FirstOrDefaultAsync(m => m.ProductDiscountId == id);
             if (productDiscount == null)
             {

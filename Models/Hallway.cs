@@ -7,13 +7,12 @@ namespace Supermarket.Models
     {
         public int HallwayId { get; set; }
 
-        [Required]
-        [StringLength(30, MinimumLength = 3)]
-        public required string description { get; set; }
+        [Required(ErrorMessage = "Please enter a Hallway Description")]
+        [StringLength(30, MinimumLength = 3, ErrorMessage = "Please enter your Hallway Description bigger than 3 leters")]
+        public required string Description { get; set; }
 
         public int StoreId { get; set; }
         public Store? Store { get; set; }
 
-        public ICollection<Shelf>? Shelf { get; set; }
     }
 }
