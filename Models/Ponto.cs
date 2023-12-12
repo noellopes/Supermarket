@@ -4,6 +4,7 @@ namespace Supermarket.Models
 {
     public class Ponto
     {
+        [Key]
         [Required]
         public int PontoId {  get; set; }
 

@@ -64,6 +64,8 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Ponto> Ponto { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.EmployeeSchedule> EmployeeSchedule { get; set; } = default!;
+
 
     }
 }

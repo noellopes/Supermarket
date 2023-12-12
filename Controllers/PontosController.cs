@@ -22,7 +22,8 @@ namespace Supermarket.Controllers
         // GET: Pontos
         public async Task<IActionResult> Index()
         {
-              return _context.Ponto != null ? 
+              
+            return _context.Ponto != null ? 
                           View(await _context.Ponto.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Ponto'  is null.");
         }
@@ -52,8 +53,6 @@ namespace Supermarket.Controllers
         }
 
         // POST: Pontos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative,CheckInCoordenates,CheckOutCoordenates")] Ponto ponto)
@@ -84,8 +83,6 @@ namespace Supermarket.Controllers
         }
 
         // POST: Pontos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative,CheckInCoordenates,CheckOutCoordenates")] Ponto ponto)
