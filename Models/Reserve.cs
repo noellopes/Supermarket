@@ -7,7 +7,7 @@ namespace Supermarket.Models
     {
         //PRIMARY KEY
         [Required]
-        int ReservaId { get; set; }
+        int ReserveId { get; set; }
 
         public required string HistoricoReserva { get; set; }
 
