@@ -176,7 +176,8 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.IdFuncao == id);
             if (funcoes == null)
             {
-                return NotFound();
+                TempData["MensagemPositiva"] = "A funcao foi deletada com sucesso";
+                return RedirectToAction(nameof(Index));
             }
 
             return View(funcoes);
@@ -194,6 +195,7 @@ namespace Supermarket.Controllers
             var funcoes = await _context.Funcoes.FindAsync(id);
             if (funcoes != null)
             {
+                TempData["MensagemPositiva"] = "A funcao foi deletada com sucesso";
                 _context.Funcoes.Remove(funcoes);
             }
             
