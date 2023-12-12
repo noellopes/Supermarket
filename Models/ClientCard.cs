@@ -5,6 +5,7 @@ namespace Supermarket.Models
 {
     public class ClientCard
     {
+        [Key]
         public int ClientCard_Id { get; set; }
 
         
