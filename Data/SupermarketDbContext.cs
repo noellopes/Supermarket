@@ -32,6 +32,8 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.ProductExpiration> ProductExpiration { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Funcao> Funcao { get; set; } = default!;
+        public DbSet<Supermarket.Models.Funcao> funcoes { get; set; } = default!;
+        public DbSet<Supermarket.Models.Funcao> Funcoes { get; set; } = default!;
 
         public DbSet<EmployeeEvaluation> AvaliacaoFuncionarios { get; set; } = default!;
 
