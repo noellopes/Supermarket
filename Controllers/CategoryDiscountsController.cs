@@ -22,20 +22,20 @@ namespace Supermarket.Controllers
         // GET: CategoryDiscounts
         public async Task<IActionResult> Index()
         {
-              return _context.CategoryDiscount != null ? 
-                          View(await _context.CategoryDiscount.ToListAsync()) :
+              return _context.CategoryDiscounts != null ? 
+                          View(await _context.CategoryDiscounts.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.CategoryDiscount'  is null.");
         }
 
         // GET: CategoryDiscounts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.CategoryDiscount == null)
+            if (id == null || _context.CategoryDiscounts == null)
             {
                 return NotFound();
             }
 
-            var categoryDiscount = await _context.CategoryDiscount
+            var categoryDiscount = await _context.CategoryDiscounts
                 .FirstOrDefaultAsync(m => m.CategoryDiscountId == id);
             if (categoryDiscount == null)
             {
@@ -70,12 +70,12 @@ namespace Supermarket.Controllers
         // GET: CategoryDiscounts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.CategoryDiscount == null)
+            if (id == null || _context.CategoryDiscounts == null)
             {
                 return NotFound();
             }
 
-            var categoryDiscount = await _context.CategoryDiscount.FindAsync(id);
+            var categoryDiscount = await _context.CategoryDiscounts.FindAsync(id);
             if (categoryDiscount == null)
             {
                 return NotFound();
@@ -121,12 +121,12 @@ namespace Supermarket.Controllers
         // GET: CategoryDiscounts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.CategoryDiscount == null)
+            if (id == null || _context.CategoryDiscounts == null)
             {
                 return NotFound();
             }
 
-            var categoryDiscount = await _context.CategoryDiscount
+            var categoryDiscount = await _context.CategoryDiscounts
                 .FirstOrDefaultAsync(m => m.CategoryDiscountId == id);
             if (categoryDiscount == null)
             {
@@ -141,14 +141,14 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.CategoryDiscount == null)
+            if (_context.CategoryDiscounts == null)
             {
                 return Problem("Entity set 'SupermarketDbContext.CategoryDiscount'  is null.");
             }
-            var categoryDiscount = await _context.CategoryDiscount.FindAsync(id);
+            var categoryDiscount = await _context.CategoryDiscounts.FindAsync(id);
             if (categoryDiscount != null)
             {
-                _context.CategoryDiscount.Remove(categoryDiscount);
+                _context.CategoryDiscounts.Remove(categoryDiscount);
             }
             
             await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ namespace Supermarket.Controllers
 
         private bool CategoryDiscountExists(int id)
         {
-          return (_context.CategoryDiscount?.Any(e => e.CategoryDiscountId == id)).GetValueOrDefault();
+          return (_context.CategoryDiscounts?.Any(e => e.CategoryDiscountId == id)).GetValueOrDefault();
         }
     }
 }
