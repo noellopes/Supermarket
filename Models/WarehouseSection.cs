@@ -6,8 +6,8 @@ namespace Supermarket.Models
     {
         public int WarehouseSectionId { get; set; }
 
-        [Required]
-        [StringLength(30, MinimumLength = 3)]
+        [Required(ErrorMessage = "Please enter a Warehouse Section Description")]
+        [StringLength(30, MinimumLength = 3, ErrorMessage = "Please enter your Warehouse Section Description bigger than 3 leters")]
         public required string Description { get; set; }
 
         public int WarehouseId { get; set; }

@@ -194,5 +194,11 @@ namespace Supermarket.Controllers
             return RedirectToAction(nameof(FolgasPendentes));
         }
 
+        public IActionResult FolgasAprovadas()
+        {
+            var FolgasAprovadas = _context.Folga.Where(f => f.Status == "Aprovada").ToList();
+            return View(FolgasAprovadas);
+        }
+
     }
 }
