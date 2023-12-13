@@ -16,7 +16,7 @@ namespace Supermarket.Models
         //Chave estrangeiras
         public Departments Departamento { get; set; }
 
-        public ICollection<Employee> Funcionario { get; set; } 
+        public ICollection<Employee> Funcionario { get; set; }
 
     }
 }
