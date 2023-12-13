@@ -87,35 +87,24 @@
     </div>
     <div class="row ">
         <div class="col-sm-4 col-lg-12 mt-2 mb-2">
-            <div class="m-1 row row-container p-3">
-                <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
-                    + 120,00€
+            @foreach (var item in Model.CardMovements)
+            {
+                <div class="m-1 row row-container p-3">
+                    <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </div>
+                    <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
+                        @Html.DisplayFor(modelItem => item.Movement_Date)
+                    </div>
+                    <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </div>
+                    <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </div>
                 </div>
-                <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
-                    15/11/2023
-                </div>
-                <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
-                    Pagamento subsidio
-                </div>
-                <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
-                    Crédito
-                </div>
-            </div>
-
-            <div class="m-1 row row-container p-3">
-                <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
-                    - 10,00€
-                </div>
-                <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
-                    15/11/2023
-                </div>
-                <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
-                    Compra Caixa
-                </div>
-                <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
-                    Debito
-                </div>
-            </div>
+            }
         </div>
     </div>
+
 </div>

@@ -36,12 +36,13 @@ namespace Supermarket.Controllers
 
             var mealCard = await _context.MealCard
                 .Include(m => m.Employee)
+                .Include(m => m.CardMovements)
                 .FirstOrDefaultAsync(m => m.MealCardId == id);
             if (mealCard == null)
             {
                 return NotFound();
             }
-
+            
             return View(mealCard);
         }
 
