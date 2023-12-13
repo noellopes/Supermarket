@@ -20,5 +20,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Addresses> Addresses { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Supplier> Supplier { get; set; } = default!;
+
     }
 }
