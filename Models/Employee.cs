@@ -47,7 +47,7 @@ namespace Supermarket.Models
 
         [Required]
         [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Formato de hora inválido. Use HH:mm")]
-        public required string Hora_Almoco_Padrao { get; set; }
+        public required string Standard_Lunch_Hour { get; set; }
 
         [Required]
         [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Formato de hora inválido. Use HH:mm")]
