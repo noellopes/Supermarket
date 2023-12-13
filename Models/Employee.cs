@@ -80,9 +80,6 @@ namespace Supermarket.Models
         //Buscar a coleção dos Abate_Funcionario (1 para muitos)
         //public ICollection<Employee_Reduction> Employee_Reduction { get; set;}
 
-
-
-
         //Buscar a coleção das Qualificação (Muitos para muitos)
         //public ICollection<Qualifications> Qualifications { get; set;}
 
