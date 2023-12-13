@@ -154,9 +154,10 @@ namespace Supermarket.Controllers
                         _context.Update(warehouseSection_Product);
                         await _context.SaveChangesAsync();
 
-
-                        ViewBag.Message = "Warehouse Section Product successfully edited.";
+                        //ViewBag.Message = "Warehouse Section Product successfully edited.";
+                        TempData["Message"] = "Warehouse Section Product successfully created.";
                         return RedirectToAction("Details", new { productId = warehouseSection_Product.ProductId, warehouseSectionId = warehouseSection_Product.WarehouseSectionId });
+
                     }
                 }
                 catch (DbUpdateConcurrencyException)
