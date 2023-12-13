@@ -1,0 +1,34 @@
+﻿@model Supermarket.Models.ProductExpiration?
+
+@{
+    ViewData["Title"] = "Batch Deleted";
+}
+
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Success</h4>
+    <p>Batch successfully deleted.</p>
+</div>
+
+@if (Model != null)
+{
+    <h1>@ViewBag.Title</h1>
+
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.BatchNumber)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ExpirationDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Quantity)
+            </dt>
+        </dl>
+    </div>
+}
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -39,7 +39,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.BatchId == id);
             if (productExpiration == null)
             {
-                return NotFound();
+                return View("ProductExpirationDeleted");
             }
 
             return View(productExpiration);
@@ -78,7 +78,7 @@ namespace Supermarket.Controllers
             var productExpiration = await _context.ProductExpiration.FindAsync(id);
             if (productExpiration == null)
             {
-                return NotFound();
+                return View("ProductExpirationDeleted");
             }
             return View(productExpiration);
         }
@@ -130,7 +130,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.BatchId == id);
             if (productExpiration == null)
             {
-                return NotFound();
+                return View("ProductExpirationDeleted");
             }
 
             return View(productExpiration);
@@ -152,7 +152,8 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return View("DeleteCompleted", productExpiration);
         }
 
         private bool ProductExpirationExists(int id)
