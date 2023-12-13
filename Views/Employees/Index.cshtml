@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Index";
+   
 }
 
 <h1>Index</h1>
@@ -13,46 +14,46 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Employee_Name)
+               Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee_Email)
+                Email
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee_Password)
+                Password
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee_Phone)
+                Phone
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee_NIF)
+                NIF
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee_Address)
+               Address
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee_Birth_Date)
+                Birth Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee_Admission_Date)
+                Admission Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee_Termination_Date)
+               Termination Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Standard_Check_In_Time)
+                Check In
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Standard_Check_Out_Time)
+                Check Out
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Hora_Almoco_Padrao)
+                Lunch Hour
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Standard_Lunch_Time)
+                Lunch Time
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Employee_Time_Bank)
+                Time Bank
             </th>
             <th></th>
         </tr>
@@ -94,7 +95,7 @@
                 @Html.DisplayFor(modelItem => item.Standard_Check_Out_Time)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Hora_Almoco_Padrao)
+                @Html.DisplayFor(modelItem => item.Standard_Lunch_Hour)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Standard_Lunch_Time)

@@ -47,7 +47,7 @@ namespace Supermarket.Models
 
         [Required]
         [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Formato de hora inválido. Use HH:mm")]
-        public required string Hora_Almoco_Padrao { get; set; }
+        public required string Standard_Lunch_Hour { get; set; }
 
         [Required]
         [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Formato de hora inválido. Use HH:mm")]
@@ -69,7 +69,7 @@ namespace Supermarket.Models
         //public ICollection<Day_Off> Days_Off { get; set;}
 
         //Buscar a coleção das Escalas (1 para muitos)
-        //public ICollection<Scales>? Scales { get; set;}
+        //+public ICollection<Scales>? Scales { get; set;}
 
         //Buscar a coleção dos Pontos (1 para muitos)
         //public ICollection<Point> Point { get; set;}
@@ -79,9 +79,6 @@ namespace Supermarket.Models
 
         //Buscar a coleção dos Abate_Funcionario (1 para muitos)
         //public ICollection<Employee_Reduction> Employee_Reduction { get; set;}
-
-
-
 
         //Buscar a coleção das Qualificação (Muitos para muitos)
         //public ICollection<Qualifications> Qualifications { get; set;}
