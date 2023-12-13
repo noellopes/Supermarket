@@ -1,27 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class Funcoes : Migration
+    public partial class CategoryDiscount : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Funcoes",
+                name: "CategoryDiscount",
                 columns: table => new
                 {
-                    IdFuncao = table.Column<int>(type: "int", nullable: false)
+                    CategoryDiscountId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NomeFuncao = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    DescricaoFuncao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Value = table.Column<int>(type: "int", nullable: false),
+                    startDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    endDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Funcoes", x => x.IdFuncao);
+                    table.PrimaryKey("PK_CategoryDiscount", x => x.CategoryDiscountId);
                 });
         }
 
@@ -29,7 +31,7 @@ namespace Supermarket.Data.Migrations.Supermarket
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Funcoes");
+                name: "CategoryDiscount");
         }
     }
 }

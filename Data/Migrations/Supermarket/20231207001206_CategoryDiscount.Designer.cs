@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231206150241_ProductDiscount")]
-    partial class ProductDiscount
+    [Migration("20231207001206_CategoryDiscount")]
+    partial class CategoryDiscount
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,28 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasKey("Card_Id", "Movement_Id");
 
                     b.ToTable("Card_Movement");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.CategoryDiscount", b =>
+                {
+                    b.Property<int>("CategoryDiscountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryDiscountId"));
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("endDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("startDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CategoryDiscountId");
+
+                    b.ToTable("CategoryDiscount");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
@@ -218,6 +240,28 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsUnique();
 
                     b.ToTable("Meal_Card");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.ProductDiscount", b =>
+                {
+                    b.Property<int>("ProductDiscountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductDiscountId"));
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("Value")
+                        .HasColumnType("real");
+
+                    b.HasKey("ProductDiscountId");
+
+                    b.ToTable("ProductDiscount");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Card_Movement", b =>

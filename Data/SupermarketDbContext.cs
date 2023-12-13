@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using Supermarket.Models;
 
 namespace Supermarket.Data
@@ -23,13 +18,14 @@ namespace Supermarket.Data
             modelBuilder.Entity<Meal_Card>().HasKey(MC => MC.Card_Id);
         }
 
-        public DbSet<Supermarket.Models.Folga> Folga { get; set; } = default!;
+        public DbSet<Folga> Folga { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.Funcoes> Funcoes { get; set; } = default!;
+        public DbSet<Funcoes> Funcoes { get; set; } = default!;
 
         public DbSet<EmployeeEvaluation> AvaliacaoFuncionarios { get; set; } = default!;
 
         public DbSet<Employee> Funcionarios { get; set; } = default!;
         public DbSet<ProductDiscount> ProductDiscount { get; internal set; }
+        public DbSet<CategoryDiscount> CategoryDiscount { get; set; } = default!;
     }
 }
