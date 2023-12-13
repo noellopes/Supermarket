@@ -310,7 +310,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                              b.Navigation("IssueTypes");
                          });
 
-                    modelBuilder.Entity("Supermarket.Models.Funcoes", b =>
+                    modelBuilder.Entity("Supermarket.Models.Funcao", b =>
                         {
                             b.Property<int>("IdFuncao")
                                 .ValueGeneratedOnAdd()
@@ -524,7 +524,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                             b.HasKey("IdFuncao");
 
-                            b.ToTable("Funcoes");
+                            b.ToTable("Funcao");
                         });
 
                             modelBuilder.Entity("Supermarket.Models.Meal_Card", b =>
