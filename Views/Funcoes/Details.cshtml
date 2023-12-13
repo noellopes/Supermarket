@@ -1,4 +1,4 @@
-﻿@model Supermarket.Models.Funcoes
+﻿@model Supermarket.Models.Funcao
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Funcoes</h4>
+    <h4>Funcao</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -25,6 +25,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdFuncao">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.FuncaoId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using Supermarket.Models;
 
 namespace Supermarket.Data
@@ -20,9 +15,10 @@ namespace Supermarket.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
+            modelBuilder.Entity<MealCard>().HasKey(MC => MC.MealCardId);
         }
 
-        public DbSet<Supermarket.Models.Folga> Folga { get; set; } = default!;
+        public DbSet<Folga> Folga { get; set; } = default!;
 
 
         public DbSet<Supermarket.Models.IssueType> IssueType { get; set; } = default!;
@@ -31,7 +27,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.ProductExpiration> ProductExpiration { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.Funcoes> Funcoes { get; set; } = default!;
+        public DbSet<Supermarket.Models.Funcao> Funcao { get; set; } = default!;
 
         public DbSet<EmployeeEvaluation> AvaliacaoFuncionarios { get; set; } = default!;
 
@@ -61,8 +57,8 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.ClientCard> ClientCard { get; set; } = default!;
+        public DbSet<ClientCard> ClientCard { get; set; }
 
-
+        public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }
     }
 }
