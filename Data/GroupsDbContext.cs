@@ -16,5 +16,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Group> Group { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Departments> Departments { get; set; } = default!;
+
     }
 }
