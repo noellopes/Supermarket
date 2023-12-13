@@ -15,20 +15,27 @@ namespace Supermarket.Models
         [Required]
         public int EmployeeId { get; set; }
 
+        //Relação de muitos para muitos
         [Required]
-        public Employee? Employee { get; set; }
+        public required List<Employee> Employees { get; set; }
 
         // FK DEPARTMENTS
 
         [Required]
         public int DepartmentsId { get; set; }
 
+        //Relação de muitos para muitos
         [Required]
-        public Departments? Departments { get; set; }
+        public required List<Departments> Departments { get; set; }
 
         // NUMERO DE FUNCIONARIOS NA RESERVA
         [Required]
         public int NumeroDeFunc { get; set; }
+
+        
+        
+
+        
 
         /* FK Ticket
           public int TicketID { get; set; }

@@ -30,6 +30,8 @@ namespace Supermarket.Controllers
         // GET: ReserveController/Create
         public ActionResult Create()
         {
+            // ViewBag.Employee = _context.Employee.Tolist();
+            // ViewBag.Departments = _context.Departments.Tolist();
             return View();
         }
 

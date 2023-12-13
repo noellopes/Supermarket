@@ -21,14 +21,16 @@
             @*Ir buscar nome do empregado apartir do ID*@
             <div class="form-group">
                 <label asp-for="EmployeeId" class="control-label">Nome do empregado </label>
-                <input asp-for="EmployeeId" class="form-control" />
-                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                <select asp-for="EmployeeId" asp-items="@(new SelectList(ViewBag.Employee, "Id", "Name"))" multiple>
+                    <option value="">Selecione um Empregado</option>
+                </select>
             </div>
             @*Ir buscar nome do departamento*@
             <div class="form-group">
                 <label asp-for="DepartmentsId" class="control-label">Nome do departamento </label>
-                <input asp-for="DepartmentsId" class="form-control" />
-                <span asp-validation-for="DepartmentsId" class="text-danger"></span>
+                <select asp-for="DepartmentsId" asp-items="@(new SelectList(ViewBag.Departments, "Id", "Name"))"multiple>
+                    <option value="">Selecione um departamento</option>
+                </select>
             </div>
             @*Escolher o número de funcionário que vão estar adicionados naquela reserva*@
             <div class="form-group">
