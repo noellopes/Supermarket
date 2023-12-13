@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Supermarket.Data;
+using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
@@ -35,16 +36,15 @@ namespace Supermarket.Controllers
         // POST: ReserveController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create([Bind("ReserveId,EmployeeId,DepartmentsId,NumeroDeFunc")] Reserve @reserve)
         {
-            try
+            if (ModelState.IsValid)
             {
+                _context.Add(@reserve);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(@reserve);
         }
 
         // GET: ReserveController/Edit/5
