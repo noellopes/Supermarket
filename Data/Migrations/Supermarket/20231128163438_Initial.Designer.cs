@@ -58,6 +58,29 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.ToTable("Folga");
                 });
+
+            modelBuilder.Entity("Supermarket.Models.Funcao", b =>
+                {
+                    b.Property<int>("FuncaoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FuncaoId"));
+
+                    b.Property<string>("DescricaoFuncao")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NomeFuncao")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("FuncaoId");
+
+                    b.ToTable("Funcao");
+                });
 #pragma warning restore 612, 618
         }
     }

@@ -36,7 +36,7 @@ namespace Supermarket.Controllers
             }
 
             var Funcao = await _context.Funcao
-                .FirstOrDefaultAsync(m => m.IdFuncao == id);
+                .FirstOrDefaultAsync(m => m.FuncaoId == id);
             if (Funcao == null)
             {
                 return NotFound();
@@ -56,7 +56,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdFuncao,NomeFuncao,DescricaoFuncao")] Funcao Funcao)
+        public async Task<IActionResult> Create([Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao Funcao)
         {
             if (ModelState.IsValid)
             {
@@ -88,9 +88,9 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdFuncao,NomeFuncao,DescricaoFuncao")] Funcao Funcao)
+        public async Task<IActionResult> Edit(int id, [Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao Funcao)
         {
-            if (id != Funcao.IdFuncao)
+            if (id != Funcao.FuncaoId)
             {
                 return NotFound();
             }
@@ -99,12 +99,35 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(Funcao);
-                    await _context.SaveChangesAsync();
+                    bool funcaoExiste = await _context.Funcao.AnyAsync(
+                        f => f.NomeFuncao == Funcao.NomeFuncao || f.FuncaoId == Funcao.FuncaoId);
+
+                    bool funcaoIgual = await _context.Funcao.AnyAsync(
+                        f => (f.NomeFuncao == Funcao.NomeFuncao || f.FuncaoId == Funcao.FuncaoId) && f.DescricaoFuncao == Funcao.DescricaoFuncao);
+                    if (funcaoExiste)
+                    {
+                        if (!funcaoIgual) {
+                            _context.Update(Funcao);
+                            await _context.SaveChangesAsync();
+                            TempData["MensagemPositiva"] = "Edicao de uma funcao ja existente com sucesso";
+                            return RedirectToAction(nameof(Index));
+                        }
+                        else
+                        {
+                            TempData["Mensagem"] = "funcao identica";
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
+                    else{
+                        _context.Update(Funcao);
+                        await _context.SaveChangesAsync();
+                        TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
+                        return View("Details", Funcao);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FuncaoExists(Funcao.IdFuncao))
+                    if (!FuncaoExists(Funcao.FuncaoId))
                     {
                         return NotFound();
                     }
@@ -127,7 +150,7 @@ namespace Supermarket.Controllers
             }
 
             var Funcao = await _context.Funcao
-                .FirstOrDefaultAsync(m => m.IdFuncao == id);
+                .FirstOrDefaultAsync(m => m.FuncaoId == id);
             if (Funcao == null)
             {
                 return NotFound();
@@ -157,7 +180,7 @@ namespace Supermarket.Controllers
 
         private bool FuncaoExists(int id)
         {
-          return (_context.Funcao?.Any(e => e.IdFuncao == id)).GetValueOrDefault();
+          return (_context.Funcao?.Any(e => e.FuncaoId == id)).GetValueOrDefault();
         }
     }
 }

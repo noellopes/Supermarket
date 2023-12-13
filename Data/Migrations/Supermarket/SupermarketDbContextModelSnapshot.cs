@@ -316,7 +316,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("int");
 
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFuncao"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FuncaoId"));
 
                             b.Property<string>("DescricaoFuncao")
                                 .IsRequired()
@@ -522,7 +522,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                                 .HasMaxLength(30)
                                 .HasColumnType("nvarchar(30)");
 
-                            b.HasKey("IdFuncao");
+                    b.HasKey("FuncaoId");
 
                             b.ToTable("Funcao");
                         });
