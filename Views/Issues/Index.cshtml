@@ -19,6 +19,9 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Supplier)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.IssueRegisterDate)
             </th>
             <th>
@@ -35,6 +38,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Supplier.SupplierId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IssueRegisterDate)

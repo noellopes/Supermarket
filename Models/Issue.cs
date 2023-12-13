@@ -27,9 +27,9 @@ namespace Supermarket.Models
         public string Description { get; set; } = string.Empty; // Issue Description
 
         //Relation with foreign key for Supplier
-        //[Display(Name = "Supplier")]
-        //public int SupplierID { get; set; }
-        //public Supplier? Supplier { get; set; }
+        [Display(Name = "Supplier")]
+        public int SupplierId { get; set; }
+        public Supplier? Supplier { get; set; }
 
         //Relation with foreign key for Client
         //[Display(Name = "Client")]
