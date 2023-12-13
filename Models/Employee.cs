@@ -90,7 +90,7 @@ namespace Supermarket.Models
         //public ICollection<Departments> Departments { get; set;}
 
 
-
+        public ICollection<Issues>? Issue { get; set; }
 
 
 

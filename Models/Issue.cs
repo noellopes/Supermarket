@@ -13,9 +13,9 @@ namespace Supermarket.Models
         public int IssueId { get; set; } // Issue Identifier
 
         //Relation with foreign key for Product
-        //[Display(Name = "Product")]
-        //public int ProductId { get; set; }
-        //public Product? Product { get; set; }
+        [Display(Name = "Product")]
+        public int ProductId { get; set; }
+        public Product? Product { get; set; }
 
         //Relation with foreign key for Issue Category
         [Display(Name = "Issue Category")]
@@ -31,15 +31,10 @@ namespace Supermarket.Models
         public int SupplierId { get; set; }
         public Supplier? Supplier { get; set; }
 
-        //Relation with foreign key for Client
-        //[Display(Name = "Client")]
-        //public int IssueTypeId { get; set; }
-        //public IssueType? IssueType { get; set; }
-
         //Relation with foreign key for Employee
-        //[Display(Name = "Employee")]
-        //public int EmployeeId { get; set; }
-        //public Employee? Employee { get; set; }
+        [Display(Name = "Employee")]
+        public int EmployeeId { get; set; }
+        public Employee? Employee { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
