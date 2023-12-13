@@ -9,7 +9,7 @@ namespace Supermarket.Models
         [Required]
         int ReserveId { get; set; }
 
-        public required string HistoricoReserva { get; set; }
+        
 
     }
 }
