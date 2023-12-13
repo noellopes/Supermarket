@@ -42,7 +42,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.IssueId == id);
             if (issues == null)
             {
-                return NotFound();
+                return View("IssueDeleted");
             }
 
             return View(issues);
@@ -71,10 +71,10 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Address", issues.EmployeeId);
-            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "IssueDescription", issues.IssueTypeId);
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", issues.ProductId);
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierId", issues.SupplierId);
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name", issues.EmployeeId);
+            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "Name", issues.IssueTypeId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", issues.ProductId);
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name", issues.SupplierId);
             return View(issues);
         }
 
@@ -89,12 +89,12 @@ namespace Supermarket.Controllers
             var issues = await _context.Issues.FindAsync(id);
             if (issues == null)
             {
-                return NotFound();
+                return View("IssueDeleted");
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Address", issues.EmployeeId);
-            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "IssueDescription", issues.IssueTypeId);
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", issues.ProductId);
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierId", issues.SupplierId);
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name", issues.EmployeeId);
+            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "Name", issues.IssueTypeId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", issues.ProductId);
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name", issues.SupplierId);
             return View(issues);
         }
 
@@ -130,10 +130,10 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Address", issues.EmployeeId);
-            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "IssueDescription", issues.IssueTypeId);
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", issues.ProductId);
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierId", issues.SupplierId);
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name", issues.EmployeeId);
+            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "Name", issues.IssueTypeId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", issues.ProductId);
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name", issues.SupplierId);
             return View(issues);
         }
 
@@ -153,7 +153,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.IssueId == id);
             if (issues == null)
             {
-                return NotFound();
+                return View("IssueDeleted");
             }
 
             return View(issues);
@@ -175,7 +175,8 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return View("DeleteCompleted", issues);
         }
 
         private bool IssuesExists(int id)
