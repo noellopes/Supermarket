@@ -21,13 +21,10 @@ namespace Supermarket.Controllers
 
         // GET: SubsidySetups
         public async Task<IActionResult> Index()
-
         {
-
-            return View(new List<SubsidySetup>());
-             // return _context.SubsidySetup != null ? 
-            //              View(await _context.SubsidySetup.ToListAsync()) :
-           //               Problem("Entity set 'SupermarketDbContext.SubsidySetup'  is null.");
+              return _context.SubsidySetup != null ? 
+                          View(await _context.SubsidySetup.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.SubsidySetup'  is null.");
         }
 
         // GET: SubsidySetups/Details/5
@@ -155,7 +152,8 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            // return RedirectToAction(nameof(Index));
+            return View("DeleteConfirmed", subsidySetup);
         }
 
         private bool SubsidySetupExists(int id)

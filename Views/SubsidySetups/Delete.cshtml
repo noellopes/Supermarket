@@ -3,6 +3,21 @@
 @{
     ViewData["Title"] = "Delete";
 }
+<style>
+    body{
+
+        background-color: indianred;
+        text-align: center;
+        font-family:'Times New Roman', Times, serif;
+    }
+
+    .back{
+
+        text-decoration: none;
+        color:darkred;
+        font-size:20px;    }
+
+</style>
 
 <h1>Delete</h1>
 
@@ -34,6 +49,8 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="SubsidySetupId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <div>
+            <div class="back"><a asp-action="Index">Back to List</a></div>
+        </div>
     </form>
 </div>

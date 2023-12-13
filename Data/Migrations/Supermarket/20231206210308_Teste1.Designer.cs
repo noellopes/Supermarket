@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231206135621_Teste2")]
-    partial class Teste2
+    [Migration("20231206210308_Teste1")]
+    partial class Teste1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,28 +58,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasIndex("Meal_CardEmployeeId", "Meal_CardCard_Id");
 
                     b.ToTable("Card_Movement");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.ConfigSubsidio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DataPagamentoMensal")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("HorasMinTrabalhadas")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float>("valorSubsidioDiario")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ConfigSubsidio");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Employee", b =>

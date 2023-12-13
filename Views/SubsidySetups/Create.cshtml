@@ -3,11 +3,36 @@
 @{
     ViewData["Title"] = "Create";
 }
+<style>
+    body{
+        background-color: #55b9c4ff;
+        color: white;
+        
+    }
+    h1, h4{
+        text-align: center;
+        font-family:'Times New Roman', Times, serif;
+    }
+    .teste{
+       margin-left:20%;
+        background-color:steelblue;
+       padding:20px;
+    }
 
-<h1>Create</h1>
+    .back, a{
+        color: red;
+        font-size:20px;
+        padding:20px;
+        text-decoration:none;
+    }
+    
+    </style>
 
-<h4>SubsidySetup</h4>
+
+
+<h4> Create SubsidySetup</h4>
 <hr />
+<div class="teste">
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -35,9 +60,9 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+        <div class="back"><a asp-action="Index">Back to List</a></div>
+    </div>
 </div>
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
