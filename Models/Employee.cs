@@ -6,7 +6,7 @@ namespace Supermarket.Models
     {
         public int EmployeeId { get; set; }
 
-        [StringLength(50,MinimumLength = 3)]
+        [StringLength(50, MinimumLength = 3)]
         [Required]
         public required string Employee_Name { get; set; }
 
@@ -33,7 +33,7 @@ namespace Supermarket.Models
         public required DateTime Employee_Birth_Date { get; set; }
 
         [Required]
-        public required DateTime Employee_Admission_Date{ get; set; }
+        public required DateTime Employee_Admission_Date { get; set; }
 
         public DateTime Employee_Termination_Date { get; set; }
 
@@ -51,14 +51,14 @@ namespace Supermarket.Models
 
         [Required]
         [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Formato de hora inválido. Use HH:mm")]
-        public required string Standard_Lunch_Time { get;set; }
+        public required string Standard_Lunch_Time { get; set; }
 
         [Required]
         public required DateTime Employee_Time_Bank { get; set; }
 
 
         //Ligação de 1 para 1 com Meal_Card
-        public Meal_Card? Meal_Card { get; set; }
+        public MealCard? MealCard { get; set; }
 
 
         //Ligação de 1 para 1 com Horario de atendimento (Schedule)

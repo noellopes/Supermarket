@@ -10,87 +10,90 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class EmployeesController : Controller
+    public class MealCardsController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public EmployeesController(SupermarketDbContext context)
+        public MealCardsController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: Employees
+        // GET: MealCards
         public async Task<IActionResult> Index()
         {
-              return _context.Employee != null ? 
-                          View(await _context.Employee.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
+            var supermarketDbContext = _context.MealCard.Include(m => m.Employee);
+            return View(await supermarketDbContext.ToListAsync());
         }
 
-        // GET: Employees/Details/5
+        // GET: MealCards/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Employee == null)
+            if (id == null || _context.MealCard == null)
             {
                 return NotFound();
             }
 
-            var employee = await _context.Employee
-                .FirstOrDefaultAsync(m => m.EmployeeId == id);
-            if (employee == null)
+            var mealCard = await _context.MealCard
+                .Include(m => m.Employee)
+                .FirstOrDefaultAsync(m => m.MealCardId == id);
+            if (mealCard == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(mealCard);
         }
 
-        // GET: Employees/Create
+        // GET: MealCards/Create
         public IActionResult Create()
         {
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
             return View();
         }
 
-        // POST: Employees/Create
+        // POST: MealCards/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Hora_Almoco_Padrao,Standard_Lunch_Time,Employee_Time_Bank")] Employee employee)
+        public async Task<IActionResult> Create([Bind("MealCardId,Balance,EmployeeId")] MealCard mealCard)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
+                _context.Add(mealCard);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", mealCard.EmployeeId);
+            return View(mealCard);
         }
 
-        // GET: Employees/Edit/5
+        // GET: MealCards/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Employee == null)
+            if (id == null || _context.MealCard == null)
             {
                 return NotFound();
             }
 
-            var employee = await _context.Employee.FindAsync(id);
-            if (employee == null)
+            var mealCard = await _context.MealCard.FindAsync(id);
+            if (mealCard == null)
             {
                 return NotFound();
             }
-            return View(employee);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", mealCard.EmployeeId);
+            return View(mealCard);
         }
 
-        // POST: Employees/Edit/5
+        // POST: MealCards/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Hora_Almoco_Padrao,Standard_Lunch_Time,Employee_Time_Bank")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("MealCardId,Balance,EmployeeId")] MealCard mealCard)
         {
-            if (id != employee.EmployeeId)
+            if (id != mealCard.MealCardId)
             {
                 return NotFound();
             }
@@ -99,12 +102,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(employee);
+                    _context.Update(mealCard);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeExists(employee.EmployeeId))
+                    if (!MealCardExists(mealCard.MealCardId))
                     {
                         return NotFound();
                     }
@@ -115,49 +118,51 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", mealCard.EmployeeId);
+            return View(mealCard);
         }
 
-        // GET: Employees/Delete/5
+        // GET: MealCards/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Employee == null)
+            if (id == null || _context.MealCard == null)
             {
                 return NotFound();
             }
 
-            var employee = await _context.Employee
-                .FirstOrDefaultAsync(m => m.EmployeeId == id);
-            if (employee == null)
+            var mealCard = await _context.MealCard
+                .Include(m => m.Employee)
+                .FirstOrDefaultAsync(m => m.MealCardId == id);
+            if (mealCard == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(mealCard);
         }
 
-        // POST: Employees/Delete/5
+        // POST: MealCards/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Employee == null)
+            if (_context.MealCard == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.MealCard'  is null.");
             }
-            var employee = await _context.Employee.FindAsync(id);
-            if (employee != null)
+            var mealCard = await _context.MealCard.FindAsync(id);
+            if (mealCard != null)
             {
-                _context.Employee.Remove(employee);
+                _context.MealCard.Remove(mealCard);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EmployeeExists(int id)
+        private bool MealCardExists(int id)
         {
-          return (_context.Employee?.Any(e => e.EmployeeId == id)).GetValueOrDefault();
+          return (_context.MealCard?.Any(e => e.MealCardId == id)).GetValueOrDefault();
         }
     }
 }
