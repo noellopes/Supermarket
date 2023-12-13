@@ -90,23 +90,45 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.ClientCard", b =>
+            modelBuilder.Entity("Supermarket.Models.CategoryDiscount", b =>
                 {
-                    b.Property<int>("ClientCard_Id")
+                    b.Property<int>("CategoryDiscountId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientCard_Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryDiscountId"));
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("endDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("startDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CategoryDiscountId");
+
+                    b.ToTable("CategoryDiscounts");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.ClientCard", b =>
+                {
+                    b.Property<int>("ClientCardId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientCardId"));
 
                     b.Property<float>("Balance")
                         .HasColumnType("real");
 
-                    b.Property<string>("ClientCard_Number")
+                    b.Property<string>("ClientCardNumber")
                         .IsRequired()
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
-                    b.HasKey("ClientCard_Id");
+                    b.HasKey("ClientCardId");
 
                     b.ToTable("ClientCard");
                 });

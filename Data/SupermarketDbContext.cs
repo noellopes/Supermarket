@@ -15,7 +15,6 @@ namespace Supermarket.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
-            modelBuilder.Entity<MealCard>().HasKey(MC => MC.MealCardId);
         }
 
         public DbSet<Folga> Folga { get; set; } = default!;
