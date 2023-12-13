@@ -39,7 +39,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.BatchId == id);
             if (productExpiration == null)
             {
-                return NotFound();
+                return View("ProductExpirationDeleted");
             }
 
             return View(productExpiration);
@@ -78,7 +78,7 @@ namespace Supermarket.Controllers
             var productExpiration = await _context.ProductExpiration.FindAsync(id);
             if (productExpiration == null)
             {
-                return NotFound();
+                return View("ProductExpirationDeleted");
             }
             return View(productExpiration);
         }
@@ -130,7 +130,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.BatchId == id);
             if (productExpiration == null)
             {
-                return NotFound();
+                return View("ProductExpirationDeleted");
             }
 
             return View(productExpiration);
