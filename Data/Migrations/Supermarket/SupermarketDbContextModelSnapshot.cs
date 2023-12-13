@@ -392,8 +392,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
+                    modelBuilder.Entity("Supermarket.Models.Funcao", b =>
+                    {
+                        b.Property<int>("IdFuncao")
+                            .ValueGeneratedOnAdd()
+                            .HasColumnType("int");
 
-                    b.Property<int>("BrandId")
+                        b.Property<int>("BrandId")
                         .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
@@ -697,6 +702,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasOne("Supermarket.Models.IssueType", null)
                         .WithMany("IssueTypes")
                         .HasForeignKey("IssueTypeId1");
+                });
+
+                    b.ToTable("Funcao");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Issues", b =>
