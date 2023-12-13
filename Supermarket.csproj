@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\Groups\" />
+    <Folder Include="Data\Migrations\Supermarket\" />
   </ItemGroup>
 
 </Project>
