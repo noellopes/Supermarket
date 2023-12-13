@@ -32,7 +32,7 @@ namespace Supermarket.Data
 
         public DbSet<Employee> Funcionarios { get; set; } = default!;
 
-        public DbSet<ProductDiscount> ProductDiscount { get; internal set; }
+        public DbSet<Supermarket.Models.ProductDiscount> ProductDiscount { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Product> Product { get; set; } = default!;
 
@@ -56,8 +56,8 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
-        public DbSet<ClientCard> ClientCard { get; set; }
+        public DbSet<Supermarket.Models.ClientCard> ClientCard { get; set; } = default!;
 
-        public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }
+        public DbSet<Supermarket.Models.CategoryDiscount> CategoryDiscounts { get; set; } = default!;
     }
 }
