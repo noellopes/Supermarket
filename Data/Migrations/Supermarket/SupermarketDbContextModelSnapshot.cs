@@ -247,6 +247,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFuncao"));
+            modelBuilder.Entity("Supermarket.Models.Funcao", b =>
+                {
+                    b.Property<int>("FuncaoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FuncaoId"));
 
                     b.Property<string>("DescricaoFuncao")
                         .IsRequired()
@@ -261,6 +268,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasKey("IdFuncao");
 
                     b.ToTable("Funcoes");
+                    b.HasKey("FuncaoId");
+
+                    b.ToTable("Funcao");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Hallway", b =>

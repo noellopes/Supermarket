@@ -1,0 +1,49 @@
+﻿@model Supermarket.Models.Issues?
+
+@{
+    ViewData["Title"] = "Issue Deleted";
+}
+
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Success</h4>
+    <p>Issue successfully deleted.</p>
+</div>
+
+@if (Model != null)
+{
+    <h1>@ViewBag.Title</h1>
+
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.IssueType)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.IssueType.IssueDescription)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.IssueRegisterDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.IssueRegisterDate)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Severity)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Severity)
+            </dd>
+        </dl>
+    </div>
+}
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

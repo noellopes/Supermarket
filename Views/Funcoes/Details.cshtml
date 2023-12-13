@@ -1,4 +1,4 @@
-﻿@model Supermarket.Models.Funcoes
+﻿@model Supermarket.Models.Funcao
 
 @{
     ViewData["Title"] = "Details";
@@ -12,7 +12,7 @@
     </div>
 }
 <div>
-    <h4>Funcoes</h4>
+    <h4>Funcao</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -37,4 +37,6 @@
             <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
         </svg> Voltar
     </a>  
+    <a asp-action="Edit" asp-route-id="@Model?.FuncaoId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>
