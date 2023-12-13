@@ -8,7 +8,7 @@ using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Supermarket
+namespace Supermarket.Migrations
 {
     [DbContext(typeof(SupermarketDbContext))]
     partial class SupermarketDbContextModelSnapshot : ModelSnapshot
@@ -446,8 +446,8 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.Property<string>("BatchNumber")
                         .IsRequired()
-                        .HasMaxLength(5)
-                        .HasColumnType("nvarchar(5)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
@@ -848,4 +848,3 @@ namespace Supermarket.Data.Migrations.Supermarket
         }
     }
 }
-
