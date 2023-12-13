@@ -10,87 +10,87 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class IssueTypesController : Controller
+    public class ClientCardsController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public IssueTypesController(SupermarketDbContext context)
+        public ClientCardsController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: IssueTypes
+        // GET: ClientCards
         public async Task<IActionResult> Index()
         {
-            return _context.IssueType != null ?
-                        View(await _context.IssueType.ToListAsync()) :
-                        Problem("Entity set 'SupermarketDbContext.IssueType'  is null.");
+              return _context.ClientCard != null ? 
+                          View(await _context.ClientCard.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
         }
 
-        // GET: IssueTypes/Details/5
+        // GET: ClientCards/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.IssueType == null)
+            if (id == null || _context.ClientCard == null)
             {
                 return NotFound();
             }
 
-            var issueType = await _context.IssueType
-                .FirstOrDefaultAsync(m => m.IssueTypeId == id);
-            if (issueType == null)
+            var clientCard = await _context.ClientCard
+                .FirstOrDefaultAsync(m => m.ClientCard_Id == id);
+            if (clientCard == null)
             {
-                return View("IssueTypeDeleted");
+                return NotFound();
             }
 
-            return View(issueType);
+            return View(clientCard);
         }
 
-        // GET: IssueTypes/Create
+        // GET: ClientCards/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: IssueTypes/Create
+        // POST: ClientCards/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IssueTypeId,Name,IssueDescription")] IssueType issueType)
+        public async Task<IActionResult> Create([Bind("ClientCard_Id,ClientCard_Number,Balance")] ClientCard clientCard)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(issueType);
+                _context.Add(clientCard);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(issueType);
+            return View(clientCard);
         }
 
-        // GET: IssueTypes/Edit/5
+        // GET: ClientCards/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.IssueType == null)
+            if (id == null || _context.ClientCard == null)
             {
                 return NotFound();
             }
 
-            var issueType = await _context.IssueType.FindAsync(id);
-            if (issueType == null)
+            var clientCard = await _context.ClientCard.FindAsync(id);
+            if (clientCard == null)
             {
-                return View("IssueTypeDeleted");
+                return NotFound();
             }
-            return View(issueType);
+            return View(clientCard);
         }
 
-        // POST: IssueTypes/Edit/5
+        // POST: ClientCards/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IssueTypeId,Name,IssueDescription")] IssueType issueType)
+        public async Task<IActionResult> Edit(int id, [Bind("ClientCard_Id,ClientCard_Number,Balance")] ClientCard clientCard)
         {
-            if (id != issueType.IssueTypeId)
+            if (id != clientCard.ClientCard_Id)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(issueType);
+                    _context.Update(clientCard);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!IssueTypeExists(issueType.IssueTypeId))
+                    if (!ClientCardExists(clientCard.ClientCard_Id))
                     {
                         return NotFound();
                     }
@@ -115,50 +115,49 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(issueType);
+            return View(clientCard);
         }
 
-        // GET: IssueTypes/Delete/5
+        // GET: ClientCards/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.IssueType == null)
+            if (id == null || _context.ClientCard == null)
             {
                 return NotFound();
             }
 
-            var issueType = await _context.IssueType
-                .FirstOrDefaultAsync(m => m.IssueTypeId == id);
-            if (issueType == null)
+            var clientCard = await _context.ClientCard
+                .FirstOrDefaultAsync(m => m.ClientCard_Id == id);
+            if (clientCard == null)
             {
-                return View("IssueTypeDeleted");
+                return NotFound();
             }
 
-            return View(issueType);
+            return View(clientCard);
         }
 
-        // POST: IssueTypes/Delete/5
+        // POST: ClientCards/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.IssueType == null)
+            if (_context.ClientCard == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.IssueType'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
             }
-            var issueType = await _context.IssueType.FindAsync(id);
-            if (issueType != null)
+            var clientCard = await _context.ClientCard.FindAsync(id);
+            if (clientCard != null)
             {
-                _context.IssueType.Remove(issueType);
+                _context.ClientCard.Remove(clientCard);
             }
-
+            
             await _context.SaveChangesAsync();
-            //return RedirectToAction(nameof(Index));
-            return View("DeleteCompleted", issueType);
+            return RedirectToAction(nameof(Index));
         }
 
-        private bool IssueTypeExists(int id)
+        private bool ClientCardExists(int id)
         {
-            return (_context.IssueType?.Any(e => e.IssueTypeId == id)).GetValueOrDefault();
+          return (_context.ClientCard?.Any(e => e.ClientCard_Id == id)).GetValueOrDefault();
         }
     }
 }
