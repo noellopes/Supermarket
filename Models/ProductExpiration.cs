@@ -9,7 +9,7 @@ namespace Supermarket.Models
         public int BatchId { get; set; }
 
         [Required]
-        [StringLength(5, MinimumLength = 3)]
+        [StringLength(10, MinimumLength = 3)]
         public required string BatchNumber { get; set; }
 
         //Relation with foreign key for Brand
@@ -23,7 +23,7 @@ namespace Supermarket.Models
         //public Product? Product { get; set; }
 
         [Required]
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.Date)]
         [Display(Name = "Expiration Date")]
         public DateTime ExpirationDate { get; set; }
 
