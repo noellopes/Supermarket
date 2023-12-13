@@ -1,31 +1,26 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Supermarket.Models
 {
     public class  Reserve_Department
     {
-        // FK RESERVE
+        // FK RESERVE       
         [Required]
-        public int ReserveId { get; set; }
-
-        [Required]
+        [ForeignKey("ReserveId")]
         public Reserve? Reserve { get; set; }
 
+        
         // FK EMPLOYEE
-        [Required]
-        public int EmployeeId { get; set; }
-
         //Relação de muitos para muitos
         [Required]
+        [ForeignKey("EmployeeId")]
         public required List<Employee> Employees { get; set; }
 
         // FK DEPARTMENTS
-
-        [Required]
-        public int DepartmentsId { get; set; }
-
         //Relação de muitos para muitos
         [Required]
+        [ForeignKey("DepartmentsId")]
         public required List<Departments> Departments { get; set; }
 
         // NUMERO DE FUNCIONARIOS NA RESERVA
