@@ -51,10 +51,10 @@ namespace Supermarket.Controllers
         // GET: Issues/Create
         public IActionResult Create()
         {
-            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Address");
-            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "IssueDescription");
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description");
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierId");
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name");
+            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "Name");
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name");
             return View();
         }
 
