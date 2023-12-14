@@ -5,13 +5,13 @@
 namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class Funcoes : Migration
+    public partial class Funcao : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Funcoes",
+                name: "Funcao",
                 columns: table => new
                 {
                     IdFuncao = table.Column<int>(type: "int", nullable: false)
@@ -21,7 +21,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Funcoes", x => x.IdFuncao);
+                    table.PrimaryKey("PK_Funcao", x => x.IdFuncao);
                 });
         }
 
@@ -29,7 +29,7 @@ namespace Supermarket.Data.Migrations.Supermarket
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Funcoes");
+                name: "Funcao");
         }
     }
 }

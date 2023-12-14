@@ -10,88 +10,88 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class FuncoesController : Controller
+    public class FuncaoController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public FuncoesController(SupermarketDbContext context)
+        public FuncaoController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: Funcoes
+        // GET: Funcao
         public async Task<IActionResult> Index()
         {
-              return _context.Funcoes != null ? 
-                          View(await _context.Funcoes.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Funcoes'  is null.");
+              return _context.Funcao != null ? 
+                          View(await _context.Funcao.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
         }
 
-        // GET: Funcoes/Details/5
+        // GET: Funcao/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Funcoes == null)
+            if (id == null || _context.Funcao == null)
             {
                 return NotFound();
             }
 
-            var funcoes = await _context.Funcoes
+            var Funcao = await _context.Funcao
                 .FirstOrDefaultAsync(m => m.IdFuncao == id);
-            if (funcoes == null)
+            if (Funcao == null)
             {
                 return NotFound();
             }
 
-            return View(funcoes);
+            return View(Funcao);
         }
 
-        // GET: Funcoes/Create
+        // GET: Funcao/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Funcoes/Create
+        // POST: Funcao/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdFuncao,NomeFuncao,DescricaoFuncao")] Funcoes funcoes)
+        public async Task<IActionResult> Create([Bind("IdFuncao,NomeFuncao,DescricaoFuncao")] Funcao Funcao)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(funcoes);
+                _context.Add(Funcao);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(funcoes);
+            return View(Funcao);
         }
 
-        // GET: Funcoes/Edit/5
+        // GET: Funcao/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Funcoes == null)
+            if (id == null || _context.Funcao == null)
             {
                 return NotFound();
             }
 
-            var funcoes = await _context.Funcoes.FindAsync(id);
-            if (funcoes == null)
+            var Funcao = await _context.Funcao.FindAsync(id);
+            if (Funcao == null)
             {
                 TempData["mensagem"] = "A funcao nao existe";
                 return RedirectToAction(nameof(Index));
             }
-            return View(funcoes);
+            return View(Funcao);
         }
 
-        // POST: Funcoes/Edit/5
+        // POST: Funcao/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdFuncao,NomeFuncao,DescricaoFuncao")] Funcoes funcoes)
+        public async Task<IActionResult> Edit(int id, [Bind("IdFuncao,NomeFuncao,DescricaoFuncao")] Funcao Funcao)
         {
-            if (id != funcoes.IdFuncao)
+            if (id != Funcao.IdFuncao)
             {
                 return NotFound();
             }
@@ -100,15 +100,15 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    bool funcaoExiste = await _context.Funcoes.AnyAsync(
-                        f => f.NomeFuncao == funcoes.NomeFuncao || f.IdFuncao == funcoes.IdFuncao);
+                    bool funcaoExiste = await _context.Funcao.AnyAsync(
+                        f => f.NomeFuncao == Funcao.NomeFuncao || f.IdFuncao == Funcao.IdFuncao);
 
-                    bool funcaoIgual = await _context.Funcoes.AnyAsync(
-                        f => (f.NomeFuncao == funcoes.NomeFuncao || f.IdFuncao == funcoes.IdFuncao) && f.DescricaoFuncao == funcoes.DescricaoFuncao);
+                    bool funcaoIgual = await _context.Funcao.AnyAsync(
+                        f => (f.NomeFuncao == Funcao.NomeFuncao || f.IdFuncao == Funcao.IdFuncao) && f.DescricaoFuncao == Funcao.DescricaoFuncao);
                     if (funcaoExiste)
                     {
                         if (!funcaoIgual) {
-                            _context.Update(funcoes);
+                            _context.Update(Funcao);
                             await _context.SaveChangesAsync();
                             TempData["MensagemPositiva"] = "Edicao de uma funcao ja existente com sucesso";
                             return RedirectToAction(nameof(Index));
@@ -120,15 +120,15 @@ namespace Supermarket.Controllers
                         }
                     }
                     else{
-                        _context.Update(funcoes);
+                        _context.Update(Funcao);
                         await _context.SaveChangesAsync();
                         TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
-                        return View("Details", funcoes);
+                        return View("Details", Funcao);
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FuncoesExists(funcoes.IdFuncao))
+                    if (!FuncaoExists(Funcao.IdFuncao))
                     {
                         return NotFound();
                     }
@@ -139,49 +139,49 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(funcoes);
+            return View(Funcao);
         }
 
-        // GET: Funcoes/Delete/5
+        // GET: Funcao/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Funcoes == null)
+            if (id == null || _context.Funcao == null)
             {
                 return NotFound();
             }
 
-            var funcoes = await _context.Funcoes
+            var Funcao = await _context.Funcao
                 .FirstOrDefaultAsync(m => m.IdFuncao == id);
-            if (funcoes == null)
+            if (Funcao == null)
             {
                 return NotFound();
             }
 
-            return View(funcoes);
+            return View(Funcao);
         }
 
-        // POST: Funcoes/Delete/5
+        // POST: Funcao/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Funcoes == null)
+            if (_context.Funcao == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.Funcoes'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
             }
-            var funcoes = await _context.Funcoes.FindAsync(id);
-            if (funcoes != null)
+            var Funcao = await _context.Funcao.FindAsync(id);
+            if (Funcao != null)
             {
-                _context.Funcoes.Remove(funcoes);
+                _context.Funcao.Remove(Funcao);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FuncoesExists(int id)
+        private bool FuncaoExists(int id)
         {
-          return (_context.Funcoes?.Any(e => e.IdFuncao == id)).GetValueOrDefault();
+          return (_context.Funcao?.Any(e => e.IdFuncao == id)).GetValueOrDefault();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Supermarket.Models
 {
     [PrimaryKey(nameof(IdFuncao))]
-    public class Funcoes
+    public class Funcao
     {
         [Required]
         public required int IdFuncao { get; set; }

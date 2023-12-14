@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231122162703_Funcoes")]
-    partial class Funcoes
+    [Migration("20231122162703_Funcao")]
+    partial class Funcao
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,7 +59,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Folga");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.Funcoes", b =>
+            modelBuilder.Entity("Supermarket.Models.Funcao", b =>
                 {
                     b.Property<int>("IdFuncao")
                         .ValueGeneratedOnAdd()
@@ -79,7 +79,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasKey("IdFuncao");
 
-                    b.ToTable("Funcoes");
+                    b.ToTable("Funcao");
                 });
 #pragma warning restore 612, 618
         }
