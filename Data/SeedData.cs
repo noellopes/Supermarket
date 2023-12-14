@@ -313,6 +313,9 @@ namespace Supermarket.Data
 
         private static void PopulateEmployees(SupermarketDbContext db)
         {
+            /* trocar "Funcionarios" por "Employee" ?
+             
+             
             if (db.Funcionarios.Any()) return;
 
             db.Funcionarios.AddRange(
@@ -367,6 +370,7 @@ namespace Supermarket.Data
                 );
 
             db.SaveChanges();
+            */
         }
 
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
@@ -377,19 +381,19 @@ namespace Supermarket.Data
                 new EmployeeEvaluation
                 {
                     Description= "Atendimento excelente!",
-                    EmployeeId = db.Funcionarios.First().EmployeeId,
+                    EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 8,
                 },
                 new EmployeeEvaluation
                 {
                     Description = "Muito rude...",
-                    EmployeeId = db.Funcionarios.First().EmployeeId,
+                    EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 3,
                 },
                 new EmployeeEvaluation
                 {
                     Description = "Adorei. Muito prestativo!",
-                    EmployeeId = db.Funcionarios.First().EmployeeId,
+                    EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 10,
                 }
                 );

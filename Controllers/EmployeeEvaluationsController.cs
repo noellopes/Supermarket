@@ -67,7 +67,7 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
 
                 ViewBag.Message = "The evaluation has successfully been created!";
-                employeeEvaluation.Employee = await _context.Funcionarios.FindAsync(employeeEvaluation.EmployeeId);
+                employeeEvaluation.Employee = await _context.Employee.FindAsync(employeeEvaluation.EmployeeId);
                 return View("Details", employeeEvaluation);
             }
             return View(employeeEvaluation);
@@ -177,7 +177,7 @@ namespace Supermarket.Controllers
         // GET: EmployeeEvaluations/EmployeeView
         public async Task<IActionResult> EmployeeView()
         {
-            var Employees = _context.Funcionarios.Include(f=>EmployeeGradeAsync(f.EmployeeId));
+            var Employees = _context.Employee.Include(f=>EmployeeGradeAsync(f.EmployeeId));
 
             return Employees != null ?
                           View(await Employees.ToListAsync()) :
@@ -186,13 +186,13 @@ namespace Supermarket.Controllers
 
         private float EmployeeGradeAsync(int? EmployeeId)
         {
-            if (EmployeeId == null || _context.Funcionarios == null)
+            if (EmployeeId == null || _context.Employee == null)
             {
                 //The employee doesn't exist!
                 return 0;
             }
 
-            var Employee =  _context.Funcionarios.Find(EmployeeId);
+            var Employee =  _context.Employee.Find(EmployeeId);
             if (Employee == null)
             {
                 //The employee doesn't exist!
