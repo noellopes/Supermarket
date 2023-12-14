@@ -78,8 +78,7 @@ namespace Supermarket.Controllers
             var Funcao = await _context.Funcao.FindAsync(id);
             if (Funcao == null)
             {
-                TempData["mensagem"] = "A funcao nao existe";
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
             return View(Funcao);
         }
@@ -96,7 +95,7 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid) //valida no lado do cliente e o do servidosr [neste caso no cliente]
+            if (ModelState.IsValid)
             {
                 try
                 {
