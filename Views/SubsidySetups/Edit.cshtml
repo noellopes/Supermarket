@@ -3,11 +3,31 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<style>
+       .teste{
+        margin-left:15%;
+        border: 1px solid;
+        padding: 10px;
+        box-shadow: 5px 10px;
+        font-family: 'Times New Roman', Times, serif;
+        font-size:20px;
+        border-radius: 50px 20px;
+        
+    }
+    h2{
+        text-align:center;
+    }
 
-<h1>Edit</h1>
 
-<h4>SubsidySetup</h4>
+    .form-group {
+        padding: 5%;
+    }
+</style>
+<h2>Edit SubsidySetup</h2>
+
+<div class="teste">
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -38,7 +58,7 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
+</div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
