@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -11,9 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231206150241_ProductDiscount")]
+    partial class ProductDiscount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,7 +175,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Folga");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.Funcao", b =>
+            modelBuilder.Entity("Supermarket.Models.Funcoes", b =>
                 {
                     b.Property<int>("IdFuncao")
                         .ValueGeneratedOnAdd()
@@ -192,7 +195,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasKey("IdFuncao");
 
-                    b.ToTable("Funcao");
+                    b.ToTable("Funcoes");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Meal_Card", b =>

@@ -60,11 +60,33 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(Funcao);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    bool funcaoExiste = await _context.Funcoes.AnyAsync(
+                        f => f.NomeFuncao == funcoes.NomeFuncao || f.IdFuncao == funcoes.IdFuncao);
+                    if (!funcaoExiste)
+                    {
+                        _context.Add(funcoes);
+                        await _context.SaveChangesAsync();
+
+                        ViewBag.Mensagem = "Funcao Criada com sucesso";
+                        
+                        return View("Details", funcoes);
+                    }
+                    else //funcao existe
+                    {
+                        TempData["Mensagem"] = "Este Funcao ja existe";
+                        //ModelState.AddModelError("", "Este Funcao ja existe");
+                    }
+                    
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(Exception ex)
+                {
+                    //return ex;
+                }
             }
-            return View(Funcao);
+            return View(funcoes);
         }
 
         // GET: Funcao/Edit/5

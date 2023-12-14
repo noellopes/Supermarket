@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Supermarket.Models.Funcao>
+@model IEnumerable<Supermarket.Models.Funcao>
 
 @{
     ViewData["Title"] = "Funcao";
@@ -7,20 +7,18 @@
     @if (TempData["Mensagem"] != null)
     {
         <div class="alert alert-danger" role="alert">
-            @TempData["Mensagem"]
+                @TempData["Mensagem"]
         </div>
     }
-</h3>
-<h3>
-    @if (TempData["MensagemPositiva"] != null)
+    else if(TempData["MensagemPositiva"] != null)
     {
         <div class="alert alert-success" role="alert">
             @TempData["MensagemPositiva"]
         </div>
     }
 </h3>
-
-<h1>Index</h1>
+  
+<h1>@ViewData["Title"]</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
