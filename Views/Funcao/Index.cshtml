@@ -1,4 +1,4 @@
-@model IEnumerable<Supermarket.Models.Funcao>
+@model Supermarket.Models.FuncaoListViewModel
 
 
 @{
@@ -35,16 +35,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NomeFuncao)
+                @Html.DisplayNameFor(model => model.funcao.First().NomeFuncao)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DescricaoFuncao)
+                @Html.DisplayNameFor(model => model.funcao.First().DescricaoFuncao)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.funcao) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.NomeFuncao)

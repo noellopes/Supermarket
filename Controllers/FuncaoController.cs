@@ -20,8 +20,23 @@ namespace Supermarket.Controllers
         }
 
         // GET: Funcao
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
+                TotalItems = _context.Funcao.Count()
+            };
+
+            return View(
+                new FuncaoListViewModel {
+                    funcao = _context.Funcao.OrderBy( f => f.NomeFuncao)
+                        .Skip((page-1)*pagination.PageSize).Take(pagination.PageSize),
+                    Pagination = pagination 
+                }
+            );
+
               return _context.Funcao != null ? 
                           View(await _context.Funcao.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
@@ -36,7 +51,7 @@ namespace Supermarket.Controllers
             }
 
             var Funcao = await _context.Funcao
-                .FirstOrDefaultAsync(m => m.IdFuncao == id);
+                .FirstOrDefaultAsync(m => m.FuncaoId == id);
             if (Funcao == null)
             {
                 return NotFound();
@@ -193,7 +208,7 @@ namespace Supermarket.Controllers
             }
 
             var Funcao = await _context.Funcao
-                .FirstOrDefaultAsync(m => m.IdFuncao == id);
+                .FirstOrDefaultAsync(m => m.FuncaoId == id);
             if (Funcao == null)
             {
                 TempData["MensagemPositiva"] = "A funcao foi deletada com sucesso";
@@ -225,7 +240,7 @@ namespace Supermarket.Controllers
 
         private bool FuncaoExists(int id)
         {
-          return (_context.Funcao?.Any(e => e.IdFuncao == id)).GetValueOrDefault();
+          return (_context.Funcao?.Any(e => e.FuncaoId == id)).GetValueOrDefault();
         }
     }
 }
