@@ -56,22 +56,22 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao funcoes)
+        public async Task<IActionResult> Create([Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao funcao)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    bool funcaoExiste = await _context.Funcoes.AnyAsync(
-                        f => f.NomeFuncao == funcoes.NomeFuncao || f.FuncaoId == funcoes.FuncaoId);
+                    bool funcaoExiste = await _context.Funcao.AnyAsync(
+                        f => f.NomeFuncao == funcao.NomeFuncao || f.FuncaoId == funcao.FuncaoId);
                     if (!funcaoExiste)
                     {
-                        _context.Add(funcoes);
+                        _context.Add(funcao);
                         await _context.SaveChangesAsync();
 
                         ViewBag.Mensagem = "Funcao Criada com sucesso";
                         
-                        return View("Details", funcoes);
+                        return View("Details", funcao);
                     }
                     else //funcao existe
                     {
@@ -85,11 +85,11 @@ namespace Supermarket.Controllers
                 {
                     //return ex;
                 }
-                _context.Add(funcoes);
+                _context.Add(funcao);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(funcoes);
+            return View(funcao);
         }
 
         // GET: Funcao/Edit/5
@@ -114,9 +114,9 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao funcoes)
+        public async Task<IActionResult> Edit(int id, [Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao funcao)
         {
-            if (id != funcoes.FuncaoId)
+            if (id != funcao.FuncaoId)
             {
                 return NotFound();
             }
@@ -125,16 +125,16 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    bool funcaoExiste = await _context.Funcoes.AnyAsync(
-                        f => f.NomeFuncao == funcoes.NomeFuncao || f.FuncaoId == funcoes.FuncaoId);
+                    bool funcaoExiste = await _context.Funcao.AnyAsync(
+                        f => f.NomeFuncao == funcao.NomeFuncao || f.FuncaoId == funcao.FuncaoId);
 
-                    bool funcaoIgual = await _context.Funcoes.AnyAsync(
-                        f => (f.NomeFuncao == funcoes.NomeFuncao || f.FuncaoId == funcoes.FuncaoId) && f.DescricaoFuncao == funcoes.DescricaoFuncao);
+                    bool funcaoIgual = await _context.Funcao.AnyAsync(
+                        f => (f.NomeFuncao == funcao.NomeFuncao || f.FuncaoId == funcao.FuncaoId) && f.DescricaoFuncao == funcao.DescricaoFuncao);
                     if (funcaoExiste)
                     {
                         if (!funcaoIgual)
                         {
-                            _context.Update(funcoes);
+                            _context.Update(funcao);
                             /*bool funcaoExiste = await _context.Funcao.AnyAsync(
                             f => f.NomeFuncao == Funcao.NomeFuncao || f.FuncaoId == Funcao.FuncaoId);
 
@@ -145,7 +145,7 @@ namespace Supermarket.Controllers
                         {
                             if (!funcaoIgual)
                             {
-                                _context.Update(funcoes);
+                                _context.Update(funcao);
                                 await _context.SaveChangesAsync();
                                 TempData["MensagemPositiva"] = "Edicao de uma funcao ja existente com sucesso";
                                 return RedirectToAction(nameof(Index));
@@ -158,20 +158,20 @@ namespace Supermarket.Controllers
                         }
                         else
                         {
-                            _context.Update(funcoes);
+                            _context.Update(funcao);
                             await _context.SaveChangesAsync();
                             TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
-                            return View("Details", funcoes);
-                            _context.Update(funcoes);
+                            return View("Details", funcao);
+                            _context.Update(funcao);
                             await _context.SaveChangesAsync();
                             TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
-                            return View("Details", funcoes);
+                            return View("Details", funcao);
                         }
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FuncaoExists(funcoes.FuncaoId))
+                    if (!FuncaoExists(funcao.FuncaoId))
                     {
                         return NotFound();
                     }
@@ -182,7 +182,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(funcoes);
+            return View(funcao);
         }
 
         // GET: Funcao/Delete/5
@@ -217,7 +217,6 @@ namespace Supermarket.Controllers
             if (Funcao != null)
             {
                 TempData["MensagemPositiva"] = "A funcao foi deletada com sucesso";
-                _context.Funcoes.Remove(Funcao);
                 _context.Funcao.Remove(Funcao);
             }
             

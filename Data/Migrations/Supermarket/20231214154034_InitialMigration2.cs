@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class updateTables : Migration
+    public partial class InitialMigration2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -70,6 +70,20 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
+                name: "Funcao",
+                columns: table => new
+                {
+                    FuncaoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NomeFuncao = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    DescricaoFuncao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Funcao", x => x.FuncaoId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Funcionarios",
                 columns: table => new
                 {
@@ -93,20 +107,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Funcionarios", x => x.EmployeeId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Funcoes",
-                columns: table => new
-                {
-                    IdFuncao = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NomeFuncao = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    DescricaoFuncao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Funcoes", x => x.IdFuncao);
                 });
 
             migrationBuilder.CreateTable(
@@ -557,7 +557,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "Folga");
 
             migrationBuilder.DropTable(
-                name: "Funcoes");
+                name: "Funcao");
 
             migrationBuilder.DropTable(
                 name: "Issues");
