@@ -56,22 +56,22 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdFuncao,NomeFuncao,DescricaoFuncao")] Funcao Funcao)
+        public async Task<IActionResult> Create([Bind("IdFuncao,NomeFuncao,DescricaoFuncao")] Funcao funcao)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    bool funcaoExiste = await _context.Funcoes.AnyAsync(
-                        f => f.NomeFuncao == funcoes.NomeFuncao || f.IdFuncao == funcoes.IdFuncao);
+                    bool funcaoExiste = await _context.Funcao.AnyAsync(
+                        f => f.NomeFuncao == funcao.NomeFuncao || f.IdFuncao == funcao.IdFuncao);
                     if (!funcaoExiste)
                     {
-                        _context.Add(funcoes);
+                        _context.Add(funcao);
                         await _context.SaveChangesAsync();
 
                         ViewBag.Mensagem = "Funcao Criada com sucesso";
                         
-                        return View("Details", funcoes);
+                        return View("Details", funcao);
                     }
                     else //funcao existe
                     {
@@ -86,7 +86,7 @@ namespace Supermarket.Controllers
                     //return ex;
                 }
             }
-            return View(funcoes);
+            return View(funcao);
         }
 
         // GET: Funcao/Edit/5
