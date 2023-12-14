@@ -5,19 +5,17 @@ namespace Supermarket.Models
 {
     public class Formation
     {
-        //PRIMARY KEY
+        // PRIMARY KEY
         [Required]
-        int FormationId { get; set; }
+        [Key]
+        public int FormationId { get; set; }
 
-
-        public required string PontuacaoFormation { get; set; }
-
+        public string PontuacaoFormation { get; set; }
 
         // FK EMPLOYEE
         public int EmployeeId { get; set; }
 
         public Employee? Employee { get; set; }
-
     }
 }
 

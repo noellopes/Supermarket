@@ -70,6 +70,8 @@ namespace Supermarket.Data
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Formation> Formation { get; set; } = default!;
+
 
     }
 }
