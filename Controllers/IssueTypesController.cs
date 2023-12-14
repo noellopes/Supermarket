@@ -22,9 +22,9 @@ namespace Supermarket.Controllers
         // GET: IssueTypes
         public async Task<IActionResult> Index()
         {
-              return _context.IssueType != null ? 
-                          View(await _context.IssueType.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.IssueType'  is null.");
+            return _context.IssueType != null ?
+                        View(await _context.IssueType.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.IssueType'  is null.");
         }
 
         // GET: IssueTypes/Details/5
@@ -39,7 +39,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.IssueTypeId == id);
             if (issueType == null)
             {
-                return NotFound();
+                return View("IssueTypeDeleted");
             }
 
             return View(issueType);
@@ -78,7 +78,7 @@ namespace Supermarket.Controllers
             var issueType = await _context.IssueType.FindAsync(id);
             if (issueType == null)
             {
-                return NotFound();
+                return View("IssueTypeDeleted");
             }
             return View(issueType);
         }
@@ -130,7 +130,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.IssueTypeId == id);
             if (issueType == null)
             {
-                return NotFound();
+                return View("IssueTypeDeleted");
             }
 
             return View(issueType);
@@ -150,14 +150,15 @@ namespace Supermarket.Controllers
             {
                 _context.IssueType.Remove(issueType);
             }
-            
+
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return View("DeleteCompleted", issueType);
         }
 
         private bool IssueTypeExists(int id)
         {
-          return (_context.IssueType?.Any(e => e.IssueTypeId == id)).GetValueOrDefault();
+            return (_context.IssueType?.Any(e => e.IssueTypeId == id)).GetValueOrDefault();
         }
     }
 }

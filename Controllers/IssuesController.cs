@@ -39,7 +39,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.IssueId == id);
             if (issues == null)
             {
-                return NotFound();
+                return View("IssueDeleted");
             }
 
             return View(issues);
@@ -80,7 +80,7 @@ namespace Supermarket.Controllers
             var issues = await _context.Issues.FindAsync(id);
             if (issues == null)
             {
-                return NotFound();
+                return View("IssueDeleted");
             }
             ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "IssueDescription", issues.IssueTypeId);
             return View(issues);
@@ -135,7 +135,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.IssueId == id);
             if (issues == null)
             {
-                return NotFound();
+                return View("IssueDeleted");
             }
 
             return View(issues);
@@ -155,14 +155,15 @@ namespace Supermarket.Controllers
             {
                 _context.Issues.Remove(issues);
             }
-            
+
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return View("DeleteCompleted", issues);
         }
 
         private bool IssuesExists(int id)
         {
-          return (_context.Issues?.Any(e => e.IssueId == id)).GetValueOrDefault();
+            return (_context.Issues?.Any(e => e.IssueId == id)).GetValueOrDefault();
         }
     }
 }
