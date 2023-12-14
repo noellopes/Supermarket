@@ -28,7 +28,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Funcao> Funcao { get; set; } = default!;
 
-        public DbSet<EmployeeEvaluation> EmployeeEvaluations { get; set; } = default!;
+        public DbSet<EmployeeEvaluation> EmployeeEvaluation { get; set; } = default!;
 
         public DbSet<Employee> Employee { get; set; } = default!;
 

@@ -225,7 +225,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("EmployeeEvaluations");
+                    b.ToTable("EmployeeEvaluation");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Folga", b =>

@@ -313,12 +313,9 @@ namespace Supermarket.Data
 
         private static void PopulateEmployees(SupermarketDbContext db)
         {
-            /* trocar "Funcionarios" por "Employee" ?
-             
-             
-            if (db.Funcionarios.Any()) return;
+            if (db.Employee.Any()) return;
 
-            db.Funcionarios.AddRange(
+            db.Employee.AddRange(
                 new Employee
                 {
                     Employee_Address= "Rua das Oliveiras",
@@ -330,7 +327,7 @@ namespace Supermarket.Data
                     Employee_Password = "123",
                     Employee_Phone = "123",
                     Employee_Time_Bank= DateTime.Now,
-                    Hora_Almoco_Padrao = "123",
+                    Standard_Lunch_Hour = "123",
                     Standard_Check_In_Time = "123",
                     Standard_Check_Out_Time = "123",
                     Standard_Lunch_Time = "123"
@@ -346,7 +343,7 @@ namespace Supermarket.Data
                     Employee_Password = "123",
                     Employee_Phone = "123",
                     Employee_Time_Bank = DateTime.Now,
-                    Hora_Almoco_Padrao = "123",
+                    Standard_Lunch_Hour = "123",
                     Standard_Check_In_Time = "123",
                     Standard_Check_Out_Time = "123",
                     Standard_Lunch_Time = "123"
@@ -362,7 +359,7 @@ namespace Supermarket.Data
                     Employee_Password = "123",
                     Employee_Phone = "123",
                     Employee_Time_Bank = DateTime.Now,
-                    Hora_Almoco_Padrao = "123",
+                    Standard_Lunch_Hour = "123",
                     Standard_Check_In_Time = "123",
                     Standard_Check_Out_Time = "123",
                     Standard_Lunch_Time = "123"
@@ -370,14 +367,13 @@ namespace Supermarket.Data
                 );
 
             db.SaveChanges();
-            */
         }
 
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
         {
-            if (db.EmployeeEvaluations.Any()) return;
+            if (db.EmployeeEvaluation.Any()) return;
 
-            db.EmployeeEvaluations.AddRange(
+            db.EmployeeEvaluation.AddRange(
                 new EmployeeEvaluation
                 {
                     Description= "Atendimento excelente!",
