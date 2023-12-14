@@ -396,5 +396,18 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
+
+        private static void PopulateFuncao(SupermarketDbContext db)
+        {
+            if (db.Funcao.Any())
+            {
+                for (int i = 0; i < 240; i++)
+                {
+                    db.Funcao.Add(new Funcao { 
+                        NomeFuncao = "Funcao " + i, DescricaoFuncao  = "Descricao " + i
+                    });
+                }
+            }
+        }
     }
 }
