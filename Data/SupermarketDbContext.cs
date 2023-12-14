@@ -56,6 +56,9 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
 
         public DbSet<ClientCard> ClientCard { get; set; } = default!;
 

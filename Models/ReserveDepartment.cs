@@ -22,11 +22,11 @@ namespace Supermarket.Models
         [ForeignKey("EmployeeId")]
         public required List<Employee> Employees { get; set; }
 
-        // FK DEPARTMENTS
-        //Relação de muitos para muitos
-        [Required]
-        [ForeignKey("DepartmentsId")]
-        public required List<Departments> Departments { get; set; }
+        //// FK DEPARTMENTS
+        ////Relação de muitos para muitos
+        //[Required]
+        //[ForeignKey("DepartmentsId")]
+        //public required List<Departments> Departments { get; set; }
 
         // NUMERO DE FUNCIONARIOS NA RESERVA
         [Required]
