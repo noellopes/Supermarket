@@ -56,14 +56,14 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdFuncao,NomeFuncao,DescricaoFuncao")] Funcao funcao)
+        public async Task<IActionResult> Create([Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao funcao)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     bool funcaoExiste = await _context.Funcao.AnyAsync(
-                        f => f.NomeFuncao == funcao.NomeFuncao || f.IdFuncao == funcao.IdFuncao);
+                        f => f.NomeFuncao == funcao.NomeFuncao || f.FuncaoId == funcao.FuncaoId);
                     if (!funcaoExiste)
                     {
                         _context.Add(funcao);
@@ -85,6 +85,9 @@ namespace Supermarket.Controllers
                 {
                     //return ex;
                 }
+                _context.Add(funcao);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             return View(funcao);
         }
@@ -110,9 +113,9 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdFuncao,NomeFuncao,DescricaoFuncao")] Funcao Funcao)
+        public async Task<IActionResult> Edit(int id, [Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao funcao)
         {
-            if (id != Funcao.IdFuncao)
+            if (id != funcao.FuncaoId)
             {
                 return NotFound();
             }
@@ -122,34 +125,52 @@ namespace Supermarket.Controllers
                 try
                 {
                     bool funcaoExiste = await _context.Funcao.AnyAsync(
-                        f => f.NomeFuncao == Funcao.NomeFuncao || f.IdFuncao == Funcao.IdFuncao);
+                        f => f.NomeFuncao == funcao.NomeFuncao || f.FuncaoId == funcao.FuncaoId);
 
                     bool funcaoIgual = await _context.Funcao.AnyAsync(
-                        f => (f.NomeFuncao == Funcao.NomeFuncao || f.IdFuncao == Funcao.IdFuncao) && f.DescricaoFuncao == Funcao.DescricaoFuncao);
+                        f => (f.NomeFuncao == funcao.NomeFuncao || f.FuncaoId == funcao.FuncaoId) && f.DescricaoFuncao == funcao.DescricaoFuncao);
                     if (funcaoExiste)
                     {
-                        if (!funcaoIgual) {
-                            _context.Update(Funcao);
-                            await _context.SaveChangesAsync();
-                            TempData["MensagemPositiva"] = "Edicao de uma funcao ja existente com sucesso";
-                            return RedirectToAction(nameof(Index));
+                        if (!funcaoIgual)
+                        {
+                            _context.Update(funcao);
+                            /*bool funcaoExiste = await _context.Funcao.AnyAsync(
+                            f => f.NomeFuncao == Funcao.NomeFuncao || f.FuncaoId == Funcao.FuncaoId);
+
+                            bool funcaoIgual = await _context.Funcao.AnyAsync(
+                            f => (f.NomeFuncao == Funcao.NomeFuncao || f.FuncaoId == Funcao.FuncaoId) && f.DescricaoFuncao == Funcao.DescricaoFuncao);*/
+                        }
+                        if (funcaoExiste)
+                        {
+                            if (!funcaoIgual)
+                            {
+                                _context.Update(funcao);
+                                await _context.SaveChangesAsync();
+                                TempData["MensagemPositiva"] = "Edicao de uma funcao ja existente com sucesso";
+                                return RedirectToAction(nameof(Index));
+                            }
+                            else
+                            {
+                                TempData["Mensagem"] = "funcao identica";
+                                return RedirectToAction(nameof(Index));
+                            }
                         }
                         else
                         {
-                            TempData["Mensagem"] = "funcao identica";
-                            return RedirectToAction(nameof(Index));
+                            _context.Update(funcao);
+                            await _context.SaveChangesAsync();
+                            TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
+                            return View("Details", funcao);
+                            _context.Update(funcao);
+                            await _context.SaveChangesAsync();
+                            TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
+                            return View("Details", funcao);
                         }
-                    }
-                    else{
-                        _context.Update(Funcao);
-                        await _context.SaveChangesAsync();
-                        TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
-                        return View("Details", Funcao);
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FuncaoExists(Funcao.IdFuncao))
+                    if (!FuncaoExists(funcao.FuncaoId))
                     {
                         return NotFound();
                     }
@@ -160,7 +181,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(Funcao);
+            return View(funcao);
         }
 
         // GET: Funcao/Delete/5
@@ -175,7 +196,8 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.IdFuncao == id);
             if (Funcao == null)
             {
-                return NotFound();
+                TempData["MensagemPositiva"] = "A funcao foi deletada com sucesso";
+                return RedirectToAction(nameof(Index));
             }
 
             return View(Funcao);
@@ -193,6 +215,7 @@ namespace Supermarket.Controllers
             var Funcao = await _context.Funcao.FindAsync(id);
             if (Funcao != null)
             {
+                TempData["MensagemPositiva"] = "A funcao foi deletada com sucesso";
                 _context.Funcao.Remove(Funcao);
             }
             
