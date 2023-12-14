@@ -98,6 +98,7 @@ namespace Supermarket.Controllers
             }
             ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "BrandId", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Name", product.CategoryId);
+            ViewData["Status"] = new SelectList("Available", "Unavailable", "Discontinued");
             return View(product);
         }
 
@@ -117,38 +118,20 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    var existingProduct = await _context.Product.FindAsync(id);
+                    bool ProductExists = await _context.Product.AnyAsync(
+                    b => b.Name == product.Name && b.Description == product.Description && b.ProductId != product.ProductId);
 
-                    if (existingProduct == null)
+                    if (ProductExists)
                     {
-                        return NotFound();
+                        ModelState.AddModelError("", "Another Product with the same Name and Description already exists.");
                     }
-
-                    if (existingProduct.Name != product.Name || existingProduct.Description != product.Description)
+                    else
                     {
-                        bool productWithSameNameAndDescriptionExists = await _context.Product
-                            .AnyAsync(p => p.ProductId != id && p.Name == product.Name && p.Description == product.Description);
-
-                        if (productWithSameNameAndDescriptionExists)
-                        {
-                            ModelState.AddModelError("", "Another product with the same Name and Description already exists.");
-                            ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "BrandId", "Name", product.BrandId);
-                            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Name", product.CategoryId);
-                            return View(product);
-                        }
+                        _context.Update(product);
+                        await _context.SaveChangesAsync();
+                        ViewBag.Message = "Product successfully edited.";
+                        return View("Details", product);
                     }
-                    existingProduct.CategoryId = product.CategoryId;
-                    existingProduct.BrandId = product.BrandId;
-                    existingProduct.TotalQuantity = product.TotalQuantity;
-                    existingProduct.MinimumQuantity = product.MinimumQuantity;
-                    existingProduct.UnitPrice = product.UnitPrice;
-                    existingProduct.Status = product.Status;
-
-                    _context.Update(existingProduct);
-                    await _context.SaveChangesAsync();
-
-                    ViewBag.Message = "Product successfully edited.";
-                    return View("Details", existingProduct);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
