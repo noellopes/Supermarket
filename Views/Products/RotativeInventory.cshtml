@@ -1,0 +1,207 @@
+﻿@{
+    ViewData["Title"] = "Rotative Inventory";
+}
+
+<h1>Rotative Inventory</h1>
+
+@{
+    var warehouseSections = ViewData["WarehouseSections"] as IEnumerable<Supermarket.Models.WarehouseSection>;
+    int warehouseSectionId;
+    var selectedWarehouseSection = (Supermarket.Models.WarehouseSection)null;
+
+    if (int.TryParse(Context.Request.Query["WarehouseSectionId"], out warehouseSectionId) && warehouseSectionId > 0)
+    {
+        selectedWarehouseSection = warehouseSections?.FirstOrDefault(w => w.WarehouseSectionId == warehouseSectionId);
+    }
+}
+
+<form asp-controller="Products" asp-action="RotativeProducts" method="get">
+    <div class="form-group">
+        <label for="WarehouseSectionId">Select Warehouse Section:</label>
+        <select name="WarehouseSectionId" class="form-control">
+            <option value="">-- All Warehouse Sections --</option>
+            @if (warehouseSections != null)
+            {
+                foreach (var warehouseSection in warehouseSections)
+                {
+                    <option value="@warehouseSection.WarehouseSectionId">@warehouseSection.Description,  @warehouseSection.Warehouse!.Name</option>
+                }
+            }
+        </select>
+    </div>
+    <div style ="margin-top: 5px;">
+    <button type="submit" class="btn btn-primary">Submeter</button>
+    </div>
+</form>
+
+<div style="margin-top: 20px;">
+   
+    @if (warehouseSectionId > 0 && selectedWarehouseSection != null)
+    {
+        <h2>Selected Warehouse Section: @selectedWarehouseSection.Description</h2>
+        <p>Belongs to Warehouse: @selectedWarehouseSection.Warehouse!.Name</p>
+
+        @if (selectedWarehouseSection.Products != null && selectedWarehouseSection.Products.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name Product</th>
+                        <th>Description</th>
+                        <th>Brand</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Product count </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var warehouseSectionProduct in selectedWarehouseSection.Products)
+                    {
+                        <tr>
+                            <td>
+                                @if (warehouseSectionProduct.Product != null)
+                                {
+                                    @warehouseSectionProduct.Product.Name
+                                }
+                                else
+                                {
+                                    <span style="color: red;">Erro: Product not available</span>
+                                }
+                            </td>
+                            <td>
+                                @warehouseSectionProduct.Product!.Description
+                            </td>
+                            <td>
+                                @warehouseSectionProduct.Product.Brand!.Name
+                            </td>
+                            <td>
+                                @warehouseSectionProduct.Product.Category!.Name
+                            </td>
+                            <td>
+                                @warehouseSectionProduct.Quantity
+                            </td>
+                            <td>
+                                <input type="number" name="quantities[@warehouseSectionProduct.ProductId]" min="0" max="99999" value="0" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <span style="color: red;"> No products available in this section of the warehouse.</span>
+        }
+    }
+    else
+    {
+        <p>Select a warehouse section to display corresponding products.</p>
+    }
+</div>
+
+
+
+
+
+
+
+
+@{
+    var shelves = ViewData["Shelf"] as IEnumerable<Supermarket.Models.Shelf>;
+    int shelfId;
+    var selectedShelf = (Supermarket.Models.Shelf)null;
+
+    if (int.TryParse(Context.Request.Query["ShelfId"], out shelfId) && shelfId > 0)
+    {
+        selectedShelf = shelves?.FirstOrDefault(s => s.ShelfId == shelfId);
+    }
+}
+<div class="custom-margin" style="margin-top: 100px;">
+    <form asp-controller="Products" asp-action="RotativeProducts" method="get">
+        <div class="form-group">
+            <label for="ShelfId">Select Shelf:</label>
+            <select name="ShelfId" class="form-control">
+                <option value="">-- All Shelves --</option>
+                @if (shelves != null)
+                {
+                    foreach (var shelf in shelves)
+                    {
+                        <option value="@shelf.ShelfId">@shelf.Name,@shelf.Hallway!.Description,@shelf.Hallway.Store!.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div style="margin-top: 5px;">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+
+    <div style="margin-top: 20px;">
+
+        @if (shelfId > 0 && selectedShelf != null)
+        {
+            <h2>Selected Shelf: @selectedShelf.Name</h2>
+            <p>Belongs to : @selectedShelf.Hallway!.Description, @selectedShelf.Hallway.Store!.Name  </p>
+         
+            @if (selectedShelf.Product != null && selectedShelf.Product.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name Product</th>
+                            <th>Description</th>
+                            <th>Brand</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Minimum Quantity</th>
+                            <th>Product count </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var shelfProductExhibition in selectedShelf.Product)
+                        {
+                            <tr>
+                                <td>
+                                    @if (shelfProductExhibition.Product != null)
+                                    {
+                                        @shelfProductExhibition.Product.Name
+                                    }
+                                    else
+                                    {
+                                        <span style="color: red;">Error: Product not available</span>
+                                    }
+                                </td>
+                                <td>
+                                    @shelfProductExhibition.Product!.Description
+                                </td>
+                                <td>
+                                    @shelfProductExhibition.Product.Brand!.Name
+                                </td>
+                                <td>
+                                    @shelfProductExhibition.Product.Category!.Name
+                                </td>
+                                <td>
+                                    @shelfProductExhibition.Quantity
+                                </td>
+                                <td>
+                                    @shelfProductExhibition.MinimumQuantity
+                                </td>
+                                <td>
+                                    <input type="number" name="quantities[@shelfProductExhibition.ProductId]" min="0" max="99999" value="0" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <span style="color: red;">No products available on this shelf.</span>
+            }
+        }
+        else
+        {
+            <p>Select a shelf to display corresponding products.</p>
+        }
+    </div>
+</div>

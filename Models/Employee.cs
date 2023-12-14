@@ -6,7 +6,7 @@ namespace Supermarket.Models
     {
         public int EmployeeId { get; set; }
 
-        [StringLength(50,MinimumLength = 3)]
+        [StringLength(50, MinimumLength = 3)]
         [Required]
         public required string Employee_Name { get; set; }
 
@@ -19,11 +19,11 @@ namespace Supermarket.Models
         public required string Employee_Password { get; set; }
 
         [MaxLength(9)]
-        public int Employee_Phone { get; set; }
+        public string Employee_Phone { get; set; }
 
 
         [MaxLength(9)]
-        public int Employee_NIF { get; set; }
+        public string Employee_NIF { get; set; }
 
         [Required]
         [StringLength(100, MinimumLength = 3)]
@@ -33,29 +33,32 @@ namespace Supermarket.Models
         public required DateTime Employee_Birth_Date { get; set; }
 
         [Required]
-        public required DateTime Employee_Admission_Date{ get; set; }
+        public required DateTime Employee_Admission_Date { get; set; }
+
+        public DateTime Employee_Termination_Date { get; set; }
 
         [Required]
-        public required DateTime Employee_Termination_Date { get; set; }
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Formato de hora inválido. Use HH:mm")]
+        public required string Standard_Check_In_Time { get; set; }
 
         [Required]
-        public required DateTime Standard_Check_In_Time { get; set; }
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Formato de hora inválido. Use HH:mm")]
+        public required string Standard_Check_Out_Time { get; set; }
 
         [Required]
-        public required DateTime Standard_Check_Out_Time { get; set; }
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Formato de hora inválido. Use HH:mm")]
+        public required string Standard_Lunch_Hour { get; set; }
 
         [Required]
-        public required DateTime Hora_Almoco_Padrao { get; set; }
-
-        [Required]
-        public required DateTime Standard_Lunch_Time { get;set; }
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Formato de hora inválido. Use HH:mm")]
+        public required string Standard_Lunch_Time { get; set; }
 
         [Required]
         public required DateTime Employee_Time_Bank { get; set; }
 
+
         //Ligação de 1 para 1 com Meal_Card
-        [Required]
-        public Meal_Card Meal_Card { get; set; }
+        public MealCard? MealCard { get; set; }
 
 
         //Ligação de 1 para 1 com Horario de atendimento (Schedule)
@@ -66,7 +69,7 @@ namespace Supermarket.Models
         //public ICollection<Day_Off> Days_Off { get; set;}
 
         //Buscar a coleção das Escalas (1 para muitos)
-        //public ICollection<Scales>? Scales { get; set;}
+        //+public ICollection<Scales>? Scales { get; set;}
 
         //Buscar a coleção dos Pontos (1 para muitos)
         //public ICollection<Point> Point { get; set;}
@@ -76,9 +79,6 @@ namespace Supermarket.Models
 
         //Buscar a coleção dos Abate_Funcionario (1 para muitos)
         //public ICollection<Employee_Reduction> Employee_Reduction { get; set;}
-
-
-
 
         //Buscar a coleção das Qualificação (Muitos para muitos)
         //public ICollection<Qualifications> Qualifications { get; set;}
