@@ -1,0 +1,100 @@
+﻿@model IEnumerable<Supermarket.Models.SubsidySetup>
+
+   
+@{
+    ViewData["Title"] = "Index";
+}
+
+<style>
+    body {
+        background-color: powderblue;
+        font-family: verdana;
+    }
+
+    th {
+        font-family:'Times New Roman', Times, serif;
+        font-size:20px;
+    }
+    .c{
+        background-color:cyan;
+       
+        color: white;
+        
+    }
+html {
+  font-size: 14px;
+}
+
+
+
+
+    .a (max-width: 500px) {
+
+        display:flex;
+        margin:20px;
+    }
+
+    table{
+        background-color: white;
+    }
+    .b{
+        background-color: white;
+    }
+</style>
+
+<div class="a">
+
+    <div class="c">
+        <h3> Ola seja Bem Vindo</h3>
+     
+    </div>
+
+<div class="b">
+<h1>Pagina de Configuraçao de Subsidio</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-danger btn-sm">Criar Novo</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HorasMinTrabalhadas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorSubsidioDiario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataPagamentoMensal)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HorasMinTrabalhadas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ValorSubsidioDiario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataPagamentoMensal)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SubsidySetupId" class="btn btn-warning btn-sm">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SubsidySetupId" class="btn btn-info btn-sm">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SubsidySetupId" class="btn btn-danger btn-sm">Delete</a> |
+
+                    <button type="submit" class="btn btn-success">Submit</button>
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+
+</div>
