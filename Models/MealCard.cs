@@ -7,7 +7,7 @@ namespace Supermarket.Models
 {
     public class MealCard
     {
-        
+
         public int MealCardId { get; set; }
 
         [Required]
@@ -20,7 +20,7 @@ namespace Supermarket.Models
         // Propriedade de navegação para o funcionario associado a este cartão
         public Employee? Employee { get; set; }
 
-        public ICollection<CardMovement>? Movements { get; set; }
+        public ICollection<CardMovement>? CardMovements { get; set; }
 
 
     }

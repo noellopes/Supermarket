@@ -11,7 +11,7 @@ namespace Supermarket.Models
 
         public DateTime HorasMinTrabalhadas { get; set; }
         [Required]
-        public float valorSubsidioDiario { get; set; }
+        public float ValorSubsidioDiario { get; set; }
         [Required]
         public DateTime DataPagamentoMensal { get; set; }
 
