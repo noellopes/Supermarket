@@ -58,15 +58,13 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.ClientCard> ClientCard { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Client> Client { get; set; } = default!;
+
         public DbSet<Supermarket.Models.CategoryDiscount> CategoryDiscounts { get; set; } = default!;
 
         public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
-
-        public DbSet<ClientCard> ClientCard { get; set; } = default!;
-
-        public DbSet<CategoryDiscount> CategoryDiscounts { get; set; } = default!;
 
         public DbSet<MealCard> MealCard { get; set; } = default!;
 
