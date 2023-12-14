@@ -60,10 +60,26 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(departments);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool DepartmentsExists = await _context.Departments.AnyAsync(
+                d => d.NameDepartments == departments.NameDepartments);
+
+                //&& b.Adress == name.Adress && b.nameId != name.NameId);
+
+                if (DepartmentsExists)
+                {
+                    ModelState.AddModelError("", "Another Departments with the same Name already exists.");
+                }
+
+                else { 
+                    _context.Add(departments);
+                    await _context.SaveChangesAsync();
+                    ViewBag.Message = "Departamento successfully Create.";
+                    //book.Author = await _context.Author.FindAsync(book.AuthorId);
+
+                    return View("Details", departments);
+                }
             }
+            //ViewData["IDDepartments"] = new SelectList(_context.Set<Schedule>(), "ScheduleId ", "StateSchedule", Schedule.ScheduleId);
             return View(departments);
         }
 
@@ -92,27 +108,41 @@ namespace Supermarket.Controllers
         {
             if (id != departments.IDDepartments)
             {
-                return NotFound();
+                return View("Departmentsnotfound");
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(departments);
-                    await _context.SaveChangesAsync();
+                    bool boolExists = await _context.Departments.AnyAsync(
+                    d => d.NameDepartments == departments.NameDepartments);
+
+                    if (boolExists)
+                    {
+                        ModelState.AddModelError("", "Another Department with same Name Department already exist");
+                    }
+                    else
+                    {
+                        _context.Update(departments);
+                        await _context.SaveChangesAsync();
+                        ViewBag.Message = "Department sucessfully edit.";
+                        departments.NameDepartments = await _context.NameDepartments.FindAsync(departments.IDDepartments);
+                        return View("Details", departments);
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!DepartmentsExists(departments.IDDepartments))
                     {
-                        return NotFound();
+                        return View("Departmentnotfound");
                     }
                     else
                     {
                         throw;
                     }
                 }
+                ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments", departments.IDDepartments);
                 return RedirectToAction(nameof(Index));
             }
             return View(departments);
@@ -123,14 +153,15 @@ namespace Supermarket.Controllers
         {
             if (id == null || _context.Departments == null)
             {
-                return NotFound();
+               return View("DeleteConfirmed");
             }
 
             var departments = await _context.Departments
+                .Include(d => d.NameDepartments)
                 .FirstOrDefaultAsync(m => m.IDDepartments == id);
             if (departments == null)
             {
-                return NotFound();
+                return View("DeleteConfirmed", departments);
             }
 
             return View(departments);
@@ -152,7 +183,9 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            // return RedirectToAction(nameof(Index));
+            departments.NameDepartments = await _context.NameDepartments.FindAsync(departments.IDDepartments);
+            return View("DeleteConfirmed", departments);
         }
 
         private bool DepartmentsExists(int id)

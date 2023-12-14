@@ -33,7 +33,7 @@ namespace Supermarket.Data
 
         public DbSet<Employee> Funcionarios { get; set; } = default!;
 
-        public DbSet<ProductDiscount> ProductDiscount { get; internal set; }
+        public DbSet<ProductDiscount> ProductDiscount { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Product> Product { get; set; } = default!;
 
