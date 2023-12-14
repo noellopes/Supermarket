@@ -3,8 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Supermarket.Models
 {
-    public class  Reserve_Department
+    public class  ReserveDepartment
     {
+        [Required]
+        [Key]
+        public int ReserveDepartmentId { get; set; }
+
+
         // FK RESERVE       
         [Required]
         [ForeignKey("ReserveId")]
@@ -26,12 +31,7 @@ namespace Supermarket.Models
         // NUMERO DE FUNCIONARIOS NA RESERVA
         [Required]
         public int NumeroDeFunc { get; set; }
-
-        
-        
-
-        
-
+             
         /* FK Ticket
           public int TicketID { get; set; }
 
