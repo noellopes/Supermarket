@@ -207,6 +207,46 @@ namespace Supermarket.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> RotativeProducts(int warehouseSectionId = 0, int shelfId = 0)
+        {
+            // Consulta para as seções do armazém
+            var warehouseSectionQuery = _context.WarehouseSection
+                .Include(ws => ws.Warehouse)
+                .Include(ws => ws.Products)
+                .ThenInclude(wsp => wsp.Product.Category)
+                .Include(ws => ws.Products)
+                .ThenInclude(wsp => wsp.Product.Brand);
+
+            // Executar a consulta e armazenar os resultados na ViewData
+            var warehouseSections = await warehouseSectionQuery.ToListAsync();
+            ViewData["WarehouseSections"] = warehouseSections;
+
+            // Selecionar a seção do armazém com base no warehouseSectionId
+            var selectedWarehouseSection = warehouseSections.FirstOrDefault(ws => ws.WarehouseSectionId == warehouseSectionId);
+            ViewData["SelectedWarehouseSection"] = selectedWarehouseSection;
+
+            // Consulta para as prateleiras
+            var shelfQuery = _context.Shelf
+                .Include(s => s.Hallway)
+                .Include(s => s.Product)
+                .ThenInclude(p => p.Product)
+                .ThenInclude(p => p.Brand)
+                .Include(s => s.Product)
+                .ThenInclude(p => p.Product)
+                .ThenInclude(p => p.Category)
+                .Include(s => s.Hallway)
+                .ThenInclude(h => h.Store);
+
+            // Executar a consulta e armazenar os resultados na ViewData
+            var shelves = await shelfQuery.ToListAsync();
+            ViewData["Shelf"] = shelves;
+
+            // Selecionar a prateleira com base no shelfId
+            var selectedShelf = shelves.FirstOrDefault(s => s.ShelfId == shelfId);
+            ViewData["SelectedShelf"] = selectedShelf;
+
+            return View("RotativeInventory");
+        }
         private bool ProductExists(int id)
         {
           return (_context.Product?.Any(e => e.ProductId == id)).GetValueOrDefault();

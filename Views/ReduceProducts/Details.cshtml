@@ -38,19 +38,19 @@
             @Html.DisplayNameFor(model => model.Product)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Product.Description), @Html.DisplayFor(model => model.Product.Brand.Name)
+            @Html.DisplayFor(model => model.Product!.Name), @Html.DisplayFor(model => model.Product!.Brand!.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.WarehouseSection)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.WarehouseSection.Description), @Html.DisplayFor(model => model.WarehouseSection.Warehouse.Name)
+            @Html.DisplayFor(model => model.WarehouseSection!.Description), @Html.DisplayFor(model => model.WarehouseSection!.Warehouse!.Name)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Shelf)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Shelf.Name), @Html.DisplayFor(model => model.Shelf.Hallway.Description), @Html.DisplayFor(model => model.Shelf.Hallway.Store.Name)
+            @Html.DisplayFor(model => model.Shelf!.Name), @Html.DisplayFor(model => model.Shelf!.Hallway!.Description), @Html.DisplayFor(model => model.Shelf!.Hallway!.Store!.Name)
         </dd>
     </dl>
 </div>

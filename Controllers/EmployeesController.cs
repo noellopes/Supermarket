@@ -10,87 +10,87 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class ClientCardsController : Controller
+    public class EmployeesController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public ClientCardsController(SupermarketDbContext context)
+        public EmployeesController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: ClientCards
+        // GET: Employees
         public async Task<IActionResult> Index()
         {
-              return _context.ClientCard != null ? 
-                          View(await _context.ClientCard.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
+              return _context.Employee != null ? 
+                          View(await _context.Employee.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
         }
 
-        // GET: ClientCards/Details/5
+        // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.Employee == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard
-                .FirstOrDefaultAsync(m => m.ClientCardId == id);
-            if (clientCard == null)
+            var employee = await _context.Employee
+                .FirstOrDefaultAsync(m => m.EmployeeId == id);
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            return View(clientCard);
+            return View(employee);
         }
 
-        // GET: ClientCards/Create
+        // GET: Employees/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ClientCards/Create
+        // POST: Employees/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientCardId,ClientCardNumber,Balance")] ClientCard clientCard)
+        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,Employee_Time_Bank")] Employee employee)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(clientCard);
+                _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(clientCard);
+            return View(employee);
         }
 
-        // GET: ClientCards/Edit/5
+        // GET: Employees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.Employee == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard.FindAsync(id);
-            if (clientCard == null)
+            var employee = await _context.Employee.FindAsync(id);
+            if (employee == null)
             {
                 return NotFound();
             }
-            return View(clientCard);
+            return View(employee);
         }
 
-        // POST: ClientCards/Edit/5
+        // POST: Employees/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientCardId,ClientCardNumber,Balance")] ClientCard clientCard)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,Employee_Time_Bank")] Employee employee)
         {
-            if (id != clientCard.ClientCardId)
+            if (id != employee.EmployeeId)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(clientCard);
+                    _context.Update(employee);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientCardExists(clientCard.ClientCardId))
+                    if (!EmployeeExists(employee.EmployeeId))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,49 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(clientCard);
+            return View(employee);
         }
 
-        // GET: ClientCards/Delete/5
+        // GET: Employees/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.Employee == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard
-                .FirstOrDefaultAsync(m => m.ClientCardId == id);
-            if (clientCard == null)
+            var employee = await _context.Employee
+                .FirstOrDefaultAsync(m => m.EmployeeId == id);
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            return View(clientCard);
+            return View(employee);
         }
 
-        // POST: ClientCards/Delete/5
+        // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.ClientCard == null)
+            if (_context.Employee == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
             }
-            var clientCard = await _context.ClientCard.FindAsync(id);
-            if (clientCard != null)
+            var employee = await _context.Employee.FindAsync(id);
+            if (employee != null)
             {
-                _context.ClientCard.Remove(clientCard);
+                _context.Employee.Remove(employee);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientCardExists(int id)
+        private bool EmployeeExists(int id)
         {
-          return (_context.ClientCard?.Any(e => e.ClientCardId == id)).GetValueOrDefault();
+          return (_context.Employee?.Any(e => e.EmployeeId == id)).GetValueOrDefault();
         }
     }
 }

@@ -10,87 +10,87 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class ClientCardsController : Controller
+    public class CategoryDiscountsController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public ClientCardsController(SupermarketDbContext context)
+        public CategoryDiscountsController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: ClientCards
+        // GET: CategoryDiscounts
         public async Task<IActionResult> Index()
         {
-              return _context.ClientCard != null ? 
-                          View(await _context.ClientCard.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
+              return _context.CategoryDiscounts != null ? 
+                          View(await _context.CategoryDiscounts.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.CategoryDiscount'  is null.");
         }
 
-        // GET: ClientCards/Details/5
+        // GET: CategoryDiscounts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.CategoryDiscounts == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard
-                .FirstOrDefaultAsync(m => m.ClientCardId == id);
-            if (clientCard == null)
+            var categoryDiscount = await _context.CategoryDiscounts
+                .FirstOrDefaultAsync(m => m.CategoryDiscountId == id);
+            if (categoryDiscount == null)
             {
                 return NotFound();
             }
 
-            return View(clientCard);
+            return View(categoryDiscount);
         }
 
-        // GET: ClientCards/Create
+        // GET: CategoryDiscounts/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ClientCards/Create
+        // POST: CategoryDiscounts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientCardId,ClientCardNumber,Balance")] ClientCard clientCard)
+        public async Task<IActionResult> Create([Bind("CategoryDiscountId,Value,startDate,endDate")] CategoryDiscount categoryDiscount)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(clientCard);
+                _context.Add(categoryDiscount);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(clientCard);
+            return View(categoryDiscount);
         }
 
-        // GET: ClientCards/Edit/5
+        // GET: CategoryDiscounts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.CategoryDiscounts == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard.FindAsync(id);
-            if (clientCard == null)
+            var categoryDiscount = await _context.CategoryDiscounts.FindAsync(id);
+            if (categoryDiscount == null)
             {
                 return NotFound();
             }
-            return View(clientCard);
+            return View(categoryDiscount);
         }
 
-        // POST: ClientCards/Edit/5
+        // POST: CategoryDiscounts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientCardId,ClientCardNumber,Balance")] ClientCard clientCard)
+        public async Task<IActionResult> Edit(int id, [Bind("CategoryDiscountId,Value,startDate,endDate")] CategoryDiscount categoryDiscount)
         {
-            if (id != clientCard.ClientCardId)
+            if (id != categoryDiscount.CategoryDiscountId)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(clientCard);
+                    _context.Update(categoryDiscount);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientCardExists(clientCard.ClientCardId))
+                    if (!CategoryDiscountExists(categoryDiscount.CategoryDiscountId))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,49 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(clientCard);
+            return View(categoryDiscount);
         }
 
-        // GET: ClientCards/Delete/5
+        // GET: CategoryDiscounts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.CategoryDiscounts == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard
-                .FirstOrDefaultAsync(m => m.ClientCardId == id);
-            if (clientCard == null)
+            var categoryDiscount = await _context.CategoryDiscounts
+                .FirstOrDefaultAsync(m => m.CategoryDiscountId == id);
+            if (categoryDiscount == null)
             {
                 return NotFound();
             }
 
-            return View(clientCard);
+            return View(categoryDiscount);
         }
 
-        // POST: ClientCards/Delete/5
+        // POST: CategoryDiscounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.ClientCard == null)
+            if (_context.CategoryDiscounts == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.CategoryDiscount'  is null.");
             }
-            var clientCard = await _context.ClientCard.FindAsync(id);
-            if (clientCard != null)
+            var categoryDiscount = await _context.CategoryDiscounts.FindAsync(id);
+            if (categoryDiscount != null)
             {
-                _context.ClientCard.Remove(clientCard);
+                _context.CategoryDiscounts.Remove(categoryDiscount);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientCardExists(int id)
+        private bool CategoryDiscountExists(int id)
         {
-          return (_context.ClientCard?.Any(e => e.ClientCardId == id)).GetValueOrDefault();
+          return (_context.CategoryDiscounts?.Any(e => e.CategoryDiscountId == id)).GetValueOrDefault();
         }
     }
 }

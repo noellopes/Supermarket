@@ -10,87 +10,87 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class ClientCardsController : Controller
+    public class SubsidySetupsController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public ClientCardsController(SupermarketDbContext context)
+        public SubsidySetupsController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: ClientCards
+        // GET: SubsidySetups
         public async Task<IActionResult> Index()
         {
-              return _context.ClientCard != null ? 
-                          View(await _context.ClientCard.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
+              return _context.SubsidySetup != null ? 
+                          View(await _context.SubsidySetup.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.SubsidySetup'  is null.");
         }
 
-        // GET: ClientCards/Details/5
+        // GET: SubsidySetups/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.SubsidySetup == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard
-                .FirstOrDefaultAsync(m => m.ClientCardId == id);
-            if (clientCard == null)
+            var subsidySetup = await _context.SubsidySetup
+                .FirstOrDefaultAsync(m => m.SubsidySetupId == id);
+            if (subsidySetup == null)
             {
                 return NotFound();
             }
 
-            return View(clientCard);
+            return View(subsidySetup);
         }
 
-        // GET: ClientCards/Create
+        // GET: SubsidySetups/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ClientCards/Create
+        // POST: SubsidySetups/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientCardId,ClientCardNumber,Balance")] ClientCard clientCard)
+        public async Task<IActionResult> Create([Bind("SubsidySetupId,HorasMinTrabalhadas,valorSubsidioDiario,DataPagamentoMensal")] SubsidySetup subsidySetup)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(clientCard);
+                _context.Add(subsidySetup);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(clientCard);
+            return View(subsidySetup);
         }
 
-        // GET: ClientCards/Edit/5
+        // GET: SubsidySetups/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.SubsidySetup == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard.FindAsync(id);
-            if (clientCard == null)
+            var subsidySetup = await _context.SubsidySetup.FindAsync(id);
+            if (subsidySetup == null)
             {
                 return NotFound();
             }
-            return View(clientCard);
+            return View(subsidySetup);
         }
 
-        // POST: ClientCards/Edit/5
+        // POST: SubsidySetups/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientCardId,ClientCardNumber,Balance")] ClientCard clientCard)
+        public async Task<IActionResult> Edit(int id, [Bind("SubsidySetupId,HorasMinTrabalhadas,valorSubsidioDiario,DataPagamentoMensal")] SubsidySetup subsidySetup)
         {
-            if (id != clientCard.ClientCardId)
+            if (id != subsidySetup.SubsidySetupId)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(clientCard);
+                    _context.Update(subsidySetup);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientCardExists(clientCard.ClientCardId))
+                    if (!SubsidySetupExists(subsidySetup.SubsidySetupId))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,50 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(clientCard);
+            return View(subsidySetup);
         }
 
-        // GET: ClientCards/Delete/5
+        // GET: SubsidySetups/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.SubsidySetup == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard
-                .FirstOrDefaultAsync(m => m.ClientCardId == id);
-            if (clientCard == null)
+            var subsidySetup = await _context.SubsidySetup
+                .FirstOrDefaultAsync(m => m.SubsidySetupId == id);
+            if (subsidySetup == null)
             {
                 return NotFound();
             }
 
-            return View(clientCard);
+            return View(subsidySetup);
         }
 
-        // POST: ClientCards/Delete/5
+        // POST: SubsidySetups/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.ClientCard == null)
+            if (_context.SubsidySetup == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.SubsidySetup'  is null.");
             }
-            var clientCard = await _context.ClientCard.FindAsync(id);
-            if (clientCard != null)
+            var subsidySetup = await _context.SubsidySetup.FindAsync(id);
+            if (subsidySetup != null)
             {
-                _context.ClientCard.Remove(clientCard);
+                _context.SubsidySetup.Remove(subsidySetup);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            // return RedirectToAction(nameof(Index));
+            return View("DeleteConfirmed", subsidySetup);
         }
 
-        private bool ClientCardExists(int id)
+        private bool SubsidySetupExists(int id)
         {
-          return (_context.ClientCard?.Any(e => e.ClientCardId == id)).GetValueOrDefault();
+          return (_context.SubsidySetup?.Any(e => e.SubsidySetupId == id)).GetValueOrDefault();
         }
     }
 }

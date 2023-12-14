@@ -1,4 +1,4 @@
-﻿@model Supermarket.Models.ClientCard
+﻿@model Supermarket.Models.MealCard
 
 @{
     ViewData["Title"] = "Create";
@@ -6,21 +6,20 @@
 
 <h1>Create</h1>
 
-<h4>ClientCard</h4>
+<h4>MealCard</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ClientCardNumber" class="control-label"></label>
-                <input asp-for="ClientCardNumber" class="form-control" />
-                <span asp-validation-for="ClientCardNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Balance" class="control-label"></label>
                 <input asp-for="Balance" class="form-control" />
                 <span asp-validation-for="Balance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label"></label>
+                <select asp-for="EmployeeId" class ="form-control" asp-items="ViewBag.EmployeeId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
