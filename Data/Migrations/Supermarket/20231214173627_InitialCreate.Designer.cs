@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231213163539_InitialCreate")]
+    [Migration("20231214173627_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -206,7 +206,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("AvaliacaoFuncionarios");
+                    b.ToTable("EmployeeEvaluations");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Folga", b =>
@@ -252,7 +252,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FuncaoId"));
 
                     b.Property<string>("DescricaoFuncao")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
