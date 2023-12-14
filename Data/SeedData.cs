@@ -371,9 +371,9 @@ namespace Supermarket.Data
 
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
         {
-            if (db.AvaliacaoFuncionarios.Any()) return;
+            if (db.EmployeeEvaluations.Any()) return;
 
-            db.AvaliacaoFuncionarios.AddRange(
+            db.EmployeeEvaluations.AddRange(
                 new EmployeeEvaluation
                 {
                     Description= "Atendimento excelente!",

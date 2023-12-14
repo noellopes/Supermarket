@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class MergeMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -70,6 +70,20 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
+                name: "Funcao",
+                columns: table => new
+                {
+                    FuncaoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NomeFuncao = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    DescricaoFuncao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Funcao", x => x.FuncaoId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Funcionarios",
                 columns: table => new
                 {
@@ -93,20 +107,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Funcionarios", x => x.EmployeeId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Funcoes",
-                columns: table => new
-                {
-                    IdFuncao = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NomeFuncao = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    DescricaoFuncao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Funcoes", x => x.IdFuncao);
                 });
 
             migrationBuilder.CreateTable(
@@ -205,7 +205,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
-                name: "AvaliacaoFuncionarios",
+                name: "EmployeeEvaluations",
                 columns: table => new
                 {
                     EmployeeEvaluationId = table.Column<int>(type: "int", nullable: false)
@@ -216,9 +216,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AvaliacaoFuncionarios", x => x.EmployeeEvaluationId);
+                    table.PrimaryKey("PK_EmployeeEvaluations", x => x.EmployeeEvaluationId);
                     table.ForeignKey(
-                        name: "FK_AvaliacaoFuncionarios_Funcionarios_EmployeeId",
+                        name: "FK_EmployeeEvaluations_Funcionarios_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Funcionarios",
                         principalColumn: "EmployeeId",
@@ -460,14 +460,14 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AvaliacaoFuncionarios_EmployeeId",
-                table: "AvaliacaoFuncionarios",
-                column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CardMovement_MealCardId",
                 table: "CardMovement",
                 column: "MealCardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeeEvaluations_EmployeeId",
+                table: "EmployeeEvaluations",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Hallway_StoreId",
@@ -545,19 +545,19 @@ namespace Supermarket.Data.Migrations.Supermarket
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AvaliacaoFuncionarios");
-
-            migrationBuilder.DropTable(
                 name: "CardMovement");
 
             migrationBuilder.DropTable(
                 name: "ClientCard");
 
             migrationBuilder.DropTable(
+                name: "EmployeeEvaluations");
+
+            migrationBuilder.DropTable(
                 name: "Folga");
 
             migrationBuilder.DropTable(
-                name: "Funcoes");
+                name: "Funcao");
 
             migrationBuilder.DropTable(
                 name: "Issues");

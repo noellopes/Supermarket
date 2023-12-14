@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231214154034_InitialMigration2")]
-    partial class InitialMigration2
+    [Migration("20231214173627_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -206,7 +206,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("AvaliacaoFuncionarios");
+                    b.ToTable("EmployeeEvaluations");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Folga", b =>

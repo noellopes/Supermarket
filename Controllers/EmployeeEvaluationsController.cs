@@ -22,21 +22,21 @@ namespace Supermarket.Controllers
         // GET: EmployeeEvaluations
         public async Task<IActionResult> Index()
         {
-            var Evaluations = _context.AvaliacaoFuncionarios.Include(ee => ee.Employee);
+            var Evaluations = _context.EmployeeEvaluations.Include(ee => ee.Employee);
             return Evaluations != null ? 
                           View(await Evaluations.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.AvaliacaoFuncionarios'  is null.");
+                          Problem("Entity set 'SupermarketDbContext.EmployeeEvaluations'  is null.");
         }
 
         // GET: EmployeeEvaluations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.AvaliacaoFuncionarios == null)
+            if (id == null || _context.EmployeeEvaluations == null)
             {
                 return NotFound();
             }
 
-            var employeeEvaluation = await _context.AvaliacaoFuncionarios
+            var employeeEvaluation = await _context.EmployeeEvaluations
                 .Include(ee => ee.Employee)
                 .FirstOrDefaultAsync(m => m.EmployeeEvaluationId == id);
             if (employeeEvaluation == null)
@@ -76,12 +76,12 @@ namespace Supermarket.Controllers
         // GET: EmployeeEvaluations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.AvaliacaoFuncionarios == null)
+            if (id == null || _context.EmployeeEvaluations == null)
             {
                 return NotFound();
             }
 
-            var employeeEvaluation = await _context.AvaliacaoFuncionarios.FindAsync(id);
+            var employeeEvaluation = await _context.EmployeeEvaluations.FindAsync(id);
             if (employeeEvaluation == null)
             {
                 TempData["MessageError"] = "The employee evaluation has already been deleted!";
@@ -131,12 +131,12 @@ namespace Supermarket.Controllers
         // GET: EmployeeEvaluations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.AvaliacaoFuncionarios == null)
+            if (id == null || _context.EmployeeEvaluations == null)
             {
                 return NotFound();
             }
 
-            var employeeEvaluation = await _context.AvaliacaoFuncionarios
+            var employeeEvaluation = await _context.EmployeeEvaluations
                 .Include(ee => ee.Employee)
                 .FirstOrDefaultAsync(m => m.EmployeeEvaluationId == id);
             if (employeeEvaluation == null)
@@ -153,14 +153,14 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.AvaliacaoFuncionarios == null)
+            if (_context.EmployeeEvaluations == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.avaliacaoFuncionarios'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.EmployeeEvaluations'  is null.");
             }
-            var employeeEvaluation = await _context.AvaliacaoFuncionarios.FindAsync(id);
+            var employeeEvaluation = await _context.EmployeeEvaluations.FindAsync(id);
             if (employeeEvaluation != null)
             {
-                _context.AvaliacaoFuncionarios.Remove(employeeEvaluation);
+                _context.EmployeeEvaluations.Remove(employeeEvaluation);
             }
             
             await _context.SaveChangesAsync();
@@ -171,7 +171,7 @@ namespace Supermarket.Controllers
 
         private bool EmployeeEvaluationExists(int id)
         {
-          return (_context.AvaliacaoFuncionarios?.Any(e => e.EmployeeEvaluationId == id)).GetValueOrDefault();
+          return (_context.EmployeeEvaluations?.Any(e => e.EmployeeEvaluationId == id)).GetValueOrDefault();
         }
 
         // GET: EmployeeEvaluations/EmployeeView
@@ -181,7 +181,7 @@ namespace Supermarket.Controllers
 
             return Employees != null ?
                           View(await Employees.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.AvaliacaoFuncionarios'  is null.");
+                          Problem("Entity set 'SupermarketDbContext.EmployeeEvaluations'  is null.");
         }
 
         private float EmployeeGradeAsync(int? EmployeeId)
@@ -199,7 +199,7 @@ namespace Supermarket.Controllers
                 return 0;
             }
 
-            var Evaluations = _context.AvaliacaoFuncionarios.Where(af => af.EmployeeId==Employee.EmployeeId).ToList();
+            var Evaluations = _context.EmployeeEvaluations.Where(af => af.EmployeeId==Employee.EmployeeId).ToList();
             var sum = 0;
             foreach (var evaluation in Evaluations) 
             {

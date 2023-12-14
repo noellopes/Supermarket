@@ -33,7 +33,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Funcao> Funcao { get; set; } = default!;
 
-        public DbSet<EmployeeEvaluation> AvaliacaoFuncionarios { get; set; } = default!;
+        public DbSet<EmployeeEvaluation> EmployeeEvaluations { get; set; } = default!;
 
         public DbSet<Employee> Funcionarios { get; set; } = default!;
 

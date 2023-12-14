@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -12,11 +11,9 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231212222544_MergeMigration")]
-    partial class MergeMigration
+    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,7 +203,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("AvaliacaoFuncionarios");
+                    b.ToTable("EmployeeEvaluations");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Folga", b =>
@@ -243,16 +240,15 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Folga");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.Funcoes", b =>
+            modelBuilder.Entity("Supermarket.Models.Funcao", b =>
                 {
-                    b.Property<int>("IdFuncao")
+                    b.Property<int>("FuncaoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdFuncao"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FuncaoId"));
 
                     b.Property<string>("DescricaoFuncao")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -261,9 +257,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.HasKey("IdFuncao");
+                    b.HasKey("FuncaoId");
 
-                    b.ToTable("Funcoes");
+                    b.ToTable("Funcao");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Hallway", b =>
