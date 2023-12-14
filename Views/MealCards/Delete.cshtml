@@ -1,4 +1,4 @@
-﻿@model Supermarket.Models.Funcao
+﻿@model Supermarket.Models.MealCard
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,25 +8,25 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Funcao</h4>
+    <h4>MealCard</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NomeFuncao)
+            @Html.DisplayNameFor(model => model.Balance)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NomeFuncao)
+            @Html.DisplayFor(model => model.Balance)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DescricaoFuncao)
+            @Html.DisplayNameFor(model => model.Employee)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DescricaoFuncao)
+            @Html.DisplayFor(model => model.Employee.Employee_Address)
         </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="FuncaoId" />
+        <input type="hidden" asp-for="MealCardId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

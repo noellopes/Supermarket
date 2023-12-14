@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231213163539_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231214200712_ReserveDepartments")]
+    partial class ReserveDepartments
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,6 +93,28 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.CategoryDiscount", b =>
+                {
+                    b.Property<int>("CategoryDiscountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryDiscountId"));
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("endDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("startDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CategoryDiscountId");
+
+                    b.ToTable("CategoryDiscounts");
+                });
+
             modelBuilder.Entity("Supermarket.Models.ClientCard", b =>
                 {
                     b.Property<int>("ClientCardId")
@@ -117,10 +139,7 @@ namespace Supermarket.Data.Migrations.Supermarket
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
                 {
                     b.Property<int>("EmployeeId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
                     b.Property<string>("Employee_Address")
                         .IsRequired()
@@ -164,15 +183,15 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<DateTime>("Employee_Time_Bank")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Hora_Almoco_Padrao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Standard_Check_In_Time")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Standard_Check_Out_Time")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Standard_Lunch_Hour")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -182,7 +201,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasKey("EmployeeId");
 
-                    b.ToTable("Funcionarios");
+                    b.ToTable("Employee");
                 });
 
             modelBuilder.Entity("Supermarket.Models.EmployeeEvaluation", b =>
@@ -206,7 +225,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("AvaliacaoFuncionarios");
+                    b.ToTable("EmployeeEvaluation");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Folga", b =>
@@ -252,7 +271,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FuncaoId"));
 
                     b.Property<string>("DescricaoFuncao")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -506,6 +524,40 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("ReduceProduct");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.Reserve", b =>
+                {
+                    b.Property<int>("ReserveId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReserveId"));
+
+                    b.HasKey("ReserveId");
+
+                    b.ToTable("Reserve");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.ReserveDepartment", b =>
+                {
+                    b.Property<int>("ReserveDepartmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReserveDepartmentId"));
+
+                    b.Property<int>("NumeroDeFunc")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReserveId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ReserveDepartmentId");
+
+                    b.HasIndex("ReserveId");
+
+                    b.ToTable("ReserveDepartment");
+                });
+
             modelBuilder.Entity("Supermarket.Models.Shelf", b =>
                 {
                     b.Property<int>("ShelfId")
@@ -571,6 +623,28 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasKey("StoreId");
 
                     b.ToTable("Store");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.SubsidySetup", b =>
+                {
+                    b.Property<int>("SubsidySetupId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubsidySetupId"));
+
+                    b.Property<DateTime>("DataPagamentoMensal")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("HorasMinTrabalhadas")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("ValorSubsidioDiario")
+                        .HasColumnType("real");
+
+                    b.HasKey("SubsidySetupId");
+
+                    b.ToTable("SubsidySetup");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Warehouse", b =>
@@ -643,12 +717,21 @@ namespace Supermarket.Data.Migrations.Supermarket
             modelBuilder.Entity("Supermarket.Models.CardMovement", b =>
                 {
                     b.HasOne("Supermarket.Models.MealCard", "MealCard")
-                        .WithMany("Movements")
+                        .WithMany("CardMovements")
                         .HasForeignKey("MealCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("MealCard");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Employee", b =>
+                {
+                    b.HasOne("Supermarket.Models.ReserveDepartment", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Supermarket.Models.EmployeeEvaluation", b =>
@@ -755,6 +838,17 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("WarehouseSection");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.ReserveDepartment", b =>
+                {
+                    b.HasOne("Supermarket.Models.Reserve", "Reserve")
+                        .WithMany()
+                        .HasForeignKey("ReserveId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Reserve");
+                });
+
             modelBuilder.Entity("Supermarket.Models.Shelf", b =>
                 {
                     b.HasOne("Supermarket.Models.Hallway", "Hallway")
@@ -817,8 +911,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
                 {
-                    b.Navigation("MealCard")
-                        .IsRequired();
+                    b.Navigation("MealCard");
                 });
 
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>
@@ -828,7 +921,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             modelBuilder.Entity("Supermarket.Models.MealCard", b =>
                 {
-                    b.Navigation("Movements");
+                    b.Navigation("CardMovements");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Product", b =>
@@ -836,6 +929,11 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("Shelf");
 
                     b.Navigation("WarehouseSection");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.ReserveDepartment", b =>
+                {
+                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Shelf", b =>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -11,9 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231214185156_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,7 +139,10 @@ namespace Supermarket.Data.Migrations.Supermarket
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
                 {
                     b.Property<int>("EmployeeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
                     b.Property<string>("Employee_Address")
                         .IsRequired()
@@ -435,9 +441,6 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductDiscountId"));
 
-                    b.Property<int>("ClientCardId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -451,8 +454,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("real");
 
                     b.HasKey("ProductDiscountId");
-
-                    b.HasIndex("ClientCardId");
 
                     b.HasIndex("ProductId");
 
@@ -524,40 +525,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasIndex("WarehouseSectionId");
 
                     b.ToTable("ReduceProduct");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.Reserve", b =>
-                {
-                    b.Property<int>("ReserveId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReserveId"));
-
-                    b.HasKey("ReserveId");
-
-                    b.ToTable("Reserve");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.ReserveDepartment", b =>
-                {
-                    b.Property<int>("ReserveDepartmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReserveDepartmentId"));
-
-                    b.Property<int>("NumeroDeFunc")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReserveId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ReserveDepartmentId");
-
-                    b.HasIndex("ReserveId");
-
-                    b.ToTable("ReserveDepartment");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Shelf", b =>
@@ -727,15 +694,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("MealCard");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.Employee", b =>
-                {
-                    b.HasOne("Supermarket.Models.ReserveDepartment", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Supermarket.Models.EmployeeEvaluation", b =>
                 {
                     b.HasOne("Supermarket.Models.Employee", "Employee")
@@ -808,19 +766,11 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             modelBuilder.Entity("Supermarket.Models.ProductDiscount", b =>
                 {
-                    b.HasOne("Supermarket.Models.ClientCard", "ClientCard")
-                        .WithMany()
-                        .HasForeignKey("ClientCardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Supermarket.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ClientCard");
 
                     b.Navigation("Product");
                 });
@@ -846,17 +796,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("Shelf");
 
                     b.Navigation("WarehouseSection");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.ReserveDepartment", b =>
-                {
-                    b.HasOne("Supermarket.Models.Reserve", "Reserve")
-                        .WithMany()
-                        .HasForeignKey("ReserveId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Reserve");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Shelf", b =>
@@ -939,11 +878,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("Shelf");
 
                     b.Navigation("WarehouseSection");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.ReserveDepartment", b =>
-                {
-                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Shelf", b =>
