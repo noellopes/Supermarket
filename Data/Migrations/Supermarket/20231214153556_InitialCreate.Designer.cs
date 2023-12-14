@@ -9,11 +9,11 @@ using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Migrations
+namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231213170413_updateProductExpirationTable")]
-    partial class updateProductExpirationTable
+    [Migration("20231214153556_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -328,18 +328,33 @@ namespace Supermarket.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("IssueRegisterDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("IssueTypeId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Severity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SupplierId")
                         .HasColumnType("int");
 
                     b.HasKey("IssueId");
 
+                    b.HasIndex("EmployeeId");
+
                     b.HasIndex("IssueTypeId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("Issues");
                 });
@@ -573,6 +588,23 @@ namespace Supermarket.Migrations
                     b.ToTable("Store");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.Supplier", b =>
+                {
+                    b.Property<int>("SupplierId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupplierId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SupplierId");
+
+                    b.ToTable("Supplier");
+                });
+
             modelBuilder.Entity("Supermarket.Models.Warehouse", b =>
                 {
                     b.Property<int>("WarehouseId")
@@ -682,13 +714,37 @@ namespace Supermarket.Migrations
 
             modelBuilder.Entity("Supermarket.Models.Issues", b =>
                 {
+                    b.HasOne("Supermarket.Models.Employee", "Employee")
+                        .WithMany("Issue")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Supermarket.Models.IssueType", "IssueType")
                         .WithMany()
                         .HasForeignKey("IssueTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Supermarket.Models.Product", "Product")
+                        .WithMany("Issue")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Supermarket.Models.Supplier", "Supplier")
+                        .WithMany("Issue")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
                     b.Navigation("IssueType");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Supermarket.Models.MealCard", b =>
@@ -817,6 +873,8 @@ namespace Supermarket.Migrations
 
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
                 {
+                    b.Navigation("Issue");
+
                     b.Navigation("MealCard")
                         .IsRequired();
                 });
@@ -833,6 +891,8 @@ namespace Supermarket.Migrations
 
             modelBuilder.Entity("Supermarket.Models.Product", b =>
                 {
+                    b.Navigation("Issue");
+
                     b.Navigation("Shelf");
 
                     b.Navigation("WarehouseSection");
@@ -841,6 +901,11 @@ namespace Supermarket.Migrations
             modelBuilder.Entity("Supermarket.Models.Shelf", b =>
                 {
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Supplier", b =>
+                {
+                    b.Navigation("Issue");
                 });
 
             modelBuilder.Entity("Supermarket.Models.WarehouseSection", b =>
