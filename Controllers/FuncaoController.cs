@@ -36,7 +36,7 @@ namespace Supermarket.Controllers
             }
 
             var Funcao = await _context.Funcao
-                .FirstOrDefaultAsync(m => m.FuncaoId == id);
+                .FirstOrDefaultAsync(m => m.IdFuncao == id);
             if (Funcao == null)
             {
                 return NotFound();
@@ -103,8 +103,7 @@ namespace Supermarket.Controllers
             var Funcao = await _context.Funcao.FindAsync(id);
             if (Funcao == null)
             {
-                TempData["mensagem"] = "A funcao nao existe";
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
             return View(Funcao);
         }
@@ -121,7 +120,7 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid) //valida no lado do cliente e o do servidosr [neste caso no cliente]
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -194,7 +193,7 @@ namespace Supermarket.Controllers
             }
 
             var Funcao = await _context.Funcao
-                .FirstOrDefaultAsync(m => m.FuncaoId == id);
+                .FirstOrDefaultAsync(m => m.IdFuncao == id);
             if (Funcao == null)
             {
                 TempData["MensagemPositiva"] = "A funcao foi deletada com sucesso";
@@ -226,7 +225,7 @@ namespace Supermarket.Controllers
 
         private bool FuncaoExists(int id)
         {
-          return (_context.Funcao?.Any(e => e.FuncaoId == id)).GetValueOrDefault();
+          return (_context.Funcao?.Any(e => e.IdFuncao == id)).GetValueOrDefault();
         }
     }
 }
