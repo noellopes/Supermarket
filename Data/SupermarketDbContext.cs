@@ -66,6 +66,9 @@ namespace Supermarket.Data
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
 
+        public DbSet<Employee> Funcionarios { get; set; } = default!;
+
+        public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
 
     }
 }

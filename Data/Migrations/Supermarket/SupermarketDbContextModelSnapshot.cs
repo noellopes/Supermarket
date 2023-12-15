@@ -310,7 +310,23 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Hallway");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.HierarquiasModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Hierarquias");
+                });
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>
+AvaliacaoFuncionarios
                 {
                     b.Property<int>("IssueTypeId")
                         .ValueGeneratedOnAdd()
