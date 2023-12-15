@@ -113,7 +113,7 @@ namespace Supermarket.Controllers
                 try
                 {
                     bool boolExists = await _context.Departments.AnyAsync(
-                    d => d.NameDepartments == departments.NameDepartments && d.IDDepartments = departments.IDDepartments);
+                    d => d.NameDepartments == departments.NameDepartments &&d.IDDepartments != departments.IDDepartments);
                     if (boolExists)
                     {
                         ModelState.AddModelError("", "Another Department with same Name Department already exist");

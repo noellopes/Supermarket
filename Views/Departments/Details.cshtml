@@ -5,7 +5,13 @@
 }
 
 <h1>Details</h1>
-
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Success</h4>
+        <p>@ViewBag.Message</p>
+    </div>
+}
 <div>
     <h4>Departments</h4>
     <hr />
