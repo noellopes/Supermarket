@@ -60,10 +60,23 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(departments);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool DepartmentsExists = await _context.Departments.AnyAsync(
+                d => d.NameDepartments == departments.NameDepartments);
+                if (DepartmentsExists) {
+                    ModelState.AddModelError("", "Another Departments with the same Name already exists.");
+                }
+                else
+                {
+                    _context.Add(departments);
+                    await _context.SaveChangesAsync();
+                    ViewBag.Message = "Departamento successfully Create.";
+                    //book.Author = await _context.Author.FindAsync(book.AuthorId);
+
+                    return View("Details", departments);
+                }
+                return View(departments);
             }
+            //ViewData["IDDepartments"] = new SelectList(_context.Set<Schedule>(), "ScheduleId ", "StateSchedule", Schedule.ScheduleId);
             return View(departments);
         }
 
@@ -99,8 +112,20 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(departments);
-                    await _context.SaveChangesAsync();
+                    bool boolExists = await _context.Departments.AnyAsync(
+                    d => d.NameDepartments == departments.NameDepartments &&d.IDDepartments != departments.IDDepartments);
+                    if (boolExists)
+                    {
+                        ModelState.AddModelError("", "Another Department with same Name Department already exist");
+                    }
+                    else
+                    {
+                        _context.Update(departments);
+                        await _context.SaveChangesAsync();
+                        ViewBag.Message = "Department sucessfully edit.";
+                        return View("Details", departments);
+                    }
+    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -113,7 +138,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
             }
             return View(departments);
         }

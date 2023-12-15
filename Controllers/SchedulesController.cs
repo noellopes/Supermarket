@@ -13,7 +13,7 @@ namespace Supermarket.Controllers
     public class SchedulesController : Controller
     {
         private readonly SupermarketDbContext _context;
-
+        
         public SchedulesController(SupermarketDbContext context)
         {
             _context = context;
