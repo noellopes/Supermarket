@@ -19,6 +19,7 @@ namespace Supermarket.Data
             PopulateReduceProduct(db);
             PopulateEmployees(db);
             PopulateEmployeeEvaluations(db);
+            PopulateFuncao(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db)
@@ -392,9 +393,23 @@ namespace Supermarket.Data
                     EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 10,
                 }
-                );
+            );
 
             db.SaveChanges();
+        }
+
+        private static void PopulateFuncao(SupermarketDbContext db)
+        {
+            if (!db.Funcao.Any())
+            {
+                for (int i = 0; i < 240; i++)
+                {
+                    db.Funcao.Add(new Funcao { 
+                        NomeFuncao = "Funcao " + i, DescricaoFuncao  = "Descricao " + i
+                    });
+                }
+                db.SaveChanges();
+            }
         }
     }
 }
