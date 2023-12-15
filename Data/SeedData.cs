@@ -410,16 +410,16 @@ namespace Supermarket.Data
 
         private static void PopulateFuncao(SupermarketDbContext db)
         {
-            if (!db.Funcao.Any())
+            if (db.Funcao.Any()) return;
+            
+            for (int i = 0; i < 240; i++)
             {
-                for (int i = 0; i < 240; i++)
-                {
-                    db.Funcao.Add(new Funcao { 
-                        NomeFuncao = "Funcao " + i, DescricaoFuncao  = "Descricao " + i
-                    });
-                }
-                db.SaveChanges();
+                db.Funcao.Add(new Funcao { 
+                    NomeFuncao = "Funcao " + i, DescricaoFuncao  = "Descricao " + i
+                });
             }
+            db.SaveChanges();
+            
         }
     }
 }
