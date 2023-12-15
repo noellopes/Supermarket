@@ -112,6 +112,40 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("CategoryDiscounts");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.Client", b =>
+                {
+                    b.Property<int>("ClientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientId"));
+
+                    b.Property<string>("ClientAdress")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("ClientBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ClientEmail")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ClientName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ClientId");
+
+                    b.ToTable("Client");
+                });
+
             modelBuilder.Entity("Supermarket.Models.ClientCard", b =>
                 {
                     b.Property<int>("ClientCardId")
@@ -128,7 +162,15 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
                     b.HasKey("ClientCardId");
+
+                    b.HasIndex("ClientId");
 
                     b.ToTable("ClientCard");
                 });
@@ -725,6 +767,15 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsRequired();
 
                     b.Navigation("MealCard");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.ClientCard", b =>
+                {
+                    b.HasOne("Supermarket.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId");
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
