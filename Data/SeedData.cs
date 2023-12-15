@@ -395,6 +395,16 @@ namespace Supermarket.Data
                 }
             );
 
+            for (int i = 1; i<101; i++)
+            {
+                db.EmployeeEvaluation.Add(new EmployeeEvaluation
+                {
+                    Description = "avaliacao "+ i,
+                    EmployeeId = db.Employee.First().EmployeeId,
+                    GradeNumber = (i%10) +1,
+                });
+            }
+
             db.SaveChanges();
         }
 

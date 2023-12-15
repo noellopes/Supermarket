@@ -29,20 +29,14 @@ namespace Supermarket.Controllers
                 TotalItems = _context.EmployeeEvaluation.Count()
             };
 
-            /*return View(
+            return View(
                 new EmployeeEvaluationListViewModel
                 {
-                    EmployeeEvaluation = _context.EmployeeEvaluation.OrderBy(f => f.NomeFuncao)
+                    EmployeeEvaluation = _context.EmployeeEvaluation.Include(ee => ee.Employee).OrderByDescending(ee => ee.EvaluationDate)
                         .Skip((page - 1) * pagination.PageSize).Take(pagination.PageSize),
                     Pagination = pagination
                 }
-            );*/
-
-
-            var Evaluations = _context.EmployeeEvaluation.Include(ee => ee.Employee);
-            return Evaluations != null ? 
-                          View(await Evaluations.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.EmployeeEvaluation'  is null.");
+            );
         }
 
         // GET: EmployeeEvaluation/Details/5

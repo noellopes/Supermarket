@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Supermarket.Models.EmployeeEvaluation>
+﻿@model Supermarket.Models.EmployeeEvaluationListViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -34,22 +34,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Employee.Employee_Name)
+                @Html.DisplayNameFor(model => model.EmployeeEvaluation.First().Employee.Employee_Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.EmployeeEvaluation.First().Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.GradeNumber)
+                @Html.DisplayNameFor(model => model.EmployeeEvaluation.First().GradeNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EvaluationDate)
+                @Html.DisplayNameFor(model => model.EmployeeEvaluation.First().EvaluationDate)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.EmployeeEvaluation) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
