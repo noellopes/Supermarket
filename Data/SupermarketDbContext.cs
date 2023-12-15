@@ -62,6 +62,8 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Qualification> Qualification { get; set; } = default!;
+
 
     }
 }
