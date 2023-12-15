@@ -7,7 +7,7 @@ namespace Supermarket.Models
         public int SupplierId { get; set; }
         [Required]
         [StringLength(30, MinimumLength = 3)]
-        public int Name { get; set; }
+        public string Name { get; set; }
 
         [Required]
         [StringLength(50, MinimumLength = 10)]
