@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models
 {
-    public class Reserve 
+    public class Reserve
     {
         //PRIMARY KEY
         [Required]
@@ -11,6 +11,6 @@ namespace Supermarket.Models
         [Key]
         public int ReserveId { get; set; }
 
-
+        public ICollection<ReserveDepartment> Name { get; set; }
     }
 }
