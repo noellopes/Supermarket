@@ -36,7 +36,7 @@ namespace Supermarket.Controllers
             }
 
             var schedule = await _context.Schedule
-                .FirstOrDefaultAsync(m => m.ScheduleID == id);
+                .FirstOrDefaultAsync(m => m.ScheduleId == id);
             if (schedule == null)
             {
                 return NotFound();
@@ -56,7 +56,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ScheduleID,StartDate,EndDate,DailyStartTime,DailyFinishTime,Id_Departments")] Schedule schedule)
+        public async Task<IActionResult> Create([Bind("ScheduleId,StartDate,EndDate,DailyStartTime,DailyFinishTime,IDDepartments")] Schedule schedule)
         {
             if (ModelState.IsValid)
             {
@@ -88,9 +88,9 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScheduleID,StartDate,EndDate,DailyStartTime,DailyFinishTime,Id_Departments")] Schedule schedule)
+        public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,StartDate,EndDate,DailyStartTime,DailyFinishTime,IDDepartments")] Schedule schedule)
         {
-            if (id != schedule.ScheduleID)
+            if (id != schedule.ScheduleId)
             {
                 return NotFound();
             }
@@ -104,7 +104,7 @@ namespace Supermarket.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ScheduleExists(schedule.ScheduleID))
+                    if (!ScheduleExists(schedule.ScheduleId))
                     {
                         return NotFound();
                     }
@@ -127,7 +127,7 @@ namespace Supermarket.Controllers
             }
 
             var schedule = await _context.Schedule
-                .FirstOrDefaultAsync(m => m.ScheduleID == id);
+                .FirstOrDefaultAsync(m => m.ScheduleId == id);
             if (schedule == null)
             {
                 return NotFound();

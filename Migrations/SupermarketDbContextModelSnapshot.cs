@@ -559,6 +559,39 @@ namespace Supermarket.Migrations
                     b.ToTable("ReduceProduct");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.Schedule", b =>
+                {
+                    b.Property<int>("ScheduleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScheduleId"));
+
+                    b.Property<DateTime>("DailyFinishTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DailyStartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DepartmentsIDDepartments")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IDDepartments")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ScheduleId");
+
+                    b.HasIndex("DepartmentsIDDepartments");
+
+                    b.ToTable("Schedule");
+                });
+
             modelBuilder.Entity("Supermarket.Models.Shelf", b =>
                 {
                     b.Property<int>("ShelfId")
@@ -806,6 +839,15 @@ namespace Supermarket.Migrations
                     b.Navigation("Shelf");
 
                     b.Navigation("WarehouseSection");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Schedule", b =>
+                {
+                    b.HasOne("Supermarket.Models.Departments", "Departments")
+                        .WithMany()
+                        .HasForeignKey("DepartmentsIDDepartments");
+
+                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Shelf", b =>

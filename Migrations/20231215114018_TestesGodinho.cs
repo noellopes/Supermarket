@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Supermarket.Migrations
 {
     /// <inheritdoc />
-    public partial class Group5Cv2 : Migration
+    public partial class TestesGodinho : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -234,6 +234,29 @@ namespace Supermarket.Migrations
                         principalTable: "Category",
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Schedule",
+                columns: table => new
+                {
+                    ScheduleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DailyStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DailyFinishTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IDDepartments = table.Column<int>(type: "int", nullable: false),
+                    DepartmentsIDDepartments = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Schedule", x => x.ScheduleId);
+                    table.ForeignKey(
+                        name: "FK_Schedule_Departments_DepartmentsIDDepartments",
+                        column: x => x.DepartmentsIDDepartments,
+                        principalTable: "Departments",
+                        principalColumn: "IDDepartments");
                 });
 
             migrationBuilder.CreateTable(
@@ -553,6 +576,11 @@ namespace Supermarket.Migrations
                 column: "WarehouseSectionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Schedule_DepartmentsIDDepartments",
+                table: "Schedule",
+                column: "DepartmentsIDDepartments");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Shelf_HallwayId",
                 table: "Shelf",
                 column: "HallwayId");
@@ -589,9 +617,6 @@ namespace Supermarket.Migrations
                 name: "ClientCard");
 
             migrationBuilder.DropTable(
-                name: "Departments");
-
-            migrationBuilder.DropTable(
                 name: "Folga");
 
             migrationBuilder.DropTable(
@@ -610,6 +635,9 @@ namespace Supermarket.Migrations
                 name: "ReduceProduct");
 
             migrationBuilder.DropTable(
+                name: "Schedule");
+
+            migrationBuilder.DropTable(
                 name: "Shelft_ProductExhibition");
 
             migrationBuilder.DropTable(
@@ -620,6 +648,9 @@ namespace Supermarket.Migrations
 
             migrationBuilder.DropTable(
                 name: "IssueType");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
 
             migrationBuilder.DropTable(
                 name: "Shelf");
