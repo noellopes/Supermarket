@@ -17,8 +17,8 @@ namespace Supermarket.Data
             PopulateWarehouseSection(db);
             PopulateWarehouseSection_Product(db);
             PopulateReduceProduct(db);
-            PopulateEmployees(db);
-            PopulateEmployeeEvaluations(db);
+            //PopulateEmployees(db);
+            //PopulateEmployeeEvaluations(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db)
