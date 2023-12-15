@@ -1,12 +1,12 @@
-﻿using System;
+﻿sssusing System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Supermarket
+namespace Supermarket.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Group5Cv2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,6 +38,21 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
+                name: "CategoryDiscounts",
+                columns: table => new
+                {
+                    CategoryDiscountId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<int>(type: "int", nullable: false),
+                    startDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    endDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoryDiscounts", x => x.CategoryDiscountId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ClientCard",
                 columns: table => new
                 {
@@ -49,6 +64,23 @@ namespace Supermarket.Data.Migrations.Supermarket
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ClientCard", x => x.ClientCard_Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    IDDepartments = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NameDepartments = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    DescriptionDepartments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    StateDepartments = table.Column<bool>(type: "bit", nullable: false),
+                    SkillsDepartments = table.Column<string>(type: "nvarchar(155)", maxLength: 155, nullable: false),
+                    QuatDepMed = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.IDDepartments);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,7 +132,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     Employee_Termination_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Standard_Check_In_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Standard_Check_Out_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Hora_Almoco_Padrao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Standard_Lunch_Hour = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Standard_Lunch_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Employee_Time_Bank = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -551,7 +583,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "CardMovement");
 
             migrationBuilder.DropTable(
+                name: "CategoryDiscounts");
+
+            migrationBuilder.DropTable(
                 name: "ClientCard");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
 
             migrationBuilder.DropTable(
                 name: "Folga");

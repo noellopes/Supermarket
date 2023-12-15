@@ -60,5 +60,7 @@ namespace Supermarket.Data
         public DbSet<ClientCard> ClientCard { get; set; }
 
         public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }
+
+        public DbSet<Supermarket.Models.Departments> Departments { get; set; } = default!;
     }
 }

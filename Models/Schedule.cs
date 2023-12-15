@@ -13,7 +13,7 @@ namespace Supermarket.Models
         public DateTime DailyStartTime {  get; set; }
         [Required(ErrorMessage = "The Daily Finish Date is mandatory.")]
         public DateTime DailyFinishTime { get; set; }
-        public int DeptID { get; set; }
-        public Departments Departments { get; set; }
+        public int IDDepartments { get; set; }
+        public Departments? Departments { get; set; }
     }
 }

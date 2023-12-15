@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Supermarket
+namespace Supermarket.Migrations
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231215104002_Group5Cv2")]
+    partial class Group5Cv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,6 +93,28 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.CategoryDiscount", b =>
+                {
+                    b.Property<int>("CategoryDiscountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryDiscountId"));
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("endDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("startDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CategoryDiscountId");
+
+                    b.ToTable("CategoryDiscounts");
+                });
+
             modelBuilder.Entity("Supermarket.Models.ClientCard", b =>
                 {
                     b.Property<int>("ClientCard_Id")
@@ -109,6 +134,40 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasKey("ClientCard_Id");
 
                     b.ToTable("ClientCard");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Departments", b =>
+                {
+                    b.Property<int>("IDDepartments")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IDDepartments"));
+
+                    b.Property<string>("DescriptionDepartments")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("NameDepartments")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("QuatDepMed")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SkillsDepartments")
+                        .IsRequired()
+                        .HasMaxLength(155)
+                        .HasColumnType("nvarchar(155)");
+
+                    b.Property<bool>("StateDepartments")
+                        .HasColumnType("bit");
+
+                    b.HasKey("IDDepartments");
+
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
@@ -161,15 +220,15 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<DateTime>("Employee_Time_Bank")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Hora_Almoco_Padrao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Standard_Check_In_Time")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Standard_Check_Out_Time")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Standard_Lunch_Hour")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -640,7 +699,7 @@ namespace Supermarket.Data.Migrations.Supermarket
             modelBuilder.Entity("Supermarket.Models.CardMovement", b =>
                 {
                     b.HasOne("Supermarket.Models.MealCard", "MealCard")
-                        .WithMany("Movements")
+                        .WithMany("CardMovements")
                         .HasForeignKey("MealCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -814,8 +873,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
                 {
-                    b.Navigation("MealCard")
-                        .IsRequired();
+                    b.Navigation("MealCard");
                 });
 
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>
@@ -825,7 +883,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             modelBuilder.Entity("Supermarket.Models.MealCard", b =>
                 {
-                    b.Navigation("Movements");
+                    b.Navigation("CardMovements");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Product", b =>

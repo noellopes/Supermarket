@@ -4,7 +4,7 @@ using Supermarket.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<GroupsDbContext>(options =>
+builder.Services.AddDbContext<SupermarketDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GroupsConnection") ?? throw new InvalidOperationException("Connection string 'GroupsConnection' not found.")));
 
 builder.Services.AddDbContext<SupermarketDbContext>(options =>
