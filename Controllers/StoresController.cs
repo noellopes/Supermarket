@@ -225,9 +225,22 @@ namespace Supermarket.Controllers
 
             return View();
         }
-    
 
-    private bool StoreExists(int id)
+        public IActionResult StoreHallways(int storeId)
+        {
+            var hallways = _context.Hallway
+                .Where(h => h.StoreId == storeId)
+                .ToList();
+
+            ViewBag.StoreId = storeId;
+            ViewBag.StoreName = _context.Store.Find(storeId)?.Name;
+            ViewBag.Hallways = hallways;
+
+            return View();
+        }
+
+
+        private bool StoreExists(int id)
         {
           return (_context.Store?.Any(e => e.StoreId == id)).GetValueOrDefault();
         }

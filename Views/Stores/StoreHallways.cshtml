@@ -1,0 +1,39 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@{
+    ViewData["Title"] = $"Hallways for {ViewBag.StoreName}";
+}
+
+<h2>@ViewBag.StoreName - Hallways</h2>
+
+@if (ViewBag.Hallways.Count > 0)
+{
+    <p>Total Hallways: @ViewBag.Hallways.Count</p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Hallway Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var hallway in ViewBag.Hallways)
+            {
+                <tr>
+                    <td>@hallway.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hallways found for this store.</p>
+}
+
+<a asp-controller="Hallways" asp-action="Create" asp-route-storeId="@ViewBag.StoreId">Create Hallway</a>
+<a asp-action="Index">Back to Store List</a>
