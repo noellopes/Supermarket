@@ -19,6 +19,7 @@ namespace Supermarket.Data
             PopulateReduceProduct(db);
             PopulateEmployees(db);
             PopulateEmployeeEvaluations(db);
+            PopulateFuncao(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db)
