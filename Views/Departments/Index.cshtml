@@ -40,8 +40,8 @@
                 @Html.DisplayFor(modelItem => item.DescriptionDepartments)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StateDepartments)
-            </td>
+                @(item.StateDepartments ? "Activo" : "Desativo")
+             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SkillsDepartments)
             </td>

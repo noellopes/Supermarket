@@ -13,19 +13,24 @@ namespace Supermarket.Controllers
     public class TicketsController : Controller
     {
         private readonly SupermarketDbContext _context;
+        public TicketsController(SupermarketDbContext context)
+        {
+            _context = context;
+        }
+ 
         // Propriedade calculada para obter a duração média de atendimento
         public TimeSpan? DuracaoAtendimento
         {
             get
             {
-                // Obtém a primeira Data de Emissão (DataEmicao) do Ticket
+                // Obtém a primeira Data de Emissão (DataEmicao) do Ticket(duvidas)
                 var de = _context.Tickets.Select(t => new { t.DataEmicao }).FirstOrDefault();
 
-                // Obtém a primeira Data de Atendimento (DataAtendimento) do Ticket
+                // Obtém a primeira Data de Atendimento (DataAtendimento) do Ticket(duvidas)
                 var da = _context.Tickets.Select(t => new { t.DataAtendimento }).FirstOrDefault();
 
                 // Verifica se as datas de Emissão e Atendimento foram obtidas com sucesso
-                if (de != null && da != null)
+                if (de != null && da != null )
                 {
                     // Extrai os valores das propriedades DataEmicao e DataAtendimento
                     var deP = de.DataEmicao;
@@ -75,11 +80,6 @@ namespace Supermarket.Controllers
                 }
             }
         }
-        public TicketsController(SupermarketDbContext context)
-        {
-            _context = context;
-        }
-
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
