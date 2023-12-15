@@ -8,7 +8,7 @@ using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Supermarket
+namespace Supermarket.Data.Migrations.Supermerket
 {
     [DbContext(typeof(SupermarketDbContext))]
     partial class SupermarketDbContextModelSnapshot : ModelSnapshot

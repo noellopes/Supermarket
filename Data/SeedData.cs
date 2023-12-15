@@ -393,7 +393,7 @@ namespace Supermarket.Data
                     EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 10,
                 }
-                );
+            );
 
             db.SaveChanges();
         }

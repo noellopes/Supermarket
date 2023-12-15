@@ -9,11 +9,11 @@ using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Supermarket
+namespace Supermarket.Data.Migrations.Supermerket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231214185156_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231215092650_InitalMigration3")]
+    partial class InitalMigration3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

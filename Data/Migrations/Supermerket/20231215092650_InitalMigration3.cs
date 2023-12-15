@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Supermarket
+namespace Supermarket.Data.Migrations.Supermerket
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitalMigration3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
