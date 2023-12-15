@@ -7,11 +7,12 @@ namespace Supermarket.Models
     {
         //PRIMARY KEY
         [Required]
-        int FormationId { get; set; }
+        [Key]
+        public int FormationId { get; set; }
 
 
         public required string PontuacaoFormation { get; set; }
-
+        public required int PontucaoAtribuida { get; set; }
 
         // FK EMPLOYEE
         public int EmployeeId { get; set; }
