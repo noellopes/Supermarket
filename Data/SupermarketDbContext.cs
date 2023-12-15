@@ -57,6 +57,8 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Schedule> Schedule { get; set; } = default!;
+
         public DbSet<ClientCard> ClientCard { get; set; }
 
         public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }
