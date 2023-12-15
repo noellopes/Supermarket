@@ -22,7 +22,7 @@ namespace Supermarket.Models
         public bool Priorioritario { get; set; }
 
         // Chave estrangeira para o departamento. Relaciona-se a outra entidade chamada "Departments".
-        public int DepartmentId { get; set; }
+        public int IDDepartments { get; set; }
         public Departments? Departments { get; set; }
 
         // Chave estrangeira para o cartão do cliente. "ClientCard".

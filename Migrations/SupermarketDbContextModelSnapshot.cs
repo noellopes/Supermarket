@@ -659,6 +659,42 @@ namespace Supermarket.Migrations
                     b.ToTable("Store");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.Tickets", b =>
+                {
+                    b.Property<int>("TicketId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
+
+                    b.Property<DateTime>("DataAtendimento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataEmicao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DepartmentsIDDepartments")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("NumeroDaSenha")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Priorioritario")
+                        .HasColumnType("bit");
+
+                    b.HasKey("TicketId");
+
+                    b.HasIndex("DepartmentsIDDepartments");
+
+                    b.ToTable("Tickets");
+                });
+
             modelBuilder.Entity("Supermarket.Models.Warehouse", b =>
                 {
                     b.Property<int>("WarehouseId")
@@ -878,6 +914,15 @@ namespace Supermarket.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Shelf");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Tickets", b =>
+                {
+                    b.HasOne("Supermarket.Models.Departments", "Departments")
+                        .WithMany()
+                        .HasForeignKey("DepartmentsIDDepartments");
+
+                    b.Navigation("Departments");
                 });
 
             modelBuilder.Entity("Supermarket.Models.WarehouseSection", b =>

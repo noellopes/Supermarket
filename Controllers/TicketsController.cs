@@ -56,7 +56,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketId,DataEmicao,DataAtendimento,NumeroDaSenha,Estado,Priorioritario,DepartmentId")] Tickets tickets)
+        public async Task<IActionResult> Create([Bind("TicketId,DataEmicao,DataAtendimento,NumeroDaSenha,Estado,Priorioritario,IDDepartments")] Tickets tickets)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TicketId,DataEmicao,DataAtendimento,NumeroDaSenha,Estado,Priorioritario,DepartmentId")] Tickets tickets)
+        public async Task<IActionResult> Edit(int id, [Bind("TicketId,DataEmicao,DataAtendimento,NumeroDaSenha,Estado,Priorioritario,IDDepartments")] Tickets tickets)
         {
             if (id != tickets.TicketId)
             {
