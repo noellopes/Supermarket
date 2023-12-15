@@ -13,7 +13,7 @@ namespace Supermarket.Controllers
     public class SchedulesController : Controller
     {
         private readonly SupermarketDbContext _context;
-
+        /*
         public SchedulesController(SupermarketDbContext context)
         {
             _context = context;
@@ -158,6 +158,6 @@ namespace Supermarket.Controllers
         private bool ScheduleExists(int id)
         {
           return (_context.Schedule?.Any(e => e.ScheduleID == id)).GetValueOrDefault();
-        }
+        }*/
     }
 }
