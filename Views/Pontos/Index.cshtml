@@ -4,10 +4,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Ponto</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Registrar Ponto</a>
 </p>
 <table class="table">
     <thead>
@@ -39,12 +39,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Justificative)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.CheckInCoordenates)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CheckOutCoordenates)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
@@ -78,16 +78,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Justificative)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.CheckInCoordenates)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CheckOutCoordenates)
-            </td>
+            </td> *@
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PontoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PontoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PontoId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.PontoId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.PontoId">Detalhes</a> 
+                @*<a asp-action="Delete" asp-route-id="@item.PontoId">Delete</a>*@
             </td>
         </tr>
 }

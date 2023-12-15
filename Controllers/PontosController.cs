@@ -55,10 +55,15 @@ namespace Supermarket.Controllers
         // POST: Pontos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative,CheckInCoordenates,CheckOutCoordenates")] Ponto ponto)
+        public async Task<IActionResult> Create([Bind("PontoId,EmployeeId,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative,CheckInCoordenates,CheckOutCoordenates")] Ponto ponto)
         {
             if (ModelState.IsValid)
             {
+                ponto.Date = DateTime.Now;
+                ponto.CheckInTime = DateTime.Now.TimeOfDay;
+                ponto.CheckOutTime = DateTime.Now.TimeOfDay;
+                ponto.LunchStartTime = DateTime.Now.TimeOfDay;
+                ponto.LunchEndTime = DateTime.Now.TimeOfDay;
                 _context.Add(ponto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

@@ -1,7 +1,7 @@
 ﻿@model Supermarket.Models.Ponto
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Registro de Ponto";
 }
 
 <h1>Edit</h1>
@@ -58,7 +58,7 @@
                 <input asp-for="Justificative" class="form-control" />
                 <span asp-validation-for="Justificative" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @* <div class="form-group">
                 <label asp-for="CheckInCoordenates" class="control-label"></label>
                 <input asp-for="CheckInCoordenates" class="form-control" />
                 <span asp-validation-for="CheckInCoordenates" class="text-danger"></span>
@@ -67,7 +67,7 @@
                 <label asp-for="CheckOutCoordenates" class="control-label"></label>
                 <input asp-for="CheckOutCoordenates" class="form-control" />
                 <span asp-validation-for="CheckOutCoordenates" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -76,7 +76,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar</a>
 </div>
 
 @section Scripts {
