@@ -38,6 +38,7 @@ namespace Supermarket.Models
         public ICollection<WarehouseSection_Product>? WarehouseSection { get; set; }
 
         public ICollection<Issues>? Issue { get; set; }
+        public ICollection<ProductExpiration>? ProductExpirations { get; set; }
 
     }
 }

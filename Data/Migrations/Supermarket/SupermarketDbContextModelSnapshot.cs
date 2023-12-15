@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -12,11 +11,9 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231214153556_InitialCreate")]
-    partial class InitialCreate
+    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -470,10 +467,15 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("BatchId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductExpiration");
                 });
@@ -788,6 +790,17 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.ProductExpiration", b =>
+                {
+                    b.HasOne("Supermarket.Models.Product", "Product")
+                        .WithMany("ProductExpirations")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Supermarket.Models.ReduceProduct", b =>
                 {
                     b.HasOne("Supermarket.Models.Product", "Product")
@@ -892,6 +905,8 @@ namespace Supermarket.Data.Migrations.Supermarket
             modelBuilder.Entity("Supermarket.Models.Product", b =>
                 {
                     b.Navigation("Issue");
+
+                    b.Navigation("ProductExpirations");
 
                     b.Navigation("Shelf");
 

@@ -22,9 +22,8 @@ namespace Supermarket.Controllers
         // GET: ProductExpirations
         public async Task<IActionResult> Index()
         {
-              return _context.ProductExpiration != null ? 
-                          View(await _context.ProductExpiration.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ProductExpiration'  is null.");
+            var supermarketDbContext = _context.ProductExpiration.Include(p => p.Product);
+            return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: ProductExpirations/Details/5
@@ -36,10 +35,11 @@ namespace Supermarket.Controllers
             }
 
             var productExpiration = await _context.ProductExpiration
+                .Include(p => p.Product)
                 .FirstOrDefaultAsync(m => m.BatchId == id);
             if (productExpiration == null)
             {
-                return View("ProductExpirationDeleted");
+                return NotFound();
             }
 
             return View(productExpiration);
@@ -48,6 +48,7 @@ namespace Supermarket.Controllers
         // GET: ProductExpirations/Create
         public IActionResult Create()
         {
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description");
             return View();
         }
 
@@ -56,7 +57,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BatchId,BatchNumber,ExpirationDate,Quantity")] ProductExpiration productExpiration)
+        public async Task<IActionResult> Create([Bind("BatchId,BatchNumber,ProductId,ExpirationDate,Quantity")] ProductExpiration productExpiration)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +65,7 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", productExpiration.ProductId);
             return View(productExpiration);
         }
 
@@ -78,8 +80,9 @@ namespace Supermarket.Controllers
             var productExpiration = await _context.ProductExpiration.FindAsync(id);
             if (productExpiration == null)
             {
-                return View("ProductExpirationDeleted");
+                return NotFound();
             }
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", productExpiration.ProductId);
             return View(productExpiration);
         }
 
@@ -88,7 +91,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BatchId,BatchNumber,ExpirationDate,Quantity")] ProductExpiration productExpiration)
+        public async Task<IActionResult> Edit(int id, [Bind("BatchId,BatchNumber,ProductId,ExpirationDate,Quantity")] ProductExpiration productExpiration)
         {
             if (id != productExpiration.BatchId)
             {
@@ -115,6 +118,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", productExpiration.ProductId);
             return View(productExpiration);
         }
 
@@ -127,10 +131,11 @@ namespace Supermarket.Controllers
             }
 
             var productExpiration = await _context.ProductExpiration
+                .Include(p => p.Product)
                 .FirstOrDefaultAsync(m => m.BatchId == id);
             if (productExpiration == null)
             {
-                return View("ProductExpirationDeleted");
+                return NotFound();
             }
 
             return View(productExpiration);
@@ -152,8 +157,7 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            //return RedirectToAction(nameof(Index));
-            return View("DeleteCompleted", productExpiration);
+            return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExpirationExists(int id)
