@@ -64,5 +64,7 @@ namespace Supermarket.Data
         public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }
 
         public DbSet<Supermarket.Models.Departments> Departments { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.Tickets> Tickets { get; set; } = default!;
     }
 }
