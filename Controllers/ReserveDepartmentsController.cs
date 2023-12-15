@@ -48,6 +48,7 @@ namespace Supermarket.Controllers
         // GET: ReserveDepartments/Create
         public IActionResult Create()
         {
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
             return View();
         }
 
@@ -64,6 +65,8 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
+            
             return View(reserveDepartment);
         }
 
