@@ -20,8 +20,25 @@ namespace Supermarket.Controllers
         }
 
         // GET: EmployeeEvaluation
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
+                TotalItems = _context.EmployeeEvaluation.Count()
+            };
+
+            /*return View(
+                new EmployeeEvaluationListViewModel
+                {
+                    EmployeeEvaluation = _context.EmployeeEvaluation.OrderBy(f => f.NomeFuncao)
+                        .Skip((page - 1) * pagination.PageSize).Take(pagination.PageSize),
+                    Pagination = pagination
+                }
+            );*/
+
+
             var Evaluations = _context.EmployeeEvaluation.Include(ee => ee.Employee);
             return Evaluations != null ? 
                           View(await Evaluations.ToListAsync()) :
@@ -62,7 +79,8 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Create([Bind("EmployeeEvaluationId,Description,GradeNumber,EmployeeId")] Supermarket.Models.EmployeeEvaluation employeeEvaluation)
         {
             if (ModelState.IsValid)
-            {
+            {   
+                employeeEvaluation.EvaluationDate = DateTime.Now;
                 _context.Add(employeeEvaluation);
                 await _context.SaveChangesAsync();
 
