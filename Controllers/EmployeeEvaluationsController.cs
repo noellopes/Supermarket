@@ -129,6 +129,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: EmployeeEvaluation/Delete/5
+        /*
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.EmployeeEvaluation == null)
@@ -147,8 +148,10 @@ namespace Supermarket.Controllers
 
             return View(employeeEvaluation);
         }
+        */
 
         // POST: EmployeeEvaluation/Delete/5
+        /*
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -168,6 +171,7 @@ namespace Supermarket.Controllers
             TempData["Message"] = "The employee evaluation has successfully been deleted!";
             return RedirectToAction(nameof(Index));
         }
+        */
 
         private bool EmployeeEvaluationExists(int id)
         {
