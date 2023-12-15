@@ -30,5 +30,7 @@ namespace Supermarket.Data
         public DbSet<EmployeeEvaluation> AvaliacaoFuncionarios { get; set; } = default!;
 
         public DbSet<Employee> Funcionarios { get; set; } = default!;
+
+        public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
     }
 }
