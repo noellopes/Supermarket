@@ -400,7 +400,7 @@ namespace Supermarket.Data
 
         private static void PopulateFuncao(SupermarketDbContext db)
         {
-            if (db.Funcao.Any())
+            if (!db.Funcao.Any())
             {
                 for (int i = 0; i < 240; i++)
                 {
