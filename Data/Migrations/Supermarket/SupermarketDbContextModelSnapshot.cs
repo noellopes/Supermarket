@@ -98,16 +98,21 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryDiscountId"));
 
-                    b.Property<int>("Value")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("endDate")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("startDate")
+                    b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<float>("Value")
+                        .HasColumnType("real");
 
                     b.HasKey("CategoryDiscountId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("CategoryDiscounts");
                 });
@@ -137,9 +142,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
 
                     b.HasKey("ClientId");
 
@@ -494,8 +496,6 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasKey("ProductDiscountId");
 
-                    b.HasIndex("ClientCardId");
-
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductDiscount");
@@ -769,6 +769,17 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("MealCard");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.CategoryDiscount", b =>
+                {
+                    b.HasOne("Supermarket.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Supermarket.Models.ClientCard", b =>
                 {
                     b.HasOne("Supermarket.Models.Client", "Client")
@@ -859,9 +870,9 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             modelBuilder.Entity("Supermarket.Models.ProductDiscount", b =>
                 {
-                    b.HasOne("Supermarket.Models.ClientCard", "ClientCard")
+                    b.HasOne("Supermarket.Models.ClientCard", "clientCard")
                         .WithMany()
-                        .HasForeignKey("ClientCardId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -871,9 +882,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ClientCard");
-
                     b.Navigation("Product");
+
+                    b.Navigation("clientCard");
                 });
 
             modelBuilder.Entity("Supermarket.Models.ReduceProduct", b =>
