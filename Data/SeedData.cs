@@ -408,6 +408,7 @@ namespace Supermarket.Data
                         NomeFuncao = "Funcao " + i, DescricaoFuncao  = "Descricao " + i
                     });
                 }
+                db.SaveChanges();
             }
         }
     }
