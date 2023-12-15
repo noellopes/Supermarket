@@ -4,36 +4,38 @@
     ViewData["Title"] = "Details";
 }
 
+
+
 <style>
-       .teste{
-        margin-left:15%;
+
+    .teste {
+        margin-left: 15%;
         border: 1px solid;
         padding: 10px;
         box-shadow: 5px 10px;
         font-family: 'Times New Roman', Times, serif;
-        font-size:20px;
+        font-size: 20px;
         border-radius: 50px 20px;
-        margin: 20px;
-    }
-    h2{
-        text-align:center;
     }
 
-
-    .form-group {
-        padding: 5%;
+    dt{
+        margin:20px;
     }
 
-    a:link {
-        text-decoration: none;
+    .testo {
+        text-align: center;
+        padding-top: 20px;
     }
+
 </style>
 
-<h2>Details SubsidySetup</h2>
 
+<h1>Details</h1>
 
-    <div class="teste">
+<div>
+    <h4>SubsidySetup</h4>
     <hr />
+    <div class="teste">
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.HorasMinTrabalhadas)
@@ -54,10 +56,10 @@
             @Html.DisplayFor(model => model.DataEntradaVigor)
         </dd>
     </dl>
-
-
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.SubsidySetupId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>
+</div>
+<div class="testo">
+  
+    <a asp-action="Edit" asp-route-id="@Model?.SubsidySetupId" class="btn btn-warning btn-smm">Edit</a>
+    <a asp-action="Index" class="btn btn-danger btn-sm">Back to List</a>
 </div>

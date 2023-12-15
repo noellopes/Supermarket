@@ -16,10 +16,12 @@ namespace Supermarket.Data
 
             db.SubsidySetup.AddRange(
                
-                new SubsidySetup { HorasMinTrabalhadas = new DateTime(2010, 8, 18, 16, 32, 18, 500), ValorSubsidioDiario = 5, DataPagamentoMensal = new DateTime(2010, 8, 18, 16, 32, 18, 500) },
-                new SubsidySetup { HorasMinTrabalhadas = new DateTime(2010, 8, 18, 16, 32, 18, 500), ValorSubsidioDiario = 5, DataPagamentoMensal = new DateTime(2010, 8, 18, 16, 32, 18, 500) }
+                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
+                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
+                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
+                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) }
 
-               ) ;
+               );
 
             db.SaveChanges();
         }
