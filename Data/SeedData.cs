@@ -17,6 +17,8 @@ namespace Supermarket.Data
             PopulateWarehouseSection(db);
             PopulateWarehouseSection_Product(db);
             PopulateReduceProduct(db);
+            //PopulateEmployees(db);
+            //PopulateEmployeeEvaluations(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db)
@@ -304,6 +306,92 @@ namespace Supermarket.Data
                         Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section D6")!
                     }
+                );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulateEmployees(SupermarketDbContext db)
+        {
+            if (db.Employee.Any()) return;
+
+            db.Employee.AddRange(
+                new Employee
+                {
+                    Employee_Address= "Rua das Oliveiras",
+                    Employee_Admission_Date= DateTime.Now,
+                    Employee_Birth_Date= DateTime.Now,
+                    Employee_Email="zeD@manga.com",
+                    Employee_Name="Jose",
+                    Employee_NIF = "123",
+                    Employee_Password = "123",
+                    Employee_Phone = "123",
+                    Employee_Time_Bank= DateTime.Now,
+                    Standard_Lunch_Hour = "123",
+                    Standard_Check_In_Time = "123",
+                    Standard_Check_Out_Time = "123",
+                    Standard_Lunch_Time = "123"
+                },
+                new Employee
+                {
+                    Employee_Address = "Rua do azeite",
+                    Employee_Admission_Date = DateTime.Now,
+                    Employee_Birth_Date = DateTime.Now,
+                    Employee_Email = "zeD@manga.com",
+                    Employee_Name = "Maria",
+                    Employee_NIF = "123",
+                    Employee_Password = "123",
+                    Employee_Phone = "123",
+                    Employee_Time_Bank = DateTime.Now,
+                    Standard_Lunch_Hour = "123",
+                    Standard_Check_In_Time = "123",
+                    Standard_Check_Out_Time = "123",
+                    Standard_Lunch_Time = "123"
+                },
+                new Employee
+                {
+                    Employee_Address = "Avenida Afonso Pena",
+                    Employee_Admission_Date = DateTime.Now,
+                    Employee_Birth_Date = DateTime.Now,
+                    Employee_Email = "zeD@manga.com",
+                    Employee_Name = "Lucas",
+                    Employee_NIF = "123",
+                    Employee_Password = "123",
+                    Employee_Phone = "123",
+                    Employee_Time_Bank = DateTime.Now,
+                    Standard_Lunch_Hour = "123",
+                    Standard_Check_In_Time = "123",
+                    Standard_Check_Out_Time = "123",
+                    Standard_Lunch_Time = "123"
+                }
+                );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
+        {
+            if (db.EmployeeEvaluation.Any()) return;
+
+            db.EmployeeEvaluation.AddRange(
+                new EmployeeEvaluation
+                {
+                    Description= "Atendimento excelente!",
+                    EmployeeId = db.Employee.First().EmployeeId,
+                    GradeNumber = 8,
+                },
+                new EmployeeEvaluation
+                {
+                    Description = "Muito rude...",
+                    EmployeeId = db.Employee.First().EmployeeId,
+                    GradeNumber = 3,
+                },
+                new EmployeeEvaluation
+                {
+                    Description = "Adorei. Muito prestativo!",
+                    EmployeeId = db.Employee.First().EmployeeId,
+                    GradeNumber = 10,
+                }
                 );
 
             db.SaveChanges();
