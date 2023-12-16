@@ -143,6 +143,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
                     b.HasKey("ClientId");
 
                     b.ToTable("Client");
@@ -267,6 +270,37 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeeEvaluation");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.EmployeeSchedule", b =>
+                {
+                    b.Property<int>("ScheduleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScheduleId"));
+
+                    b.Property<TimeSpan>("CheckInTime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("CheckOutTime")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("LunchStartTime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("LunchTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("ScheduleId");
+
+                    b.ToTable("EmployeeSchedule");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Folga", b =>
@@ -425,6 +459,56 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("MealCard");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.Ponto", b =>
+                {
+                    b.Property<int>("PontoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PontoId"));
+
+                    b.Property<string>("CheckInCoordenates")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("CheckInTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("CheckOutCoordenates")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("CheckOutTime")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DayBalance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Justificative")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("LunchEndTime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("LunchStartTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PontoId");
+
+                    b.ToTable("Ponto");
+                });
+
             modelBuilder.Entity("Supermarket.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -495,6 +579,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("real");
 
                     b.HasKey("ProductDiscountId");
+
+                    b.HasIndex("ClientCardId");
 
                     b.HasIndex("ProductId");
 
@@ -870,9 +956,9 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             modelBuilder.Entity("Supermarket.Models.ProductDiscount", b =>
                 {
-                    b.HasOne("Supermarket.Models.ClientCard", "clientCard")
+                    b.HasOne("Supermarket.Models.ClientCard", "ClientCard")
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ClientCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -882,9 +968,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("ClientCard");
 
-                    b.Navigation("clientCard");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Supermarket.Models.ReduceProduct", b =>
