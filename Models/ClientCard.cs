@@ -8,9 +8,8 @@ namespace Supermarket.Models
 
         public int ClientCardId { get; set; }
         public  Client? Client {get;  set;}
-        
-        [StringLength(6)]
-        required public string ClientCardNumber { get; set; }
+  
+        public int ClientCardNumber { get; set; }
 
         public float Balance { get; set; } = 0;
 

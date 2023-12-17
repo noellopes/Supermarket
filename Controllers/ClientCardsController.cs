@@ -60,6 +60,13 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
+                var random = new Random();
+                bool isUnique = false;
+                while (!isUnique) 
+                {
+                    clientCard.ClientCardNumber = random.Next(100000, 999999);
+                    isUnique = !_context.ClientCard.Any(c => c.ClientCardNumber == clientCard.ClientCardNumber);
+                }
                 _context.Add(clientCard);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
