@@ -1,10 +1,10 @@
 ﻿@model Supermarket.Models.Hallway
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Hallway";
 }
 
-<h1>Create</h1>
+<h1>Create Hallway</h1>
 
 <h4>Hallway</h4>
 <hr />
@@ -17,10 +17,32 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Store" class="control-label"></label>
-                <select asp-for="StoreId" class ="form-control" asp-items="ViewBag.StoreId"></select>
-            </div>
+
+
+ 
+
+@if (ViewBag.StoreId2 != null)
+{
+    <div class="form-group">
+        <label asp-for="StoreId" class="control-label"></label>
+        <select asp-for="StoreId" class="form-control" readonly>
+                        <option value="@ViewBag.StoreId2" selected>@ViewBag.StoreName</option>
+        </select>
+    </div>
+
+}
+            else
+            {
+                <div class="form-group">
+                    <label asp-for="StoreId" class="control-label"></label>
+                    <select asp-for="StoreId" class="form-control" >
+                        @foreach (var item in ViewBag.StoreId)
+                        {
+                            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                        }
+                    </select>
+                </div>
+            }
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -33,5 +55,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

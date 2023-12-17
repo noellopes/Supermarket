@@ -4,6 +4,14 @@
     ViewData["Title"] = "Details";
 }
 
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        <h2>Success</h2>
+        <p>@ViewBag.Message</p>
+    </div>
+}
+
 <h1>Details</h1>
 
 <div>
@@ -31,6 +39,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.EmployeeEvaluationId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.EmployeeEvaluationId" class="btn btn-info">Edit</a> |
+    <a asp-action="Index" class="btn btn-outline-primary btn-sm">Back to List</a>
 </div>

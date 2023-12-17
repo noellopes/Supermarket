@@ -46,9 +46,18 @@ namespace Supermarket.Controllers
         }
 
         // GET: Hallways/Create
-        public IActionResult Create()
+        public IActionResult Create(int? storeId)
         {
-            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name");
+            if (storeId.HasValue)
+            {
+                ViewBag.StoreId2 = new SelectList(_context.Store, "StoreId", "Name", storeId.Value);
+                ViewBag.StoreName = _context.Store.Find(storeId.Value)?.Name;
+            }
+            else
+            {
+                ViewBag.StoreId = new SelectList(_context.Store, "StoreId", "Name");
+            }
+
             return View();
         }
 
