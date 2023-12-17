@@ -71,38 +71,24 @@ namespace Supermarket.Controllers
             if (ModelState.IsValid)
             {
                 bool HallwaysExists = await _context.Hallway.AnyAsync(
-                b => b.Description == hallway.Description && b.StoreId == hallway.StoreId);
+                    b => b.Description == hallway.Description && b.StoreId == hallway.StoreId);
 
                 if (HallwaysExists)
                 {
                     ModelState.AddModelError("", "Another hallway with the same description and store already exists.");
                 }
-                else{
+                else
+                {
                     _context.Add(hallway);
                     await _context.SaveChangesAsync();
 
-                    ViewBag.Message = "Hallways successfully created.";
-                    hallway.Store = await _context.Store.FindAsync(hallway.StoreId);
-                    return View("Details", hallway);
+                    TempData["Message"] = "Hallway successfully created.";
+                    TempData["StoreId2"] = hallway.StoreId;
+
+                    return RedirectToAction("Details", new { id = hallway.HallwayId });
                 }
             }
-            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
-            return View(hallway);
-        }
 
-        // GET: Hallways/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Hallway == null)
-            {
-                return NotFound();
-            }
-
-            var hallway = await _context.Hallway.FindAsync(id);
-            if (hallway == null)
-            {
-                return NotFound();
-            }
             ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
             return View(hallway);
         }

@@ -194,27 +194,28 @@ namespace Supermarket.Controllers
         }
 
         public IActionResult StoreProducts(int storeId)
-        {
-            var storeInfo = _context.Store
-                .Where(s => s.StoreId == storeId)
-                .Select(s => new
-                {
-                    StoreName = s.Name
-                })
-                .FirstOrDefault();
+        {   
+             var storeInfo = _context.Store
+            .Where(s => s.StoreId == storeId)
+           .Select(s => new
+            {
+            StoreName = s.Name
+            })
+            .FirstOrDefault();
 
             if (storeInfo == null)
             {
-                return NotFound(); // ou algum tratamento de erro apropriado
+                return NotFound(); 
             }
 
             var products = _context.Shelft_ProductExhibition
                 .Where(sp => sp.Shelf.Hallway.StoreId == storeId && sp.Product.Name != null)
                 .Include(sp => sp.Product)
-                .Select(sp => new
+                .GroupBy(sp => sp.ProductId) // Agrupar por ProductId
+                .Select(group => new
                 {
-                    ProductName = sp.Product.Name,
-                    Quantity = sp.Quantity
+                    ProductName = group.First().Product.Name, // o nome do primeiro produto no grupo
+                    Quantity = group.Sum(p => p.Quantity) // Somar a quantidade do grupo
                 })
                 .ToList();
 
