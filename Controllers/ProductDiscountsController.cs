@@ -65,6 +65,7 @@ namespace Supermarket.Controllers
             {
                 _context.Add(productDiscount);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Product sucessful created!";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
@@ -108,6 +109,8 @@ namespace Supermarket.Controllers
                 {
                     _context.Update(productDiscount);
                     await _context.SaveChangesAsync();
+
+                    TempData["SuccessMessage"] = "Product sucessful edited!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -160,6 +163,9 @@ namespace Supermarket.Controllers
             if (productDiscount != null)
             {
                 _context.ProductDiscount.Remove(productDiscount);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Product sucessful deleted";
             }
             
             await _context.SaveChangesAsync();
