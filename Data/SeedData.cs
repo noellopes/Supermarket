@@ -17,6 +17,9 @@ namespace Supermarket.Data
             PopulateWarehouseSection(db);
             PopulateWarehouseSection_Product(db);
             PopulateReduceProduct(db);
+            PopulateClients(db);
+            PopulateClientCard(db);
+            PopulateProductDiscounts(db);
             //PopulateEmployees(db);
             //PopulateEmployeeEvaluations(db);
         }
@@ -394,6 +397,90 @@ namespace Supermarket.Data
                 }
                 );
 
+            db.SaveChanges();
+        }
+
+        private static void PopulateClients(SupermarketDbContext db)
+        {
+            if (db.Client.Any()) return;
+
+            db.Client.AddRange(
+                new Client
+                {
+                    ClientName = "João",
+                    ClientAdress = "Largo do Poço",
+                    ClientEmail = "joão@gmail.com",
+                    ClientBirth = new DateTime(1980, 10, 20),
+                    Estado = true
+                },
+                new Client
+                {
+                    ClientName = "Rui",
+                    ClientAdress = "Rua do Penedo",
+                    ClientEmail = "rui@sapo.com",
+                    ClientBirth = new DateTime(1970, 2, 12),
+                    Estado = true
+                },
+                new Client
+                {
+                    ClientName = "Jacinta",
+                    ClientAdress = "Fundo da Vila",
+                    ClientEmail = "jacintona@iol.com",
+                    ClientBirth = new DateTime(2002, 7, 22),
+                    Estado = true
+                },
+                new Client
+                {
+                    ClientName = "Hugo",
+                    ClientAdress = "Casal do Rei",
+                    ClientEmail = "hugo@outlook.com",
+                    ClientBirth = new DateTime(1997, 9, 2),
+                    Estado = true
+                }
+                );
+            db.SaveChanges();
+        }
+        private static void PopulateClientCard(SupermarketDbContext db)
+        {
+            if (db.ClientCard.Any()) return;
+
+            db.ClientCard.AddRange(
+                new ClientCard
+                {
+                    ClientCardNumber = 123456789,
+                    Balance = 0f,
+                    Estado = true
+                },
+                new ClientCard
+                {
+                    ClientCardNumber = 987654321,
+                    Balance = 0f,
+                    Estado = true
+                },
+                new ClientCard
+                {
+                    ClientCardNumber = 111223344,
+                    Balance = 0f,
+                    Estado = true
+                }
+            );
+
+            db.SaveChanges();
+        }
+        private static void PopulateProductDiscounts(SupermarketDbContext db)
+        {
+            if (db.ProductDiscount.Any()) return;
+
+            db.ProductDiscount.AddRange(
+                new ProductDiscount
+                {
+                    Product = db.Product.FirstOrDefault(p => p.Name == "Cream")!,
+                    ClientCard = db.ClientCard.FirstOrDefault(c => c.ClientCardNumber == 987654321)!,
+                    Value = 0.1f,
+                    StartDate = new DateTime(2023, 12, 17),
+                    EndDate = new DateTime(2023, 12, 21)
+                   }
+                );
             db.SaveChanges();
         }
     }

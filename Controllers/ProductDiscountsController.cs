@@ -62,11 +62,24 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Create([Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (ModelState.IsValid)
+        {
+            bool productDiscountExists = await _context.ProductDiscount.AnyAsync(
+                b => b.ProductId == productDiscount.ProductId && 
+                     b.ClientCardId == productDiscount.ClientCardId && 
+                     b.Value == productDiscount.Value);
+
+            if (productDiscountExists)
+            {
+                ModelState.AddModelError("", "Another Product Discount with the same Product, Card Number, and Value already exists.");
+            }
+            else
             {
                 _context.Add(productDiscount);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Product successfully created!";
                 return RedirectToAction(nameof(Index));
             }
+        }
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
             return View(productDiscount);
@@ -108,6 +121,8 @@ namespace Supermarket.Controllers
                 {
                     _context.Update(productDiscount);
                     await _context.SaveChangesAsync();
+
+                    TempData["SuccessMessage"] = "Product sucessful edited!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -160,6 +175,9 @@ namespace Supermarket.Controllers
             if (productDiscount != null)
             {
                 _context.ProductDiscount.Remove(productDiscount);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Product sucessful deleted";
             }
             
             await _context.SaveChangesAsync();
