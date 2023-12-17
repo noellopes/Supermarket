@@ -3,11 +3,11 @@
 @{
     ViewData["Title"] = "Hallway Details";
 }
-@if (TempData["Message"] != null)
+@if (@ViewBag.Message != null)
 {
     <div class="alert alert-success" role="alert">
         <h4 class="alert-heading">Success</h4>
-        <p>@TempData["Message"]</p>
+        <p>@ViewBag.Message</p>
     </div>
 }
 <h1>Hallway Details</h1>
@@ -30,14 +30,9 @@
         </dd>
     </dl>
 </div>
-@if (TempData["StoreId2"] != null)
-{
-    <a asp-action="StoreHallways" asp-controller="Stores" asp-route-storeId="@TempData["StoreId2"]">Back to List</a>
-    <a asp-action="Edit" asp-route-id="@Model?.HallwayId">Edit</a>
-}
-else
-{
-    <a asp-action="Edit" asp-route-id="@Model?.HallwayId">Edit</a>
-    <a asp-action="Index">Back to List</a>
-}
+
+<a asp-action="Index" asp-controller="Hallways" asp-route-storeId="@Model.StoreId" class="btn btn-secondary">Back to List</a>
+<a asp-action="Edit" asp-route-id="@Model.HallwayId" class="btn btn-primary">Edit</a>
+
+
 

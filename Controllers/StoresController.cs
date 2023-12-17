@@ -211,35 +211,25 @@ namespace Supermarket.Controllers
             var products = _context.Shelft_ProductExhibition
                 .Where(sp => sp.Shelf.Hallway.StoreId == storeId && sp.Product.Name != null)
                 .Include(sp => sp.Product)
+                .ThenInclude(p => p.Brand)
                 .GroupBy(sp => sp.ProductId) // Agrupar por ProductId
                 .Select(group => new
                 {
-                    ProductName = group.First().Product.Name, // o nome do primeiro produto no grupo
-                    Quantity = group.Sum(p => p.Quantity) // Somar a quantidade do grupo
+                    ProductName = group.First().Product.Name, 
+                    ProductDescription= group.First().Product.Description,
+                    BrandName = group.First().Product.Brand != null ? group.First().Product.Brand.Name : "No Brand",
+                    Quantity = group.Sum(p => p.Quantity) 
                 })
                 .ToList();
-
+          
             ViewBag.StoreName = storeInfo.StoreName;
             ViewBag.TotalProducts = products.Count;
             ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
             ViewBag.Products = products;
 
+           
             return View();
         }
-
-        public IActionResult StoreHallways(int storeId)
-        {
-            var hallways = _context.Hallway
-                .Where(h => h.StoreId == storeId)
-                .ToList();
-
-            ViewBag.StoreId = storeId;
-            ViewBag.StoreName = _context.Store.Find(storeId)?.Name;
-            ViewBag.Hallways = hallways;
-
-            return View();
-        }
-
 
         private bool StoreExists(int id)
         {

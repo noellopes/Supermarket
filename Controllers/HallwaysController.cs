@@ -20,10 +20,20 @@ namespace Supermarket.Controllers
         }
 
         // GET: Hallways
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int storeId)
         {
-            var supermarketDbContext = _context.Hallway.Include(h => h.Store);
-            return View(await supermarketDbContext.ToListAsync());
+            var hallways = await _context.Hallway
+             .Where(h => h.StoreId == storeId)
+             .ToListAsync();
+
+            var storeName = _context.Store.Find(storeId)?.Name;
+
+            ViewBag.StoreId = storeId;
+            ViewBag.StoreName = storeName;
+            ViewBag.Hallways = hallways;
+            ViewBag.TotalHallways = hallways.Count;
+
+            return View(hallways);
         }
 
         // GET: Hallways/Details/5
@@ -82,13 +92,28 @@ namespace Supermarket.Controllers
                     _context.Add(hallway);
                     await _context.SaveChangesAsync();
 
-                    TempData["Message"] = "Hallway successfully created.";
-                    TempData["StoreId2"] = hallway.StoreId;
+                    ViewBag.Message = "Hallway successfully created.";
+                    return RedirectToAction("Details", new { id = hallway.HallwayId, storeId = hallway.StoreId });
 
-                    return RedirectToAction("Details", new { id = hallway.HallwayId });
                 }
             }
 
+            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
+            return View(hallway);
+        }
+        // GET: Hallways/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.Hallway == null)
+            {
+                return NotFound();
+            }
+
+            var hallway = await _context.Hallway.FindAsync(id);
+            if (hallway == null)
+            {
+                return NotFound();
+            }
             ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
             return View(hallway);
         }
@@ -143,7 +168,6 @@ namespace Supermarket.Controllers
             ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
             return View(hallway);
         }
-
         // GET: Hallways/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -155,19 +179,23 @@ namespace Supermarket.Controllers
             var hallway = await _context.Hallway
                 .Include(h => h.Store)
                 .FirstOrDefaultAsync(m => m.HallwayId == id);
+
             if (hallway == null)
             {
                 return NotFound();
             }
+
             var ShelfsAssociatedWithHallway = await _context.Shelf
-            .Where(s => s.HallwayId == id)
-            .ToListAsync();
+                .Where(s => s.HallwayId == id)
+                .ToListAsync();
+
+            int storeIdToDelete = hallway.StoreId;
 
             if (ShelfsAssociatedWithHallway.Count > 0)
             {
                 ViewBag.ErrorMessage = "It is not possible to delete the hallway as there are shelves associated with it";
                 ViewBag.ShelfsAssociatedWithHallway = ShelfsAssociatedWithHallway;
-                return View("Delete");
+                return View("Delete", hallway); 
             }
 
             return View(hallway);
@@ -182,14 +210,16 @@ namespace Supermarket.Controllers
             {
                 return Problem("Entity set 'SupermarketDbContext.Hallway'  is null.");
             }
+
             var hallway = await _context.Hallway.FindAsync(id);
+
             if (hallway != null)
             {
                 _context.Hallway.Remove(hallway);
+                await _context.SaveChangesAsync();
             }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index", "Hallways", new { storeId = hallway?.StoreId });
         }
 
         private bool HallwayExists(int id)
