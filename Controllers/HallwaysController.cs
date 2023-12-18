@@ -60,7 +60,7 @@ namespace Supermarket.Controllers
         {
             if (storeId.HasValue)
             {
-                ViewBag.StoreId2 = new SelectList(_context.Store, "StoreId", "Name", storeId.Value);
+                ViewBag.StoreId2 = storeId.Value;
                 ViewBag.StoreName = _context.Store.Find(storeId.Value)?.Name;
             }
             else

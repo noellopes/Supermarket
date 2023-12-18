@@ -24,7 +24,7 @@
 @if (ViewBag.StoreId2 != null)
 {
     <div class="form-group">
-        <label asp-for="StoreId" class="control-label"></label>
+        <label asp-for="StoreId" class="control-label">Store</label>
         <select asp-for="StoreId" class="form-control" readonly>
                         <option value="@ViewBag.StoreId2" selected>@ViewBag.StoreName</option>
         </select>
@@ -45,14 +45,12 @@
             }
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" asp-controller="Hallways" asp-route-storeId="@ViewBag.StoreId2" class="btn btn-secondary">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{
