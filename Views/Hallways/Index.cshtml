@@ -64,7 +64,7 @@
                         <div class="btn-group" role="group" aria-label="Actions">
                             <a asp-controller="Hallways" asp-action="Edit" asp-route-id="@hallway.HallwayId" class="btn btn-secondary">Edit </a>
                             <a asp-controller="Hallways" asp-action="Details" asp-route-id="@hallway.HallwayId" class="btn btn-secondary">Details</a>
-                            <a asp-controller="Hallways" asp-action="Details" asp-route-id="@hallway.HallwayId" class="btn btn-secondary"> View Products</a>
+                            <a asp-controller="Hallways" asp-action="HallwayProducts" asp-route-hallwayId="@hallway.HallwayId" class="btn btn-secondary">View Products</a>
                             <a asp-controller="Hallways" asp-action="Details" asp-route-id="@hallway.HallwayId" class="btn btn-secondary">View Shefts</a>
                             <a asp-controller="Hallways" asp-action="Delete" asp-route-id="@hallway.HallwayId" class="btn btn-danger">Delete</a>
                         </div>

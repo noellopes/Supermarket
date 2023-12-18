@@ -231,6 +231,7 @@ namespace Supermarket.Controllers
             return View();
         }
 
+        
         private bool StoreExists(int id)
         {
           return (_context.Store?.Any(e => e.StoreId == id)).GetValueOrDefault();

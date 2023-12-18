@@ -13,7 +13,28 @@
     </div>
     @if (ViewBag.ShelfsAssociatedWithHallway != null)
     {
-        <!-- Restante do seu código -->
+        <div>
+            <h4>Associated Shelves</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var shelf in ViewBag.ShelfsAssociatedWithHallway)
+                    {
+                        <tr>
+                            <td>@shelf.Name</td>
+                            <td>
+                                <a asp-action="Details" asp-controller="Shelves" asp-route-id="@shelf.ShelfId" class="btn btn-info">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
 }
 else

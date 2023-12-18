@@ -222,6 +222,46 @@ namespace Supermarket.Controllers
             return RedirectToAction("Index", "Hallways", new { storeId = hallway?.StoreId });
         }
 
+        public IActionResult HallwayProducts(int hallwayId)
+        {
+            var hallwayInfo = _context.Hallway
+                .Where(h => h.HallwayId == hallwayId)
+                .Select(h => new
+                {
+                    HallwayName = h.Description,
+                     StoreId = h.StoreId
+                })
+                .FirstOrDefault();
+
+            if (hallwayInfo == null)
+            {
+                return NotFound();
+            }
+
+            var products = _context.Shelft_ProductExhibition
+                .Where(sp => sp.Shelf.HallwayId == hallwayId && sp.Product.Name != null)
+                .Include(sp => sp.Product)
+                .ThenInclude(p => p.Brand)
+                .GroupBy(sp => sp.ProductId) // Agrupar por ProductId
+                .Select(group => new
+                {
+                    ProductName = group.First().Product.Name,
+                    ProductDescription = group.First().Product.Description,
+                    BrandName = group.First().Product.Brand != null ? group.First().Product.Brand.Name : "No Brand",
+                    Quantity = group.Sum(p => p.Quantity)
+                })
+                .ToList();
+            ViewBag.StoreId = hallwayInfo.StoreId;
+            ViewBag.HallwayName = hallwayInfo.HallwayName;
+            ViewBag.TotalProducts = products.Count;
+            ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
+            ViewBag.Products = products;
+          
+          
+
+
+            return View();
+        }
         private bool HallwayExists(int id)
         {
           return (_context.Hallway?.Any(e => e.HallwayId == id)).GetValueOrDefault();
