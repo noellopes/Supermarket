@@ -7,7 +7,8 @@ namespace Supermarket.Models
     {
 
         public int ClientCardId { get; set; }
-        public  Client? Client {get;  set;}
+
+        public Client? Client {get;  set;}
   
         public int ClientCardNumber { get; set; }
 
