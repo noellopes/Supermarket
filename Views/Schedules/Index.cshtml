@@ -5,7 +5,13 @@
 }
 
 <h1>Index</h1>
-
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Success</h4>
+        <p>@ViewBag.Message</p>
+    </div>
+}
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -42,8 +48,8 @@
             <p class="card-text">Secalhar descricao ou algo do departamento</p>
         </div>
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">@Html.DisplayNameFor(item => item.StartDate): @Html.DisplayFor(modelItem => item.StartDate)</li>
-            <li class="list-group-item">@Html.DisplayNameFor(item => item.EndDate): @Html.DisplayFor(modelItem => item.EndDate)</li>
+                    <li class="list-group-item">@Html.DisplayNameFor(item => item.StartDate): @Html.DisplayFor(modelItem => item.StartDate.Day)/@Html.DisplayFor(modelItem => item.StartDate.Month)/@Html.DisplayFor(modelItem => item.StartDate.Year)</li>
+                    <li class="list-group-item">@Html.DisplayNameFor(item => item.EndDate): @Html.DisplayFor(modelItem => item.EndDate.Day)/@Html.DisplayFor(modelItem => item.EndDate.Month)/@Html.DisplayFor(modelItem => item.EndDate.Year)</li>
             <li class="list-group-item">@Html.DisplayNameFor(item => item.DailyStartTime): @Html.DisplayFor(modelItem => item.DailyStartTime)</li>
             <li class="list-group-item">@Html.DisplayNameFor(item => item.DailyFinishTime): @Html.DisplayFor(modelItem => item.DailyFinishTime)</li>
         </ul>

@@ -25,6 +25,8 @@ namespace Supermarket.Controllers
               return _context.Schedule != null ? 
                           View(await _context.Schedule.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Schedule'  is null.");
+           
+
         }
 
         // GET: Schedules/Details/5
@@ -62,7 +64,6 @@ namespace Supermarket.Controllers
             {
                 _context.Add(schedule);
                 await _context.SaveChangesAsync();
-                ViewBag.Message = "Schedule successfully created.";
                 return RedirectToAction(nameof(Index));
             }
 
