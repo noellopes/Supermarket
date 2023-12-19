@@ -10,6 +10,7 @@ namespace Supermarket.Models
         
         [System.ComponentModel.DisplayName("Grade Number")]
         [Required]
+        [Range(1, 10)]
         public int GradeNumber { get; set; }
 
         [System.ComponentModel.DisplayName("Employee Id")]

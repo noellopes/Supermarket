@@ -9,7 +9,6 @@ namespace Supermarket.Models
     {
         public int ProductId { get; set; }
         public Product? Product { get; set; }
-
         public int WarehouseSectionId { get; set; }
         public WarehouseSection? WarehouseSection { get; set; }
 
