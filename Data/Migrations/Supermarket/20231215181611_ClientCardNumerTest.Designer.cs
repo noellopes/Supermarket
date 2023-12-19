@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -11,9 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231215181611_ClientCardNumerTest")]
+    partial class ClientCardNumerTest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,37 +273,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("EmployeeEvaluation");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.EmployeeSchedule", b =>
-                {
-                    b.Property<int>("ScheduleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScheduleId"));
-
-                    b.Property<TimeSpan>("CheckInTime")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("CheckOutTime")
-                        .HasColumnType("time");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<TimeSpan>("LunchStartTime")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("LunchTime")
-                        .HasColumnType("time");
-
-                    b.HasKey("ScheduleId");
-
-                    b.ToTable("EmployeeSchedule");
-                });
-
             modelBuilder.Entity("Supermarket.Models.Folga", b =>
                 {
                     b.Property<int>("FolgaId")
@@ -455,56 +427,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsUnique();
 
                     b.ToTable("MealCard");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.Ponto", b =>
-                {
-                    b.Property<int>("PontoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PontoId"));
-
-                    b.Property<string>("CheckInCoordenates")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<TimeSpan>("CheckInTime")
-                        .HasColumnType("time");
-
-                    b.Property<string>("CheckOutCoordenates")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<TimeSpan>("CheckOutTime")
-                        .HasColumnType("time");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DayBalance")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Justificative")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<TimeSpan>("LunchEndTime")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("LunchStartTime")
-                        .HasColumnType("time");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PontoId");
-
-                    b.ToTable("Ponto");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Product", b =>
