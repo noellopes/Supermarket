@@ -19,21 +19,35 @@ namespace Supermarket.Controllers
             _context = context;
         }
     //pesquisa por nome do departamento 
-    public IActionResult pesqNome(string searchTerm)
+    public IActionResult pesqNomeTrue(string searchTerm)
     {
         var results = _context.Departments
-            .Where(d => d.NameDepartments.Contains(searchTerm))
-            .ToList();
+        .Where(d => (d.StateDepartments.Equals(true)) && d.NameDepartments.Contains(searchTerm))
+        .ToList();
 
-        if (results.Count == 0)
+            if (results.Count == 0)
         {
           ViewBag.Message = "Nenhum resultado encontrado para a pesquisa.";
         }
 
         return View("Index", results);
     }
-    // GET: Departments
-    public async Task<IActionResult> Index()
+        //pesquisa por nome do departamentoInop 
+        public IActionResult pesqNomeFalse(string searchTerm)
+        {
+            var results = _context.Departments
+        .Where(d => (d.StateDepartments.Equals(false)) && d.NameDepartments.Contains(searchTerm))
+        .ToList();
+            if (results.Count == 0)
+            {
+                ViewBag.Message = "Nenhum resultado encontrado para a pesquisa.";
+            }
+
+            return View("DepInop", results);
+        }
+
+        // GET: Departments
+        public async Task<IActionResult> Index()
         {
             IQueryable<Departments> departmentsQuery = _context.Departments;
 
