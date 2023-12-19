@@ -5,27 +5,35 @@
 }
 
 <h1>Departamentos</h1>
-
+<div class="input-group">
+    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+    <button type="button" class="btn btn-outline-primary" data-mdb-ripple-init>search</button>
+</div>
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New Department</a>
+    <a asp-action="Create" class="btn btn-primary">Novo Departamento</a>
+    <a asp-action="DepInop" class="btn btn-primary">Departamentos Inativos</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NameDepartments)
+             Nome do Departamento
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DescriptionDepartments)
+             Descrição do Departamento
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StateDepartments)
+             Estado do Departamento
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SkillsDepartments)
+             Formação Nessesaria   
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.QuatDepMed)
+             Numero de senhas para a calculo media 
+            </th>
+            <th>
+              Tempo de atendimento medio por dia 
             </th>
             <th></th>
         </tr>
@@ -48,6 +56,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.QuatDepMed)
             </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuatDepMed)
+                </td>
             <td>
                 <div class="btn-group" role="group" aria-label="Edit,Details,Delete">
                         <a asp-action="Edit" asp-route-id="@item.IDDepartments" class="btn btn-outline-success">Edit</a>

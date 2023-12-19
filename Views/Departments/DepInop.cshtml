@@ -1,0 +1,43 @@
+﻿@model Supermarket.Models.Departments
+@{
+    ViewData["Title"] = "DepartamentosInop";
+}
+
+<h1>Departamentos Inop</h1>
+
+<p>
+
+    <a asp-action="DepInop" class="btn btn-primary">Voltar ao Departamentos activos</a>
+</p>
+<p>
+    <div class="input-group">
+        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+        <button type="button" class="btn btn-outline-primary" data-mdb-ripple-init>search</button>
+    </div>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nome do Departamento
+            </th>
+            <th>
+                Descrição do Departamento
+            </th>
+            <th>
+                Estado do Departamento
+            </th>
+            <th>
+                Formação Nessesaria
+            </th>
+            <th>
+                Numero de senhas para a calculo media
+            </th>
+            <th>
+                Tempo de atendimento medio por dia
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+
+</table>

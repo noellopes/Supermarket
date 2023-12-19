@@ -20,11 +20,36 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments
-        public async Task<IActionResult> Index()
+       public async Task<IActionResult> Index()
         {
-              return _context.Departments != null ? 
-                          View(await _context.Departments.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Departments'  is null.");
+            IQueryable<Departments> departmentsQuery = _context.Departments;
+
+            if (departmentsQuery == null || !departmentsQuery.Any())
+            {
+                return Problem("Entity set 'SupermarketDbContext.Departments' is null or empty.");
+            }
+
+            var activeDepartments = await departmentsQuery
+                .Where(sp => sp.StateDepartments.Equals(true))
+                .ToListAsync();
+
+            return View(activeDepartments);
+        }
+        // GET: Departments
+        public async Task<IActionResult> DepInop()
+        {
+            IQueryable<Departments> departmentsQuery = _context.Departments;
+
+            if (departmentsQuery == null || !departmentsQuery.Any())
+            {
+                return Problem("Entity set 'SupermarketDbContext.Departments' is null or empty.");
+            }
+
+            var activeDepartments = await departmentsQuery
+                .Where(sp => sp.StateDepartments.Equals(false))
+                .ToListAsync();
+
+            return View(activeDepartments);
         }
 
         // GET: Departments/Details/5
