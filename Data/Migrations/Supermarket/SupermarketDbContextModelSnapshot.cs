@@ -326,7 +326,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Hierarquias");
                 });
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>
-AvaliacaoFuncionarios
+
                 {
                     b.Property<int>("IssueTypeId")
                         .ValueGeneratedOnAdd()
