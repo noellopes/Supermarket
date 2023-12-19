@@ -316,22 +316,27 @@
 //        {
 //            if (db.Employee.Any()) return;
 
+//            var random = new Random();
+
+//            var funcoes = db.Funcao.ToList();
+
 //            db.Employee.AddRange(
 //                new Employee
 //                {
-//                    Employee_Address= "Rua das Oliveiras",
-//                    Employee_Admission_Date= DateTime.Now,
-//                    Employee_Birth_Date= DateTime.Now,
-//                    Employee_Email="zeD@manga.com",
-//                    Employee_Name="Jose",
+//                    Employee_Address = "Rua das Oliveiras",
+//                    Employee_Admission_Date = DateTime.Now,
+//                    Employee_Birth_Date = DateTime.Now,
+//                    Employee_Email = "zeD@manga.com",
+//                    Employee_Name = "Jose",
 //                    Employee_NIF = "123",
 //                    Employee_Password = "123",
 //                    Employee_Phone = "123",
-//                    Employee_Time_Bank= DateTime.Now,
+//                    Employee_Time_Bank = DateTime.Now,
 //                    Standard_Lunch_Hour = "123",
 //                    Standard_Check_In_Time = "123",
 //                    Standard_Check_Out_Time = "123",
-//                    Standard_Lunch_Time = "123"
+//                    Standard_Lunch_Time = "123",
+//                    Funcao = funcoes[random.Next(funcoes.Count)],
 //                },
 //                new Employee
 //                {
@@ -347,7 +352,8 @@
 //                    Standard_Lunch_Hour = "123",
 //                    Standard_Check_In_Time = "123",
 //                    Standard_Check_Out_Time = "123",
-//                    Standard_Lunch_Time = "123"
+//                    Standard_Lunch_Time = "123",
+//                    Funcao = funcoes[random.Next(funcoes.Count)],
 //                },
 //                new Employee
 //                {
@@ -360,15 +366,9 @@
 //                    Employee_Password = "123",
 //                    Employee_Phone = "123",
 //                    Employee_Time_Bank = DateTime.Now,
-//                    Standard_Lunch_Hour = "123",
-//                    Standard_Check_In_Time = "123",
-//                    Standard_Check_Out_Time = "123",
-//                    Standard_Lunch_Time = "123"
-//                }
-//                );
+//                    S
+        
 
-//            db.SaveChanges();
-//        }
 
 //        private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
 //        {

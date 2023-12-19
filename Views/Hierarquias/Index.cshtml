@@ -7,13 +7,14 @@
 <h2>Superidade Hierarquica Supermarket</h2>
 
 <p>
-    <a asp-action="Employees" class="btn btn-info">Gerenciar Empregados</a>
+    <a asp-controller="Employees" asp-action="Index" class="btn btn-info">Gerenciar Empregados</a>
 
     <a asp-action="AllHierarquias" class="btn btn-info">Gerenciar Cargos Hierárquicos</a>
 
-    <a asp-action="Funcao" class="btn btn-info">Gerenciar Funcoes</a>
+    <a asp-controller="Funcao" asp-action="Index" class="btn btn-info">Gerenciar Funcoes</a>
 </p>
 
+<table class="table">
 <thead>
     <tr>
         <th>ID</th>
@@ -43,7 +44,7 @@
         </tr>
     }
 </tbody>
-
+</table>
 <style>
     .progress {
         height: 10px;
