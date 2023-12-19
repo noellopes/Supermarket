@@ -62,6 +62,7 @@ namespace Supermarket.Controllers
             {
                 _context.Add(schedule);
                 await _context.SaveChangesAsync();
+                ViewBag.Message = "Schedule successfully created.";
                 return RedirectToAction(nameof(Index));
             }
 
