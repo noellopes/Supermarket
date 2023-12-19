@@ -27,7 +27,7 @@ namespace Supermarket.Controllers
 
         if (results.Count == 0)
         {
-            ViewBag.Message = "Nenhum resultado encontrado para a pesquisa.";
+          ViewBag.Message = "Nenhum resultado encontrado para a pesquisa.";
         }
 
         return View("Index", results);
