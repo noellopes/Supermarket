@@ -5,15 +5,20 @@
 }
 
 <h1>Departamentos</h1>
-<div class="input-group">
-    <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-    <button type="button" class="btn btn-outline-primary" data-mdb-ripple-init>search</button>
+<div class="containerPesquisa">
+    <div class="row">
+        <div class="col-12 col-md-4">
+            <div class="input-group">
+                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                <button type="button" class="btn btn-outline-primary" data-mdb-ripple-init>Search</button>
+            </div>
+        </div>
+    </div>
 </div>
-<p>
+<div class= "mt-3 mb-3" >
     <a asp-action="Create" class="btn btn-primary">Novo Departamento</a>
     <a asp-action="DepInop" class="btn btn-primary">Departamentos Inativos</a>
-</p>
-
+</div>
 <table class="table">
     <thead>
         <tr>
