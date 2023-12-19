@@ -18,15 +18,34 @@ namespace Hierarquias.Controllers
             _context = context;
         }
 
+        public IActionResult AllHierarquias()
+        {
+            var allHierarquias = _context.Hierarquias.ToList();
+            return View(allHierarquias);
+        }
+
         // GET: Hierarquias
         public async Task<IActionResult> Index()
         {
+            var employees = await _context.Employee
+        .Include(e => e.Hierarquia)
+        .Include(e => e.Funcao)
+        .Select(e => new EmployeeViewModel
+        {
+            EmployeeId = e.EmployeeId,
+            EmployeeName = e.Employee_Name,
+            HierarquiaNome = e.Hierarquia != null ? e.Hierarquia.HierarquiaNome : "Sem Hierarquia",
+            NivelHierarquia = e.Hierarquia != null ? e.Hierarquia.NivelHierarquico : 0,
+            FuncaoNome = e.Funcao != null ? e.Funcao.NomeFuncao : "Sem Função"
+        })
+        .ToListAsync();
             if (TempData.ContainsKey("MensagemExclusao"))
             {
                 ViewBag.MensagemExclusao = TempData["MensagemExclusao"];
             }
+            var hierarquias = await _context.Hierarquias.OrderBy(h => h.NivelHierarquico).ToListAsync();
 
-            return View(await _context.Hierarquias.ToListAsync());
+            return View(employees);
         }
 
         // GET: Hierarquias/Detalhes
@@ -38,7 +57,7 @@ namespace Hierarquias.Controllers
             }
 
             var Hierarquia = await _context.Hierarquias
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.HierarquiaId == id);
             if (Hierarquia == null)
             {
                 return RedirectToAction("Error");
@@ -61,14 +80,21 @@ namespace Hierarquias.Controllers
         // POST: Hierarquias/Criar
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome")] HierarquiasModel Hierarquia)
+        public async Task<IActionResult> Create([Bind("Id,Nome,NivelHierarquia")] HierarquiasModel Hierarquia)
         {
             if (ModelState.IsValid)
             {
                 // Verificar se o nome do Hierarquia já existe
-                if (_context.Hierarquias.Any(c => c.Nome == Hierarquia.Nome))
+                if (_context.Hierarquias.Any(c => c.HierarquiaNome == Hierarquia.HierarquiaNome))
                 {
                     ModelState.AddModelError("Nome", "Já existe um Hierarquia com este nome.");
+                    return View(Hierarquia);
+                }
+
+                // Verificar se o nível de hierarquia já foi atribuído a outra hierarquia
+                if (_context.Hierarquias.Any(c => c.NivelHierarquico == Hierarquia.NivelHierarquico))
+                {
+                    ModelState.AddModelError("NivelHierarquia", "Este nível de hierarquia já foi atribuído a outra hierarquia.");
                     return View(Hierarquia);
                 }
 
@@ -77,7 +103,7 @@ namespace Hierarquias.Controllers
 
                 TempData["MensagemCriadoSuccess"] = "Hierarquia criado com sucesso!";
 
-                return RedirectToAction(nameof(Details), new { id = Hierarquia.Id });
+                return RedirectToAction(nameof(Details), new { id = Hierarquia.HierarquiaId });
             }
 
             return View(Hierarquia);
@@ -104,7 +130,7 @@ namespace Hierarquias.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome")] HierarquiasModel Hierarquia)
         {
-            if (id != Hierarquia.Id)
+            if (id != Hierarquia.HierarquiaId)
             {
                 return NotFound();
             }
@@ -112,9 +138,14 @@ namespace Hierarquias.Controllers
             if (ModelState.IsValid)
             {
                 // Verificar se o nome do Hierarquia já existe (exceto para o Hierarquia sendo editado)
-                if (_context.Hierarquias.Any(c => c.Nome == Hierarquia.Nome && c.Id != Hierarquia.Id))
+                if (_context.Hierarquias.Any(c => c.HierarquiaNome == Hierarquia.HierarquiaNome && c.HierarquiaId != Hierarquia.HierarquiaId))
                 {
                     ModelState.AddModelError("Nome", "Já existe um Hierarquia com este nome.");
+                    return View(Hierarquia);
+                }
+                if (_context.Hierarquias.Any(c => c.NivelHierarquico == Hierarquia.NivelHierarquico))
+                {
+                    ModelState.AddModelError("NivelHierarquia", "Este nível de hierarquia já foi atribuído a outra hierarquia.");
                     return View(Hierarquia);
                 }
 
@@ -125,7 +156,7 @@ namespace Hierarquias.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!HierarquiaExists(Hierarquia.Id))
+                    if (!HierarquiaExists(Hierarquia.HierarquiaId))
                     {
                         return NotFound();
                     }
@@ -148,7 +179,7 @@ namespace Hierarquias.Controllers
             }
 
             var Hierarquia = await _context.Hierarquias
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.HierarquiaId == id);
             if (Hierarquia == null)
             {
                 return NotFound();
@@ -173,7 +204,7 @@ namespace Hierarquias.Controllers
 
             TempData["MensagemExclusao"] = "Hierarquia excluído com sucesso.";
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(AllHierarquias));
         }
 
         public IActionResult ItemNaoEncontrado()
@@ -181,9 +212,69 @@ namespace Hierarquias.Controllers
             return View();
         }
 
-        private bool HierarquiaExists(int id)
+        // GET: Hierarquias/AssignHierarquia/5
+        public IActionResult AssignHierarquia(int? id)
         {
-            return _context.Hierarquias.Any(e => e.Id == id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Obter o empregado pelo ID
+            var employee = _context.Employee.Find(id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            // Lógica para atribuir hierarquia ao empregado com o ID especificado
+            // Exemplo: Atribuir hierarquia de nível 1
+            employee.Hierarquia = new HierarquiasModel
+            {
+                HierarquiaNome = "Chefe",
+                NivelHierarquico = 1
+            };
+
+            // Salvar as alterações no contexto
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        // GET: Hierarquias/AssignFuncao/5
+        public IActionResult AssignFuncao(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Obter o empregado pelo ID
+            var employee = _context.Employee.Find(id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            // Lógica para atribuir função ao empregado com o ID especificado
+            // Exemplo: Atribuir a função "Funcionario Padrão"
+            employee.Funcao = new Funcao
+            {
+                NomeFuncao = "Funcionario Padrão",
+                DescricaoFuncao = "Descrição da função padrão"
+            };
+
+            // Salvar as alterações no contexto
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+    private bool HierarquiaExists(int id)
+        {
+            return _context.Hierarquias.Any(e => e.HierarquiaId == id);
         }
     }
 }

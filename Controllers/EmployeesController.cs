@@ -22,7 +22,19 @@ namespace Supermarket.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-              return _context.Employee != null ? 
+            var employees = await _context.Employee
+            .Include(e => e.Hierarquia)
+            .Include(e => e.Funcao)
+            .Select(e => new
+        {
+            e.EmployeeId,
+            e.Employee_Name,
+            e.Hierarquia.HierarquiaNome,
+            NivelHierarquia = e.Hierarquia.NivelHierarquico,
+            FuncaoNome = e.Funcao.NomeFuncao
+        })
+        .ToListAsync();
+            return _context.Employee != null ? 
                           View(await _context.Employee.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
         }

@@ -86,11 +86,11 @@ namespace Supermarket.Models
         //Buscar a coleção do Departamento (Muitos para muitos)
         //public ICollection<Departments> Departments { get; set;}
 
+        public int HierarquiaId { get; set; }
+        public virtual HierarquiasModel ?Hierarquia { get; set; }
 
-
-
-
-
+        public int FuncaoId { get; set; }
+        public virtual Funcao ?Funcao { get; set; }
 
     }
 }

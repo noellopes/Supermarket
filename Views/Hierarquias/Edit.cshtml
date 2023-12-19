@@ -7,12 +7,18 @@
 <h2>Editar Hierarquias</h2>
 
 <form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="HierarquiaId" />
 
     <div class="form-group">
-        <label asp-for="Nome"></label>
-        <input asp-for="Nome" class="form-control" />
-        <span asp-validation-for="Nome" class="text-danger"></span>
+        <label asp-for="HierarquiaNome"></label>
+        <input asp-for="HierarquiaNome" class="form-control" />
+        <span asp-validation-for="HierarquiaNome" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NivelHierarquico"></label>
+        <input asp-for="NivelHierarquico" class="form-control" />
+        <span asp-validation-for="NivelHierarquico" class="text-danger"></span>
     </div>
     <p></p>
     <button type="submit" class="btn btn-primary">Salvar</button>

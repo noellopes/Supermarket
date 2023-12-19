@@ -1,48 +1,48 @@
-﻿@model List<HierarquiasModel>
+﻿@model List<EmployeeViewModel>
 
 @{
     ViewData["Title"] = "Hierarquias";
 }
 
-@if (ViewBag.MensagemExclusao != null)
-{
-    <div id="mensagemExclusao" class="alert alert-danger" role="alert" style="width: 33%;">
-        @ViewBag.MensagemExclusao
-        <div class="progress" style="height: 10px; margin-top: 5px;">
-            <div id="progressBar" class="progress-bar bg-danger" role="progressbar"></div>
-        </div>
-    </div>
-}
-
-<h2>Lista de Hierarquias</h2>
+<h2>Superidade Hierarquica Supermarket</h2>
 
 <p>
-    <a asp-action="Create" class="btn btn-success">Nova Hierarquias</a>
+    <a asp-action="Employees" class="btn btn-info">Gerenciar Empregados</a>
+
+    <a asp-action="AllHierarquias" class="btn btn-info">Gerenciar Cargos Hierárquicos</a>
+
+    <a asp-action="Funcao" class="btn btn-info">Gerenciar Funcoes</a>
 </p>
 
-<table class="table">
-    <thead>
+<thead>
+    <tr>
+        <th>ID</th>
+        <th>Nome do Funcionário</th>
+        <th>Hierarquia</th>
+        <th>Nível Hierárquico</th>
+        <th>Função</th>
+        <th>Ações</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach (var employee in Model)
+    {
         <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Ações</th>
+            <td>@employee.EmployeeId</td>
+            <td>@employee.EmployeeName</td>
+            <td>@employee.HierarquiaNome != null ? employee.Hierarquia.Nome : "Sem Hierarquia"</td>
+            <td>@employee.HierarquiaNome != null ? employee.Hierarquia.NivelHierarquia : 0</td>
+            <td>@employee.FuncaoNome != null ? employee.Funcao.NomeFuncao : "Sem Função"</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@employee.EmployeeId" class="btn btn-info">Detalhes</a>
+                <a asp-action="Edit" asp-route-id="@employee.EmployeeId" class="btn btn-warning">Editar</a>
+                <!-- Adicione botões para atribuir hierarquia e função -->
+                <a asp-action="AssignHierarquia" asp-route-id="@employee.EmployeeId" class="btn btn-primary">Atribuir Hierarquia</a>
+                <a asp-action="AssignFuncao" asp-route-id="@employee.EmployeeId" class="btn btn-success">Atribuir Função</a>
+            </td>
         </tr>
-    </thead>
-    <tbody>
-        @foreach (var Hierarquias in Model)
-        {
-            <tr>
-                <td>@Hierarquias.Id</td>
-                <td>@Hierarquias.Nome</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@Hierarquias.Id" class="btn btn-info">Detalhes</a>
-                    <a asp-action="Edit" asp-route-id="@Hierarquias.Id" class="btn btn-warning">Editar</a>
-                    <a asp-action="Delete" asp-route-id="@Hierarquias.Id" class="btn btn-danger">Deletar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    }
+</tbody>
 
 <style>
     .progress {
