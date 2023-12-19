@@ -22,6 +22,8 @@ namespace Supermarket.Data
             PopulateProductDiscounts(db);
             //PopulateEmployees(db);
             //PopulateEmployeeEvaluations(db);
+            PopulateConfSub(db);
+            //PopulateEmployee(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db)
@@ -329,7 +331,7 @@ namespace Supermarket.Data
                     Employee_NIF = "123",
                     Employee_Password = "123",
                     Employee_Phone = "123",
-                    Employee_Time_Bank= DateTime.Now,
+                    //Employee_Time_Bank= DateTime.Now,
                     Standard_Lunch_Hour = "123",
                     Standard_Check_In_Time = "123",
                     Standard_Check_Out_Time = "123",
@@ -345,7 +347,7 @@ namespace Supermarket.Data
                     Employee_NIF = "123",
                     Employee_Password = "123",
                     Employee_Phone = "123",
-                    Employee_Time_Bank = DateTime.Now,
+                    //Employee_Time_Bank = DateTime.Now,
                     Standard_Lunch_Hour = "123",
                     Standard_Check_In_Time = "123",
                     Standard_Check_Out_Time = "123",
@@ -361,7 +363,7 @@ namespace Supermarket.Data
                     Employee_NIF = "123",
                     Employee_Password = "123",
                     Employee_Phone = "123",
-                    Employee_Time_Bank = DateTime.Now,
+                    //Employee_Time_Bank = DateTime.Now,
                     Standard_Lunch_Hour = "123",
                     Standard_Check_In_Time = "123",
                     Standard_Check_Out_Time = "123",
@@ -481,6 +483,49 @@ namespace Supermarket.Data
                     EndDate = new DateTime(2023, 12, 21)
                    }
                 );
+            db.SaveChanges();
+        }
+
+        private static void PopulateConfSub(SupermarketDbContext db)
+        {
+            if (db.SubsidySetup.Any()) return;
+
+            db.SubsidySetup.AddRange(
+
+                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
+                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
+                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
+                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) }
+
+               );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulateEmployee(SupermarketDbContext db)
+        {
+            if (db.Employee.Any()) return;
+
+            db.Employee.AddRange(
+                new Employee
+                {
+                    Employee_Address = "Rua da direita",
+                    Employee_Admission_Date = new DateTime(2023, 01, 05),
+                    Employee_Termination_Date = new DateTime(2023, 12, 31),
+                    Employee_Birth_Date = new DateTime(2002, 01, 01),
+                    Employee_Email = "test@gmail.com",
+                    Employee_Name = "Alberto",
+                    Employee_NIF = "123456789",
+                    Employee_Password = "0000",
+                    Employee_Phone = "987465321",
+                    Standard_Check_In_Time = "9:10",
+                    Standard_Check_Out_Time = "10:01",
+                    Standard_Lunch_Hour = "12:30",
+                    Standard_Lunch_Time="13:00",
+                    Employee_Time_Bank= 1,
+                }
+                );
+
             db.SaveChanges();
         }
     }
