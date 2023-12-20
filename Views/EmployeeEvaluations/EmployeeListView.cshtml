@@ -1,0 +1,115 @@
+﻿@model IEnumerable<Supermarket.Models.Employee>
+
+@{
+    ViewData["Title"] = "EmployeeView";
+   
+}
+
+<h1>EmployeeView</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               Name
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Password
+            </th>
+            <th>
+                Phone
+            </th>
+            <th>
+                NIF
+            </th>
+            <th>
+               Address
+            </th>
+            <th>
+                Birth Date
+            </th>
+            <th>
+                Admission Date
+            </th>
+            <th>
+               Termination Date
+            </th>
+            <th>
+                Check In
+            </th>
+            <th>
+                Check Out
+            </th>
+            <th>
+                Lunch Hour
+            </th>
+            <th>
+                Lunch Time
+            </th>
+            <th>
+                Time Bank
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_NIF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Birth_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Admission_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Termination_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Standard_Check_In_Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Standard_Check_Out_Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Standard_Lunch_Hour)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Standard_Lunch_Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Time_Bank)
+            </td>
+            <td>
+                <a asp-controller="Employees" asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |
+                <a asp-controller="Employees"  asp-action="Details" asp-route-id="@item.EmployeeId">Details</a> |
+                <a asp-controller="Employees" asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
+                    <a asp-controller="EmployeeEvaluations" asp-action="EmployeeListView" asp-route-id="@item.EmployeeId">View employee evaluations</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

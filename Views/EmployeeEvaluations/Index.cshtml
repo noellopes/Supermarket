@@ -29,9 +29,11 @@
             <label for="Description" class="control-label">Description</label>
             <input name="Description" type="search" class="form-control" value="@ViewBag.FilterDescription" />
 
-            <label for="EmployeeName" class="control-label">Employee</label>
-            <input name="EmployeeName" type="search" class="form-control" value="@ViewBag.FilterEmployeeName" />
-
+            @if (!ViewBag.HideEmployeeName)
+            {
+                <label for="EmployeeName" class="control-label">Employee</label>
+                <input name="EmployeeName" type="search" class="form-control" value="@ViewBag.FilterEmployeeName" />
+            }
             <input class="btn btn-outline-primary" type="submit" value="Search" />
             <a class="btn btn-outline-secondary" asp-action="Index" >Cancel</a>
         </form>
@@ -48,9 +50,12 @@
 <table class="table table-bordered border-primary">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeEvaluation.First().Employee.Employee_Name)
-            </th>
+            @if (!ViewBag.HideEmployeeName)
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.EmployeeEvaluation.First().Employee!.Employee_Name)
+                </th>
+            }
             <th>
                 @Html.DisplayNameFor(model => model.EmployeeEvaluation.First().Description)
             </th>
@@ -66,9 +71,13 @@
     <tbody>
 @foreach (var item in Model.EmployeeEvaluation) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
-            </td>
+            @if (!ViewBag.HideEmployeeName)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee!.Employee_Name)
+                </td>
+
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
@@ -95,3 +104,52 @@
 }
     </tbody>
 </table>
+@{
+    int initialPage = Model.Pagination.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+    if (initialPage < 1) initialPage = 1;
+    int lastPage = Model.Pagination.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+    if (lastPage > Model.Pagination.TotalPages) lastPage = Model.Pagination.TotalPages;
+    int last = ((int)Model.Pagination.TotalPages);
+}
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        @if (Model.Pagination.CurrentPage != initialPage)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="1" aria-label="Previous">
+                    <span aria-hidden="true">
+                        &laquo
+                    </span>
+                </a>
+            </li>
+        }
+        @for (int p = initialPage; p <= lastPage; p++)
+        {
+
+            if (p == Model.Pagination.CurrentPage)
+            {
+                <li class="page-item active "><a class="page-link" href="#">@p</a></li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-page="@p">@p</a>
+                </li>
+            }
+        }
+
+        @if (Model.Pagination.CurrentPage != Model.Pagination.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@last" aria-label="Next">
+                    <span aria-hidden="true">
+                        &raquo
+                    </span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>
+<small style="color:gray" class="pagination justify-content-center"><i>Total Pages: @Model.Pagination.TotalItems </i></small>

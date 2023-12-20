@@ -20,7 +20,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: EmployeeEvaluation
-        public async Task<IActionResult> Index(int page = 1, string description = "", string employeeName = "")
+        public async Task<IActionResult> Index(int page = 1, string description = "", string employeeName = "", int employeeId = 0)
         {
             var evaluationsFiltered = _context.EmployeeEvaluation.Include(ee => ee.Employee).AsQueryable();
             if(description != "")
@@ -30,6 +30,11 @@ namespace Supermarket.Controllers
             if(employeeName != "")
             {
                 evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Employee!.Employee_Name.Contains(employeeName));
+            }
+            if(employeeId > 0)
+            {
+                evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Employee!.EmployeeId == employeeId);
+                ViewBag.HideEmployeeName = true;
             }
 
             var pagination = new PagingInfo
@@ -204,13 +209,11 @@ namespace Supermarket.Controllers
         }
 
         // GET: EmployeeEvaluation/EmployeeView
-        public async Task<IActionResult> EmployeeView()
+        public async Task<IActionResult> EmployeeListView()
         {
-            var Employees = _context.Employee.Include(f=>EmployeeGradeAsync(f.EmployeeId));
-
-            return Employees != null ?
-                          View(await Employees.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.EmployeeEvaluation'  is null.");
+            return _context.Employee != null ?
+                        View(await _context.Employee.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
         }
 
         private float EmployeeGradeAsync(int? EmployeeId)

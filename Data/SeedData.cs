@@ -1,4 +1,5 @@
-﻿using Supermarket.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using Supermarket.Models;
 
 namespace Supermarket.Data
 {
@@ -420,6 +421,11 @@ namespace Supermarket.Data
             }
             db.SaveChanges();
             
+        }
+
+        internal static void PopulateDevUsers(UserManager<IdentityUser>? userManager)
+        {
+            throw new NotImplementedException();
         }
     }
 }
