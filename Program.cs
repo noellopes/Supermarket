@@ -48,8 +48,8 @@ if (app.Environment.IsDevelopment()) {
     var db = serviceScope.ServiceProvider.GetService<SupermarketDbContext>();
     SeedData.Populate(db!);
 
-    var userManager = serviceScope.ServiceProvider.GetService<UserManager<IdentityUser>>();
-    SeedData.PopulateDevUsers(userManager);
+    //var userManager = serviceScope.ServiceProvider.GetService<UserManager<IdentityUser>>();
+    //SeedData.PopulateDevUsers(userManager);
 } else {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
