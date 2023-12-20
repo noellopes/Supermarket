@@ -318,58 +318,58 @@ namespace Supermarket.Data
         {
             if (db.Employee.Any()) return;
 
-            db.Employee.AddRange(
-                new Employee
-                {
-                    Employee_Address= "Rua das Oliveiras",
-                    Employee_Admission_Date= DateTime.Now,
-                    Employee_Birth_Date= DateTime.Now,
-                    Employee_Email="zeD@manga.com",
-                    Employee_Name="Jose",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    Employee_Time_Bank= DateTime.Now,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                    Standard_Lunch_Time = "123"
-                },
-                new Employee
-                {
-                    Employee_Address = "Rua do azeite",
-                    Employee_Admission_Date = DateTime.Now,
-                    Employee_Birth_Date = DateTime.Now,
-                    Employee_Email = "zeD@manga.com",
-                    Employee_Name = "Maria",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    Employee_Time_Bank = DateTime.Now,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                    Standard_Lunch_Time = "123"
-                },
-                new Employee
-                {
-                    Employee_Address = "Avenida Afonso Pena",
-                    Employee_Admission_Date = DateTime.Now,
-                    Employee_Birth_Date = DateTime.Now,
-                    Employee_Email = "zeD@manga.com",
-                    Employee_Name = "Lucas",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    Employee_Time_Bank = DateTime.Now,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                    Standard_Lunch_Time = "123"
-                }
-                );
+            //db.Employee.AddRange(
+            //    new Employee
+            //    {
+            //        Employee_Address= "Rua das Oliveiras",
+            //        Employee_Admission_Date= DateTime.Now,
+            //        Employee_Birth_Date= DateTime.Now,
+            //        Employee_Email="zeD@manga.com",
+            //        Employee_Name="Jose",
+            //        Employee_NIF = "123",
+            //        Employee_Password = "123",
+            //        Employee_Phone = "123",
+            //        Employee_Time_Bank= DateTime.Now,
+            //        Standard_Lunch_Hour = "123",
+            //        Standard_Check_In_Time = "123",
+            //        Standard_Check_Out_Time = "123",
+            //        Standard_Lunch_Time = "123"
+            //    },
+            //    new Employee
+            //    {
+            //        Employee_Address = "Rua do azeite",
+            //        Employee_Admission_Date = DateTime.Now,
+            //        Employee_Birth_Date = DateTime.Now,
+            //        Employee_Email = "zeD@manga.com",
+            //        Employee_Name = "Maria",
+            //        Employee_NIF = "123",
+            //        Employee_Password = "123",
+            //        Employee_Phone = "123",
+            //        Employee_Time_Bank = DateTime.Now,
+            //        Standard_Lunch_Hour = "123",
+            //        Standard_Check_In_Time = "123",
+            //        Standard_Check_Out_Time = "123",
+            //        Standard_Lunch_Time = "123"
+            //    },
+            //    new Employee
+            //    {
+            //        Employee_Address = "Avenida Afonso Pena",
+            //        Employee_Admission_Date = DateTime.Now,
+            //        Employee_Birth_Date = DateTime.Now,
+            //        Employee_Email = "zeD@manga.com",
+            //        Employee_Name = "Lucas",
+            //        Employee_NIF = "123",
+            //        Employee_Password = "123",
+            //        Employee_Phone = "123",
+            //        Employee_Time_Bank = DateTime.Now,
+            //        Standard_Lunch_Hour = "123",
+            //        Standard_Check_In_Time = "123",
+            //        Standard_Check_Out_Time = "123",
+            //        Standard_Lunch_Time = "123"
+            //    }
+            //    );
 
-            db.SaveChanges();
+            //db.SaveChanges();
         }
 
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
@@ -471,17 +471,17 @@ namespace Supermarket.Data
         {
             if (db.ProductDiscount.Any()) return;
 
-            db.ProductDiscount.AddRange(
-                new ProductDiscount
-                {
-                    Product = db.Product.FirstOrDefault(p => p.Name == "Cream")!,
-                    ClientCard = db.ClientCard.FirstOrDefault(c => c.ClientCardNumber == 987654321)!,
-                    Value = 0.1f,
-                    StartDate = new DateTime(2023, 12, 17),
-                    EndDate = new DateTime(2023, 12, 21)
-                   }
-                );
-            db.SaveChanges();
+            //db.ProductDiscount.AddRange(
+            //    new ProductDiscount
+            //    {
+            //        Product = db.Product.FirstOrDefault(p => p.Name == "Cream")!,
+            //        ClientCard = db.ClientCard.FirstOrDefault(c => c.ClientCardNumber == 987654321)!,
+            //        Value = 0.1f,
+            //        StartDate = new DateTime(2023, 12, 17),
+            //        EndDate = new DateTime(2023, 12, 21)
+            //       }
+            //    );
+            //db.SaveChanges();
         }
     }
 }
