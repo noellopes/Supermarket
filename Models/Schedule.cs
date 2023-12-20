@@ -7,7 +7,7 @@ namespace Supermarket.Models
         public int ScheduleId { get; set; }
         [Required(ErrorMessage = "The Start Date is mandatory.")]
         public DateTime StartDate { get; set; } = DateTime.Now;
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; } = null;
         [Required(ErrorMessage = "The Daily Start Date is mandatory.")]
         public DateTime DailyStartTime {  get; set; }
         [Required(ErrorMessage = "The Daily Finish Date is mandatory.")]
