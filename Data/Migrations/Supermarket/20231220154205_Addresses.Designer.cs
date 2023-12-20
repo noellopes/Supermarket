@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231215100727_Addresses")]
+    [Migration("20231220154205_Addresses")]
     partial class Addresses
     {
         /// <inheritdoc />
@@ -129,9 +129,10 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("Name")
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("Telefone")
                         .HasColumnType("int");

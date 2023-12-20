@@ -48,7 +48,8 @@ namespace Supermarket.Controllers
         // GET: Addresses/Create
         public IActionResult Create()
         {
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "HeadQuarters");
+
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name");
             return View();
         }
 
@@ -59,14 +60,10 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AddressesId,SupplierId,Address,Telephone")] Addresses addresses)
         {
-            if (ModelState.IsValid)
-            {
+            
                 _context.Add(addresses);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "HeadQuarters", addresses.SupplierId);
-            return View(addresses);
         }
 
         // GET: Addresses/Edit/5
@@ -82,7 +79,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "HeadQuarters", addresses.SupplierId);
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name", addresses.SupplierId);
             return View(addresses);
         }
 
@@ -118,7 +115,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "HeadQuarters", addresses.SupplierId);
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name", addresses.SupplierId);
             return View(addresses);
         }
 
