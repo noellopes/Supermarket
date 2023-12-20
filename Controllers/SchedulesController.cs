@@ -22,12 +22,19 @@ namespace Supermarket.Controllers
         // GET: Schedules
         public async Task<IActionResult> Index(int page = 1, int dept = 1)
         {
-            var Schedule = _context.Schedule.AsQueryable();
+            //var Schedule = _context.Schedule.AsQueryable();
 
-            if (dept != null)
-            {
-                Schedule = Schedule.Where(b => b.IDDepartments== dept);
-            }
+            //if (dept != null)
+            //{
+            //    Schedule = Schedule.Where(b => b.IDDepartments== dept);
+            //}
+
+            //var SchedulesAuthors = Schedule.Include(b => b.IDDepartments);
+
+            //if (SchedulesAuthors != null)
+            //{
+            //    SchedulesAuthors.Where(b=> b.S)
+            //}
 
               return _context.Schedule != null ? 
                           View(await _context.Schedule.ToListAsync()) :
