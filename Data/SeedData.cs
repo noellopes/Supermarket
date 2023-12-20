@@ -35,10 +35,9 @@ namespace Supermarket.Data
             db.Schedule.AddRange(
                     new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2028, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho")},
                     new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2025, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho")},
-                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2028, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho") },
-                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2029, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho") },
+                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2028, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho")},
+                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2029, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho")},
                     new Schedule { StartDate = DateTime.Now, EndDate = null, DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho") }
-
                 );
             db.SaveChanges();
         }
@@ -47,7 +46,7 @@ namespace Supermarket.Data
             if (db.Tickets.Any()) return;
 
             db.Tickets.AddRange(
-               new Tickets { DataEmicao = DateTime.Now, DataAtendimento = new DateTime(2028, 04, 30, 12, 30, 0), NumeroDaSenha = 1, Estado = true, Priorioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho")! }!
+               new Tickets { DataEmicao = DateTime.Now, DataAtendimento = new DateTime(2028, 04, 30, 12, 30, 0), NumeroDaSenha = 1, Estado = true, Priorioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho")}
             );
             db.SaveChanges();
         }
