@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231215181611_ClientCardNumerTest")]
-    partial class ClientCardNumerTest
+    [Migration("20231220154243_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -191,21 +191,21 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("Employee_Admission_Date")
+                    b.Property<DateTime?>("Employee_Admission_Date")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Employee_Birth_Date")
+                    b.Property<DateTime?>("Employee_Birth_Date")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Employee_Email")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Employee_NIF")
                         .IsRequired()
-                        .HasMaxLength(9)
-                        .HasColumnType("nvarchar(9)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Employee_Name")
                         .IsRequired()
@@ -219,14 +219,13 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.Property<string>("Employee_Phone")
                         .IsRequired()
-                        .HasMaxLength(9)
-                        .HasColumnType("nvarchar(9)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Employee_Termination_Date")
+                    b.Property<DateTime?>("Employee_Termination_Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Employee_Time_Bank")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Employee_Time_Bank")
+                        .HasColumnType("int");
 
                     b.Property<string>("Standard_Check_In_Time")
                         .IsRequired()
@@ -271,6 +270,37 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeeEvaluation");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.EmployeeSchedule", b =>
+                {
+                    b.Property<int>("ScheduleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScheduleId"));
+
+                    b.Property<TimeSpan>("CheckInTime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("CheckOutTime")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("LunchStartTime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("LunchTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("ScheduleId");
+
+                    b.ToTable("EmployeeSchedule");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Folga", b =>
@@ -427,6 +457,56 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsUnique();
 
                     b.ToTable("MealCard");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Ponto", b =>
+                {
+                    b.Property<int>("PontoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PontoId"));
+
+                    b.Property<string>("CheckInCoordenates")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("CheckInTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("CheckOutCoordenates")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("CheckOutTime")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DayBalance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Justificative")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("LunchEndTime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("LunchStartTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PontoId");
+
+                    b.ToTable("Ponto");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Product", b =>
@@ -683,11 +763,11 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubsidySetupId"));
 
-                    b.Property<DateTime>("DataPagamentoMensal")
+                    b.Property<DateTime>("DataEntradaVigor")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("HorasMinTrabalhadas")
-                        .HasColumnType("datetime2");
+                    b.Property<float>("HorasMinTrabalhadas")
+                        .HasColumnType("real");
 
                     b.Property<float>("ValorSubsidioDiario")
                         .HasColumnType("real");

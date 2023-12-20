@@ -188,21 +188,21 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("Employee_Admission_Date")
+                    b.Property<DateTime?>("Employee_Admission_Date")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Employee_Birth_Date")
+                    b.Property<DateTime?>("Employee_Birth_Date")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Employee_Email")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Employee_NIF")
                         .IsRequired()
-                        .HasMaxLength(9)
-                        .HasColumnType("nvarchar(9)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Employee_Name")
                         .IsRequired()
@@ -216,14 +216,13 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.Property<string>("Employee_Phone")
                         .IsRequired()
-                        .HasMaxLength(9)
-                        .HasColumnType("nvarchar(9)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Employee_Termination_Date")
+                    b.Property<DateTime?>("Employee_Termination_Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Employee_Time_Bank")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Employee_Time_Bank")
+                        .HasColumnType("int");
 
                     b.Property<string>("Standard_Check_In_Time")
                         .IsRequired()
@@ -761,11 +760,11 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubsidySetupId"));
 
-                    b.Property<DateTime>("DataPagamentoMensal")
+                    b.Property<DateTime>("DataEntradaVigor")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("HorasMinTrabalhadas")
-                        .HasColumnType("datetime2");
+                    b.Property<float>("HorasMinTrabalhadas")
+                        .HasColumnType("real");
 
                     b.Property<float>("ValorSubsidioDiario")
                         .HasColumnType("real");
