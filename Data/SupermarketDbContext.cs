@@ -57,14 +57,14 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.Schedule> Schedule { get; set; } = default!;
+        public DbSet<Schedule> Schedule { get; set; }
 
         public DbSet<ClientCard> ClientCard { get; set; }
 
         public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }
 
-        public DbSet<Supermarket.Models.Departments> Departments { get; set; } = default!;
+        public DbSet<Departments> Departments { get; set; }
 
-        public DbSet<Supermarket.Models.Tickets> Tickets { get; set; } = default!;
+        public DbSet<Tickets> Tickets { get; set; }
     }
 }

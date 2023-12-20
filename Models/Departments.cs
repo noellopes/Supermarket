@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Supermarket.Models
 {
@@ -7,7 +8,8 @@ namespace Supermarket.Models
     {
         // Chave primária
         [Key]
-        public required int IDDepartments { get; set; }
+        public int IDDepartments { get; set; }
+
         // Nome do Departamento
         [Required(ErrorMessage = "The Department Name field is mandatory.")]
         [StringLength(100, ErrorMessage = "The Department Name field must have a maximum of 100 characters.")]
@@ -24,6 +26,7 @@ namespace Supermarket.Models
         [Required(ErrorMessage = "O campo QuatDepMed é obrigatório.")]
         [Range(1, 100, ErrorMessage = "O valor de QuatDepMed deve ser maior que 0 e me que 100.")]
         public required int QuatDepMed { get; set; }
+
     }
 }
 
