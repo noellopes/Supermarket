@@ -20,13 +20,20 @@ namespace Supermarket.Controllers
         }
 
         // GET: Schedules
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int dept = 1)
         {
+            var Schedule = _context.Schedule.AsQueryable();
+
+            if (dept != null)
+            {
+                Schedule = Schedule.Where(b => b.IDDepartments== dept);
+            }
+
               return _context.Schedule != null ? 
                           View(await _context.Schedule.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Schedule'  is null.");
            
-
+           
         }
 
         // GET: Schedules/Details/5
