@@ -21,6 +21,8 @@ namespace Supermarket.Models
         [StringLength(155, ErrorMessage = "The Department Description field must have a maximum of 255 characters.")]
         public required string SkillsDepartments { get; set; }
         //Quantidade de senhas que cada gestor de departamento definir para o calculo da media
+        [Required(ErrorMessage = "O campo QuatDepMed é obrigatório.")]
+        [Range(1, 100, ErrorMessage = "O valor de QuatDepMed deve ser maior que 0 e me que 100.")]
         public required int QuatDepMed { get; set; }
     }
 }
