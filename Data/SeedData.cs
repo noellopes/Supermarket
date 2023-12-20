@@ -1,4 +1,6 @@
-﻿using Supermarket.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using Supermarket.Models;
+using System.Threading.Tasks;
 
 namespace Supermarket.Data
 {
@@ -482,6 +484,19 @@ namespace Supermarket.Data
             //       }
             //    );
             //db.SaveChanges();
+        }
+
+        internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager) {
+            await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
+        }
+
+        private static async System.Threading.Tasks.Task EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password) {
+            var user = await userManager.FindByNameAsync(username);
+            
+            if (user == null) {
+                user = new IdentityUser(username);
+                await userManager.CreateAsync(user, password);
+            }
         }
     }
 }
