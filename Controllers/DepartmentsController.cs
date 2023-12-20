@@ -35,7 +35,7 @@ namespace Supermarket.Controllers
         //pesquisa por nome do departamentoInop 
         public IActionResult pesqNomeFalse(string searchTerm)
         {
-            var results = _context.Departments
+         var results = _context.Departments
         .Where(d => (d.StateDepartments.Equals(false)) && d.NameDepartments.Contains(searchTerm))
         .ToList();
             if (results.Count == 0)

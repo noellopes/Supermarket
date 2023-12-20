@@ -13,9 +13,6 @@ namespace Supermarket.Data
 
         private static void PopulateSchedules(SupermarketDbContext db)
         {
-
-           
-
             if (db.Schedule.Any()) return;
 
             db.Schedule.AddRange(
@@ -26,7 +23,6 @@ namespace Supermarket.Data
                     new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2029, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, IDDepartments = 6 },
                     new Schedule { StartDate = DateTime.Now, EndDate = null, DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, IDDepartments = 6 }
                 );
-
             db.SaveChanges();
         }
         private static void PopulateDepartments(SupermarketDbContext db)
