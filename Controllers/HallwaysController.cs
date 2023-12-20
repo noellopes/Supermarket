@@ -63,11 +63,7 @@ namespace Supermarket.Controllers
                 ViewBag.StoreId2 = storeId.Value;
                 ViewBag.StoreName = _context.Store.Find(storeId.Value)?.Name;
             }
-            else
-            {
-                ViewBag.StoreId = new SelectList(_context.Store, "StoreId", "Name");
-            }
-
+           
             return View();
         }
 

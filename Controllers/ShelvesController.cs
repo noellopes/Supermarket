@@ -20,10 +20,29 @@ namespace Supermarket.Controllers
         }
 
         // GET: Shelves
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int hallwaysId)
         {
-            var supermarketDbContext = _context.Shelf.Include(s => s.Hallway);
-            return View(await supermarketDbContext.ToListAsync());
+            
+            var hallways = await _context.Hallway.FindAsync(hallwaysId);
+
+            if (hallways == null)
+            {
+                // Trate o cenário onde o Hallway não foi encontrado
+                return NotFound();
+            }
+
+            var shelves = await _context.Shelf
+                .Where(s => s.HallwayId == hallwaysId)
+                .ToListAsync();
+
+            ViewBag.HallwaysId = hallwaysId;
+            ViewBag.HallaysName = hallways.Description;
+            ViewBag.Shelves = shelves;
+            ViewBag.TotalShelft = shelves.Count();
+
+            return View(shelves);
+
+
         }
 
         // GET: Shelves/Details/5
@@ -46,15 +65,23 @@ namespace Supermarket.Controllers
         }
 
         // GET: Shelves/Create
-        public IActionResult Create()
+        public IActionResult Create(int? hallwaysId)
         {
-            ViewData["HallwayId"] = new SelectList(_context.Hallway, "HallwayId", "Description");
+            if (hallwaysId.HasValue)
+            {
+                ViewBag.HallwaysId2 = hallwaysId.Value;
+                ViewBag.HallwaysName = _context.Store.Find(hallwaysId.Value)?.Name;
+                ViewBag.HallwayId = new SelectList(_context.Hallway, "HallwayId", "Description", hallwaysId.Value);
+            }
+            else
+            {
+                ViewBag.HallwayId = new SelectList(_context.Hallway, "HallwayId", "Description");
+            }
+
             return View();
         }
 
         // POST: Shelves/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ShelfId,Name,HallwayId")] Shelf shelf)
@@ -62,7 +89,7 @@ namespace Supermarket.Controllers
             if (ModelState.IsValid)
             {
                 bool ShelvesExists = await _context.Shelf.AnyAsync(
-               b => b.Name == shelf.Name && b.HallwayId == shelf.HallwayId);
+                    b => b.Name == shelf.Name && b.HallwayId == shelf.HallwayId);
 
                 if (ShelvesExists)
                 {
@@ -75,12 +102,14 @@ namespace Supermarket.Controllers
 
                     ViewBag.Message = "Shelf successfully created.";
                     shelf.Hallway = await _context.Hallway.FindAsync(shelf.HallwayId);
-                    return View("Details", shelf);
+                    return RedirectToAction("Details", new { id = shelf.ShelfId, hallwayId = shelf.HallwayId });
                 }
             }
-            ViewData["HallwayId"] = new SelectList(_context.Hallway, "HallwayId", "Description", shelf.HallwayId);
+
+            ViewBag.HallwayId = new SelectList(_context.Hallway, "HallwayId", "Description", shelf.HallwayId);
             return View(shelf);
         }
+
 
         // GET: Shelves/Edit/5
         public async Task<IActionResult> Edit(int? id)
