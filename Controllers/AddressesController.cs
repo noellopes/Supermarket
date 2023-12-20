@@ -95,28 +95,25 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+           
+            try
             {
-                try
-                {
-                    _context.Update(addresses);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AddressesExists(addresses.AddressesId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(addresses);
+                await _context.SaveChangesAsync();
             }
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name", addresses.SupplierId);
-            return View(addresses);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AddressesExists(addresses.AddressesId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+           
         }
 
         // GET: Addresses/Delete/5
