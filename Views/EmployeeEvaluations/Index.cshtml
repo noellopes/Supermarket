@@ -22,6 +22,21 @@
 
 <h1>Employee Evaluations</h1>
 
+<div class="card mb-3">
+    <div class="card-body">
+        <form asp-action="Index" method="get">
+            <h4>Search...</h4>
+            <label for="Description" class="control-label">Description</label>
+            <input name="Description" type="search" class="form-control" value="@ViewBag.FilterDescription" />
+
+            <label for="EmployeeName" class="control-label">Employee</label>
+            <input name="EmployeeName" type="search" class="form-control" value="@ViewBag.FilterEmployeeName" />
+
+            <input class="btn btn-outline-primary" type="submit" value="Search" />
+            <a class="btn btn-outline-secondary" asp-action="Index" >Cancel</a>
+        </form>
+    </div>
+</div>
 <p>
     <a asp-action="Create" class="btn btn-outline-primary">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-rolodex" viewBox="0 0 16 16">
