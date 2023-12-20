@@ -48,7 +48,7 @@ namespace Supermarket.Controllers
         // GET: PurchaseSuppliers/Create
         public IActionResult Create()
         {
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "HeadQuarters");
+            ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "Name");
             return View();
         }
 
@@ -59,14 +59,12 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PurchaseSupplierId,SubTotal,Total,Date,SupplierId")] PurchaseSupplier purchaseSupplier)
         {
-            if (ModelState.IsValid)
-            {
+            
                 _context.Add(purchaseSupplier);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "HeadQuarters", purchaseSupplier.SupplierId);
-            return View(purchaseSupplier);
+            
+            
         }
 
         // GET: PurchaseSuppliers/Edit/5
@@ -82,7 +80,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "HeadQuarters", purchaseSupplier.SupplierId);
+            ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "Name", purchaseSupplier.SupplierId);
             return View(purchaseSupplier);
         }
 
@@ -118,7 +116,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "HeadQuarters", purchaseSupplier.SupplierId);
+            ViewData["SupplierId"] = new SelectList(_context.Supplier, "SupplierId", "Name", purchaseSupplier.SupplierId);
             return View(purchaseSupplier);
         }
 
