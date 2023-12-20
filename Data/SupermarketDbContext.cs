@@ -75,5 +75,6 @@ namespace Supermarket.Data
 
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
+        public object Pontos { get; internal set; }
     }
 }
