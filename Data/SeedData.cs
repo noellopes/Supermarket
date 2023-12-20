@@ -447,20 +447,20 @@ namespace Supermarket.Data
             db.ClientCard.AddRange(
                 new ClientCard
                 {
-                    ClientCardNumber = 123456789,
-                    Balance = 0f,
+                    ClientCardNumber = 123456,
+                    Balance = 0,
                     Estado = true
                 },
                 new ClientCard
                 {
-                    ClientCardNumber = 987654321,
-                    Balance = 0f,
+                    ClientCardNumber = 987654,
+                    Balance = 0,
                     Estado = true
                 },
                 new ClientCard
                 {
-                    ClientCardNumber = 111223344,
-                    Balance = 0f,
+                    ClientCardNumber = 111223,
+                    Balance = 0,
                     Estado = true
                 }
             );
@@ -471,17 +471,17 @@ namespace Supermarket.Data
         {
             if (db.ProductDiscount.Any()) return;
 
-            //db.ProductDiscount.AddRange(
-            //    new ProductDiscount
-            //    {
-            //        Product = db.Product.FirstOrDefault(p => p.Name == "Cream")!,
-            //        ClientCard = db.ClientCard.FirstOrDefault(c => c.ClientCardNumber == 987654321)!,
-            //        Value = 0.1f,
-            //        StartDate = new DateTime(2023, 12, 17),
-            //        EndDate = new DateTime(2023, 12, 21)
-            //       }
-            //    );
-            //db.SaveChanges();
+            db.ProductDiscount.AddRange(
+                new ProductDiscount
+                {
+                    Product = db.Product.FirstOrDefault(b => b.Name == "Cream")!,
+                    ClientCard = db.ClientCard.FirstOrDefault(b => b.ClientCardNumber == 987654)!,
+                    Value = 10,
+                    StartDate = new DateTime(2023, 12, 17),
+                    EndDate = new DateTime(2023, 12, 21)
+                   }
+                );
+            db.SaveChanges();
         }
     }
 }
