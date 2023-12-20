@@ -42,15 +42,23 @@ namespace Supermarket.Data
         private static void PopulateExp(SupermarketDbContext db)
         {
             db.IssueType.AddRange(
-                new Models.IssueType { Name = "Expired Products", IssueDescription = "Products being sold after the expiration date" },
+                new Models.IssueType { Name = "Cross-Contamination", IssueDescription = "Transfer of contaminants between products, often related to improper handling or storage" },
+                new Models.IssueType { Name = "Customer Complaints", IssueDescription = "Issues reported by customers regarding the quality or safety of products" },
                 new Models.IssueType { Name = "Deterioration and Damage", IssueDescription = "Products damaged during transportation, storage, or handling, compromising their quality" },
-                new Models.IssueType { Name = "Cross-Contamination", IssueDescription = "Transfer of contaminants between products, often related to improper handling or storage" }
-            );
+                new Models.IssueType { Name = "Expired Products", IssueDescription = "Products being sold after the expiration date" },
+                new Models.IssueType { Name = "Inadequate Storage Conditions", IssueDescription = "Products stored in conditions that may affect their quality, such as temperature or humidity issues" },
+                new Models.IssueType { Name = "Incorrect Pricing", IssueDescription = "Mismatch between the displayed price and the actual price at the point of sale" },
+                new Models.IssueType { Name = "Mislabeling", IssueDescription = "Incorrect or misleading product labeling, including inaccurate nutritional information or allergen details" },
+                new Models.IssueType { Name = "Out-of-Stock", IssueDescription = "Products unavailable for purchase despite being listed as in-stock" },
+                new Models.IssueType { Name = "Sanitation and Cleanliness", IssueDescription = "Concerns related to the cleanliness and hygiene of the supermarket premises" }
+              );
 
-            db.ProductExpiration.AddRange(
+            
+
+             db.ProductExpiration.AddRange(
                 new Models.ProductExpiration { ProductId = 1, BatchNumber = "LOTE123", ExpirationDate = new DateTime(), Quantity = 2 }
              );
-
+            
             db.SaveChanges();
         }
         private static void PopulateBrand(SupermarketDbContext db)
@@ -58,9 +66,22 @@ namespace Supermarket.Data
             if (db.Brand.Any()) return;
 
             db.Brand.AddRange(
-                    new Brand { Name = "Nivea" },
+                    new Brand { Name = "Coca-Cola" },
+                    new Brand { Name = "Colgate" },
+                    new Brand { Name = "Dove" },
                     new Brand { Name = "Frankfurt" },
-                    new Brand { Name = "Lays" }
+                    new Brand { Name = "General Mills" },
+                    new Brand { Name = "Heinz" },
+                    new Brand { Name = "Huggies" },
+                    new Brand { Name = "Johnson & Johnson" },
+                    new Brand { Name = "Kellogg's" },
+                    new Brand { Name = "Lays" },
+                    new Brand { Name = "Nestle" },
+                    new Brand { Name = "Nivea" },
+                    new Brand { Name = "Pampers" },
+                    new Brand { Name = "Procter & Gamble" },
+                    new Brand { Name = "Quaker" },
+                    new Brand { Name = "Tide" }
                 );
 
             db.SaveChanges();
@@ -71,9 +92,23 @@ namespace Supermarket.Data
             if (db.Category.Any()) return;
 
             db.Category.AddRange(
-                    new Category { Name = "Hygiene" },
+                    new Category { Name = "Baby Care" },
+                    new Category { Name = "Bakery" },
                     new Category { Name = "Canned" },
-                    new Category { Name = "Drinks" }
+                    new Category { Name = "Condiments and Sauces" },
+                    new Category { Name = "Dairy and Cheese" },
+                    new Category { Name = "Drinks" },
+                    new Category { Name = "Electronics and Appliances" },
+                    new Category { Name = "Fresh Produce" },
+                    new Category { Name = "Frozen Foods" },
+                    new Category { Name = "Home and Kitchen" },
+                    new Category { Name = "Household Cleaning" },
+                    new Category { Name = "Hygiene" },
+                    new Category { Name = "Meat and Seafood" },
+                    new Category { Name = "Office and School Supplies" },
+                    new Category { Name = "Personal Care" },
+                    new Category { Name = "Pet Supplies" },
+                    new Category { Name = "Snacks" }
                 );
 
             db.SaveChanges();
