@@ -4,41 +4,62 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Criar novo Pedido de Folga</h1>
+<h1>Create</h1>
 
-
+<h4>Folga</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
-           
-            
             <div class="form-group">
-                <label asp-for="DataInicio" class="control-label">Data de Início </label>
+                <label asp-for="FuncionarioId" class="control-label"></label>
+                <select asp-for="FuncionarioId" class ="form-control" asp-items="ViewBag.FuncionarioId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="GestorId" class="control-label"></label>
+                <input asp-for="GestorId" class="form-control" />
+                <span asp-validation-for="GestorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <input asp-for="Status" class="form-control" />
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataPedido" class="control-label"></label>
+                <input asp-for="DataPedido" class="form-control" />
+                <span asp-validation-for="DataPedido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataResultado" class="control-label"></label>
+                <input asp-for="DataResultado" class="form-control" />
+                <span asp-validation-for="DataResultado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataInicio" class="control-label"></label>
                 <input asp-for="DataInicio" class="form-control" />
                 <span asp-validation-for="DataInicio" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DataFim" class="control-label">Data de Fim </label>
+                <label asp-for="DataFim" class="control-label"></label>
                 <input asp-for="DataFim" class="form-control" />
                 <span asp-validation-for="DataFim" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Motivo" class="control-label">Motivo </label>
-                <input asp-for="Motivo" class="form-control" />
-                <span asp-validation-for="Motivo" class="text-danger"></span>
+                <label asp-for="motivo" class="control-label"></label>
+                <select asp-for="motivo" class="form-control"></select>
+                <span asp-validation-for="motivo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Submeter" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Voltar</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

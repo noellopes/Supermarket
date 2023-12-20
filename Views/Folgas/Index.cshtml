@@ -4,35 +4,37 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Folgas</h1>
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert_success" role="alert">@TempData["SuccessMessage"]</div>
-}
+<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Criar novo pedido de folga</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                Gestor
+                @Html.DisplayNameFor(model => model.GestorId)
             </th>
             <th>
-                Status
+                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                Data Pedido
+                @Html.DisplayNameFor(model => model.DataPedido)
             </th>
             <th>
-                Início
+                @Html.DisplayNameFor(model => model.DataResultado)
             </th>
             <th>
-                Fim
+                @Html.DisplayNameFor(model => model.DataInicio)
             </th>
             <th>
-                Motivo
+                @Html.DisplayNameFor(model => model.DataFim)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.motivo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Funcionario)
             </th>
             <th></th>
         </tr>
@@ -41,7 +43,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Gestor)
+                @Html.DisplayFor(modelItem => item.GestorId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
@@ -50,18 +52,24 @@
                 @Html.DisplayFor(modelItem => item.DataPedido)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.DataResultado)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.DataInicio)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DataFim)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Motivo)
+                @Html.DisplayFor(modelItem => item.motivo)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FolgaId">Alterar</a> |
-                <a asp-action="Details" asp-route-id="@item.FolgaId">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.FolgaId">Eliminar</a>
+                @Html.DisplayFor(modelItem => item.Funcionario.Employee_Address)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FolgaId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.FolgaId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.FolgaId">Delete</a>
             </td>
         </tr>
 }

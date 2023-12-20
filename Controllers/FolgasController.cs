@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,9 +22,8 @@ namespace Supermarket.Controllers
         // GET: Folgas
         public async Task<IActionResult> Index()
         {
-              return _context.Folga != null ? 
-                          View(await _context.Folga.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Folga'  is null.");
+            var supermarketDbContext = _context.Folga.Include(f => f.Funcionario);
+            return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: Folgas/Details/5
@@ -37,6 +35,7 @@ namespace Supermarket.Controllers
             }
 
             var folga = await _context.Folga
+                .Include(f => f.Funcionario)
                 .FirstOrDefaultAsync(m => m.FolgaId == id);
             if (folga == null)
             {
@@ -49,6 +48,7 @@ namespace Supermarket.Controllers
         // GET: Folgas/Create
         public IActionResult Create()
         {
+            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address");
             return View();
         }
 
@@ -57,17 +57,15 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FolgaId,Gestor,Status,DataPedido,DataInicio,DataFim,Motivo")] Folga folga)
+        public async Task<IActionResult> Create([Bind("FolgaId,FuncionarioId,GestorId,Status,DataPedido,DataResultado,DataInicio,DataFim,motivo")] Folga folga)
         {
             if (ModelState.IsValid)
             {
-                folga.DataPedido = DateTime.Now;
-                folga.Status = "Pendente";
                 _context.Add(folga);
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "A sua folga foi adicionada com sucesso. Brevemente iremos dar resposta ao seu pedido";
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", folga.FuncionarioId);
             return View(folga);
         }
 
@@ -84,6 +82,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", folga.FuncionarioId);
             return View(folga);
         }
 
@@ -92,7 +91,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FolgaId,Gestor,Status,DataPedido,DataInicio,DataFim,Motivo")] Folga folga)
+        public async Task<IActionResult> Edit(int id, [Bind("FolgaId,FuncionarioId,GestorId,Status,DataPedido,DataResultado,DataInicio,DataFim,motivo")] Folga folga)
         {
             if (id != folga.FolgaId)
             {
@@ -103,11 +102,8 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    folga.DataPedido = DateTime.Now;
-                    folga.Status = "Pendente";
                     _context.Update(folga);
                     await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "A sua folga foi adicionada com sucesso. Brevemente iremos dar resposta ao seu pedido";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -122,6 +118,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", folga.FuncionarioId);
             return View(folga);
         }
 
@@ -134,6 +131,7 @@ namespace Supermarket.Controllers
             }
 
             var folga = await _context.Folga
+                .Include(f => f.Funcionario)
                 .FirstOrDefaultAsync(m => m.FolgaId == id);
             if (folga == null)
             {
@@ -157,48 +155,14 @@ namespace Supermarket.Controllers
             {
                 _context.Folga.Remove(folga);
             }
-            
-            await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "A sua folga foi eliminada com sucesso.";
 
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool FolgaExists(int id)
         {
-          return (_context.Folga?.Any(e => e.FolgaId == id)).GetValueOrDefault();
+            return (_context.Folga?.Any(e => e.FolgaId == id)).GetValueOrDefault();
         }
-
-        public IActionResult FolgasPendentes()
-        {
-            var FolgasPendentes = _context.Folga.Where(f => f.Status == "Pendente").ToList();
-            return View(FolgasPendentes);
-        }
-        //Método para aprovar ou rejeitar folga
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult>AprovarRejeitarFolga(int folgaId, bool aprovar, string gestor)
-        {
-            var folga = await _context.Folga.FindAsync(folgaId);
-
-            if (folga == null)
-            {
-                return NotFound();
-            }
-            folga.Gestor = gestor;
-            folga.Status = aprovar ? "Aprovada" : "Rejeitada";
-
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(FolgasPendentes));
-        }
-
-        public IActionResult FolgasAprovadas()
-        {
-            var FolgasAprovadas = _context.Folga.Where(f => f.Status == "Aprovada").ToList();
-            return View(FolgasAprovadas);
-        }
-
     }
 }
