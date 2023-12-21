@@ -9,14 +9,14 @@ namespace Supermarket.Models
         [Key]
         public int FolgaId { get; set; }
 
-
+        [Required]
 
         public int FuncionarioId { get; set; }
 
 
 
 
-
+        
         public int? GestorId { get; set; }
         public bool? Status { get; set; }
 
@@ -35,12 +35,14 @@ namespace Supermarket.Models
         [Required]
 
         [DataType(DataType.Date)]
+        
         public DateTime? DataInicio { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         public DateTime? DataFim { get; set; }
 
+        [Required]
         public Motivo motivo { get; set; }
 
 
