@@ -35,6 +35,12 @@ namespace Supermarket.Controllers
                 .Where(s => s.HallwayId == hallwaysId)
                 .ToListAsync();
 
+            var hallway = _context.Hallway
+            .Include(h => h.Store) 
+            .FirstOrDefault(h => h.HallwayId == hallwaysId);
+
+            ViewBag.StoreId = hallway.StoreId;
+
             ViewBag.HallwaysId = hallwaysId;
             ViewBag.HallaysName = hallways.Description;
             ViewBag.Shelves = shelves;
@@ -56,6 +62,7 @@ namespace Supermarket.Controllers
             var shelf = await _context.Shelf
                 .Include(s => s.Hallway)
                 .FirstOrDefaultAsync(m => m.ShelfId == id);
+
             if (shelf == null)
             {
                 return NotFound();
@@ -64,23 +71,18 @@ namespace Supermarket.Controllers
             return View(shelf);
         }
 
-        // GET: Shelves/Create
         public IActionResult Create(int? hallwaysId)
         {
             if (hallwaysId.HasValue)
             {
                 ViewBag.HallwaysId2 = hallwaysId.Value;
-                ViewBag.HallwaysName = _context.Store.Find(hallwaysId.Value)?.Name;
-                ViewBag.HallwayId = new SelectList(_context.Hallway, "HallwayId", "Description", hallwaysId.Value);
+                ViewBag.HallwaysName = _context.Hallway.Find(hallwaysId.Value)?.Description;
             }
-            else
-            {
-                ViewBag.HallwayId = new SelectList(_context.Hallway, "HallwayId", "Description");
-            }
+
+            ViewBag.HallwayIdOptions = new SelectList(_context.Hallway, "HallwayId", "Description");
 
             return View();
         }
-
         // POST: Shelves/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -100,7 +102,7 @@ namespace Supermarket.Controllers
                     _context.Add(shelf);
                     await _context.SaveChangesAsync();
 
-                    ViewBag.Message = "Shelf successfully created.";
+                    TempData["Message"] = "Hallway successfully created.";
                     shelf.Hallway = await _context.Hallway.FindAsync(shelf.HallwayId);
                     return RedirectToAction("Details", new { id = shelf.ShelfId, hallwayId = shelf.HallwayId });
                 }
@@ -154,7 +156,7 @@ namespace Supermarket.Controllers
                     {
                         _context.Update(shelf);
                         await _context.SaveChangesAsync();
-                        ViewBag.Message = "Hallways successfully edited.";
+                        ViewBag.Message = "Shelf successfully edited.";
                         shelf.Hallway = await _context.Hallway.FindAsync(shelf.HallwayId);
 
                         return View("Details", shelf);
@@ -197,13 +199,14 @@ namespace Supermarket.Controllers
 
             if (hasProductsAssociated)
             {
+                
                 ViewBag.ErrorMessage = "It is not possible to delete the shelfts  as there are products associated with it";
                 ViewBag.hasProductsAssociated = await _context.Shelft_ProductExhibition
                     .Include(wp => wp.Product)
                     .Where(wp => wp.ShelfId == id)
                     .ToListAsync();
 
-                return View("Delete");
+                return View("Delete",shelf);
             }
 
             return View(shelf);
@@ -225,7 +228,48 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index", "Shelves", new { hallwayId = shelf?.HallwayId });
+
+        }
+
+        public IActionResult ShelfProducts(int shelfId)
+        {
+            var shelfInfo = _context.Shelf
+                .Where(s => s.ShelfId == shelfId)
+                .Select(s => new
+                {
+                    ShelfName = s.Name,
+                    HallwayId = s.HallwayId
+                })
+                .FirstOrDefault();
+
+            if (shelfInfo == null)
+            {
+                return NotFound();
+            }
+
+            var products = _context.Shelft_ProductExhibition
+                .Where(sp => sp.ShelfId == shelfId && sp.Product.Name != null)
+                .Include(sp => sp.Product)
+                .ThenInclude(p => p.Brand)
+                .GroupBy(sp => sp.ProductId) // Agrupar por ProductId
+                .Select(group => new
+                {
+                    ProductName = group.First().Product.Name,
+                    ProductDescription = group.First().Product.Description,
+                    BrandName = group.First().Product.Brand != null ? group.First().Product.Brand.Name : "No Brand",
+                    Quantity = group.Sum(p => p.Quantity)
+                })
+                .ToList();
+
+            ViewBag.HallwayId = shelfInfo.HallwayId;
+            ViewBag.ShelfName = shelfInfo.ShelfName;
+            ViewBag.TotalProducts = products.Count;
+            ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
+            ViewBag.Products = products;
+
+            return View();
         }
 
         private bool ShelfExists(int id)

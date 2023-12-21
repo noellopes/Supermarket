@@ -39,8 +39,8 @@
 
 <div class="card">
     <div class="card-body">
-        <h2 class="card-title">@ViewBag.HallaysName - Hallways</h2>
-        <p class="card-text">Total Hallways: @ViewBag.TotalShelft</p>
+        <h2 class="card-title">@ViewBag.HallaysName - Shelf</h2>
+        <p class="card-text">Total Shelf: @ViewBag.TotalShelft</p>
     </div>
 </div>
 
@@ -64,6 +64,7 @@
                         <div class="btn-group" role="group" aria-label="Actions">
                             <a asp-controller="Shelves" asp-action="Edit" asp-route-id="@shelf.ShelfId" class="btn btn-secondary">Edit</a>
                             <a asp-controller="Shelves" asp-action="Details" asp-route-id="@shelf.ShelfId" class="btn btn-secondary">Details</a>
+                            <a asp-controller="Shelves" asp-action="ShelfProducts" asp-route-shelfId="@shelf.ShelfId" class="btn btn-secondary">View Products</a>
                             <a asp-controller="Shelves" asp-action="Delete" asp-route-id="@shelf.ShelfId" class="btn btn-danger">Delete</a>
                         </div>
                     </td>
@@ -78,5 +79,5 @@ else
 }
 
 
-<a asp-controller="Shelves" asp-action="Create" class="btn btn-create">Create Shelf</a>
-<a asp-action="Index" asp-controller="Hallways" class="btn btn-secondary">Back to Hallway List</a>
+<a asp-controller="Shelves" asp-action="Create" asp-route-hallwaysId="@ViewBag.HallwaysId" class="btn btn-create">Create Shelf</a>
+<a asp-action="Index" asp-controller="Hallways" asp-route-storeId="@ViewBag.StoreId" class="btn btn-secondary">Back to Hallway List</a>

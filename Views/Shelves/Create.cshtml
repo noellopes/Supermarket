@@ -23,8 +23,12 @@
                 <input type="hidden" asp-for="HallwayId" />
                 <div class="form-group">
                     <label asp-for="HallwayId" class="control-label"></label>
-                    <input asp-for="HallwayId" class="form-control" readonly />
+                    <select asp-for="HallwayId" class="form-control" readonly>
+                        <option value="@ViewBag.HallwaysId2" selected>@ViewBag.HallwaysName</option>
+                    </select>
                 </div>
+
+                
             }
             else
             {
@@ -36,14 +40,13 @@
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" asp-route-hallwaysId="@ViewBag.HallwaysId2" class="btn btn-secondary">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{

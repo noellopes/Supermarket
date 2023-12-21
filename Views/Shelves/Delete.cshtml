@@ -8,7 +8,9 @@
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <h4 class="alert-heading">Error</h4>
         <p>@ViewBag.ErrorMessage</p>
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index" asp-route-hallwaysId="@Model.HallwayId" class="btn btn-secondary">Back to List</a>
+
+       
     </div>
 }
 
@@ -30,7 +32,6 @@
                     <tr>
                         <td>@productAssociated.Product.Name</td>
                         <td>@productAssociated.Quantity</td>
-                        <td><a asp-controller="Shelft_ProductExhibition" asp-action="Details" asp-route-ShelfId="@productAssociated.ShelfId" asp-route-ProductId="@productAssociated.ProductId" class="btn btn-info">Details</a></td>
                     </tr>
                 }
             </tbody>
@@ -63,7 +64,7 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="ShelfId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+            <a asp-action="Index" asp-route-hallwaysId="@Model.HallwayId" class="btn btn-secondary">Back to List</a>
     </form>
 </div>
 }

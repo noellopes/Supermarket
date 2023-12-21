@@ -56,6 +56,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Hallways/Create
+      
         public IActionResult Create(int? storeId)
         {
             if (storeId.HasValue)
@@ -87,9 +88,8 @@ namespace Supermarket.Controllers
                 {
                     _context.Add(hallway);
                     await _context.SaveChangesAsync();
-
-                    ViewBag.Message = "Hallway successfully created.";
-                    return RedirectToAction("Details", new { id = hallway.HallwayId, storeId = hallway.StoreId });
+                    TempData["Message"] = "Hallway successfully created.";
+                    return RedirectToAction("Details", new { id = hallway.HallwayId, storeId = hallway.StoreId});
 
                 }
             }
