@@ -224,7 +224,7 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("ShelfProducts", "Shelves", new { shelfId = shelft_ProductExhibition.ShelfId });
         }
 
         private bool Shelft_ProductExhibitionExists(int id)
