@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -47,11 +48,12 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments
-        public IActionResult Index(string searchTerm, int page = 1)
+        public IActionResult Index(string searchTerm, int page = 1, int pageSize = 2)
         {
 
-            var pageSize = 4;
             IQueryable<Departments> departmentsQuery = _context.Departments;
+            //numero de paginas que da para seelecionar
+            var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
 
             // Filtra apenas os departamentos ativos
             departmentsQuery = departmentsQuery
@@ -63,7 +65,10 @@ namespace Supermarket.Controllers
                 departmentsQuery = departmentsQuery
                     .Where(d => d.NameDepartments.Contains(searchTerm));
             }
-
+            if (!pageSizes.Contains(pageSize))
+            {
+                pageSizes.Add(pageSize);
+            }
             var totalItems = departmentsQuery.Count();
 
             var pagination = new PagingInfo
@@ -82,11 +87,14 @@ namespace Supermarket.Controllers
             var viewModel = new ProductsListViewModel
             {
                 Departments = departments,
-                Pagination = pagination
+                Pagination = pagination,
+                SelectedPageSize = pageSize
             };
 
             // Passa o termo de pesquisa para a view, se houver
             ViewData["SearchTerm"] = searchTerm;
+            ViewData["PageSizes"] = new SelectList(pageSizes);
+            ViewData["SelectedPageSize"] = pageSize;
 
             return View(viewModel);
         }
