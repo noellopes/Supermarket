@@ -36,9 +36,9 @@ namespace Supermarket.Controllers
         //pesquisa por nome do departamentoInop 
         public IActionResult pesqNomeFalse(string searchTerm)
         {
-         var results = _context.Departments
-        .Where(d => (d.StateDepartments.Equals(false)) && d.NameDepartments.Contains(searchTerm))
-        .ToList();
+            var results = _context.Departments
+                .Where(d => (d.StateDepartments.Equals(false)) && d.NameDepartments.Contains(searchTerm))
+                .ToList();
             if (results.Count == 0)
             {
                 ViewBag.Message = "Nenhum resultado encontrado para a pesquisa.";
@@ -99,19 +99,55 @@ namespace Supermarket.Controllers
             return View(viewModel);
         }
         // GET: DepartmentsInop
-        public async Task<IActionResult> DepInop()
+        public IActionResult IndexInop(string searchTerm, int page = 1, int pageSize = 2)
         {
-            IQueryable<Departments> departmentsInopQuery = _context.Departments;
 
-            if (departmentsInopQuery == null || !departmentsInopQuery.Any())
+            IQueryable<Departments> departmentsQuery = _context.Departments;
+            //numero de paginas que da para seelecionar
+            var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
+
+            // Filtra apenas os departamentos ativos
+            departmentsQuery = departmentsQuery
+                .Where(d => d.StateDepartments.Equals(false));
+
+            if (!string.IsNullOrEmpty(searchTerm))
             {
-                return Problem("Entity set 'SupermarketDbContext.Departments' is null or empty.");
+                // Aplica a pesquisa se o termo de pesquisa não estiver vazio
+                departmentsQuery = departmentsQuery
+                    .Where(d => d.NameDepartments.Contains(searchTerm));
             }
+            if (!pageSizes.Contains(pageSize))
+            {
+                pageSizes.Add(pageSize);
+            }
+            var totalItems = departmentsQuery.Count();
 
-            var inactiveDepartments = await departmentsInopQuery
-                .Where(sp => sp.StateDepartments.Equals(false))
-                .ToListAsync();
-            return View("DepInop", inactiveDepartments);
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            var departments = departmentsQuery
+                .OrderBy(p => p.NameDepartments)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var viewModel = new ProductsListViewModel
+            {
+                Departments = departments,
+                Pagination = pagination,
+                SelectedPageSize = pageSize
+            };
+
+            // Passa o termo de pesquisa para a view, se houver
+            ViewData["SearchTerm"] = searchTerm;
+            ViewData["PageSizes"] = new SelectList(pageSizes);
+            ViewData["SelectedPageSize"] = pageSize;
+
+            return View("DepInop", viewModel);
         }
 
         // GET: Departments/Details/

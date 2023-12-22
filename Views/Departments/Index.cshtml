@@ -28,7 +28,7 @@
 
 <div class="mt-3 mb-3">
     <a asp-action="Create" class="btn btn-primary">Novo Departamento</a>
-    <a asp-action="DepInop" class="btn btn-primary">Departamentos Inativos</a>
+    <a asp-controller="Departments" asp-action="IndexInop" class="btn btn-primary">Departamentos Inativos</a>
 </div>
 
    
@@ -90,20 +90,20 @@
 }
     </tbody>
 </table>
-<div class="d-flex justify-content-between align-items-center">
-    <nav aria-label="Page navigation">
-        <ul class="pagination">
-            @{
-                int initialPage = Model.Pagination.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-                if (initialPage < 1) initialPage = 1;
+<nav aria-label="Page navigation">
+    <div class="pagination-container d-flex justify-content-between align-items-center">
+        @{
+            int initialPage = Model.Pagination.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+            if (initialPage < 1) initialPage = 1;
 
-                int finalPage = Model.Pagination.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-                if (finalPage > Model.Pagination.TotalPages) finalPage = Model.Pagination.TotalPages;
-            }
+            int finalPage = Model.Pagination.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+            if (finalPage > Model.Pagination.TotalPages) finalPage = Model.Pagination.TotalPages;
+        }
 
+        <div class="pagination d-flex list-unstyled">
             @for (int p = initialPage; p <= finalPage; p++)
             {
-                <li class="page-item @(p == Model.Pagination.CurrentPage ? "active" : "")">
+                <div class="page-item @(p == Model.Pagination.CurrentPage ? "active" : "") d-flex">
                     @if (p == Model.Pagination.CurrentPage)
                     {
                         <span class="page-link">@p <span class="sr-only"></span></span>
@@ -112,17 +112,17 @@
                     {
                         <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
                     }
-                </li>
+                </div>
             }
-        </ul>
-    </nav>
+        </div>
 
-    <li class="col-md-6 d-flex">
-        <label class ="mr-2">Tamanho da Página: </label>
-        @foreach (var pageSize in pageSizes)
-        {
-            var isActive = (Model.SelectedPageSize == pageSize) ? "active" : "";
-            <a asp-action="Index" asp-route-pageSize="@pageSize" class="btn btn-primary @isActive">@((pageSize == int.MaxValue) ? "Todos" : pageSize.ToString())</a>
-        }
-    </li>
-</div>
+        <div class="col-md-6 d-flex">
+            <label class="ml-2">Tamanho da Página:</label>
+            @foreach (var pageSize in pageSizes)
+            {
+                var isActive = (Model.SelectedPageSize == pageSize) ? "active" : "";
+                <a asp-action="Index" asp-route-pageSize="@pageSize" class="btn btn-primary @isActive">@((pageSize == int.MaxValue) ? "Todos" : pageSize.ToString())</a>
+            }
+        </div>
+    </div>
+</nav>
