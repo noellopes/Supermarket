@@ -14,30 +14,43 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IDDepartments" />
             <div class="form-group">
-                <label asp-for="NameDepartments" class="control-label"></label>
+                <label asp-for="NameDepartments" class="control-label">Nome dos Departamento</label>
                 <input asp-for="NameDepartments" class="form-control" />
                 <span asp-validation-for="NameDepartments" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DescriptionDepartments" class="control-label"></label>
+                <label asp-for="DescriptionDepartments" class="control-label">Descriçao dos Departamento</label>
                 <input asp-for="DescriptionDepartments" class="form-control" />
                 <span asp-validation-for="DescriptionDepartments" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="StateDepartments" /> @Html.DisplayNameFor(model => model.StateDepartments)
-                </label>
-            </div>
             <div class="form-group">
-                <label asp-for="SkillsDepartments" class="control-label"></label>
-                <input asp-for="SkillsDepartments" class="form-control" />
-                <span asp-validation-for="SkillsDepartments" class="text-danger"></span>
+                <label for="stateDropdown">Estado do Departamento</label>
+                <select class="form-control" id="stateDropdown" asp-for="StateDepartments">
+                    <option value="">----clique para selecionar uma opção----</option>
+                    <option value="true">Ativo</option>
+                    <option value="false">Desativo</option>
+                </select>
+                <span asp-validation-for="StateDepartments" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="QuatDepMed" class="control-label"></label>
-                <input asp-for="QuatDepMed" class="form-control" />
-                <span asp-validation-for="QuatDepMed" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <label for="stateDropdown">Formação</label>
+                    <select class="form-control" id="stateDropdown" asp-for="StateDepartments">
+                        <option value="">----clique para selecionar uma opção-----</option>
+                        <option value="A1">A1</option>
+                        <option value="B2">B2</option>
+                        <option value="C3">C3</option>
+                        <option value="D4">D4</option>
+                        <option value="F5">F5</option>
+                        <option value="E6">E6</option>
+                        <option value="G7">G7</option>
+                    </select>
+                    <span asp-validation-for="SkillsDepartments" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                <label asp-for="QuatDepMed" class="control-label">Quantidade de senhas para a media</label>
+                    <input asp-for="QuatDepMed" class="form-control" type="number" min="1" max="100" />
+                    <span asp-validation-for="QuatDepMed" class="text-danger"></span>
+                </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
