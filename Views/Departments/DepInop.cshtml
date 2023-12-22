@@ -88,4 +88,40 @@
         }
     </tbody>
 </table>
+<nav aria-label="Page navigation">
+    <div class="pagination-container d-flex justify-content-between align-items-center">
+        @{
+            int initialPage = Model.Pagination.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+            if (initialPage < 1) initialPage = 1;
 
+            int finalPage = Model.Pagination.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+            if (finalPage > Model.Pagination.TotalPages) finalPage = Model.Pagination.TotalPages;
+        }
+
+        <div class="pagination d-flex list-unstyled">
+            @for (int p = initialPage; p <= finalPage; p++)
+            {
+                <div class="page-item @(p == Model.Pagination.CurrentPage ? "active" : "") d-flex">
+                    @if (p == Model.Pagination.CurrentPage)
+                    {
+                        <span class="page-link">@p <span class="sr-only"></span></span>
+                    }
+                    else
+                    {
+                        <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="col-md-6 d-flex">
+            <label class="ml-2">Tamanho da Página:</label>
+            @foreach (var pageSize in pageSizes)
+            {
+                var isActive = (Model.SelectedPageSize == pageSize) ? "active" : "";
+                <a asp-action="IndexInop" asp-route-pageSize="@pageSize" class="btn btn-primary @isActive">@((pageSize == int.MaxValue) ? "Todos" : pageSize.ToString())</a>
+            }
+
+        </div>
+    </div>
+</nav>

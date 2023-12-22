@@ -123,6 +123,7 @@
                 var isActive = (Model.SelectedPageSize == pageSize) ? "active" : "";
                 <a asp-action="Index" asp-route-pageSize="@pageSize" class="btn btn-primary @isActive">@((pageSize == int.MaxValue) ? "Todos" : pageSize.ToString())</a>
             }
-        </div>
+  
+      </div>
     </div>
 </nav>
