@@ -8,7 +8,7 @@
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <h4 class="alert-heading">Error</h4>
         <p>@ViewBag.Message</p>
-        <a asp-action="Index">Back to List</a>
+        <a asp-controller="Shelves" asp-action="ShelfProducts" asp-route-shelfId="@Model.ShelfId" class="btn btn-secondary">Back to List</a>
     </div>
 
 }
@@ -51,7 +51,7 @@ else{
         <input type="hidden" asp-for="ProductId" />
         <input type="hidden" asp-for="ShelfId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+            <a asp-controller="Shelves" asp-action="ShelfProducts" asp-route-shelfId="@ViewBag.ShelfId2" class="btn btn-secondary">Back to List</a>
     </form>
      }
 </div>

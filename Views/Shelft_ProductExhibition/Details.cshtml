@@ -51,6 +51,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-ProductId="@Model.ProductId" asp-route-shelftId="@Model.ShelfId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-productId="@Model.ProductId" asp-route-shelfId="@Model.ShelfId" class="btn btn-primary">Edit</a> |
+    <a asp-controller="Shelves" asp-action="ShelfProducts" asp-route-shelfId="@Model.ShelfId" class="btn btn-secondary">Back to List</a>
 </div>
