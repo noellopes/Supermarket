@@ -90,38 +90,39 @@
 }
     </tbody>
 </table>
-<nav aria-label="Page navigation">
-    <ul class="pagination">
-        @{
-            int initialPage = Model.Pagination.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-            if (initialPage < 1) initialPage = 1;
+<div class="d-flex justify-content-between align-items-center">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            @{
+                int initialPage = Model.Pagination.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                if (initialPage < 1) initialPage = 1;
 
-            int finalPage = Model.Pagination.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-            if (finalPage > Model.Pagination.TotalPages) finalPage = Model.Pagination.TotalPages;
-        }
+                int finalPage = Model.Pagination.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                if (finalPage > Model.Pagination.TotalPages) finalPage = Model.Pagination.TotalPages;
+            }
 
-        @for (int p = initialPage; p <= finalPage; p++)
+            @for (int p = initialPage; p <= finalPage; p++)
+            {
+                <li class="page-item @(p == Model.Pagination.CurrentPage ? "active" : "")">
+                    @if (p == Model.Pagination.CurrentPage)
+                    {
+                        <span class="page-link">@p <span class="sr-only"></span></span>
+                    }
+                    else
+                    {
+                        <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                    }
+                </li>
+            }
+        </ul>
+    </nav>
+
+    <li class="col-md-6 d-flex">
+        <label class ="mr-2">Tamanho da Página: </label>
+        @foreach (var pageSize in pageSizes)
         {
-            <li class="page-item @(p == Model.Pagination.CurrentPage ? "active" : "")">
-                @if (p == Model.Pagination.CurrentPage)
-                {
-                    <span class="page-link">@p <span class="sr-only"></span></span>
-                }
-                else
-                {
-                    <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
-                }
-            </li>
+            var isActive = (Model.SelectedPageSize == pageSize) ? "active" : "";
+            <a asp-action="Index" asp-route-pageSize="@pageSize" class="btn btn-primary @isActive">@((pageSize == int.MaxValue) ? "Todos" : pageSize.ToString())</a>
         }
-        <li class="col-md-6 ">
-            
-                <label>Tamanho da Página:</label>
-                @foreach (var pageSize in pageSizes)
-                {
-                    var isActive = (Model.SelectedPageSize == pageSize) ? "active" : "";
-                    <a asp-action="Index" asp-route-pageSize="@pageSize" class="btn btn-primary @isActive">@((pageSize == int.MaxValue) ? "Todos" : pageSize.ToString())</a>
-                }
-            </li>
-            
-    </ul>
-</nav>
+    </li>
+</div>
