@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Edit";
-
 }
 
 <h1>Edit</h1>
@@ -15,57 +14,72 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="EmployeeId" />
             <div class="form-group">
-                <label asp-for="Employee_Name" class="control-label">Name</label>
+                <label asp-for="Employee_Name" class="control-label"></label>
                 <input asp-for="Employee_Name" class="form-control" />
                 <span asp-validation-for="Employee_Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Employee_Email" class="control-label">Email</label>
+                <label asp-for="Employee_Email" class="control-label"></label>
                 <input asp-for="Employee_Email" class="form-control" />
                 <span asp-validation-for="Employee_Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Employee_Password" class="control-label">Password</label>
+                <label asp-for="Employee_Password" class="control-label"></label>
                 <input asp-for="Employee_Password" class="form-control" />
                 <span asp-validation-for="Employee_Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Employee_Phone" class="control-label">Phone</label>
+                <label asp-for="Employee_Phone" class="control-label"></label>
                 <input asp-for="Employee_Phone" class="form-control" />
                 <span asp-validation-for="Employee_Phone" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Employee_Address" class="control-label">Address</label>
+                <label asp-for="Employee_NIF" class="control-label"></label>
+                <input asp-for="Employee_NIF" class="form-control" />
+                <span asp-validation-for="Employee_NIF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Employee_Address" class="control-label"></label>
                 <input asp-for="Employee_Address" class="form-control" />
                 <span asp-validation-for="Employee_Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Employee_Termination_Date" class="control-label">Termination Date</label>
+                <label asp-for="Employee_Birth_Date" class="control-label"></label>
+                <input asp-for="Employee_Birth_Date" class="form-control" />
+                <span asp-validation-for="Employee_Birth_Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Employee_Admission_Date" class="control-label"></label>
+                <input asp-for="Employee_Admission_Date" class="form-control" />
+                <span asp-validation-for="Employee_Admission_Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Employee_Termination_Date" class="control-label"></label>
                 <input asp-for="Employee_Termination_Date" class="form-control" />
                 <span asp-validation-for="Employee_Termination_Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Standard_Check_In_Time" class="control-label">Check In</label>
+                <label asp-for="Standard_Check_In_Time" class="control-label"></label>
                 <input asp-for="Standard_Check_In_Time" class="form-control" />
                 <span asp-validation-for="Standard_Check_In_Time" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Standard_Check_Out_Time" class="control-label">Check Out</label>
+                <label asp-for="Standard_Check_Out_Time" class="control-label"></label>
                 <input asp-for="Standard_Check_Out_Time" class="form-control" />
                 <span asp-validation-for="Standard_Check_Out_Time" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Standard_Lunch_Hour" class="control-label">Lunch Hour</label>
+                <label asp-for="Standard_Lunch_Hour" class="control-label"></label>
                 <input asp-for="Standard_Lunch_Hour" class="form-control" />
                 <span asp-validation-for="Standard_Lunch_Hour" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Standard_Lunch_Time" class="control-label">Lunch Time</label>
+                <label asp-for="Standard_Lunch_Time" class="control-label"></label>
                 <input asp-for="Standard_Lunch_Time" class="form-control" />
                 <span asp-validation-for="Standard_Lunch_Time" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Employee_Time_Bank" class="control-label">Time Bank</label>
+                <label asp-for="Employee_Time_Bank" class="control-label"></label>
                 <input asp-for="Employee_Time_Bank" class="form-control" />
                 <span asp-validation-for="Employee_Time_Bank" class="text-danger"></span>
             </div>
@@ -81,7 +95,5 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

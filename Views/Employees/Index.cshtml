@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Index";
-   
 }
 
 <h1>Index</h1>
@@ -14,9 +13,47 @@
     <thead>
         <tr>
             <th>
-               Name
+                @Html.DisplayNameFor(model => model.Employee_Name)
             </th>
-          
+            <th>
+                @Html.DisplayNameFor(model => model.Employee_Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee_Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee_Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee_NIF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee_Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee_Birth_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee_Admission_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee_Termination_Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Standard_Check_In_Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Standard_Check_Out_Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Standard_Lunch_Hour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Standard_Lunch_Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee_Time_Bank)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -26,7 +63,45 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Employee_Name)
             </td>
-           
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_NIF)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Birth_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Admission_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Termination_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Standard_Check_In_Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Standard_Check_Out_Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Standard_Lunch_Hour)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Standard_Lunch_Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee_Time_Bank)
+            </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.EmployeeId">Details</a> |

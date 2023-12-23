@@ -8,8 +8,10 @@ namespace Supermarket.Models
         [Required]
         public int ScheduleId {  get; set; }
 
-        [Required]
+        
         public int EmployeeId { get; set; }
+
+        public Employee? Employee { get; set; }
 
         public DateTime Date { get; set; }
         public TimeSpan CheckInTime { get; set; }
