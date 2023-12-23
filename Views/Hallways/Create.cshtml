@@ -4,53 +4,115 @@
     ViewData["Title"] = "Create Hallway";
 }
 
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+    .select-card {
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        cursor: pointer;
+    }
+
+    .select-card:hover {
+        background-color: #f8f8f8;
+    }
+
+   
+</style>
+
+
+
+
 <h1>Create Hallway</h1>
 
 <h4>Hallway</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
 
-
- 
-
-@if (ViewBag.StoreId2 != null)
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage2))
 {
-    <div class="form-group">
-        <label asp-for="StoreId" class="control-label">Store</label>
-        <select asp-for="StoreId" class="form-control" readonly>
-                        <option value="@ViewBag.StoreId2" selected>@ViewBag.StoreName</option>
-        </select>
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage2
     </div>
-
 }
-            else
-            {
+<hr />
+<div class="card">
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="StoreId" class="control-label"></label>
-                    <select asp-for="StoreId" class="form-control" >
-                        @foreach (var item in ViewBag.StoreId)
-                        {
-                            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
-                        }
-                    </select>
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
-            }
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" asp-controller="Hallways" asp-route-storeId="@ViewBag.StoreId2" class="btn btn-secondary">Back to List</a>
-            </div>
-        </form>
+
+                @if (ViewBag.StoreId2 != null)
+                {
+                    <div class="form-group">
+                        <label asp-for="StoreId" class="control-label">Store</label>
+                        <div class="select-card">
+                            @ViewBag.StoreName
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label asp-for="StoreId" class="control-label"></label>
+                        <select asp-for="StoreId" class="form-control">
+                            @foreach (var item in ViewBag.StoreId)
+                            {
+                                <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                            }
+                        </select>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <a asp-action="Index" asp-controller="Hallways" asp-route-storeId="@ViewBag.StoreId2" class="btn btn-secondary">Back to List</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
 
 @section Scripts {
     @{

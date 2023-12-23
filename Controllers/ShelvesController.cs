@@ -72,7 +72,7 @@ namespace Supermarket.Controllers
             return View(shelf);
         }
 
-        public IActionResult Create(int hallwaysId)
+        public IActionResult Create(int? hallwaysId)
         {
             
             
@@ -90,10 +90,9 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ShelfId,Name")] Shelf shelf)
         {
-            //HallwayId =0/console
+            
             shelf.HallwayId = (int)TempData["HallwaysId2"];
-            // Log para verificar se a ação está sendo chamada
-            Console.WriteLine("Create Action Called");
+     
         
             if (ModelState.IsValid)
             {
@@ -104,7 +103,7 @@ namespace Supermarket.Controllers
 
                 if (ShelfExists)
                 {
-                    Console.WriteLine("ShelfExists: Another Shelf with the same Name and Hallway already exists.");
+                   
                     TempData["ErrorMessage"] = "Another Shelf with the same Name and Hallway already exists.";
                 }
                 else
@@ -123,20 +122,16 @@ namespace Supermarket.Controllers
                     }
                     catch (DbUpdateException)
                     {
-                        // Handle any exceptions that might occur during saving changes
-                        // You can log the exception or show an error message to the user
-                        Console.WriteLine("DbUpdateException: An error occurred while saving the data.");
-                        ModelState.AddModelError("", "An error occurred while saving the data.");
+                       
                         TempData["ErrorMessage"] = "DataBase conection Error ";
                     }
                 }
             }
            
 
-            // Repopulate ViewData["HallwayId"] for the dropdown list
+           
             ViewData["HallwayId"] = new SelectList(_context.Shelf, "HallwayId", "Name", shelf.HallwayId);
 
-            // Redirect to the "Create" action with the associated hallway ID
             return RedirectToAction("Create", new { hallwaysId = TempData["HallwaysId2"] });
         }
 

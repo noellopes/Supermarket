@@ -61,10 +61,14 @@ namespace Supermarket.Controllers
         {
             if (storeId.HasValue)
             {
+                ViewBag.ErrorMessage2 = TempData["ErrorMessage2"] as string;
                 ViewBag.StoreId2 = storeId.Value;
                 ViewBag.StoreName = _context.Store.Find(storeId.Value)?.Name;
+                TempData["StoreIdId2"] = storeId;
             }
-           
+            else
+                return NotFound();
+
             return View();
         }
 
@@ -73,8 +77,10 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("HallwayId,Description,StoreId")] Hallway hallway)
+        public async Task<IActionResult> Create([Bind("HallwayId,Description")] Hallway hallway)
         {
+            hallway.StoreId = (int)TempData["StoreIdId2"];
+
             if (ModelState.IsValid)
             {
                 bool HallwaysExists = await _context.Hallway.AnyAsync(
@@ -82,20 +88,27 @@ namespace Supermarket.Controllers
 
                 if (HallwaysExists)
                 {
-                    ModelState.AddModelError("", "Another hallway with the same description and store already exists.");
+                    TempData["ErrorMessage2"] = "Another hallway with the same description and store already exists.";
                 }
                 else
                 {
+                    try { 
                     _context.Add(hallway);
                     await _context.SaveChangesAsync();
                     TempData["Message"] = "Hallway successfully created.";
                     return RedirectToAction("Details", new { id = hallway.HallwayId, storeId = hallway.StoreId});
+                    }
+                    catch (DbUpdateException)
+                    {
+
+                        TempData["ErrorMessage2"] = "DataBase conection Error ";
+                    }
 
                 }
             }
 
             ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
-            return View(hallway);
+            return RedirectToAction("Create", new { storeId = TempData["StoreIdId2"] });
         }
         // GET: Hallways/Edit/5
         public async Task<IActionResult> Edit(int? id)
