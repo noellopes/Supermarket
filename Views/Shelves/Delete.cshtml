@@ -60,14 +60,14 @@
                 <tr>
                     <th>Name</th>
                     <th>Quantity</th>
-                    <th></th>
+                    
                 </tr>
             </thead>
             <tbody>
                 @foreach (var productAssociated in ViewBag.hasProductsAssociated)
                 {
                     <tr>
-                        <td>@productAssociated.Product.Name</td
+                        <td>@productAssociated.Product.Name</td>
                         <td>@productAssociated.Quantity</td>
                     </tr>
                 }
