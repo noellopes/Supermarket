@@ -3,6 +3,57 @@
 @{
     ViewData["Title"] = "Shelft Product Exhibition Details";
 }
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+    .select-card {
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        cursor: pointer;
+    }
+
+        .select-card:hover {
+            background-color: #f8f8f8;
+        }
+</style>
 @if (ViewBag.Message != null)
 {
     <div class="alert alert-success" role="alert">
@@ -18,6 +69,8 @@
         @TempData["Message"]
     </div>
 }
+
+<div class="card">
 <h1>Details</h1>
 
 <div>
@@ -51,6 +104,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-ProductId="@Model.ProductId" asp-route-shelftId="@Model.ShelfId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-productId="@Model.ProductId" asp-route-shelfId="@Model.ShelfId" class="btn btn-primary">Edit</a> |
+    <a asp-controller="Shelves" asp-action="ShelfProducts" asp-route-shelfId="@Model.ShelfId" class="btn btn-secondary">Back to List</a>
+</div>
 </div>

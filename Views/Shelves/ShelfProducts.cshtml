@@ -1,4 +1,12 @@
-﻿<style>
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    ViewData["Title"] = "Shelf Products";
+}
+
+<style>
     body {
         padding: 20px;
         background-color: #f8f9fa; /* Cor de fundo mais clara */
@@ -32,7 +40,7 @@
 
 <div class="container">
     <div class="card">
-        <h2 class="mt-4">@ViewBag.StoreName - Products</h2>
+        <h2 class="mt-4">@ViewBag.ShelfName - Products</h2>
 
         <div class="lead">Total Products: @ViewBag.TotalProducts</div>
         <div class="lead">Total Quantity: @ViewBag.TotalQuantity</div>
@@ -45,6 +53,8 @@
                 <th>Description</th>
                 <th>Brand</th>
                 <th>Quantity</th>
+                <th>Action</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -55,9 +65,19 @@
                     <td>@product.ProductDescription</td>
                     <td>@product.BrandName</td>
                     <td>@product.Quantity</td>
+                    <td>
+
+                        <div class="btn-group">
+                            <a asp-controller="Shelft_ProductExhibition" asp-action="Edit" asp-route-productId="@product.ProductId" asp-route-shelfId="@ViewBag.ShelfId" class="btn btn-primary">Edit</a>
+                            <a asp-controller="Shelft_ProductExhibition" asp-action="Details" asp-route-productId="@product.ProductId" asp-route-shelfId="@ViewBag.ShelfId" class="btn btn-primary">Details</a>
+                            <a asp-controller="Shelft_ProductExhibition" asp-action="Delete" asp-route-productId="@product.ProductId" asp-route-shelfId="@ViewBag.ShelfId" class="btn btn-primary">Delete</a>
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-controller="Shelft_ProductExhibition" asp-action="Create" asp-route-shelfId="@ViewBag.ShelfId" class="btn btn-success">Add Product</a>
+    <a asp-action="Index" asp-route-hallwaysId="@ViewBag.HallwayId" class="btn btn-secondary">Back to List</a>
+
 </div>
