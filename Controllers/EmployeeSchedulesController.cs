@@ -36,7 +36,7 @@ namespace Supermarket.Controllers
 
             var employeeSchedule = await _context.EmployeeSchedule
                 .Include(e => e.Employee)
-                .FirstOrDefaultAsync(m => m.ScheduleId == id);
+                .FirstOrDefaultAsync(m => m.EmployeeScheduleId == id);
             if (employeeSchedule == null)
             {
                 return NotFound();
@@ -57,7 +57,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
+        public async Task<IActionResult> Create([Bind("EmployeeScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
         {
             if (ModelState.IsValid)
             {
@@ -91,9 +91,9 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
         {
-            if (id != employeeSchedule.ScheduleId)
+            if (id != employeeSchedule.EmployeeScheduleId)
             {
                 return NotFound();
             }
@@ -107,7 +107,7 @@ namespace Supermarket.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeScheduleExists(employeeSchedule.ScheduleId))
+                    if (!EmployeeScheduleExists(employeeSchedule.EmployeeScheduleId))
                     {
                         return NotFound();
                     }
@@ -132,7 +132,7 @@ namespace Supermarket.Controllers
 
             var employeeSchedule = await _context.EmployeeSchedule
                 .Include(e => e.Employee)
-                .FirstOrDefaultAsync(m => m.ScheduleId == id);
+                .FirstOrDefaultAsync(m => m.EmployeeScheduleId == id);
             if (employeeSchedule == null)
             {
                 return NotFound();
@@ -162,7 +162,7 @@ namespace Supermarket.Controllers
 
         private bool EmployeeScheduleExists(int id)
         {
-          return (_context.EmployeeSchedule?.Any(e => e.ScheduleId == id)).GetValueOrDefault();
+          return (_context.EmployeeSchedule?.Any(e => e.EmployeeScheduleId == id)).GetValueOrDefault();
         }
     }
 }
