@@ -18,7 +18,14 @@ namespace Supermarket.Models
 
         
         public int? GestorId { get; set; }
-        public bool? Status { get; set; }
+        public enum  FolgaStatus
+        {
+            Aprovada,
+            Rejeitada,
+            Pendente
+        }
+
+        public FolgaStatus? Status { get; set; }
 
 
 
@@ -36,11 +43,11 @@ namespace Supermarket.Models
 
         [DataType(DataType.Date)]
         
-        public DateTime? DataInicio { get; set; }
+        public DateTime DataInicio { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime? DataFim { get; set; }
+        public DateTime DataFim { get; set; }
 
         [Required]
         public Motivo motivo { get; set; }
