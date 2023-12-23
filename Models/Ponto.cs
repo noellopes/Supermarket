@@ -8,8 +8,8 @@ namespace Supermarket.Models
         [Required]
         public int PontoId {  get; set; }
 
-        [Required]
         public int EmployeeId { get; set; }
+        public Employee? Employee { get; set; }
 
         [Required]
         public DateTime Date { get; set; }

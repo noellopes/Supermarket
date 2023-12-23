@@ -4,9 +4,7 @@ namespace Supermarket.Models
 {
     public class EmployeeSchedule
     {
-        [Key]
-        [Required]
-        public int ScheduleId {  get; set; }
+        public int EmployeeScheduleId {  get; set; }
 
         
         public int EmployeeId { get; set; }
