@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Supermarket.Models.SupplierAvailability>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPriceSupplier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveryTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Supplier)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitPriceSupplier)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Supplier.HeadQuarters)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SupplierAvailabilityID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SupplierAvailabilityID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SupplierAvailabilityID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
