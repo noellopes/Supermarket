@@ -62,7 +62,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.CategoryDiscount> CategoryDiscounts { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
+        //public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
 
