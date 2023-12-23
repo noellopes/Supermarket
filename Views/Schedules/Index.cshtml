@@ -64,15 +64,26 @@
                 @* <img class="card-img-top" src="..." alt="Card image cap">*@
                 <div class="card-body">
                     <h5 class="card-title">Horário @Html.DisplayFor(modelItem => item.ScheduleId) </h5>
-                    <p class="card-text">@Html.DisplayFor(modelItem => item.ScheduleId)</p>
+                    
+                    @{
+                        if (item.IDDepartments==0)
+                        {
+                            <p class="card-text">Sem departamento</p>
+                        } else
+                        {
+
+                            <p class="card-text">@ViewBag.DepartmentName</p>
+                        }
+                    }
+                    @* <p class="card-text">@Html.DisplayFor(modelItem => item.Departments.NameDepartments)</p> *@
                 </div>
                 <ul class="list-group list-group-flush">
                     @{
-                        string Data = item.StartDate.ToString("dd/mm/yyyy");
-                        <li class="list-group-item"> @Html.DisplayNameFor(item => item.StartDate): <p>@Html.DisplayFor(modelItem => Data)</p></li>
+                        string Data = item.StartDate.ToString("dd/MM/yyyy");
+                        <li class="list-group-item"> Data em que entra em vigor: <p>@Html.DisplayFor(modelItem => Data)</p></li>
                         }
                     <li class="list-group-item">
-                        @Html.DisplayNameFor(item => item.EndDate):
+                        Data em que termina:
                         @*@Html.DisplayFor(modelItem => item.EndDate??.ToString("dd/MM/yyyy"))*@
                         @{
                             if (item.EndDate.HasValue==false)
@@ -85,8 +96,8 @@
                         }
                         
                     </li>
-                    <li class="list-group-item">@Html.DisplayNameFor(item => item.DailyStartTime): <p>@Html.DisplayFor(modelItem => item.DailyStartTime)</p> </li>
-                    <li class="list-group-item">@Html.DisplayNameFor(item => item.DailyFinishTime): <p>@Html.DisplayFor(modelItem => item.DailyFinishTime)</p> </li>
+                    <li class="list-group-item">Hora de começo diário: <p>@item.DailyStartTime.ToString("hh:mm")</p> </li>
+                    <li class="list-group-item">Hora de término diário: <p>@item.DailyFinishTime.ToString("hh:mm")</p> </li>
                 </ul>
                 <div class="card-body">
                     <a asp-action="Edit" asp-route-id="@item.ScheduleId" class="card-link">Edit</a>

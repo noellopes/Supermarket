@@ -22,21 +22,28 @@ namespace Supermarket.Controllers
         // GET: Schedules
         public async Task<IActionResult> Index(int page = 1, int dept = 1)
         {
-            //var Schedule = _context.Schedule.AsQueryable();
+           
 
-            //if (dept != null)
-            //{
-            //    Schedule = Schedule.Where(b => b.IDDepartments== dept);
-            //}
+            int departmentId = _context.Departments
+    .Select(a => a.IDDepartments)
+    .FirstOrDefault();
 
-            //var SchedulesAuthors = Schedule.Include(b => b.IDDepartments);
+            string departmentName = _context.Departments
+       .Where(a => a.IDDepartments == departmentId)
+       .Select(a => a.NameDepartments)
+       .FirstOrDefault();
 
-            //if (SchedulesAuthors != null)
-            //{
-            //    SchedulesAuthors.Where(b=> b.S)
-            //}
+            // Pass the departmentName to the view
+            ViewBag.DepartmentName = departmentName;
 
-              return _context.Schedule != null ? 
+
+            //// Retrieve the corresponding department name from the database
+            //string departmentName = _context.Departments
+            //    .Where(a => a.IDDepartments == I)
+            //    .Select(a => a.NameDepartments)
+            //    .FirstOrDefault();
+
+            return _context.Schedule != null ? 
                           View(await _context.Schedule.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Schedule'  is null.");
            
