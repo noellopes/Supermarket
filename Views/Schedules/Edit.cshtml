@@ -34,9 +34,8 @@
                 <span asp-validation-for="DailyFinishTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IDDepartments" class="control-label"></label>
-                <input asp-for="IDDepartments" class="form-control" />
-                <span asp-validation-for="IDDepartments" class="text-danger"></span>
+                <label asp-for="Departments.NameDepartments" class="control-label"></label>
+                <select asp-for="IDDepartments" class="form-control" asp-items="ViewBag.IDDepartments"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

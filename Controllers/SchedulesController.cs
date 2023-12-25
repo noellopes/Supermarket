@@ -118,6 +118,9 @@ namespace Supermarket.Controllers
         // GET: Schedules/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
+            ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
+
             if (id == null || _context.Schedule == null)
             {
                 return NotFound();
