@@ -39,6 +39,22 @@ namespace Supermarket.Data
                     new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2029, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, IDDepartments = db.Departments.Where(a => a.NameDepartments == "Congelados").Select(a => a.IDDepartments).FirstOrDefault() },
                     new Schedule { StartDate = DateTime.Now, EndDate = null, DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, IDDepartments = db.Departments.Where(a => a.NameDepartments == "Armazem").Select(a => a.IDDepartments).FirstOrDefault() }
                 );
+
+            //for (int i = 0; i < 1000; i++)
+            //{
+            //    db.Add(
+            //        new Schedule
+            //        {
+            //            StartDate = DateTime.Now,
+            //            EndDate = new DateTime(2029, 04, 30, 12, 30, 0),
+            //            DailyStartTime = DateTime.Now,
+            //            DailyFinishTime = DateTime.Now,
+            //            IDDepartments = db.Departments.Where(a => a.NameDepartments == "Armazem").Select(a => a.IDDepartments).FirstOrDefault()
+            //        }
+            //    );
+            //}
+
+            db.SaveChanges();
             db.SaveChanges();
         }
         private static void PopulateTickets(SupermarketDbContext db)

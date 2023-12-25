@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -18,13 +19,47 @@ namespace Supermarket.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index (string departmentName = "")
+        public async Task<IActionResult> Index (int page = 1,string departmentName = "")
         {
+
+            var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
+
             int departmentId = GetDepartmentId(departmentName);
 
-            var schedules = _context.Schedule.Include(s => s.Departments).ToList();
+            if (departmentName != "")
+            {
+                schedules = schedules.Where(x => x.Departments.NameDepartments.Contains(departmentName));
+            }
 
-            return View(schedules);
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await schedules.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
+
+            var vm = new SchedulesViewModel
+            {
+                Schedules = await schedules
+                   .OrderBy(b => b.IDDepartments)
+                   .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                   .Take(paging.PageSize)
+                   .ToListAsync(),
+                PagingInfo = paging,
+                SearchDepartment = departmentName,
+            };
+
+            return View(vm);
         }
 
         private int GetDepartmentId(string departmentName)
@@ -56,6 +91,7 @@ namespace Supermarket.Controllers
         // GET: Schedules/Create
         public IActionResult Create()
         {
+            ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
             return View();
         }
 
@@ -66,6 +102,7 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ScheduleId,StartDate,EndDate,DailyStartTime,DailyFinishTime,IDDepartments")] Schedule schedule)
         {
+           
             if (ModelState.IsValid)
             {
                 _context.Add(schedule);
