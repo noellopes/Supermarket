@@ -18,36 +18,21 @@ namespace Supermarket.Controllers
         {
             _context = context;
         }
-
-        // GET: Schedules
-        public async Task<IActionResult> Index(int page = 1, int dept = 1)
+        public async Task<IActionResult> Index (string departmentName = "")
         {
-           
+            int departmentId = GetDepartmentId(departmentName);
 
-            int departmentId = _context.Departments
-    .Select(a => a.IDDepartments)
-    .FirstOrDefault();
+            var schedules = _context.Schedule.Include(s => s.Departments).ToList();
 
-            string departmentName = _context.Departments
-       .Where(a => a.IDDepartments == departmentId)
-       .Select(a => a.NameDepartments)
-       .FirstOrDefault();
+            return View(schedules);
+        }
 
-            // Pass the departmentName to the view
-            ViewBag.DepartmentName = departmentName;
-
-
-            //// Retrieve the corresponding department name from the database
-            //string departmentName = _context.Departments
-            //    .Where(a => a.IDDepartments == I)
-            //    .Select(a => a.NameDepartments)
-            //    .FirstOrDefault();
-
-            return _context.Schedule != null ? 
-                          View(await _context.Schedule.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Schedule'  is null.");
-           
-           
+        private int GetDepartmentId(string departmentName)
+        {
+            return _context.Departments
+                .Where(a => a.NameDepartments == departmentName)
+                .Select(a => a.IDDepartments)
+                .FirstOrDefault();
         }
 
         // GET: Schedules/Details/5

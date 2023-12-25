@@ -9,7 +9,6 @@ namespace Supermarket.Models
         // Chave primária
         [Key]
         public int IDDepartments { get; set; }
-
         // Nome do Departamento
         [Required(ErrorMessage = "The Department Name field is mandatory.")]
         [StringLength(100, ErrorMessage = "The Department Name field must have a maximum of 100 characters.")]

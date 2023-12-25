@@ -16,8 +16,13 @@ namespace Supermarket.Data
 
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
             modelBuilder.Entity<MealCard>().HasKey(MC => MC.MealCardId);
+            //Relação entre Schedule e Departments
+            modelBuilder.Entity<Schedule>()
+                .HasOne(s => s.Departments)
+                .WithMany()
+                .HasForeignKey(s => s.IDDepartments);
         }
-
+ 
         public DbSet<Folga> Folga { get; set; } = default!;
 
 
@@ -58,7 +63,7 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
         public DbSet<Schedule> Schedule { get; set; }
-
+        
         public DbSet<ClientCard> ClientCard { get; set; }
 
         public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }

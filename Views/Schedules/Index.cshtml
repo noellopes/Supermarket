@@ -1,5 +1,5 @@
-﻿@model IEnumerable<Supermarket.Models.Schedule>
-
+﻿@using Supermarket.Models
+@model IEnumerable<Schedule>
 @{
     ViewData["Title"] = "Index";
 }
@@ -59,21 +59,27 @@
 
     @foreach (var item in Model)
     {
+        Console.WriteLine($"Schedule ID: {item.ScheduleId}");
+        Console.WriteLine($"Department ID: {item.IDDepartments}");
         <div class="col mt-3">
             <div class="card text-center" style="width: 18rem;">
                 @* <img class="card-img-top" src="..." alt="Card image cap">*@
                 <div class="card-body">
                     <h5 class="card-title">Horário @Html.DisplayFor(modelItem => item.ScheduleId) </h5>
-                    
-                    @{
-                        if (item.IDDepartments==0)
-                        {
-                            <p class="card-text">Sem departamento</p>
-                        } else
-                        {
+                    @if (item.IDDepartments == 0)
+                    {
 
-                            <p class="card-text">@ViewBag.DepartmentName</p>
-                        }
+                        <p class="card-text">Sem departamento</p>
+                    }
+                    else if (item.Departments != null)
+                    {
+                        <p>Departamento</p>
+                        <p class="card-text">@item.Departments.NameDepartments</p>
+                    }
+                    else
+                    {
+                        <p>Departamento</p>
+                        <p class="card-text">Unknown department</p>
                     }
                     @* <p class="card-text">@Html.DisplayFor(modelItem => item.Departments.NameDepartments)</p> *@
                 </div>
