@@ -74,55 +74,62 @@ namespace Supermarket.Controllers
 
             if (ModelState.IsValid)
             {
-                if(SectionProduct == null)
+                if (reduceProduct.WarehouseSectionId != null)
                 {
-                    ModelState.AddModelError(string.Empty, "The product does not exist in this section");
-                }
-                else
-                {
-                    if (SectionProduct!.Quantity > 0)
+                    if (SectionProduct == null)
                     {
-                        if (reduceProduct.Quantity < SectionProduct.Quantity)
-                        {
-                            _context.Add(reduceProduct);
-                            await _context.SaveChangesAsync();
-                            return RedirectToAction(nameof(Index));
-                        }
-                        else
-                        {
-                            ModelState.AddModelError(string.Empty, "More products to write-off than exist in the section");
-                        }
+                        ModelState.AddModelError(string.Empty, "The product does not exist in this section");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "This section does not contain any more of this product to be writed-off, quantity = 0");
+                        if (SectionProduct!.Quantity > 0)
+                        {
+                            if (reduceProduct.Quantity < SectionProduct.Quantity)
+                            {
+                                _context.Add(reduceProduct);
+                                await _context.SaveChangesAsync();
+                                return RedirectToAction(nameof(Index));
+                            }
+                            else
+                            {
+                                ModelState.AddModelError(string.Empty, "More products to write-off than exist in the section");
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "This section does not contain any more of this product to be writed-off, quantity = 0");
+                        }
                     }
                 }
 
-                if (ShelfProduct == null)
+                if (reduceProduct.ShelfId != null)
                 {
-                    ModelState.AddModelError(string.Empty, "The product does not exist in this shelf");
-                }
-                else
-                {
-                    if (ShelfProduct!.Quantity > 0)
+                    if (ShelfProduct == null)
                     {
-                        if (reduceProduct.Quantity < ShelfProduct.Quantity)
-                        {
-                            _context.Add(reduceProduct);
-                            await _context.SaveChangesAsync();
-                            return RedirectToAction(nameof(Index));
-                        }
-                        else
-                        {
-                            ModelState.AddModelError(string.Empty, "More products to write-off than exist in the shelf");
-                        }
+                        ModelState.AddModelError(string.Empty, "The product does not exist in this shelf");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "This shelf does not contain any more of this product to be writed-off, quantity = 0");
+                        if (ShelfProduct!.Quantity > 0)
+                        {
+                            if (reduceProduct.Quantity < ShelfProduct.Quantity)
+                            {
+                                _context.Add(reduceProduct);
+                                await _context.SaveChangesAsync();
+                                return RedirectToAction(nameof(Index));
+                            }
+                            else
+                            {
+                                ModelState.AddModelError(string.Empty, "More products to write-off than exist in the shelf");
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "This shelf does not contain any more of this product to be writed-off, quantity = 0");
+                        }
                     }
                 }
+               
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
