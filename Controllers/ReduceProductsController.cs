@@ -87,7 +87,16 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
-            var reduceProduct = await _context.ReduceProduct.FindAsync(id);
+            //var reduceProduct = await _context.ReduceProduct.FindAsync(id);
+            var reduceProduct = await _context.ReduceProduct
+                .Include(r => r.Product)
+                .Include(r => r.Product!.Brand)
+                .Include(r => r.Shelf)
+                .Include(r => r.Shelf!.Hallway)
+                .Include(r => r.Shelf!.Hallway!.Store)
+                .Include(r => r.WarehouseSection)
+                .Include(r => r.WarehouseSection!.Warehouse)
+                .FirstOrDefaultAsync(m => m.ReduceProductId == id);
             if (reduceProduct == null)
             {
                 return NotFound();
@@ -104,6 +113,71 @@ namespace Supermarket.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ReduceProductId,Reason,Status,Date,Quantity,ProductId,WarehouseSectionId,ShelfId")] ReduceProduct reduceProduct)
+        {
+            if (id != reduceProduct.ReduceProductId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(reduceProduct);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ReduceProductExists(reduceProduct.ReduceProductId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
+            ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
+            ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            return View(reduceProduct);
+        }
+
+        public async Task<IActionResult> ConfirmStatus(int? id)
+        {
+            if (id == null || _context.ReduceProduct == null)
+            {
+                return NotFound();
+            }
+
+            //var reduceProduct = await _context.ReduceProduct.FindAsync(id);
+            var reduceProduct = await _context.ReduceProduct
+                .Include(r => r.Product)
+                .Include(r => r.Product!.Brand)
+                .Include(r => r.Shelf)
+                .Include(r => r.Shelf!.Hallway)
+                .Include(r => r.Shelf!.Hallway!.Store)
+                .Include(r => r.WarehouseSection)
+                .Include(r => r.WarehouseSection!.Warehouse)
+                .FirstOrDefaultAsync(m => m.ReduceProductId == id);
+            if (reduceProduct == null)
+            {
+                return NotFound();
+            }
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
+            ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
+            ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            return View(reduceProduct);
+        }
+
+        // POST: ReduceProducts/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmStatus(int id, [Bind("ReduceProductId,Reason,Status,Date,Quantity,ProductId,WarehouseSectionId,ShelfId")] ReduceProduct reduceProduct)
         {
             if (id != reduceProduct.ReduceProductId)
             {
