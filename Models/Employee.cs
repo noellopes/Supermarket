@@ -40,24 +40,24 @@ namespace Supermarket.Models
         [DataType(DataType.Date)]
         public DateTime? Employee_Termination_Date { get; set; }
 
-        //[Required]
-        //[RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
-        //public required string Standard_Check_In_Time { get; set; }
+        [Required]
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
+        public required string Standard_Check_In_Time { get; set; }
 
-        //[Required]
-       // [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]        
-        //public required string Standard_Check_Out_Time { get; set; }
+        [Required]
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]        
+        public required string Standard_Check_Out_Time { get; set; }
 
 
-       // [Required]
-        //[RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
-       // public required string Standard_Lunch_Hour { get; set; }
+        [Required]
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
+        public required string Standard_Lunch_Hour { get; set; }
 
-       // [Required]
-       // public required string Standard_Lunch_Time { get; set; }
+        [Required]
+        public required string Standard_Lunch_Time { get; set; }
 
         
-        //public int Employee_Time_Bank { get; set; }
+        public int Employee_Time_Bank { get; set; }
 
 
         //Ligação de 1 para 1 com Meal_Card
