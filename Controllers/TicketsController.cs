@@ -12,81 +12,25 @@ namespace Supermarket.Controllers
 {
     public class TicketsController : Controller
     {
+        private static int ticketCount = 0;
         private readonly SupermarketDbContext _context;
+
         public TicketsController(SupermarketDbContext context)
         {
             _context = context;
         }
- 
-        // Propriedade calculada para obter a duração média de atendimento
-        public TimeSpan? DuracaoAtendimento
-        {
-            get
-            {
-                // Obtém a primeira Data de Emissão (DataEmicao) do Ticket(duvidas)
-                var de = _context.Tickets.Select(t => new { t.DataEmicao }).FirstOrDefault();
 
-                // Obtém a primeira Data de Atendimento (DataAtendimento) do Ticket(duvidas)
-                var da = _context.Tickets.Select(t => new { t.DataAtendimento }).FirstOrDefault();
-
-                // Verifica se as datas de Emissão e Atendimento foram obtidas com sucesso
-                if (de != null && da != null )
-                {
-                    // Extrai os valores das propriedades DataEmicao e DataAtendimento
-                    var deP = de.DataEmicao;
-                    var daP = da.DataAtendimento;
-
-                    // Obtém a quantidade média de departamentos da tabela Departments
-                    var MediaDep = _context.Departments.Select(t => new { t.QuatDepMed }).FirstOrDefault();
-
-                    // Verifica se a quantidade média de departamentos foi obtida com sucesso
-                    if (MediaDep != null)
-                    {
-                        // Obtém o valor da quantidade média de departamentos
-                        int QuatDepMed = MediaDep.QuatDepMed;
-
-                        // Inicializa um TimeSpan para calcular a média
-                        TimeSpan media = TimeSpan.Zero;
-
-                        // Loop para calcular a diferença entre as datas e somar ao total
-                        for (int i = 1; i <= QuatDepMed; i++)
-                        {
-                            var aux = (daP - deP);
-                            media += aux;
-                        }
-
-                        // Calcula a média e retorna como TimeSpan
-                        if (QuatDepMed > 0)
-                        {
-                            media = TimeSpan.FromTicks(media.Ticks / QuatDepMed);
-                            return media;
-                        }
-                        else
-                        {
-                            // Retorna null se a quantidade média de departamentos for 0
-                            return null;
-                        }
-                    }
-                    else
-                    {
-                        // Retorna null caso não haja registros na tabela Departments
-                        return null;
-                    }
-                }
-                else
-                {
-                    // Retorna null se as datas de Emissão e Atendimento não foram obtidas
-                    return null;
-                }
-            }
-        }
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
               return _context.Tickets != null ? 
                           View(await _context.Tickets.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Tickets'  is null.");
-        }
+
+          
+            }
+
+        
 
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -109,6 +53,8 @@ namespace Supermarket.Controllers
         // GET: Tickets/Create
         public IActionResult Create()
         {
+            
+
             return View();
         }
 
@@ -117,13 +63,18 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketId,DataEmicao,DataAtendimento,NumeroDaSenha,Estado,Priorioritario,IDDepartments")] Tickets tickets)
+        public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Tickets tickets)
         {
+            // Increment the ticket count
+            ticketCount++;
+            // Pass the ticket count to the view
+            ViewBag.TicketCount = ticketCount;
             if (ModelState.IsValid)
             {
                 _context.Add(tickets);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewBag.Message = "Ticket created sucessfully.";
+                return View("Details",tickets);
             }
             return View(tickets);
         }
@@ -149,7 +100,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TicketId,DataEmicao,DataAtendimento,NumeroDaSenha,Estado,Priorioritario,IDDepartments")] Tickets tickets)
+        public async Task<IActionResult> Edit(int id, [Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Tickets tickets)
         {
             if (id != tickets.TicketId)
             {

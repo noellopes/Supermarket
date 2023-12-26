@@ -13,20 +13,21 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="DataEmicao" class="control-label"></label>
-                <input asp-for="DataEmicao" class="form-control" />
-                <span asp-validation-for="DataEmicao" class="text-danger"></span>
+                <label asp-for="DataEmissao" class="control-label"></label>
+                <input asp-for="DataEmissao" class="form-control" />
+                <span asp-validation-for="DataEmissao" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DataAtendimento" class="control-label"></label>
                 <input asp-for="DataAtendimento" class="form-control" />
                 <span asp-validation-for="DataAtendimento" class="text-danger"></span>
             </div>
-            <div class="form-group">
+             <div class="form-group">
                 <label asp-for="NumeroDaSenha" class="control-label"></label>
-                <input asp-for="NumeroDaSenha" class="form-control" />
+                <input asp-for="NumeroDaSenha"  class="form-control"  />
+                @* <input asp-for="NumeroDaSenha" value="@ViewBag.TicketCount" class="form-control" readonly />*@
                 <span asp-validation-for="NumeroDaSenha" class="text-danger"></span>
-            </div>
+            </div> 
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
@@ -34,7 +35,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Priorioritario" /> @Html.DisplayNameFor(model => model.Priorioritario)
+                    <input class="form-check-input" asp-for="Prioritario" /> @Html.DisplayNameFor(model => model.Prioritario)
                 </label>
             </div>
             <div class="form-group">

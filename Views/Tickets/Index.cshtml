@@ -1,64 +1,38 @@
 ﻿@model IEnumerable<Supermarket.Models.Tickets>
 
+@{
     ViewData["Title"] = "Index";
 }
 
-<h1>Tickts</h1>
+<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DataEmicao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataAtendimento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumeroDaSenha)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Priorioritario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IDDepartments)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="row">
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataEmicao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataAtendimento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumeroDaSenha)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Priorioritario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IDDepartments)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TicketId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TicketId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TicketId">Delete</a>
-            </td>
-        </tr>
+    <div class="col mt-3">
+    <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                <h5 class="card-title mt-3">Número da Senha:  #@Html.DisplayFor(modelItem => item.NumeroDaSenha)</h5>
+                <h6 class="card-subtitle mb-2 mt-3 text-muted">Emitida:  @Html.DisplayFor(modelItem => item.DataEmissao)</h6>
+                   <h6 class="mt-3">Tempo previsto:  Por desenvolver</h6>
+                <h6 class="card-subtitle mb-2 mt-3 text-muted">Atendida:  @Html.DisplayFor(modelItem => item.DataAtendimento)</h6>
+                
+                <h6 class="mt-3">Departamento:  @Html.DisplayFor(modelItem => item.IDDepartments)</h6>
+                    <h6 class="card-subtitle mt-3 text-muted"> Prioritário:   @(item.Estado ? "Sim" : "Não")</h6>
+                <h6 class="card-subtitle mb-2 mt-3 text-muted">
+                    Estado:  @(item.Estado ? "Atendido" : "Não atendido")
+                        </h6>
+
+                <a asp-action="Edit" class="card-link  mt-3" asp-route-id="@item.TicketId">Edit</a> |
+                <a asp-action="Details" class="card-link  mt-3" asp-route-id="@item.TicketId">Details</a> |
+                <a asp-action="Delete" class="card-link  mt-3" asp-route-id="@item.TicketId">Delete</a>
+                </div>
+            </div>
+    </div>
+
+
+       
 }
-    </tbody>
-</table>
+  </div>
