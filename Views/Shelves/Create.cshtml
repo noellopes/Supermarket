@@ -4,34 +4,113 @@
     ViewData["Title"] = "Create";
 }
 
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+ 
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+    .select-card {
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        cursor: pointer;
+    }
+
+        .select-card:hover {
+            background-color: #f8f8f8;
+        }
+</style>
+
 <h1>Create</h1>
 
 <h4>Shelf</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HallwayId" class="control-label"></label>
-                <select asp-for="HallwayId" class ="form-control" asp-items="ViewBag.HallwayId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
     </div>
-</div>
+}
+<hr />
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<div class="card">
+ 
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
 
+                @if (ViewBag.HallwaysId2 != null)
+                {
+                    <input type="hidden" asp-for="HallwayId" />
+                    <div class="form-group">
+                        <label asp-for="HallwayId" class="control-label">Hallway</label>
+                        <div class="select-card">
+                            @ViewBag.HallwaysName
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label asp-for="HallwayId" class="control-label">Hallway</label>
+                        <select asp-for="HallwayId" class="form-control" asp-items="ViewBag.HallwayId">
+                            <option value="" selected>-- Select Hallway --</option>
+                        </select>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <a asp-action="Index" asp-route-hallwaysId="@ViewBag.HallwaysId2" class="btn btn-secondary">Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

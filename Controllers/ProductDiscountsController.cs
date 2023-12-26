@@ -22,7 +22,7 @@ namespace Supermarket.Controllers
         // GET: ProductDiscounts
         public async Task<IActionResult> Index()
         {
-            var supermarketDbContext = _context.ProductDiscount.Include(p => p.ClientCard).Include(p => p.Product);
+            var supermarketDbContext = _context.ProductDiscount.Include(p => p.Product);
             return View(await supermarketDbContext.ToListAsync());
         }
 
@@ -35,7 +35,6 @@ namespace Supermarket.Controllers
             }
 
             var productDiscount = await _context.ProductDiscount
-                .Include(p => p.ClientCard)
                 .Include(p => p.Product)
                 .FirstOrDefaultAsync(m => m.ProductDiscountId == id);
             if (productDiscount == null)
@@ -49,8 +48,7 @@ namespace Supermarket.Controllers
         // GET: ProductDiscounts/Create
         public IActionResult Create()
         {
-            ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber");
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description");
             return View();
         }
 
@@ -59,29 +57,15 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
+        public async Task<IActionResult> Create([Bind("ProductDiscountId,ProductId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (ModelState.IsValid)
-        {
-            bool productDiscountExists = await _context.ProductDiscount.AnyAsync(
-                b => b.ProductId == productDiscount.ProductId && 
-                     b.ClientCardId == productDiscount.ClientCardId && 
-                     b.Value == productDiscount.Value);
-
-            if (productDiscountExists)
-            {
-                ModelState.AddModelError("", "Another Product Discount with the same Product, Card Number, and Value already exists.");
-            }
-            else
             {
                 _context.Add(productDiscount);
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Product successfully created!";
                 return RedirectToAction(nameof(Index));
             }
-        }
-            ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", productDiscount.ProductId);
             return View(productDiscount);
         }
 
@@ -98,8 +82,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", productDiscount.ProductId);
             return View(productDiscount);
         }
 
@@ -108,7 +91,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductDiscountId,ProductId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (id != productDiscount.ProductDiscountId)
             {
@@ -121,8 +104,6 @@ namespace Supermarket.Controllers
                 {
                     _context.Update(productDiscount);
                     await _context.SaveChangesAsync();
-
-                    TempData["SuccessMessage"] = "Product sucessful edited!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -137,8 +118,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", productDiscount.ProductId);
             return View(productDiscount);
         }
 
@@ -151,7 +131,6 @@ namespace Supermarket.Controllers
             }
 
             var productDiscount = await _context.ProductDiscount
-                .Include(p => p.ClientCard)
                 .Include(p => p.Product)
                 .FirstOrDefaultAsync(m => m.ProductDiscountId == id);
             if (productDiscount == null)
@@ -175,9 +154,6 @@ namespace Supermarket.Controllers
             if (productDiscount != null)
             {
                 _context.ProductDiscount.Remove(productDiscount);
-                await _context.SaveChangesAsync();
-
-                TempData["SuccessMessage"] = "Product sucessful deleted";
             }
             
             await _context.SaveChangesAsync();
