@@ -37,7 +37,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("Brand", (string)null);
+                    b.ToTable("Brand");
                 });
 
             modelBuilder.Entity("Supermarket.Models.CardMovement", b =>
@@ -69,7 +69,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("MealCardId");
 
-                    b.ToTable("CardMovement", (string)null);
+                    b.ToTable("CardMovement");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Category", b =>
@@ -87,7 +87,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Category", (string)null);
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Supermarket.Models.CategoryDiscount", b =>
@@ -109,7 +109,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("CategoryDiscountId");
 
-                    b.ToTable("CategoryDiscounts", (string)null);
+                    b.ToTable("CategoryDiscounts");
                 });
 
             modelBuilder.Entity("Supermarket.Models.ClientCard", b =>
@@ -130,7 +130,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("ClientCard_Id");
 
-                    b.ToTable("ClientCard", (string)null);
+                    b.ToTable("ClientCard");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Departments", b =>
@@ -164,7 +164,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("IDDepartments");
 
-                    b.ToTable("Departments", (string)null);
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
@@ -235,7 +235,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("EmployeeId");
 
-                    b.ToTable("Funcionarios", (string)null);
+                    b.ToTable("Funcionarios");
                 });
 
             modelBuilder.Entity("Supermarket.Models.EmployeeEvaluation", b =>
@@ -259,7 +259,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("AvaliacaoFuncionarios", (string)null);
+                    b.ToTable("AvaliacaoFuncionarios");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Folga", b =>
@@ -293,7 +293,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("FolgaId");
 
-                    b.ToTable("Folga", (string)null);
+                    b.ToTable("Folga");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Funcao", b =>
@@ -316,7 +316,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("FuncaoId");
 
-                    b.ToTable("Funcao", (string)null);
+                    b.ToTable("Funcao");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Hallway", b =>
@@ -339,7 +339,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("Hallway", (string)null);
+                    b.ToTable("Hallway");
                 });
 
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>
@@ -366,7 +366,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("IssueTypeId1");
 
-                    b.ToTable("IssueType", (string)null);
+                    b.ToTable("IssueType");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Issues", b =>
@@ -394,7 +394,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("IssueTypeId");
 
-                    b.ToTable("Issues", (string)null);
+                    b.ToTable("Issues");
                 });
 
             modelBuilder.Entity("Supermarket.Models.MealCard", b =>
@@ -416,7 +416,7 @@ namespace Supermarket.Migrations
                     b.HasIndex("EmployeeId")
                         .IsUnique();
 
-                    b.ToTable("MealCard", (string)null);
+                    b.ToTable("MealCard");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Product", b =>
@@ -462,7 +462,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Supermarket.Models.ProductDiscount", b =>
@@ -489,7 +489,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductDiscount", (string)null);
+                    b.ToTable("ProductDiscount");
                 });
 
             modelBuilder.Entity("Supermarket.Models.ProductExpiration", b =>
@@ -513,7 +513,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("BatchId");
 
-                    b.ToTable("ProductExpiration", (string)null);
+                    b.ToTable("ProductExpiration");
                 });
 
             modelBuilder.Entity("Supermarket.Models.ReduceProduct", b =>
@@ -556,7 +556,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("WarehouseSectionId");
 
-                    b.ToTable("ReduceProduct", (string)null);
+                    b.ToTable("ReduceProduct");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Schedule", b =>
@@ -573,9 +573,6 @@ namespace Supermarket.Migrations
                     b.Property<DateTime>("DailyStartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DepartmentsIDDepartments")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
@@ -587,9 +584,9 @@ namespace Supermarket.Migrations
 
                     b.HasKey("ScheduleId");
 
-                    b.HasIndex("DepartmentsIDDepartments");
+                    b.HasIndex("IDDepartments");
 
-                    b.ToTable("Schedule", (string)null);
+                    b.ToTable("Schedule");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Shelf", b =>
@@ -612,7 +609,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("HallwayId");
 
-                    b.ToTable("Shelf", (string)null);
+                    b.ToTable("Shelf");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Shelft_ProductExhibition", b =>
@@ -633,7 +630,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("ShelfId");
 
-                    b.ToTable("Shelft_ProductExhibition", (string)null);
+                    b.ToTable("Shelft_ProductExhibition");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Store", b =>
@@ -656,7 +653,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("StoreId");
 
-                    b.ToTable("Store", (string)null);
+                    b.ToTable("Store");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Tickets", b =>
@@ -670,7 +667,7 @@ namespace Supermarket.Migrations
                     b.Property<DateTime>("DataAtendimento")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DataEmicao")
+                    b.Property<DateTime>("DataEmissao")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("DepartmentsIDDepartments")
@@ -685,14 +682,14 @@ namespace Supermarket.Migrations
                     b.Property<int>("NumeroDaSenha")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Priorioritario")
+                    b.Property<bool>("Prioritario")
                         .HasColumnType("bit");
 
                     b.HasKey("TicketId");
 
                     b.HasIndex("DepartmentsIDDepartments");
 
-                    b.ToTable("Tickets", (string)null);
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Warehouse", b =>
@@ -715,7 +712,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("WarehouseId");
 
-                    b.ToTable("Warehouse", (string)null);
+                    b.ToTable("Warehouse");
                 });
 
             modelBuilder.Entity("Supermarket.Models.WarehouseSection", b =>
@@ -738,7 +735,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("WarehouseSection", (string)null);
+                    b.ToTable("WarehouseSection");
                 });
 
             modelBuilder.Entity("Supermarket.Models.WarehouseSection_Product", b =>
@@ -759,7 +756,7 @@ namespace Supermarket.Migrations
 
                     b.HasIndex("WarehouseSectionId");
 
-                    b.ToTable("WarehouseSection_Product", (string)null);
+                    b.ToTable("WarehouseSection_Product");
                 });
 
             modelBuilder.Entity("Supermarket.Models.CardMovement", b =>
@@ -881,7 +878,9 @@ namespace Supermarket.Migrations
                 {
                     b.HasOne("Supermarket.Models.Departments", "Departments")
                         .WithMany()
-                        .HasForeignKey("DepartmentsIDDepartments");
+                        .HasForeignKey("IDDepartments")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Departments");
                 });

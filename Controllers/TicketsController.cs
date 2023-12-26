@@ -21,16 +21,29 @@ namespace Supermarket.Controllers
         }
 
         // GET: Tickets
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index (string departmentName = "")
         {
-              return _context.Tickets != null ? 
+            //var ticketList = _context.Tickets.Join(_context.Departments,
+            //    ticket => ticket.IDDepartments,
+            //    department => department.IDDepartments,
+            //    (ticket, department) => new { TicketId = ticket.IDDepartments,
+            //        DepartmentName = department.NameDepartments }).ToList();
+
+            //return View(ticketList);
+            return _context.Tickets != null ?
                           View(await _context.Tickets.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Tickets'  is null.");
 
-          
-            }
 
-        
+        }
+
+        private int GetDepartmentId(string departmentName)
+        {
+            return _context.Departments
+                .Where(a => a.NameDepartments == departmentName)
+                .Select(a => a.IDDepartments)
+                .FirstOrDefault();
+        }
 
         // GET: Tickets/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -53,7 +66,8 @@ namespace Supermarket.Controllers
         // GET: Tickets/Create
         public IActionResult Create()
         {
-            
+
+            ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
 
             return View();
         }
@@ -82,6 +96,8 @@ namespace Supermarket.Controllers
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
+
             if (id == null || _context.Tickets == null)
             {
                 return NotFound();

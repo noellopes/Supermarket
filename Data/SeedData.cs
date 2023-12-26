@@ -62,7 +62,7 @@ namespace Supermarket.Data
             if (db.Tickets.Any()) return;
 
             db.Tickets.AddRange(
-               new Tickets { DataEmicao = DateTime.Now, DataAtendimento = new DateTime(2028, 04, 30, 12, 30, 0), NumeroDaSenha = 1, Estado = true, Priorioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho")}
+               new Tickets { DataEmissao = DateTime.Now, DataAtendimento = new DateTime(2028, 04, 30, 12, 30, 0), NumeroDaSenha = 1, Estado = true, Prioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho")}
             );
             db.SaveChanges();
         }

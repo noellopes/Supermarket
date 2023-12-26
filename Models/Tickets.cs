@@ -2,15 +2,15 @@
 
 namespace Supermarket.Models
 {
-    public class Tickets
-    {
+    public class Tickets { 
+
         // Chave primária da entidade. O atributo [Key] é usado para marcar a chave primária.
         [Key]
         public int TicketId { get; set; }
 
         // Data de impressão do ticket.
         [Required]
-        public DateTime DataEmissao { get; set; }
+        public DateTime DataEmissao { get; set; } = DateTime.Now;
         //public DateTime DataEmissao { get; set; } = DateTime.Now ;
         // Data de impressão do ticket.
         public DateTime DataAtendimento { get; set; }

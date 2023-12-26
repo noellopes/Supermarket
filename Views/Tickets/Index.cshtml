@@ -19,11 +19,19 @@
                    <h6 class="mt-3">Tempo previsto:  Por desenvolver</h6>
                 <h6 class="card-subtitle mb-2 mt-3 text-muted">Atendida:  @Html.DisplayFor(modelItem => item.DataAtendimento)</h6>
                 
-                <h6 class="mt-3">Departamento:  @Html.DisplayFor(modelItem => item.IDDepartments)</h6>
+                @* <h6 class="mt-3">Departamento:  @Html.DisplayFor(modelItem => item.Departments.NameDepartments)</h6> *@
+                    @if (item.IDDepartments == 0)
+                    {
+                        <h6>Sem departamento</h6>
+                    }
+                    else if (item.Departments != null)
+                    {
+                        <h6>@item.Departments.NameDepartments</h6>
+                    }
                     <h6 class="card-subtitle mt-3 text-muted"> Prioritário:   @(item.Estado ? "Sim" : "Não")</h6>
                 <h6 class="card-subtitle mb-2 mt-3 text-muted">
                     Estado:  @(item.Estado ? "Atendido" : "Não atendido")
-                        </h6>
+                </h6>
 
                 <a asp-action="Edit" class="card-link  mt-3" asp-route-id="@item.TicketId">Edit</a> |
                 <a asp-action="Details" class="card-link  mt-3" asp-route-id="@item.TicketId">Details</a> |

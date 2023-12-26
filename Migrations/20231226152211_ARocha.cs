@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Supermarket.Migrations
 {
     /// <inheritdoc />
-    public partial class Grupo5T : Migration
+    public partial class ARocha : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -243,20 +243,20 @@ namespace Supermarket.Migrations
                     ScheduleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DailyStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DailyFinishTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IDDepartments = table.Column<int>(type: "int", nullable: false),
-                    DepartmentsIDDepartments = table.Column<int>(type: "int", nullable: true)
+                    IDDepartments = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Schedule", x => x.ScheduleId);
                     table.ForeignKey(
-                        name: "FK_Schedule_Departments_DepartmentsIDDepartments",
-                        column: x => x.DepartmentsIDDepartments,
+                        name: "FK_Schedule_Departments_IDDepartments",
+                        column: x => x.IDDepartments,
                         principalTable: "Departments",
-                        principalColumn: "IDDepartments");
+                        principalColumn: "IDDepartments",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -265,11 +265,11 @@ namespace Supermarket.Migrations
                 {
                     TicketId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DataEmicao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataEmissao = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DataAtendimento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NumeroDaSenha = table.Column<int>(type: "int", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false),
-                    Priorioritario = table.Column<bool>(type: "bit", nullable: false),
+                    Prioritario = table.Column<bool>(type: "bit", nullable: false),
                     IDDepartments = table.Column<int>(type: "int", nullable: false),
                     DepartmentsIDDepartments = table.Column<int>(type: "int", nullable: true)
                 },
@@ -600,9 +600,9 @@ namespace Supermarket.Migrations
                 column: "WarehouseSectionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Schedule_DepartmentsIDDepartments",
+                name: "IX_Schedule_IDDepartments",
                 table: "Schedule",
-                column: "DepartmentsIDDepartments");
+                column: "IDDepartments");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shelf_HallwayId",

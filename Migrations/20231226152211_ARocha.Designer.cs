@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Migrations
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231215162536_Grupo5T")]
-    partial class Grupo5T
+    [Migration("20231226152211_ARocha")]
+    partial class ARocha
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -576,10 +576,7 @@ namespace Supermarket.Migrations
                     b.Property<DateTime>("DailyStartTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DepartmentsIDDepartments")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("IDDepartments")
@@ -590,7 +587,7 @@ namespace Supermarket.Migrations
 
                     b.HasKey("ScheduleId");
 
-                    b.HasIndex("DepartmentsIDDepartments");
+                    b.HasIndex("IDDepartments");
 
                     b.ToTable("Schedule");
                 });
@@ -673,7 +670,7 @@ namespace Supermarket.Migrations
                     b.Property<DateTime>("DataAtendimento")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DataEmicao")
+                    b.Property<DateTime>("DataEmissao")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("DepartmentsIDDepartments")
@@ -688,7 +685,7 @@ namespace Supermarket.Migrations
                     b.Property<int>("NumeroDaSenha")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Priorioritario")
+                    b.Property<bool>("Prioritario")
                         .HasColumnType("bit");
 
                     b.HasKey("TicketId");
@@ -884,7 +881,9 @@ namespace Supermarket.Migrations
                 {
                     b.HasOne("Supermarket.Models.Departments", "Departments")
                         .WithMany()
-                        .HasForeignKey("DepartmentsIDDepartments");
+                        .HasForeignKey("IDDepartments")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Departments");
                 });
