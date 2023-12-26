@@ -10,94 +10,87 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class ClientCardsController : Controller
+    public class EmployeeSchedulesController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public ClientCardsController(SupermarketDbContext context)
+        public EmployeeSchedulesController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: ClientCards
+        // GET: EmployeeSchedules
         public async Task<IActionResult> Index()
         {
-              return _context.ClientCard != null ? 
-                          View(await _context.ClientCard.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
+              return _context.EmployeeSchedule != null ? 
+                          View(await _context.EmployeeSchedule.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.EmployeeSchedule'  is null.");
         }
 
-        // GET: ClientCards/Details/5
+        // GET: EmployeeSchedules/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.EmployeeSchedule == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard
-                .FirstOrDefaultAsync(m => m.ClientCardId == id);
-            if (clientCard == null)
+            var employeeSchedule = await _context.EmployeeSchedule
+                .FirstOrDefaultAsync(m => m.ScheduleId == id);
+            if (employeeSchedule == null)
             {
                 return NotFound();
             }
 
-            return View(clientCard);
+            return View(employeeSchedule);
         }
 
-        // GET: ClientCards/Create
+        // GET: EmployeeSchedules/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ClientCards/Create
+        // POST: EmployeeSchedules/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientCardId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
+        public async Task<IActionResult> Create([Bind("ScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
         {
             if (ModelState.IsValid)
             {
-                var random = new Random();
-                bool isUnique = false;
-                while (!isUnique) 
-                {
-                    clientCard.ClientCardNumber = random.Next(100000, 999999);
-                    isUnique = !_context.ClientCard.Any(c => c.ClientCardNumber == clientCard.ClientCardNumber);
-                }
-                _context.Add(clientCard);
+                _context.Add(employeeSchedule);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(clientCard);
+            return View(employeeSchedule);
         }
 
-        // GET: ClientCards/Edit/5
+        // GET: EmployeeSchedules/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.EmployeeSchedule == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard.FindAsync(id);
-            if (clientCard == null)
+            var employeeSchedule = await _context.EmployeeSchedule.FindAsync(id);
+            if (employeeSchedule == null)
             {
                 return NotFound();
             }
-            return View(clientCard);
+            return View(employeeSchedule);
         }
 
-        // POST: ClientCards/Edit/5
+        // POST: EmployeeSchedules/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientCardId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
+        public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
         {
-            if (id != clientCard.ClientCardId)
+            if (id != employeeSchedule.ScheduleId)
             {
                 return NotFound();
             }
@@ -106,12 +99,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(clientCard);
+                    _context.Update(employeeSchedule);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientCardExists(clientCard.ClientCardId))
+                    if (!EmployeeScheduleExists(employeeSchedule.ScheduleId))
                     {
                         return NotFound();
                     }
@@ -122,49 +115,49 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(clientCard);
+            return View(employeeSchedule);
         }
 
-        // GET: ClientCards/Delete/5
+        // GET: EmployeeSchedules/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ClientCard == null)
+            if (id == null || _context.EmployeeSchedule == null)
             {
                 return NotFound();
             }
 
-            var clientCard = await _context.ClientCard
-                .FirstOrDefaultAsync(m => m.ClientCardId == id);
-            if (clientCard == null)
+            var employeeSchedule = await _context.EmployeeSchedule
+                .FirstOrDefaultAsync(m => m.ScheduleId == id);
+            if (employeeSchedule == null)
             {
                 return NotFound();
             }
 
-            return View(clientCard);
+            return View(employeeSchedule);
         }
 
-        // POST: ClientCards/Delete/5
+        // POST: EmployeeSchedules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.ClientCard == null)
+            if (_context.EmployeeSchedule == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.EmployeeSchedule'  is null.");
             }
-            var clientCard = await _context.ClientCard.FindAsync(id);
-            if (clientCard != null)
+            var employeeSchedule = await _context.EmployeeSchedule.FindAsync(id);
+            if (employeeSchedule != null)
             {
-                _context.ClientCard.Remove(clientCard);
+                _context.EmployeeSchedule.Remove(employeeSchedule);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientCardExists(int id)
+        private bool EmployeeScheduleExists(int id)
         {
-          return (_context.ClientCard?.Any(e => e.ClientCardId == id)).GetValueOrDefault();
+          return (_context.EmployeeSchedule?.Any(e => e.ScheduleId == id)).GetValueOrDefault();
         }
     }
 }

@@ -16,8 +16,27 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(
+    options => {
+        // Sign in
+        options.SignIn.RequireConfirmedAccount = false;
+
+        // Password
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequiredLength = 8;
+        options.Password.RequiredUniqueChars = 6;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequireUppercase = true;
+
+        // Lockout
+        options.Lockout.AllowedForNewUsers = true;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+        options.Lockout.MaxFailedAccessAttempts = 5;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultUI();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -27,7 +46,10 @@ if (app.Environment.IsDevelopment()) {
     app.UseMigrationsEndPoint();
     using var serviceScope = app.Services.CreateScope();
     var db = serviceScope.ServiceProvider.GetService<SupermarketDbContext>();
-    SeedData.Populate(db!);
+    //SeedData.Populate(db!);
+
+    //var userManager = serviceScope.ServiceProvider.GetService<UserManager<IdentityUser>>();
+    //SeedData.PopulateDevUsers(userManager);
 } else {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
