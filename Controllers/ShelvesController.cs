@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -21,35 +20,10 @@ namespace Supermarket.Controllers
         }
 
         // GET: Shelves
-        public async Task<IActionResult> Index(int hallwaysId)
+        public async Task<IActionResult> Index()
         {
-            
-            var hallways = await _context.Hallway.FindAsync(hallwaysId);
-
-            if (hallways == null)
-            {
-                // Trate o cenário onde o Hallway não foi encontrado
-                return NotFound();
-            }
-
-            var shelves = await _context.Shelf
-                .Where(s => s.HallwayId == hallwaysId)
-                .ToListAsync();
-
-            var hallway = _context.Hallway
-            .Include(h => h.Store) 
-            .FirstOrDefault(h => h.HallwayId == hallwaysId);
-
-            ViewBag.StoreId = hallway.StoreId;
-
-            ViewBag.HallwaysId = hallwaysId;
-            ViewBag.HallaysName = hallways.Description;
-            ViewBag.Shelves = shelves;
-            ViewBag.TotalShelft = shelves.Count();
-
-            return View(shelves);
-
-
+            var supermarketDbContext = _context.Shelf.Include(s => s.Hallway);
+            return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: Shelves/Details/5
@@ -63,7 +37,6 @@ namespace Supermarket.Controllers
             var shelf = await _context.Shelf
                 .Include(s => s.Hallway)
                 .FirstOrDefaultAsync(m => m.ShelfId == id);
-
             if (shelf == null)
             {
                 return NotFound();
@@ -72,69 +45,42 @@ namespace Supermarket.Controllers
             return View(shelf);
         }
 
-        public IActionResult Create(int? hallwaysId)
+        // GET: Shelves/Create
+        public IActionResult Create()
         {
-            
-            
-
-
-            ViewBag.ErrorMessage = TempData["ErrorMessage"] as string;
-            TempData["HallwaysId2"] = hallwaysId;
-            ViewBag.HallwaysId2 = hallwaysId;
-            ViewBag.HallwaysName = _context.Hallway.Find(hallwaysId)?.Description;
-            
-
+            ViewData["HallwayId"] = new SelectList(_context.Hallway, "HallwayId", "Description");
             return View();
         }
+
+        // POST: Shelves/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ShelfId,Name")] Shelf shelf)
+        public async Task<IActionResult> Create([Bind("ShelfId,Name,HallwayId")] Shelf shelf)
         {
-            
-            shelf.HallwayId = (int)TempData["HallwaysId2"];
-     
-        
             if (ModelState.IsValid)
             {
-                
-                Console.WriteLine("ModelState is Valid");
+                bool ShelvesExists = await _context.Shelf.AnyAsync(
+               b => b.Name == shelf.Name && b.HallwayId == shelf.HallwayId);
 
-                bool ShelfExists = await _context.Shelf.AnyAsync(s => s.Name == shelf.Name && s.HallwayId == shelf.HallwayId);
-
-                if (ShelfExists)
+                if (ShelvesExists)
                 {
-                   
-                    TempData["ErrorMessage"] = "Another Shelf with the same Name and Hallway already exists.";
+                    ModelState.AddModelError("", "Another Shelf with the same Name and Hallway already exists.");
                 }
                 else
                 {
-                    try
-                    {
-                        
-                        Console.WriteLine("Adding Shelf to the context");
-                        _context.Add(shelf);
-                        await _context.SaveChangesAsync();
+                    _context.Add(shelf);
+                    await _context.SaveChangesAsync();
 
-                        TempData["Message"] = "Shelf successfully created.";
-
-                        // Redirect to the "Details" action with the associated shelf ID
-                        return RedirectToAction("Details", new { id = shelf.ShelfId, hallwayId = shelf.HallwayId });
-                    }
-                    catch (DbUpdateException)
-                    {
-                       
-                        TempData["ErrorMessage"] = "DataBase conection Error ";
-                    }
+                    ViewBag.Message = "Shelf successfully created.";
+                    shelf.Hallway = await _context.Hallway.FindAsync(shelf.HallwayId);
+                    return View("Details", shelf);
                 }
             }
-           
-
-           
-            ViewData["HallwayId"] = new SelectList(_context.Shelf, "HallwayId", "Name", shelf.HallwayId);
-
-            return RedirectToAction("Create", new { hallwaysId = TempData["HallwaysId2"] });
+            ViewData["HallwayId"] = new SelectList(_context.Hallway, "HallwayId", "Description", shelf.HallwayId);
+            return View(shelf);
         }
-
 
         // GET: Shelves/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -179,7 +125,7 @@ namespace Supermarket.Controllers
                     {
                         _context.Update(shelf);
                         await _context.SaveChangesAsync();
-                        ViewBag.Message = "Shelf successfully edited.";
+                        ViewBag.Message = "Hallways successfully edited.";
                         shelf.Hallway = await _context.Hallway.FindAsync(shelf.HallwayId);
 
                         return View("Details", shelf);
@@ -222,14 +168,13 @@ namespace Supermarket.Controllers
 
             if (hasProductsAssociated)
             {
-                
                 ViewBag.ErrorMessage = "It is not possible to delete the shelfts  as there are products associated with it";
                 ViewBag.hasProductsAssociated = await _context.Shelft_ProductExhibition
                     .Include(wp => wp.Product)
                     .Where(wp => wp.ShelfId == id)
                     .ToListAsync();
 
-                return View("Delete",shelf);
+                return View("Delete");
             }
 
             return View(shelf);
@@ -251,50 +196,7 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index", new { hallwaysId = shelf?.HallwayId });
-
-        }
-
-        public IActionResult ShelfProducts(int shelfId)
-        {
-            var shelfInfo = _context.Shelf
-      .Where(s => s.ShelfId == shelfId)
-      .Select(s => new
-      {
-          ShelfName = s.Name,
-          HallwayId = s.HallwayId
-      })
-      .FirstOrDefault();
-
-            if (shelfInfo == null)
-            {
-                return NotFound();
-            }
-
-            var products = _context.Shelft_ProductExhibition
-                .Where(sp => sp.ShelfId == shelfId && sp.Product.Name != null)
-                .Include(sp => sp.Product)
-                .ThenInclude(p => p.Brand)
-                .GroupBy(sp => sp.ProductId)
-                .Select(group => new
-                {
-                    ProductId = group.Key, // Adiciona a propriedade ProductId
-                    ProductName = group.First().Product.Name,
-                    ProductDescription = group.First().Product.Description,
-                    BrandName = group.First().Product.Brand != null ? group.First().Product.Brand.Name : "No Brand",
-                    Quantity = group.Sum(p => p.Quantity)
-                })
-                .ToList();
-
-            ViewBag.ShelfId = shelfId;
-            ViewBag.HallwayId = shelfInfo.HallwayId;
-            ViewBag.ShelfName = shelfInfo.ShelfName;
-            ViewBag.TotalProducts = products.Count;
-            ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
-            ViewBag.Products = products;
-
-            return View();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool ShelfExists(int id)
