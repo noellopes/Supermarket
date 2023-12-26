@@ -19,11 +19,16 @@ namespace Supermarket.Data
             PopulateWarehouseSection(db);
             PopulateWarehouseSection_Product(db);
             PopulateReduceProduct(db);
+
             PopulateClients(db);
             PopulateClientCard(db);
             PopulateProductDiscounts(db);
             //PopulateEmployees(db);
             //PopulateEmployeeEvaluations(db);
+
+            //PopulateEmployees(db);
+           // PopulateEmployeeEvaluations(db);
+
         }
 
         private static void PopulateBrand(SupermarketDbContext db)
@@ -315,7 +320,7 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-
+/*
         private static void PopulateEmployees(SupermarketDbContext db)
         {
             if (db.Employee.Any()) return;
@@ -400,6 +405,7 @@ namespace Supermarket.Data
                 );
 
             db.SaveChanges();
+
         }
 
         private static void PopulateClients(SupermarketDbContext db)
@@ -498,5 +504,8 @@ namespace Supermarket.Data
                 await userManager.CreateAsync(user, password);
             }
         }
+
+        }*/
+
     }
 }
