@@ -33,6 +33,8 @@ namespace Supermarket.Models
         [Required]
         public required string Status { get; set; } = "Unavailable";
 
+        public static List<string> StatusList = new List<string> { "Available", "Unavailable", "Discontinued" };
+
         public ICollection<Shelft_ProductExhibition>? Shelf { get; set; }
 
         public ICollection<WarehouseSection_Product>? WarehouseSection { get; set; }

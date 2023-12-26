@@ -69,10 +69,6 @@ namespace Supermarket.Data
         public DbSet<MealCard> MealCard { get; set; } = default!;
 
         public DbSet<CardMovement> CardMovement { get; set; } = default!;
-        public DbSet<Supermarket.Models.Ponto> Ponto { get; set; } = default!;
-
-        public DbSet<Supermarket.Models.EmployeeSchedule> EmployeeSchedule { get; set; } = default!;
-
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
 
