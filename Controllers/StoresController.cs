@@ -194,52 +194,44 @@ namespace Supermarket.Controllers
         }
 
         public IActionResult StoreProducts(int storeId)
-        {
-            var storeInfo = _context.Store
-                .Where(s => s.StoreId == storeId)
-                .Select(s => new
-                {
-                    StoreName = s.Name
-                })
-                .FirstOrDefault();
+        {   
+             var storeInfo = _context.Store
+            .Where(s => s.StoreId == storeId)
+           .Select(s => new
+            {
+            StoreName = s.Name
+            })
+            .FirstOrDefault();
 
             if (storeInfo == null)
             {
-                return NotFound(); // ou algum tratamento de erro apropriado
+                return NotFound(); 
             }
 
             var products = _context.Shelft_ProductExhibition
                 .Where(sp => sp.Shelf.Hallway.StoreId == storeId && sp.Product.Name != null)
                 .Include(sp => sp.Product)
-                .Select(sp => new
+                .ThenInclude(p => p.Brand)
+                .GroupBy(sp => sp.ProductId) // Agrupar por ProductId
+                .Select(group => new
                 {
-                    ProductName = sp.Product.Name,
-                    Quantity = sp.Quantity
+                    ProductName = group.First().Product.Name, 
+                    ProductDescription= group.First().Product.Description,
+                    BrandName = group.First().Product.Brand != null ? group.First().Product.Brand.Name : "No Brand",
+                    Quantity = group.Sum(p => p.Quantity) 
                 })
                 .ToList();
-
+          
             ViewBag.StoreName = storeInfo.StoreName;
             ViewBag.TotalProducts = products.Count;
             ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
             ViewBag.Products = products;
 
+           
             return View();
         }
 
-        public IActionResult StoreHallways(int storeId)
-        {
-            var hallways = _context.Hallway
-                .Where(h => h.StoreId == storeId)
-                .ToList();
-
-            ViewBag.StoreId = storeId;
-            ViewBag.StoreName = _context.Store.Find(storeId)?.Name;
-            ViewBag.Hallways = hallways;
-
-            return View();
-        }
-
-
+        
         private bool StoreExists(int id)
         {
           return (_context.Store?.Any(e => e.StoreId == id)).GetValueOrDefault();
