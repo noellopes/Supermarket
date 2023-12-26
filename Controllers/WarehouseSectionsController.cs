@@ -147,7 +147,7 @@ namespace Supermarket.Controllers
             ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Name", warehouseSection.WarehouseId);
             return View(warehouseSection);
         }
-
+        /*
         // GET: WarehouseSections/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -196,7 +196,7 @@ namespace Supermarket.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
+        }*/
 
         private bool WarehouseSectionExists(int id)
         {

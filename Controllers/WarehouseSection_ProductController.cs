@@ -22,30 +22,27 @@ namespace Supermarket.Controllers
         // GET: WarehouseSection_Product
         public async Task<IActionResult> Index()
         {
-            var supermarketDbContext = _context.WarehouseSection_Product.Include(w => w.Product).Include(w => w.WarehouseSection);
+            var supermarketDbContext = _context.WarehouseSection_Product.Include(w => w.Product).Include(w => w.Supplier).Include(w => w.WarehouseSection);
             return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: WarehouseSection_Product/Details/5
-        public async Task<IActionResult> Details(int? productId, int? warehouseSectionId)
+        public async Task<IActionResult> Details(int? id)
         {
-            if (productId == null || warehouseSectionId == null || _context.WarehouseSection_Product == null)
+            if (id == null || _context.WarehouseSection_Product == null)
             {
                 return NotFound();
             }
 
             var warehouseSection_Product = await _context.WarehouseSection_Product
                 .Include(w => w.Product)
+                .Include(w => w.Supplier)
                 .Include(w => w.WarehouseSection)
-                .FirstOrDefaultAsync(m => m.ProductId == productId && m.WarehouseSectionId == warehouseSectionId);
-
+                .FirstOrDefaultAsync(m => m.WarehouseSection_ProductId == id);
             if (warehouseSection_Product == null)
             {
                 return NotFound();
             }
-
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
-            ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description");
 
             return View(warehouseSection_Product);
         }
@@ -53,8 +50,8 @@ namespace Supermarket.Controllers
         // GET: WarehouseSection_Product/Create
         public IActionResult Create()
         {
-
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description");
+            ViewData["SupplierID"] = new SelectList(_context.Supplier, "SupplierId", "Name");
             ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description");
             return View();
         }
@@ -64,59 +61,36 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,WarehouseSectionId,Quantity,ReservedQuantity")] WarehouseSection_Product warehouseSection_Product)
+        public async Task<IActionResult> Create([Bind("WarehouseSection_ProductId,ProductId,WarehouseSectionId,Quantity,ReservedQuantity,BatchNumber,ExpirationDate,SupplierID")] WarehouseSection_Product warehouseSection_Product)
         {
             if (ModelState.IsValid)
             {
-                bool WarehouseSection_ProductExists = await _context.WarehouseSection_Product.AnyAsync(
-                w => w.ProductId == warehouseSection_Product.ProductId
-                && w.WarehouseSectionId == warehouseSection_Product.WarehouseSectionId);
-                if (WarehouseSection_ProductExists)
-                {
-                    ModelState.AddModelError("", "Another Warehouse Section Product with the same Product and WarehouseSection already exists.");
-                }
-                else
-                {
-                    _context.Add(warehouseSection_Product);
-                    await _context.Entry(warehouseSection_Product)
-                    .Reference(wp => wp.Product)
-                    .LoadAsync();
-                    await _context.Entry(warehouseSection_Product)
-                    .Reference(wp => wp.WarehouseSection)
-                    .LoadAsync();
-
-                    await _context.SaveChangesAsync();
-                    ViewBag.Message = "Warehouse Section Product successfully created.";
-                    return View("Details", warehouseSection_Product);
-                }
+                _context.Add(warehouseSection_Product);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", warehouseSection_Product.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", warehouseSection_Product.ProductId);
+            ViewData["SupplierID"] = new SelectList(_context.Supplier, "SupplierId", "Name", warehouseSection_Product.SupplierID);
             ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description", warehouseSection_Product.WarehouseSectionId);
             return View(warehouseSection_Product);
         }
 
         // GET: WarehouseSection_Product/Edit/5
-        public async Task<IActionResult> Edit(int? productId, int? warehouseSectionId)
+        public async Task<IActionResult> Edit(int? id)
         {
-            if (productId == null || warehouseSectionId == null )
+            if (id == null || _context.WarehouseSection_Product == null)
             {
                 return NotFound();
             }
 
-            var warehouseSection_Product = await _context.WarehouseSection_Product
-               .Include(w => w.Product)
-               .Include(w => w.WarehouseSection)
-               .FirstOrDefaultAsync(m => m.ProductId == productId && m.WarehouseSectionId == warehouseSectionId);
-
+            var warehouseSection_Product = await _context.WarehouseSection_Product.FindAsync(id);
             if (warehouseSection_Product == null)
             {
                 return NotFound();
             }
-            
-
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", warehouseSection_Product.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", warehouseSection_Product.ProductId);
+            ViewData["SupplierID"] = new SelectList(_context.Supplier, "SupplierId", "Name", warehouseSection_Product.SupplierID);
             ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description", warehouseSection_Product.WarehouseSectionId);
-
             return View(warehouseSection_Product);
         }
 
@@ -125,15 +99,9 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int? productId, int? warehouseSectionId, [Bind("ProductId,WarehouseSectionId,Quantity,ReservedQuantity")] WarehouseSection_Product warehouseSection_Product)
+        public async Task<IActionResult> Edit(int id, [Bind("WarehouseSection_ProductId,ProductId,WarehouseSectionId,Quantity,ReservedQuantity,BatchNumber,ExpirationDate,SupplierID")] WarehouseSection_Product warehouseSection_Product)
         {
-            if (productId == null || warehouseSectionId == null || warehouseSection_Product == null)
-            {
-                return NotFound();
-            }
-
-
-            if (productId != warehouseSection_Product.ProductId || warehouseSectionId != warehouseSection_Product.WarehouseSectionId)
+            if (id != warehouseSection_Product.WarehouseSection_ProductId)
             {
                 return NotFound();
             }
@@ -142,27 +110,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    
-                    if (warehouseSection_Product.ReservedQuantity > warehouseSection_Product.Quantity)
-                    {
-            
-                        ModelState.AddModelError("", "The quantity must always be greater than or equal to the reserved quantity");
-                       
-                    }
-                    else
-                    {
-                        _context.Update(warehouseSection_Product);
-                        await _context.SaveChangesAsync();
-
-                        //ViewBag.Message = "Warehouse Section Product successfully edited.";
-                        TempData["Message"] = "Warehouse Section Product successfully created.";
-                        return RedirectToAction("Details", new { productId = warehouseSection_Product.ProductId, warehouseSectionId = warehouseSection_Product.WarehouseSectionId });
-
-                    }
+                    _context.Update(warehouseSection_Product);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!WarehouseSection_ProductExists(warehouseSection_Product.ProductId, warehouseSection_Product.WarehouseSectionId))
+                    if (!WarehouseSection_ProductExists(warehouseSection_Product.WarehouseSection_ProductId))
                     {
                         return NotFound();
                     }
@@ -171,37 +124,27 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-               // return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
-            warehouseSection_Product.Product = await _context.Product.FindAsync(warehouseSection_Product.ProductId);
-            warehouseSection_Product.WarehouseSection = await _context.WarehouseSection.FindAsync(warehouseSection_Product.WarehouseSectionId);
-
-
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", warehouseSection_Product.ProductId);
+            ViewData["SupplierID"] = new SelectList(_context.Supplier, "SupplierId", "Name", warehouseSection_Product.SupplierID);
+            ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description", warehouseSection_Product.WarehouseSectionId);
             return View(warehouseSection_Product);
         }
 
-       
-
         // GET: WarehouseSection_Product/Delete/5
-        public async Task<IActionResult> Delete(int? productId, int? warehouseSectionId)
+        public async Task<IActionResult> Delete(int? id)
         {
-            if (productId == null || warehouseSectionId == null || _context.WarehouseSection_Product == null)
+            if (id == null || _context.WarehouseSection_Product == null)
             {
                 return NotFound();
             }
 
             var warehouseSection_Product = await _context.WarehouseSection_Product
                 .Include(w => w.Product)
+                .Include(w => w.Supplier)
                 .Include(w => w.WarehouseSection)
-                .FirstOrDefaultAsync(m => m.ProductId == productId && m.WarehouseSectionId == warehouseSectionId);
-
-            if (warehouseSection_Product.Quantity != 0)
-            {
-                ViewBag.Message = "Warehouse Section Product cannot be eliminated because it has a quantity greater than 0";
-                return View("Delete", warehouseSection_Product); 
-            }
-
-
+                .FirstOrDefaultAsync(m => m.WarehouseSection_ProductId == id);
             if (warehouseSection_Product == null)
             {
                 return NotFound();
@@ -209,31 +152,29 @@ namespace Supermarket.Controllers
 
             return View(warehouseSection_Product);
         }
-       
+
         // POST: WarehouseSection_Product/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int productId, int warehouseSectionId)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.WarehouseSection_Product == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.WarehouseSection_Product' is null.");
+                return Problem("Entity set 'SupermarketDbContext.WarehouseSection_Product'  is null.");
             }
-            var warehouseSection_Product = await _context.WarehouseSection_Product
-            .FirstOrDefaultAsync(m => m.ProductId == productId && m.WarehouseSectionId == warehouseSectionId);
-
+            var warehouseSection_Product = await _context.WarehouseSection_Product.FindAsync(id);
             if (warehouseSection_Product != null)
             {
                 _context.WarehouseSection_Product.Remove(warehouseSection_Product);
-                await _context.SaveChangesAsync();
             }
-
+            
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool WarehouseSection_ProductExists(int productId, int warehouseSectionId)
+        private bool WarehouseSection_ProductExists(int id)
         {
-            return _context.WarehouseSection_Product?.Any(e => e.ProductId == productId && e.WarehouseSectionId == warehouseSectionId) == true;
+          return (_context.WarehouseSection_Product?.Any(e => e.WarehouseSection_ProductId == id)).GetValueOrDefault();
         }
     }
 }

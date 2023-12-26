@@ -6,24 +6,22 @@
 
 <h1>Edit</h1>
 
-<h4>Warehouse Section Product</h4>
-
+<h4>WarehouseSection_Product</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ProductId" />
-            <input type="hidden" asp-for="WarehouseSectionId" />
-            
+            <input type="hidden" asp-for="WarehouseSection_ProductId" />
             <div class="form-group">
-                <label asp-for="ProductId" class="control-label">Product</label>
-                <span asp-for="ProductId" class="form-control" readonly> @Model.Product.Name</span>
+                <label asp-for="ProductId" class="control-label"></label>
+                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <label asp-for="WarehouseSectionId" class="control-label">Warehouse Section</label>
-                <span asp-for="WarehouseSectionId" class="form-control" readonly>@Model.WarehouseSection.Description</span>
+                <label asp-for="WarehouseSectionId" class="control-label"></label>
+                <select asp-for="WarehouseSectionId" class="form-control" asp-items="ViewBag.WarehouseSectionId"></select>
+                <span asp-validation-for="WarehouseSectionId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Quantity" class="control-label"></label>
@@ -34,6 +32,21 @@
                 <label asp-for="ReservedQuantity" class="control-label"></label>
                 <input asp-for="ReservedQuantity" class="form-control" />
                 <span asp-validation-for="ReservedQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BatchNumber" class="control-label"></label>
+                <input asp-for="BatchNumber" class="form-control" />
+                <span asp-validation-for="BatchNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpirationDate" class="control-label"></label>
+                <input asp-for="ExpirationDate" class="form-control" />
+                <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SupplierID" class="control-label"></label>
+                <select asp-for="SupplierID" class="form-control" asp-items="ViewBag.SupplierID"></select>
+                <span asp-validation-for="SupplierID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

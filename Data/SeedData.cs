@@ -14,9 +14,9 @@ namespace Supermarket.Data
             PopulateShelf(db);
             PopulateShelft_ProductExhibition(db);
             PopulateWarehouse(db);
-            PopulateWarehouseSection(db);
-            PopulateWarehouseSection_Product(db);
-            PopulateReduceProduct(db);
+            //PopulateWarehouseSection(db);
+            //PopulateWarehouseSection_Product(db);
+           // PopulateReduceProduct(db);
             //PopulateEmployees(db);
            // PopulateEmployeeEvaluations(db);
         }
@@ -220,7 +220,7 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-
+        /*
         private static void PopulateWarehouseSection(SupermarketDbContext db)
         {
             if (db.WarehouseSection.Any()) return;
@@ -309,7 +309,7 @@ namespace Supermarket.Data
                 );
 
             db.SaveChanges();
-        }
+        }*/
 /*
         private static void PopulateEmployees(SupermarketDbContext db)
         {
