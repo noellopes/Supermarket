@@ -75,5 +75,8 @@ namespace Supermarket.Data
 
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
+
+
+        public DbSet<Supermarket.Models.Supplier> Supplier { get; set; } = default!;
     }
 }
