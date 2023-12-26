@@ -4,17 +4,13 @@
 
 <h1>Rotative Inventory</h1>
 
-  
 @{
-    // Recuperar as seções de armazém de ViewData
     var warehouseSections = ViewData["WarehouseSections"] as IEnumerable<Supermarket.Models.WarehouseSection>;
     int warehouseSectionId;
     var selectedWarehouseSection = (Supermarket.Models.WarehouseSection)null;
 
-    // Verificar se WarehouseSectionId está presente nos parâmetros da consulta
     if (int.TryParse(Context.Request.Query["WarehouseSectionId"], out warehouseSectionId) && warehouseSectionId > 0)
     {
-        // Encontrar a seção de armazém selecionada
         selectedWarehouseSection = warehouseSections?.FirstOrDefault(w => w.WarehouseSectionId == warehouseSectionId);
     }
 }
@@ -23,7 +19,6 @@
     <div class="form-group">
         <label for="WarehouseSectionId">Select Warehouse Section:</label>
         <select name="WarehouseSectionId" class="form-control">
-            <!-- Dropdown para Seções de Armazém -->
             <option value="">-- All Warehouse Sections --</option>
             @if (warehouseSections != null)
             {
@@ -112,15 +107,12 @@
 
 
 @{
-    // Recuperar as prateleiras da  ViewData
     var shelves = ViewData["Shelf"] as IEnumerable<Supermarket.Models.Shelf>;
     int shelfId;
     var selectedShelf = (Supermarket.Models.Shelf)null;
 
-    // Verificar se ShelfId está presente nos parâmetros da consulta
     if (int.TryParse(Context.Request.Query["ShelfId"], out shelfId) && shelfId > 0)
     {
-        // Encontrar a prateleira selecionada
         selectedShelf = shelves?.FirstOrDefault(s => s.ShelfId == shelfId);
     }
 }
@@ -128,7 +120,6 @@
     <form asp-controller="Products" asp-action="RotativeProducts" method="get">
         <div class="form-group">
             <label for="ShelfId">Select Shelf:</label>
-            <!-- Dropdown para as prateleiras -->
             <select name="ShelfId" class="form-control">
                 <option value="">-- All Shelves --</option>
                 @if (shelves != null)
@@ -188,7 +179,6 @@
                                 </td>
                                 <td>
                                     @shelfProductExhibition.Product.Category!.Name
-
                                 </td>
                                 <td>
                                     @shelfProductExhibition.Quantity

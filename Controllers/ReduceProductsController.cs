@@ -67,69 +67,11 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ReduceProductId,Reason,Status,Date,Quantity,ProductId,WarehouseSectionId,ShelfId")] ReduceProduct reduceProduct)
         {
-            var SectionProduct = await _context.WarehouseSection_Product
-                   .FirstOrDefaultAsync(m => m.ProductId == reduceProduct.ProductId && m.WarehouseSectionId == reduceProduct.WarehouseSectionId);
-            var ShelfProduct = await _context.Shelft_ProductExhibition
-                   .FirstOrDefaultAsync(m => m.ProductId == reduceProduct.ProductId && m.ShelfId == reduceProduct.ShelfId);
-
             if (ModelState.IsValid)
             {
-                if (reduceProduct.WarehouseSectionId != null)
-                {
-                    if (SectionProduct == null)
-                    {
-                        ModelState.AddModelError(string.Empty, "The product does not exist in this section");
-                    }
-                    else
-                    {
-                        if (SectionProduct!.Quantity > 0)
-                        {
-                            if (reduceProduct.Quantity < SectionProduct.Quantity)
-                            {
-                                _context.Add(reduceProduct);
-                                await _context.SaveChangesAsync();
-                                return RedirectToAction(nameof(Index));
-                            }
-                            else
-                            {
-                                ModelState.AddModelError(string.Empty, "More products to write-off than exist in the section");
-                            }
-                        }
-                        else
-                        {
-                            ModelState.AddModelError(string.Empty, "This section does not contain any more of this product to be writed-off, quantity = 0");
-                        }
-                    }
-                }
-
-                if (reduceProduct.ShelfId != null)
-                {
-                    if (ShelfProduct == null)
-                    {
-                        ModelState.AddModelError(string.Empty, "The product does not exist in this shelf");
-                    }
-                    else
-                    {
-                        if (ShelfProduct!.Quantity > 0)
-                        {
-                            if (reduceProduct.Quantity < ShelfProduct.Quantity)
-                            {
-                                _context.Add(reduceProduct);
-                                await _context.SaveChangesAsync();
-                                return RedirectToAction(nameof(Index));
-                            }
-                            else
-                            {
-                                ModelState.AddModelError(string.Empty, "More products to write-off than exist in the shelf");
-                            }
-                        }
-                        else
-                        {
-                            ModelState.AddModelError(string.Empty, "This shelf does not contain any more of this product to be writed-off, quantity = 0");
-                        }
-                    }
-                }
-               
+                _context.Add(reduceProduct);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
@@ -137,8 +79,7 @@ namespace Supermarket.Controllers
             return View(reduceProduct);
         }
 
-
-        // GET: ReduceProducts/Edit/5 SelectProduct
+        // GET: ReduceProducts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ReduceProduct == null)

@@ -143,11 +143,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
-
-
 
                     b.HasKey("ClientId");
 
@@ -167,12 +164,6 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.Property<int>("ClientCardNumber")
                         .HasColumnType("int");
-
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
@@ -586,6 +577,8 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasKey("ProductDiscountId");
 
+                    b.HasIndex("ClientCardId");
+
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductDiscount");
@@ -859,7 +852,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("MealCard");
                 });
 
-
             modelBuilder.Entity("Supermarket.Models.CategoryDiscount", b =>
                 {
                     b.HasOne("Supermarket.Models.Category", "Category")
@@ -870,7 +862,6 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.Navigation("Category");
                 });
-
 
             modelBuilder.Entity("Supermarket.Models.ClientCard", b =>
                 {
@@ -962,9 +953,9 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             modelBuilder.Entity("Supermarket.Models.ProductDiscount", b =>
                 {
-                    b.HasOne("Supermarket.Models.ClientCard", "clientCard")
+                    b.HasOne("Supermarket.Models.ClientCard", "ClientCard")
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ClientCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -974,9 +965,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("ClientCard");
 
-                    b.Navigation("clientCard");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Supermarket.Models.ReduceProduct", b =>

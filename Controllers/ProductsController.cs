@@ -98,7 +98,6 @@ namespace Supermarket.Controllers
             }
             ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "BrandId", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Name", product.CategoryId);
-            ViewData["Status"] = new SelectList(Product.StatusList, product.Status);
             return View(product);
         }
 
@@ -118,20 +117,38 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    bool ProductExists = await _context.Product.AnyAsync(
-                    b => b.Name == product.Name && b.Description == product.Description && b.ProductId != product.ProductId);
+                    var existingProduct = await _context.Product.FindAsync(id);
 
-                    if (ProductExists)
+                    if (existingProduct == null)
                     {
-                        ModelState.AddModelError("", "Another Product with the same Name and Description already exists.");
+                        return NotFound();
                     }
-                    else
+
+                    if (existingProduct.Name != product.Name || existingProduct.Description != product.Description)
                     {
-                        _context.Update(product);
-                        await _context.SaveChangesAsync();
-                        ViewBag.Message = "Product successfully edited.";
-                        return View("Details", product);
+                        bool productWithSameNameAndDescriptionExists = await _context.Product
+                            .AnyAsync(p => p.ProductId != id && p.Name == product.Name && p.Description == product.Description);
+
+                        if (productWithSameNameAndDescriptionExists)
+                        {
+                            ModelState.AddModelError("", "Another product with the same Name and Description already exists.");
+                            ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "BrandId", "Name", product.BrandId);
+                            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Name", product.CategoryId);
+                            return View(product);
+                        }
                     }
+                    existingProduct.CategoryId = product.CategoryId;
+                    existingProduct.BrandId = product.BrandId;
+                    existingProduct.TotalQuantity = product.TotalQuantity;
+                    existingProduct.MinimumQuantity = product.MinimumQuantity;
+                    existingProduct.UnitPrice = product.UnitPrice;
+                    existingProduct.Status = product.Status;
+
+                    _context.Update(existingProduct);
+                    await _context.SaveChangesAsync();
+
+                    ViewBag.Message = "Product successfully edited.";
+                    return View("Details", existingProduct);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -151,44 +168,44 @@ namespace Supermarket.Controllers
             return View(product);
         }
 
-        //// GET: Products/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null || _context.Product == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: Products/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Product == null)
+            {
+                return NotFound();
+            }
 
-        //    var product = await _context.Product
-        //        .Include(p => p.Brand)
-        //        .Include(p => p.Category)
-        //        .FirstOrDefaultAsync(m => m.ProductId == id);
-        //    if (product == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var product = await _context.Product
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
-        //    return View(product);
-        //}
+            return View(product);
+        }
 
-        //// POST: Products/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    if (_context.Product == null)
-        //    {
-        //        return Problem("Entity set 'SupermarketDbContext.Product'  is null.");
-        //    }
-        //    var product = await _context.Product.FindAsync(id);
-        //    if (product != null)
-        //    {
-        //        _context.Product.Remove(product);
-        //    }
+        // POST: Products/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.Product == null)
+            {
+                return Problem("Entity set 'SupermarketDbContext.Product'  is null.");
+            }
+            var product = await _context.Product.FindAsync(id);
+            if (product != null)
+            {
+                _context.Product.Remove(product);
+            }
             
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         public async Task<IActionResult> RotativeProducts(int warehouseSectionId = 0, int shelfId = 0)
         {

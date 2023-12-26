@@ -20,20 +20,10 @@ namespace Supermarket.Controllers
         }
 
         // GET: Hallways
-        public async Task<IActionResult> Index(int storeId)
+        public async Task<IActionResult> Index()
         {
-            var hallways = await _context.Hallway
-             .Where(h => h.StoreId == storeId)
-             .ToListAsync();
-
-            var storeName = _context.Store.Find(storeId)?.Name;
-
-            ViewBag.StoreId = storeId;
-            ViewBag.StoreName = storeName;
-            ViewBag.Hallways = hallways;
-            ViewBag.TotalHallways = hallways.Count;
-
-            return View(hallways);
+            var supermarketDbContext = _context.Hallway.Include(h => h.Store);
+            return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: Hallways/Details/5
@@ -56,19 +46,9 @@ namespace Supermarket.Controllers
         }
 
         // GET: Hallways/Create
-      
-        public IActionResult Create(int? storeId)
+        public IActionResult Create()
         {
-            if (storeId.HasValue)
-            {
-                ViewBag.ErrorMessage2 = TempData["ErrorMessage2"] as string;
-                ViewBag.StoreId2 = storeId.Value;
-                ViewBag.StoreName = _context.Store.Find(storeId.Value)?.Name;
-                TempData["StoreIdId2"] = storeId;
-            }
-            else
-                return NotFound();
-
+            ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name");
             return View();
         }
 
@@ -77,39 +57,30 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("HallwayId,Description")] Hallway hallway)
+        public async Task<IActionResult> Create([Bind("HallwayId,Description,StoreId")] Hallway hallway)
         {
-            hallway.StoreId = (int)TempData["StoreIdId2"];
-
             if (ModelState.IsValid)
             {
                 bool HallwaysExists = await _context.Hallway.AnyAsync(
-                    b => b.Description == hallway.Description && b.StoreId == hallway.StoreId);
+                b => b.Description == hallway.Description && b.StoreId == hallway.StoreId);
 
                 if (HallwaysExists)
                 {
-                    TempData["ErrorMessage2"] = "Another hallway with the same description and store already exists.";
+                    ModelState.AddModelError("", "Another hallway with the same description and store already exists.");
                 }
-                else
-                {
-                    try { 
+                else{
                     _context.Add(hallway);
                     await _context.SaveChangesAsync();
-                    TempData["Message"] = "Hallway successfully created.";
-                    return RedirectToAction("Details", new { id = hallway.HallwayId, storeId = hallway.StoreId});
-                    }
-                    catch (DbUpdateException)
-                    {
 
-                        TempData["ErrorMessage2"] = "DataBase conection Error ";
-                    }
-
+                    ViewBag.Message = "Hallways successfully created.";
+                    hallway.Store = await _context.Store.FindAsync(hallway.StoreId);
+                    return View("Details", hallway);
                 }
             }
-
             ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
-            return RedirectToAction("Create", new { storeId = TempData["StoreIdId2"] });
+            return View(hallway);
         }
+
         // GET: Hallways/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -177,6 +148,7 @@ namespace Supermarket.Controllers
             ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
             return View(hallway);
         }
+
         // GET: Hallways/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -188,23 +160,19 @@ namespace Supermarket.Controllers
             var hallway = await _context.Hallway
                 .Include(h => h.Store)
                 .FirstOrDefaultAsync(m => m.HallwayId == id);
-
             if (hallway == null)
             {
                 return NotFound();
             }
-
             var ShelfsAssociatedWithHallway = await _context.Shelf
-                .Where(s => s.HallwayId == id)
-                .ToListAsync();
-
-            int storeIdToDelete = hallway.StoreId;
+            .Where(s => s.HallwayId == id)
+            .ToListAsync();
 
             if (ShelfsAssociatedWithHallway.Count > 0)
             {
                 ViewBag.ErrorMessage = "It is not possible to delete the hallway as there are shelves associated with it";
                 ViewBag.ShelfsAssociatedWithHallway = ShelfsAssociatedWithHallway;
-                return View("Delete", hallway); 
+                return View("Delete");
             }
 
             return View(hallway);
@@ -219,58 +187,16 @@ namespace Supermarket.Controllers
             {
                 return Problem("Entity set 'SupermarketDbContext.Hallway'  is null.");
             }
-
             var hallway = await _context.Hallway.FindAsync(id);
-
             if (hallway != null)
             {
                 _context.Hallway.Remove(hallway);
-                await _context.SaveChangesAsync();
             }
-
-            return RedirectToAction("Index", "Hallways", new { storeId = hallway?.StoreId });
+            
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult HallwayProducts(int hallwayId)
-        {
-            var hallwayInfo = _context.Hallway
-                .Where(h => h.HallwayId == hallwayId)
-                .Select(h => new
-                {
-                    HallwayName = h.Description,
-                     StoreId = h.StoreId
-                })
-                .FirstOrDefault();
-
-            if (hallwayInfo == null)
-            {
-                return NotFound();
-            }
-
-            var products = _context.Shelft_ProductExhibition
-                .Where(sp => sp.Shelf.HallwayId == hallwayId && sp.Product.Name != null)
-                .Include(sp => sp.Product)
-                .ThenInclude(p => p.Brand)
-                .GroupBy(sp => sp.ProductId) // Agrupar por ProductId
-                .Select(group => new
-                {
-                    ProductName = group.First().Product.Name,
-                    ProductDescription = group.First().Product.Description,
-                    BrandName = group.First().Product.Brand != null ? group.First().Product.Brand.Name : "No Brand",
-                    Quantity = group.Sum(p => p.Quantity)
-                })
-                .ToList();
-            ViewBag.StoreId = hallwayInfo.StoreId;
-            ViewBag.HallwayName = hallwayInfo.HallwayName;
-            ViewBag.TotalProducts = products.Count;
-            ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
-            ViewBag.Products = products;
-          
-          
-
-
-            return View();
-        }
         private bool HallwayExists(int id)
         {
           return (_context.Hallway?.Any(e => e.HallwayId == id)).GetValueOrDefault();
