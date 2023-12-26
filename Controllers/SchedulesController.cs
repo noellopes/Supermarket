@@ -19,8 +19,9 @@ namespace Supermarket.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index (int page = 1,string departmentName = "")
+        public async Task<IActionResult> Index (int page = 1, string departmentName = "" /*int departmentButtonName = 0*/)
         {
+            ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
 
             var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
             //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
@@ -31,6 +32,11 @@ namespace Supermarket.Controllers
             {
                 schedules = schedules.Where(x => x.Departments!.NameDepartments.Contains(departmentName));
             }
+
+            //if (departmentButtonName != 0)
+            //{
+            //    schedules = schedules.Where(x => x.IDDepartments.Equals(departmentButtonName));
+            //}
 
             PagingInfo paging = new PagingInfo
             {
@@ -56,6 +62,7 @@ namespace Supermarket.Controllers
                    .ToListAsync(),
                 PagingInfo = paging,
                 SearchDepartment = departmentName,
+                //SearchButtonDepartment = departmentButtonName,
             };
 
             return View(vm);
