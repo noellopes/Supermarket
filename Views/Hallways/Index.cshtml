@@ -4,83 +4,38 @@
     ViewData["Title"] = "Hallway";
 }
 
-<style>
-    body {
-        padding: 20px;
-        background-color: #f8f9fa;
-        color: #343a40;
-    }
+<h1>Hallway List </h1>
 
-    h1 {
-        color: #007bff;
-        margin-top: 20px;
-    }
-
-    .card {
-        background-color: #fff;
-        border: 1px solid rgba(0, 0, 0, 0.125);
-        border-radius: 0.25rem;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .table th,
-    .table td {
-        background-color: #f8f8f8;
-        color: #000;
-        border: none;
-    }
-
-    .btn-create {
-        background-color: #28a745;
-        color: #fff;
-    }
-</style>
-
-<h1>Hallway List</h1>
-
-<div class="card">
-    <div class="card-body">
-        <h2 class="card-title">@ViewBag.StoreName - Hallways</h2>
-        <p class="card-text">Total Hallways: @ViewBag.TotalHallways</p>
-    </div>
-</div>
-
-@if (ViewBag.TotalHallways != null && ViewBag.TotalHallways > 0)
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Hallway Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var hallway in ViewBag.Hallways)
-            {
-                <tr>
-                    <td>@hallway.Description</td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="Actions">
-                            <a asp-controller="Hallways" asp-action="Edit" asp-route-id="@hallway.HallwayId" class="btn btn-secondary">Edit </a>
-                            <a asp-controller="Hallways" asp-action="Details" asp-route-id="@hallway.HallwayId" class="btn btn-secondary">Details</a>
-                            <a asp-controller="Hallways" asp-action="HallwayProducts" asp-route-hallwayId="@hallway.HallwayId" class="btn btn-secondary">View Products</a>
-                            <a asp-controller="Shelves" asp-action="Index" asp-route-hallwaysId="@hallway.HallwayId" class="btn btn-secondary">View Shelves</a>
-                            <a asp-controller="Hallways" asp-action="Delete" asp-route-id="@hallway.HallwayId" class="btn btn-danger">Delete</a>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Store)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Store.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.HallwayId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.HallwayId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.HallwayId">Delete</a>
+            </td>
+        </tr>
 }
-else
-{
-    <p class="card-text">No hallways found for this store.</p>
-}
-
-<a asp-controller="Hallways" asp-action="Create" asp-route-storeId="@ViewBag.StoreId" class="btn btn-create">
-    Create Hallway
-</a>
-
-<a asp-action="Index" asp-controller="Stores" class="btn btn-secondary">Back to Store List</a>
+    </tbody>
+</table>
