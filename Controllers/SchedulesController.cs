@@ -23,12 +23,13 @@ namespace Supermarket.Controllers
         {
 
             var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
+            //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
 
             int departmentId = GetDepartmentId(departmentName);
 
             if (departmentName != "")
             {
-                schedules = schedules.Where(x => x.Departments.NameDepartments.Contains(departmentName));
+                schedules = schedules.Where(x => x.Departments!.NameDepartments.Contains(departmentName));
             }
 
             PagingInfo paging = new PagingInfo
@@ -46,12 +47,10 @@ namespace Supermarket.Controllers
                 paging.CurrentPage = paging.TotalPages;
             }
 
-            //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
-
             var vm = new SchedulesViewModel
             {
                 Schedules = await schedules
-                   .OrderBy(b => b.IDDepartments)
+                   .OrderBy(b => b.ScheduleId)
                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
                    .Take(paging.PageSize)
                    .ToListAsync(),
