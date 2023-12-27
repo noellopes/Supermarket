@@ -48,8 +48,8 @@ namespace Supermarket.Controllers
         // GET: Folgas/Create
         public IActionResult Create()
         {
-            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address");
-            ViewBag.Motivos = new SelectList(Enum.GetValues(typeof(Folga.Motivo)));
+           
+            
             return View();
         }
 
@@ -66,8 +66,8 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", folga.FuncionarioId);
-            ViewBag.Motivos = new SelectList(Enum.GetValues(typeof(Folga.Motivo)));
+            
+            
             return View(folga);
         }
 
