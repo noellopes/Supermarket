@@ -59,7 +59,7 @@ namespace Supermarket.Controllers
             ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description");
             return View();
         }
-        /*
+        
         // POST: ReduceProducts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -135,7 +135,7 @@ namespace Supermarket.Controllers
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
             ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
             return View(reduceProduct);
-        }*/
+        }
 
 
         // GET: ReduceProducts/Edit/5 SelectProduct
@@ -177,6 +177,8 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+
+            
 
             if (ModelState.IsValid)
             {
@@ -228,6 +230,7 @@ namespace Supermarket.Controllers
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
             ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            ViewData["Status"] = new SelectList(ReduceProduct.StatusList, reduceProduct.Status);
             return View(reduceProduct);
         }
 
@@ -266,6 +269,7 @@ namespace Supermarket.Controllers
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
             ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            ViewData["Status"] = new SelectList(ReduceProduct.StatusList, reduceProduct.Status);
             return View(reduceProduct);
         }
 

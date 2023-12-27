@@ -52,13 +52,20 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Date)
         </dd>
-        <form asp-action="Edit">
+        <form asp-action="ConfirmStatus">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ReduceProductId" />
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status" class="form-control"></select>
+                <select asp-for="Status" class="form-control" asp-items="ViewBag.Status"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+            <div class="form-group" style="display: none;">
+                <label asp-for="ProductId" class="control-label"></label>
+                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
         </form>
     </div>
