@@ -46,7 +46,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: CardMovements/Create
-        public IActionResult Create()
+        public IActionResult Create(int mealCardId)
         {
             ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId");
             return View();
@@ -93,7 +93,7 @@ namespace Supermarket.Controllers
                 _context.Add(cardMovement);
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "MealCards", new { id = cardMovement.MealCardId });
             }
             ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId", cardMovement.MealCardId);
             return View(cardMovement);

@@ -4,16 +4,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>MealCard</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Employee_Name)
+                Employee
             </th>
             <th></th>
         </tr>
@@ -28,11 +25,14 @@
                 <td>
                     @if (employee.MealCard == null)
                     {
-                        <a asp-action="Create" asp-controller="MealCards" asp-route-employeeId="@employee.EmployeeId">Create MealCard</a>
+                        <form asp-action="Create" asp-controller="MealCards">
+                            <input type="hidden" name="employeeId" value="@employee.EmployeeId" />
+                            <button type="submit" class="btn btn-success btn-sm">Create MealCard</button>
+                        </form>
                     }
                     else
                     {
-                        <a asp-action="Details" asp-controller="MealCards" asp-route-id="@employee.MealCard.MealCardId">Details</a>
+                        <a asp-action="Details" asp-controller="MealCards" asp-route-id="@employee.MealCard.MealCardId" class="btn btn-dark btn-sm">View MealCard</a>
                     }
                 </td>
             </tr>

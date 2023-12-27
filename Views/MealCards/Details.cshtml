@@ -56,6 +56,15 @@
     </div>
 </div>
 
+@* <form asp-action="Create" asp-controller="CardMovements" method="get">
+    <input type="hidden" name="MealCardId" value="@Model.MealCardId" />
+    <button type="submit" class="btn btn-primary btn-sm">Adicionar Novo Movimento</button>
+</form> *@
+<div class="row">
+    <div class="col-md-4">
+        <a asp-action="Create" asp-controller="CardMovements" asp-route-MealCardId="@Model.MealCardId" class="btn btn-primary">Adicionar Novo Movimento</a>
+    </div>
+</div>
 <div class="container tabela_css">
     <div class="row le-hide">
 
