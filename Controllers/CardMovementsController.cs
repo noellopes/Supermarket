@@ -57,11 +57,41 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CardMovementId,Movement_Date,Value,Description,Type,MealCardId")] CardMovement cardMovement)
+        public async Task<IActionResult> Create([Bind("CardMovementId,Movement_Date,Value,Description,MealCardId")] CardMovement cardMovement)
         {
+            var mealCard = await _context.MealCard.FindAsync(cardMovement.MealCardId);
+            //if (cardMovement.Value < 0 && cardMovement.Value > mealCard.Balance)
+            //{
+            //    ModelState.AddModelError("Value", "Saldo insuficiente para a transação de débito.");
+            //    ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId", cardMovement.MealCardId);
+            //    return View(cardMovement);
+            //}
             if (ModelState.IsValid)
             {
+                
+                if(cardMovement.Value < 0)
+                {
+
+                    cardMovement.Type = "Debit";
+                    if (mealCard != null)
+                    {
+                        mealCard.Balance += cardMovement.Value;
+                        _context.Update(mealCard);
+                    }
+                }
+                else
+                {
+                        cardMovement.Type = "Credit";
+
+                    
+                    if (mealCard != null)
+                    {
+                        mealCard.Balance += cardMovement.Value;
+                        _context.Update(mealCard);
+                    }
+                }
                 _context.Add(cardMovement);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
