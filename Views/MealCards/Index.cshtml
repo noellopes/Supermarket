@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Supermarket.Models.MealCard>
+﻿@model IEnumerable<Supermarket.Models.Employee>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,23 +13,29 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Employee)
+                @Html.DisplayNameFor(model => model.Employee_Name)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.MealCardId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MealCardId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MealCardId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => employee.Employee_Name)
+                </td>
+                <td>
+                    @if (employee.MealCard == null)
+                    {
+                        <a asp-action="Create" asp-controller="MealCards" asp-route-employeeId="@employee.EmployeeId">Create MealCard</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Details" asp-controller="MealCards" asp-route-id="@employee.MealCard.MealCardId">Details</a>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

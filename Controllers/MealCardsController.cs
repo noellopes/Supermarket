@@ -22,7 +22,7 @@ namespace Supermarket.Controllers
         // GET: MealCards
         public async Task<IActionResult> Index()
         {
-            var supermarketDbContext = _context.MealCard.Include(m => m.Employee);
+            var supermarketDbContext = _context.Employee.Include(m => m.MealCard);
             return View(await supermarketDbContext.ToListAsync());
         }
 
