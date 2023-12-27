@@ -27,8 +27,9 @@ namespace Supermarket.Controllers
         //}
 
         // GET: CardMovements/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int cardMovementId)
         {
+            var id = _context.CardMovement.Find(cardMovementId);
             if (id == null || _context.CardMovement == null)
             {
                 return NotFound();
@@ -36,7 +37,7 @@ namespace Supermarket.Controllers
 
             var cardMovement = await _context.CardMovement
                 .Include(c => c.MealCard)
-                .FirstOrDefaultAsync(m => m.CardMovementId == id);
+                .FirstOrDefaultAsync(m => m.CardMovementId == cardMovementId);
             if (cardMovement == null)
             {
                 return NotFound();

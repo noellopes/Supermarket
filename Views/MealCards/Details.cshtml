@@ -19,10 +19,11 @@
 
     .button {
         display:inline-flex;
+        margin-bottom: -8%;
     }
 
     .button-text {
-        margin-left: 20vh; /* Ajuste a margem conforme necessário 125px; */
+        margin-left: 15vh; /* Ajuste a margem conforme necessário 125px; */
         align-items: right;
         text-decoration: none;
     }
@@ -51,20 +52,14 @@
     <div class="card-body">
         <div class="button">
             <p class="card-text">Saldo</p>
+            <a asp-action="Create" asp-controller="CardMovements" asp-route-MealCardId="@Model.MealCardId" class="btn btn-outline-dark button-text btn-sm">Novo Movimento</a>
+
         </div>
         <h3>@ViewData["Saldo"]€</h3>
-    </div>
+         </div>
 </div>
 
-@* <form asp-action="Create" asp-controller="CardMovements" method="get">
-    <input type="hidden" name="MealCardId" value="@Model.MealCardId" />
-    <button type="submit" class="btn btn-primary btn-sm">Adicionar Novo Movimento</button>
-</form> *@
-<div class="row">
-    <div class="col-md-4">
-        <a asp-action="Create" asp-controller="CardMovements" asp-route-MealCardId="@Model.MealCardId" class="btn btn-primary">Adicionar Novo Movimento</a>
-    </div>
-</div>
+
 <div class="container tabela_css">
     <div class="row le-hide">
 
@@ -103,6 +98,9 @@
                     </div>
                     <div class="col-sm-12 col-lg-3 p-0 pl-lg-5">
                         @Html.DisplayFor(modelItem => item.Type)
+                    </div>
+                    <div>
+                        <a asp-action="Details" asp-controller="CardMovements" asp-route-cardMovementId="@item.CardMovementId" class="btn btn-outline-dark button-text btn-sm">Details</a> |
                     </div>
                 </div>
             }

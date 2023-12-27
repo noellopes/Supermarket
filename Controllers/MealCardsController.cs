@@ -73,7 +73,6 @@ namespace Supermarket.Controllers
                 var mealCard = new MealCard
                 {
                     EmployeeId = employee.EmployeeId,
-                    // Adicione outras propriedades conforme necessário
                 };
 
                 _context.Add(mealCard);
