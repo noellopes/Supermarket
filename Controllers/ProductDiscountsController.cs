@@ -89,11 +89,11 @@ namespace Supermarket.Controllers
                             EndDate = productDiscount.EndDate,
                         };
 
-                        _context.Add(productDiscount);
+                        _context.Add(newProductDiscount);
                     }
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Product successfully created!";
-                return RedirectToAction(nameof(Index));
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Product successfully created!";
+                    return RedirectToAction(nameof(Index));
             }
         }
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
