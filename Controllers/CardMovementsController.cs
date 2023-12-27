@@ -34,9 +34,9 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-
             var cardMovement = await _context.CardMovement
                 .Include(c => c.MealCard)
+                .ThenInclude(mc => mc.Employee)
                 .FirstOrDefaultAsync(m => m.CardMovementId == cardMovementId);
             if (cardMovement == null)
             {
