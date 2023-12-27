@@ -50,6 +50,7 @@ namespace Supermarket.Controllers
         public IActionResult Create(int mealCardId)
         {
             ViewData["MealCardId"] = new SelectList(_context.MealCard.Include(mc => mc.Employee), "MealCardId", "Employee.Employee_Name");
+            ViewData["MCID"] = mealCardId;
             return View();
         }
 
@@ -98,6 +99,11 @@ namespace Supermarket.Controllers
             }
             ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId", cardMovement.MealCardId);
             return View(cardMovement);
+        }
+
+        public IActionResult back(int mc)
+        {
+            return RedirectToAction("Details", "MealCards", new { id = mc });
         }
 
 
