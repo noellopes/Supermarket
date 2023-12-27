@@ -48,7 +48,7 @@ namespace Supermarket.Controllers
         // GET: CardMovements/Create
         public IActionResult Create(int mealCardId)
         {
-            ViewData["MealCardId"] = new SelectList(_context.MealCard.Include(mc => mc.Employee), "MealCardId", "Employee.Employee_Name");
+            ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId");
             return View();
         }
 
