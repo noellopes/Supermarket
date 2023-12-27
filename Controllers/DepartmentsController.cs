@@ -20,61 +20,8 @@ namespace Supermarket.Controllers
         {
             _context = context;
         }
-        public ActionResult CalcularTempoMedioAtendimento(int departamentoId)
-        { 
-            List<Tickets> tickets = TicketsBaseDados (departamentoId);
-
-            if (tickets.Any())
-            {
-                TimeSpan tempoMedio = CalcularTempoMedioAtendimento(tickets);
-                ViewBag.TempoMedio = tempoMedio.TotalMinutes;
-            }
-            else
-            {
-                ViewBag.TempoMedio = 0; 
-            }
-
-            return View();
-        }
-
-        // Método para obter os tickets associados a um departamento
-        private List<Tickets> TicketsBaseDados(int departamentoId)
-        {
-            using (var dbContext = new SupermarketDbContext(new DbContextOptions<SupermarketDbContext>()))
-            {
-                List<Tickets> tickets = dbContext.Tickets
-                    .Where(t => t.IDDepartments == departamentoId)
-                    .OrderBy(t => t.DataEmissao)
-                    .ToList();
-
-                return tickets;
-            }
-        }
-
-        // Método para calcular o tempo médio de atendimento
-        private TimeSpan CalcularTempoMedioAtendimento(List<Tickets> tickets)
-        {
-            List<TimeSpan> temposAtendimento = new List<TimeSpan>();
-
-            var options = new DbContextOptionsBuilder<SupermarketDbContext>()
-                .UseSqlServer("SupermarketDbContext") 
-                .Options;
-
-            using (var dbContext = new SupermarketDbContext(options))
-            {
-                for (int i = 1; i < tickets.Count; i++)
-                {
-                    TimeSpan tempoAtendimento = tickets[i].DataAtendimento - tickets[i - 1].DataAtendimento;
-                    temposAtendimento.Add(tempoAtendimento);
-                }
-            }
-
-            TimeSpan tempoMedio = TimeSpan.FromMinutes(temposAtendimento.Average(t => t.TotalMinutes));
-            return tempoMedio;
-        }
-
-        //pesquisa por nome do departamento 
-        public IActionResult pesqNomeTrue(string searchTerm)
+    //pesquisa por nome do departamento 
+            public IActionResult pesqNomeTrue(string searchTerm)
     {
         var results = _context.Departments
         .Where(d => (d.StateDepartments.Equals(true)) && d.NameDepartments.Contains(searchTerm))
@@ -102,20 +49,20 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments
-        public IActionResult Index(string searchTerm, int page = 1, int pageSize = 2)
+        public async Task<IActionResult> Index(string searchTerm, int page = 1, int pageSize = 2)
         {
-
             IQueryable<Departments> departmentsQuery = _context.Departments;
-            //numero de paginas que da para seelecionar
-            var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
 
-            // Filtra apenas os departamentos ativos
+            var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
+            var startDate = DateTime.Now.AddDays(-30); // por exemplo, 30 dias atrás
+            var endDate = DateTime.Now; // data atual
+            var mediasPorDepartamento = await MediasPorDepartamento(startDate, endDate);
+
             departmentsQuery = departmentsQuery
                 .Where(d => d.StateDepartments.Equals(true));
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                // Aplica a pesquisa se o termo de pesquisa não estiver vazio
                 departmentsQuery = departmentsQuery
                     .Where(d => d.NameDepartments.Contains(searchTerm));
             }
@@ -142,16 +89,18 @@ namespace Supermarket.Controllers
             {
                 Departments = departments,
                 Pagination = pagination,
-                SelectedPageSize = pageSize
+                SelectedPageSize = pageSize,
+                MediasPorDepartamento = mediasPorDepartamento
             };
 
-            // Passa o termo de pesquisa para a view, se houver
             ViewData["SearchTerm"] = searchTerm;
             ViewData["PageSizes"] = new SelectList(pageSizes);
             ViewData["SelectedPageSize"] = pageSize;
+            ViewData["MediasPorDepartamento"] = mediasPorDepartamento;
 
             return View(viewModel);
         }
+
         // GET: DepartmentsInop
         public IActionResult IndexInop(string searchTerm, int page = 1, int pageSize = 2)
         {
@@ -360,6 +309,20 @@ namespace Supermarket.Controllers
         private bool DepartmentsExists(int id)
         {
           return (_context.Departments?.Any(e => e.IDDepartments == id)).GetValueOrDefault();
+        }
+        //calculo da media no meu controlador 
+        public async Task<Dictionary<int, double>> MediasPorDepartamento(DateTime startDate, DateTime endDate)
+        {
+            var mediasPorDepartamento = await _context.Tickets
+
+                .Where(t => t.DataAtendimento >= startDate && t.DataAtendimento <= endDate)
+                .GroupBy(t => t.IDDepartments)
+                .ToDictionaryAsync(
+                    group => group.Key,
+                    group => group.Select(t => (t.DataAtendimento - t.DataEmissao).TotalMinutes).Average()
+                );
+
+            return mediasPorDepartamento;
         }
     }
 }

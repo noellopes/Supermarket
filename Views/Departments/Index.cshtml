@@ -51,11 +51,12 @@
              Numero de senhas para a calculo media 
             </th>
             <th>
-             Tempo de atendimento medio por dia 
+                Média de Tempo de Serviço (minutos)
             </th>
             <th></th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var item in Model.Departments)
         {
@@ -76,7 +77,11 @@
                 @Html.DisplayFor(modelItem => item.QuatDepMed)
             </td>
             <td>
-                10mins
+                    @if (Model.MediasPorDepartamento.ContainsKey(item.IDDepartments))
+                    {
+                        var media = Model.MediasPorDepartamento[item.IDDepartments];
+                        <p>Departamento @item.IDDepartments: @media minutos</p>
+                    }
             </td>
             <td>
                 <div class="btn-group" role="group" aria-label="Edit,Details,Delete">
