@@ -64,7 +64,7 @@ namespace Supermarket.Controllers
                 ViewBag.ErrorMessage2 = TempData["ErrorMessage2"] as string;
                 ViewBag.StoreId2 = storeId.Value;
                 ViewBag.StoreName = _context.Store.Find(storeId.Value)?.Name;
-                TempData["StoreIdId2"] = storeId;
+                TempData["StoreId2"] = storeId;
             }
             else
                 return NotFound();
@@ -79,7 +79,7 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("HallwayId,Description")] Hallway hallway)
         {
-            hallway.StoreId = (int)TempData["StoreIdId2"];
+            hallway.StoreId = (int)TempData["StoreId2"];
 
             if (ModelState.IsValid)
             {
@@ -108,7 +108,7 @@ namespace Supermarket.Controllers
             }
 
             ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
-            return RedirectToAction("Create", new { storeId = TempData["StoreIdId2"] });
+            return RedirectToAction("Create", new { storeId = TempData["StoreId2"] });
         }
         // GET: Hallways/Edit/5
         public async Task<IActionResult> Edit(int? id)

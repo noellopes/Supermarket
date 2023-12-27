@@ -4,38 +4,82 @@
     ViewData["Title"] = "Warehouse Section";
 }
 
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .table th,
+    .table td {
+        background-color: #f8f8f8;
+        color: #000;
+        border: none;
+    }
+
+    .btn-create {
+        background-color: #28a745;
+        color: #fff;
+    }
+</style>
+
 <h1>Warehouse Section List</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                Warehouse
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Warehouse.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.WarehouseSectionId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.WarehouseSectionId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.WarehouseSectionId">Delete</a>
-            </td>
-        </tr>
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title">@ViewBag.WarehouseName - Warehouse</h2>
+        <p class="card-text">Total Warehouse Sections: @ViewBag.TotalWarehouseSections</p>
+    </div>
+</div>
+
+@if (ViewBag.TotalWarehouseSections != null && ViewBag.TotalWarehouseSections > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Warehouse Section Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var warehouseSections in ViewBag.WarehouseSections)
+            {
+                <tr>
+                    <td>@warehouseSections.Description</td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a asp-controller="WarehouseSections" asp-action="Edit" asp-route-id="@warehouseSections.WarehouseSectionId" class="btn btn-secondary">Edit </a>
+                            <a asp-controller="WarehouseSections" asp-action="Details" asp-route-id="@warehouseSections.WarehouseSectionId" class="btn btn-secondary">Details</a>
+                            <a asp-controller="WarehouseSections" asp-action="WarehouseSectionProducts" asp-route-warehouseSectionId="@warehouseSections.WarehouseSectionId" class="btn btn-secondary">View Products</a>
+                            <a asp-controller="WarehouseSections" asp-action="Index" asp-route-Id="@warehouseSections.WarehouseSectionId" class="btn btn-secondary">View Shelves</a>
+                            <a asp-controller="WarehouseSections" asp-action="Delete" asp-route-id="@warehouseSections.WarehouseSectionId" class="btn btn-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
+else
+{
+    <p class="card-text">No Warehouse Section found for this Warehouse.</p>
+}
+
+<a asp-action="Create" asp-route-warehouseId="@ViewBag.WarehouseId" class="btn btn-primary">
+    Create Warehouse Section
+</a>
+<a asp-action="Index" asp-controller="Warehouses" class="btn btn-secondary">Back to Warehouse List</a>
