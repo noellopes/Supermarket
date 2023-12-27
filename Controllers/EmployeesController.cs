@@ -37,12 +37,34 @@ namespace Supermarket.Controllers
 
             var employee = await _context.Employee
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
+
             if (employee == null)
             {
                 return NotFound();
             }
 
+            CalculateWorkingHours(employee);
+
             return View(employee);
+        }
+
+        private void CalculateWorkingHours(Employee employee)
+        {
+            if (!string.IsNullOrEmpty(employee.Standard_Check_In_Time) && !string.IsNullOrEmpty(employee.Standard_Check_Out_Time))
+            {
+                DateTime inTime = DateTime.Parse(employee.Standard_Check_In_Time);
+                DateTime outTime = DateTime.Parse(employee.Standard_Check_Out_Time);
+
+                if (outTime > inTime)
+                {
+                    TimeSpan workingHours = outTime - inTime;
+                    employee.Employee_Time_Bank = workingHours;
+                }
+                else
+                {
+                    employee.Employee_Time_Bank = TimeSpan.Zero;
+                }
+            }
         }
 
         // GET: Employees/Create
