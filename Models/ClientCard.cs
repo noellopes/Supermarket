@@ -15,6 +15,8 @@ namespace Supermarket.Models
         public float Balance { get; set; } = 0;
 
         public Boolean Estado { get; set; } = true;
+
+        public ICollection<ProductDiscount> ProductDiscounts { get; set; }
         
     }
 }

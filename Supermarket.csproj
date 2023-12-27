@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\Application\" />
+    <Folder Include="Data\Migrations\Supermarket\" />
   </ItemGroup>
 
 
