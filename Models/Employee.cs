@@ -59,13 +59,18 @@ namespace Supermarket.Models
         public required string Standard_Lunch_Time { get; set; }
 
 
+
         [DisplayFormat(DataFormatString = "{0:hh\\:mm}")]
         public TimeSpan Employee_Time_Bank { get; set; }
 
+        
 
+
+
+        //Ligação de 1 para 1 com Meal_Card
         public MealCard? MealCard { get; set; }
 
-
+       
 
     }
 }
