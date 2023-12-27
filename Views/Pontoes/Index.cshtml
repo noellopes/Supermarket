@@ -39,12 +39,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Justificative)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckInCoordenates)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckOutCoordenates)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -77,12 +71,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Justificative)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckInCoordenates)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckOutCoordenates)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PontoId">Edit</a> |

@@ -22,7 +22,7 @@ namespace Supermarket.Controllers
         // GET: MealCards
         public async Task<IActionResult> Index()
         {
-            var supermarketDbContext = _context.MealCard.Include(m => m.Employee);
+            var supermarketDbContext = _context.Employee.Include(m => m.MealCard);
             return View(await supermarketDbContext.ToListAsync());
         }
 
@@ -58,17 +58,41 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MealCardId,Balance,EmployeeId")] MealCard mealCard)
+
+        public IActionResult Create(int employeeId)
         {
-            if (ModelState.IsValid)
+            var employee = _context.Employee.Find(employeeId);
+
+            if (employee == null)
             {
-                _context.Add(mealCard);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", mealCard.EmployeeId);
-            return View(mealCard);
+
+            if (employee.MealCard == null)
+            {
+                var mealCard = new MealCard
+                {
+                    EmployeeId = employee.EmployeeId,
+                    // Adicione outras propriedades conforme necessário
+                };
+
+                _context.Add(mealCard);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
+        //public async Task<IActionResult> Create([Bind("MealCardId,Balance,EmployeeId")] MealCard mealCard)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(mealCard);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", mealCard.EmployeeId);
+        //    return View(mealCard);
+        //}
 
         // GET: MealCards/Edit/5
         public async Task<IActionResult> Edit(int? id)

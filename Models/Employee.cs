@@ -63,7 +63,7 @@ namespace Supermarket.Models
         public TimeSpan Employee_Time_Bank { get; set; }
 
 
-
+        public MealCard? MealCard { get; set; }
 
 
 

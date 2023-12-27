@@ -57,7 +57,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative,CheckInCoordenates,CheckOutCoordenates")] Ponto ponto)
+        public async Task<IActionResult> Create([Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative")] Ponto ponto)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative,CheckInCoordenates,CheckOutCoordenates")] Ponto ponto)
+        public async Task<IActionResult> Edit(int id, [Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative")] Ponto ponto)
         {
             if (id != ponto.PontoId)
             {
