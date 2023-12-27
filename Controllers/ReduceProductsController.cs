@@ -163,6 +163,7 @@ namespace Supermarket.Controllers
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
             ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            ViewData["Status"] = new SelectList(ReduceProduct.StatusList, reduceProduct.Status);
             return View(reduceProduct);
         }
 
@@ -203,6 +204,7 @@ namespace Supermarket.Controllers
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
             ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            ViewData["Status"] = new SelectList(ReduceProduct.StatusList, reduceProduct.Status);
             return View(reduceProduct);
         }
 
