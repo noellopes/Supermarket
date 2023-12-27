@@ -279,7 +279,7 @@ namespace Supermarket.Controllers
                 .GroupBy(sp => sp.ProductId)
                 .Select(group => new
                 {
-                    ProductId = group.Key, // Adiciona a propriedade ProductId
+                    ProductId = group.Key, 
                     ProductName = group.First().Product.Name,
                     ProductDescription = group.First().Product.Description,
                     BrandName = group.First().Product.Brand != null ? group.First().Product.Brand.Name : "No Brand",

@@ -1,4 +1,9 @@
-﻿<style>
+﻿
+@{
+    ViewData["Title"] = "WarehouseProducts";
+}
+
+<style>
     body {
         padding: 20px;
         background-color: #f8f9fa; /* Cor de fundo mais clara */
@@ -32,10 +37,9 @@
 
 <div class="container">
     <div class="card">
-        <h2 class="mt-4">@ViewBag.StoreName - Products</h2>
+        <h2 class="mt-4">@ViewBag.WarehouseName - Products</h2>
 
-        <div class="lead">Total Products: @ViewBag.TotalProducts</div>
-       
+        <div class="lead">Total Products: @ViewBag.TotalWarehouseProducts</div>
     </div>
 
     <table class="table table-striped">
@@ -48,7 +52,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var product in ViewBag.Products)
+            @foreach (var product in ViewBag.WarehouseProducts)
             {
                 <tr>
                     <td>@product.ProductName</td>
@@ -61,3 +65,4 @@
     </table>
     <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
+
