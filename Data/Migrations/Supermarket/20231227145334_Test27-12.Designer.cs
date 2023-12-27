@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -11,9 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231227145334_Test27-12")]
+    partial class Test2712
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -454,8 +457,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasKey("MealCardId");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("MealCard");
                 });
@@ -911,8 +913,8 @@ namespace Supermarket.Data.Migrations.Supermarket
             modelBuilder.Entity("Supermarket.Models.MealCard", b =>
                 {
                     b.HasOne("Supermarket.Models.Employee", "Employee")
-                        .WithOne("MealCard")
-                        .HasForeignKey("Supermarket.Models.MealCard", "EmployeeId")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1049,11 +1051,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("Product");
 
                     b.Navigation("WarehouseSection");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.Employee", b =>
-                {
-                    b.Navigation("MealCard");
                 });
 
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>
