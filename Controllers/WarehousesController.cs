@@ -186,6 +186,52 @@ namespace Supermarket.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public IActionResult WarehouseProducts(int warehouseId)
+        {
+            var warehouseInfo = _context.Warehouse
+                .Where(w => w.WarehouseId == warehouseId)
+                .Select(w => new
+                {
+                    WarehouseName = w.Name
+                })
+                .FirstOrDefault();
+
+            if (warehouseInfo == null)
+            {
+                return NotFound();
+            }
+
+            var warehouseProducts = _context.WarehouseSection_Product
+            .Where(wp => wp.WarehouseSection.WarehouseId == warehouseId && wp.Product != null)
+            .Include(wp => wp.Product)
+            .ThenInclude(p => p.Brand)
+            .AsEnumerable() 
+            .GroupBy(wp => new
+            {
+                ProductId = wp.ProductId,
+                Name = wp.Product.Name,
+                Description = wp.Product.Description,
+                Brand = wp.Product.Brand
+            })
+            .Select(group => new
+            {
+                ProductId = group.Key.ProductId,
+                ProductName = group.Key.Name,
+                ProductDescription = group.Key.Description,
+                BrandName = group.Key.Brand != null ? group.Key.Brand.Name : "No Brand",
+                Quantity = group.Sum(p => p.Quantity)
+            })
+            .ToList();
+
+
+
+
+            ViewBag.WarehouseName = warehouseInfo.WarehouseName;
+            ViewBag.TotalWarehouseProducts = warehouseProducts.Count;
+            ViewBag.WarehouseProducts = warehouseProducts;
+
+            return View();
+        }
 
         private bool WarehouseExists(int id)
         {

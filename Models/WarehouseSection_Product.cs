@@ -16,7 +16,7 @@ namespace Supermarket.Models
         public WarehouseSection? WarehouseSection { get; set; }
 
         [Range(0, 99999, ErrorMessage = "The Quantity must be greater than zero")]
-        public int Quantity { get; set; }
+        public int Quantity { get; set; }=0;
 
         [Range(0, 99999, ErrorMessage = "he Reserved Quantity must be greater than zero")]
         public int ReservedQuantity { get; set; } = 0;
@@ -24,7 +24,7 @@ namespace Supermarket.Models
 
         //Número de lote
         [Required]
-        [StringLength(10, MinimumLength = 3)]
+        [StringLength(20, MinimumLength = 3)]
         public required string BatchNumber { get; set; }
 
         //Data de validade

@@ -4,33 +4,67 @@
     ViewData["Title"] = "Create";
 }
 
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa; /* Cor de fundo mais clara */
+        color: #343a40; /* Cor do texto mais escura */
+    }
+
+    h2 {
+        color: #007bff; /* Azul Bootstrap */
+        margin-top: 20px; /* Margem superior maior */
+    }
+
+    .lead {
+        font-size: 1.25rem; /* Tamanho de fonte maior */
+        margin-bottom: 20px; /* Margem inferior maior */
+    }
+
+    .card {
+        background-color: #fff; /* Cor de fundo do cartão */
+        border: 1px solid rgba(0, 0, 0, 0.125); /* Borda do cartão */
+        border-radius: 0.25rem; /* Borda arredondada */
+        padding: 20px; /* Espaçamento interno do cartão */
+        margin-bottom: 20px; /* Margem inferior do cartão */
+    }
+
+    .table th, .table td {
+        background-color: #f8f8f8; /* Cor de fundo alternativa (cinza mais claro) para as células da tabela */
+        color: #000; /* Cor do texto na tabela */
+        border: none; /* Remove bordas das células da tabela */
+    }
+</style>
+
 <h1>Create</h1>
 
 <h4>Warehouse</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Adress" class="control-label"></label>
-                <input asp-for="Adress" class="form-control" />
-                <span asp-validation-for="Adress" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="card">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Adress" class="control-label"></label>
+                    <input asp-for="Adress" class="form-control" />
+                    <span asp-validation-for="Adress" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
 @section Scripts {

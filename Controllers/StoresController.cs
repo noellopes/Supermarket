@@ -224,7 +224,7 @@ namespace Supermarket.Controllers
           
             ViewBag.StoreName = storeInfo.StoreName;
             ViewBag.TotalProducts = products.Count;
-            ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
+        
             ViewBag.Products = products;
 
            

@@ -14,11 +14,12 @@ namespace Supermarket.Data
             PopulateShelf(db);
             PopulateShelft_ProductExhibition(db);
             PopulateWarehouse(db);
-            //PopulateWarehouseSection(db);
-            //PopulateWarehouseSection_Product(db);
-           // PopulateReduceProduct(db);
+            PopulateWarehouseSection(db);
+            PopulateSupplier(db);
+            PopulateWarehouseSection_Product(db);
+            // PopulateReduceProduct(db);
             //PopulateEmployees(db);
-           // PopulateEmployeeEvaluations(db);
+            // PopulateEmployeeEvaluations(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db)
@@ -220,7 +221,7 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-        /*
+      
         private static void PopulateWarehouseSection(SupermarketDbContext db)
         {
             if (db.WarehouseSection.Any()) return;
@@ -245,7 +246,7 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-
+     
         private static void PopulateWarehouseSection_Product(SupermarketDbContext db)
         {
             if (db.WarehouseSection_Product.Any()) return;
@@ -255,28 +256,78 @@ namespace Supermarket.Data
                     {
                         Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream.")!,
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
-                        Quantity = 0,
-                        ReservedQuantity = 0
+                        BatchNumber = "D45",
+                        ExpirationDate = DateTime.Now,
+                        Quantity = 40,
+                        ReservedQuantity = 0,
+                        Supplier = db.Supplier.FirstOrDefault(a => a.Name == "Supplier Guarda")
                     },
+
+
+                     new WarehouseSection_Product
+                     {
+                         Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
+                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
+                         BatchNumber = "C65",
+                         ExpirationDate = DateTime.Now,
+                         Quantity = 88,
+                         ReservedQuantity = 0,
+                         Supplier = db.Supplier.FirstOrDefault(a => a.Name == "Supplier Guarda")
+                     },
+
+
+
                     new WarehouseSection_Product
                     {
                         Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section B4")!,
+                        BatchNumber = "B65",
+                        ExpirationDate = DateTime.Now,
                         Quantity = 30,
-                        ReservedQuantity = 10
+                        ReservedQuantity = 10,
+                        Supplier = db.Supplier.FirstOrDefault(a => a.Name == "Supplier Algarve")
                     },
                     new WarehouseSection_Product
                     {
                         Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
+
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section D6")!,
+                        BatchNumber = "A45",
+                        ExpirationDate = DateTime.Now,
                         Quantity = 15,
-                        ReservedQuantity = 15
+                        ReservedQuantity = 15,
+                        Supplier = db.Supplier.FirstOrDefault(a => a.Name == "Supplier Paris")
                     }
                 );
 
             db.SaveChanges();
         }
 
+        private static void PopulateSupplier(SupermarketDbContext db)
+        {
+            if (db.Supplier.Any()) return;
+
+            db.Supplier.AddRange(
+                    new Supplier
+                    {
+                        Name = "Supplier Guarda",
+
+                    },
+                    new Supplier
+                    {
+                        Name = "Supplier Algarve",
+
+                    },
+                    new Supplier
+                    {
+                        Name = "Supplier Paris",
+
+                    }
+                );
+
+            db.SaveChanges();
+        }
+        /*
         private static void PopulateReduceProduct(SupermarketDbContext db)
         {
             if (db.ReduceProduct.Any()) return;
@@ -310,91 +361,91 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }*/
-/*
-        private static void PopulateEmployees(SupermarketDbContext db)
-        {
-            if (db.Employee.Any()) return;
+        /*
+                private static void PopulateEmployees(SupermarketDbContext db)
+                {
+                    if (db.Employee.Any()) return;
 
-            db.Employee.AddRange(
-                new Employee
-                {
-                    Employee_Address= "Rua das Oliveiras",
-                    Employee_Admission_Date= DateTime.Now,
-                    Employee_Birth_Date= DateTime.Now,
-                    Employee_Email="zeD@manga.com",
-                    Employee_Name="Jose",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    Employee_Time_Bank= DateTime.Now,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                    Standard_Lunch_Time = "123"
-                },
-                new Employee
-                {
-                    Employee_Address = "Rua do azeite",
-                    Employee_Admission_Date = DateTime.Now,
-                    Employee_Birth_Date = DateTime.Now,
-                    Employee_Email = "zeD@manga.com",
-                    Employee_Name = "Maria",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    Employee_Time_Bank = DateTime.Now,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                    Standard_Lunch_Time = "123"
-                },
-                new Employee
-                {
-                    Employee_Address = "Avenida Afonso Pena",
-                    Employee_Admission_Date = DateTime.Now,
-                    Employee_Birth_Date = DateTime.Now,
-                    Employee_Email = "zeD@manga.com",
-                    Employee_Name = "Lucas",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    Employee_Time_Bank = DateTime.Now,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                    Standard_Lunch_Time = "123"
+                    db.Employee.AddRange(
+                        new Employee
+                        {
+                            Employee_Address= "Rua das Oliveiras",
+                            Employee_Admission_Date= DateTime.Now,
+                            Employee_Birth_Date= DateTime.Now,
+                            Employee_Email="zeD@manga.com",
+                            Employee_Name="Jose",
+                            Employee_NIF = "123",
+                            Employee_Password = "123",
+                            Employee_Phone = "123",
+                            Employee_Time_Bank= DateTime.Now,
+                            Standard_Lunch_Hour = "123",
+                            Standard_Check_In_Time = "123",
+                            Standard_Check_Out_Time = "123",
+                            Standard_Lunch_Time = "123"
+                        },
+                        new Employee
+                        {
+                            Employee_Address = "Rua do azeite",
+                            Employee_Admission_Date = DateTime.Now,
+                            Employee_Birth_Date = DateTime.Now,
+                            Employee_Email = "zeD@manga.com",
+                            Employee_Name = "Maria",
+                            Employee_NIF = "123",
+                            Employee_Password = "123",
+                            Employee_Phone = "123",
+                            Employee_Time_Bank = DateTime.Now,
+                            Standard_Lunch_Hour = "123",
+                            Standard_Check_In_Time = "123",
+                            Standard_Check_Out_Time = "123",
+                            Standard_Lunch_Time = "123"
+                        },
+                        new Employee
+                        {
+                            Employee_Address = "Avenida Afonso Pena",
+                            Employee_Admission_Date = DateTime.Now,
+                            Employee_Birth_Date = DateTime.Now,
+                            Employee_Email = "zeD@manga.com",
+                            Employee_Name = "Lucas",
+                            Employee_NIF = "123",
+                            Employee_Password = "123",
+                            Employee_Phone = "123",
+                            Employee_Time_Bank = DateTime.Now,
+                            Standard_Lunch_Hour = "123",
+                            Standard_Check_In_Time = "123",
+                            Standard_Check_Out_Time = "123",
+                            Standard_Lunch_Time = "123"
+                        }
+                        );
+
+                    db.SaveChanges();
                 }
-                );
 
-            db.SaveChanges();
-        }
-
-        private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
-        {
-            if (db.EmployeeEvaluation.Any()) return;
-
-            db.EmployeeEvaluation.AddRange(
-                new EmployeeEvaluation
+                private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
                 {
-                    Description= "Atendimento excelente!",
-                    EmployeeId = db.Employee.First().EmployeeId,
-                    GradeNumber = 8,
-                },
-                new EmployeeEvaluation
-                {
-                    Description = "Muito rude...",
-                    EmployeeId = db.Employee.First().EmployeeId,
-                    GradeNumber = 3,
-                },
-                new EmployeeEvaluation
-                {
-                    Description = "Adorei. Muito prestativo!",
-                    EmployeeId = db.Employee.First().EmployeeId,
-                    GradeNumber = 10,
-                }
-                );
+                    if (db.EmployeeEvaluation.Any()) return;
 
-            db.SaveChanges();
-        }*/
+                    db.EmployeeEvaluation.AddRange(
+                        new EmployeeEvaluation
+                        {
+                            Description= "Atendimento excelente!",
+                            EmployeeId = db.Employee.First().EmployeeId,
+                            GradeNumber = 8,
+                        },
+                        new EmployeeEvaluation
+                        {
+                            Description = "Muito rude...",
+                            EmployeeId = db.Employee.First().EmployeeId,
+                            GradeNumber = 3,
+                        },
+                        new EmployeeEvaluation
+                        {
+                            Description = "Adorei. Muito prestativo!",
+                            EmployeeId = db.Employee.First().EmployeeId,
+                            GradeNumber = 10,
+                        }
+                        );
+
+                    db.SaveChanges();
+                }*/
     }
 }
