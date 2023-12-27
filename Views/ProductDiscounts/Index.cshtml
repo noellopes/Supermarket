@@ -1,7 +1,8 @@
-﻿@model IEnumerable<Supermarket.Models.ProductDiscount>
+﻿@model ProductDiscountsViewModel
+
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Products Discountnde";
 }
 
 <h1>Product Discounts</h1>
@@ -20,22 +21,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Product)
+                @Html.DisplayNameFor(model => model.ProductDiscounts[0].Product)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Value)
+                @Html.DisplayNameFor(model => model.ProductDiscounts[0].Value)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
+                @Html.DisplayNameFor(model => model.ProductDiscounts[0].StartDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndDate)
+                @Html.DisplayNameFor(model => model.ProductDiscounts[0].EndDate)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.ProductDiscounts) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Product.Name)
@@ -58,3 +59,56 @@
 }
     </tbody>
 </table>
+
+<nav aria-label="ProductDiscount">
+    <ul class="pagination">
+        @if (Model.PagingInfo.CurrentPage == 1)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">First</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+            </li>
+        }
+
+        @{
+            int first = Model.PagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+            if (first < 1) first = 1;
+
+            int last = Model.PagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+            if (last > Model.PagingInfo.TotalPages) last = Model.PagingInfo.TotalPages;
+        }
+
+        @for (int p = first; p <= last; p++)
+        {
+            @if (p == Model.PagingInfo.CurrentPage)
+            {
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">@p</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                </li>
+            }
+        }
+        @if (Model.PagingInfo.CurrentPage == Model.PagingInfo.TotalPages)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Last</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages">Last</a>
+            </li>
+        }
+    </ul>
+</nav>

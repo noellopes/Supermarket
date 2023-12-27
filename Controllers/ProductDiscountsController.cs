@@ -20,10 +20,34 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var supermarketDbContext = _context.ProductDiscount.Include(p => p.ClientCard).Include(p => p.Product);
-            return View(await supermarketDbContext.ToListAsync());
+            var producDiscounts = from b in _context.ProductDiscount.Include(p => p.ClientCard).Include(p => p.Product) select b;
+
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await producDiscounts.CountAsync(),
+            };
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new ProductDiscountsViewModel
+            {
+                ProductDiscounts = await producDiscounts
+                    .OrderBy(b => b.Product.Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfo = paging,
+            };
+            return View(vm);
         }
 
         // GET: ProductDiscounts/Details/5
