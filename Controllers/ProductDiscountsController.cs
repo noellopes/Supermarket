@@ -66,7 +66,9 @@ namespace Supermarket.Controllers
             bool productDiscountExists = await _context.ProductDiscount.AnyAsync(
                 b => b.ProductId == productDiscount.ProductId && 
                      b.ClientCardId == productDiscount.ClientCardId && 
-                     b.Value == productDiscount.Value);
+                     b.Value == productDiscount.Value &&
+                     b.StartDate == productDiscount.StartDate &&
+                     b.EndDate == productDiscount.EndDate);
 
             if (productDiscountExists)
             {
@@ -74,7 +76,21 @@ namespace Supermarket.Controllers
             }
             else
             {
-                _context.Add(productDiscount);
+                var clientCards = await _context.ClientCard.ToListAsync();
+
+                    foreach (var clientCard in clientCards)
+                    {
+                        var newProductDiscount = new ProductDiscount
+                        {
+                            ProductId = productDiscount.ProductId,
+                            ClientCardId = clientCard.ClientCardId,
+                            Value = productDiscount.Value,
+                            StartDate = productDiscount.StartDate,
+                            EndDate = productDiscount.EndDate,
+                        };
+
+                        _context.Add(productDiscount);
+                    }
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Product successfully created!";
                 return RedirectToAction(nameof(Index));
