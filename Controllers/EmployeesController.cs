@@ -67,6 +67,23 @@ namespace Supermarket.Controllers
             }
         }
 
+
+
+        private async Task<bool> IsEmailUnique(string email)
+        {
+            return await _context.Employee.AllAsync(e => e.Employee_Email != email);
+        }
+        private async Task<bool> IsPhoneUnique(string phone)
+        {
+            return await _context.Employee.AllAsync(e => e.Employee_Phone != phone);
+        }
+
+        private async Task<bool> IsNIFUnique(string nif)
+        {
+            return await _context.Employee.AllAsync(e => e.Employee_NIF != nif);
+        }
+
+
         // GET: Employees/Create
         public IActionResult Create()
         {
@@ -78,10 +95,28 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,Employee_Time_Bank")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time")] Employee employee)
         {
             if (ModelState.IsValid)
             {
+                if (!await IsEmailUnique(employee.Employee_Email))
+                {
+                    ModelState.AddModelError("Employee_Email", "Email is already in use.");
+                    return View(employee);
+                }
+
+                if (!await IsPhoneUnique(employee.Employee_Phone))
+                {
+                    ModelState.AddModelError("Employee_Phone", "Phone number is already in use.");
+                    return View(employee);
+                }
+
+                if (!await IsNIFUnique(employee.Employee_NIF))
+                {
+                    ModelState.AddModelError("Employee_NIF", "NIF is already in use.");
+                    return View(employee);
+                }
+
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
