@@ -19,12 +19,12 @@ namespace Supermarket.Controllers
             _context = context;
         }
 
-        // GET: CardMovements
-        public async Task<IActionResult> Index()
-        {
-            var supermarketDbContext = _context.CardMovement.Include(c => c.MealCard);
-            return View(await supermarketDbContext.ToListAsync());
-        }
+        //// GET: CardMovements
+        //public async Task<IActionResult> Index()
+        //{
+        //    var supermarketDbContext = _context.CardMovement.Include(c => c.MealCard);
+        //    return View(await supermarketDbContext.ToListAsync());
+        //}
 
         // GET: CardMovements/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -68,8 +68,8 @@ namespace Supermarket.Controllers
             }
             if (ModelState.IsValid)
             {
-                
-                if(cardMovement.Value < 0)
+
+                if (cardMovement.Value < 0)
                 {
 
                     cardMovement.Type = "Debit";
@@ -81,9 +81,9 @@ namespace Supermarket.Controllers
                 }
                 else
                 {
-                        cardMovement.Type = "Credit";
+                    cardMovement.Type = "Credit";
 
-                    
+
                     if (mealCard != null)
                     {
                         mealCard.Balance += cardMovement.Value;
@@ -99,100 +99,6 @@ namespace Supermarket.Controllers
             return View(cardMovement);
         }
 
-        // GET: CardMovements/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.CardMovement == null)
-            {
-                return NotFound();
-            }
 
-            var cardMovement = await _context.CardMovement.FindAsync(id);
-            if (cardMovement == null)
-            {
-                return NotFound();
-            }
-            ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId", cardMovement.MealCardId);
-            return View(cardMovement);
-        }
-
-        // POST: CardMovements/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CardMovementId,Movement_Date,Value,Description,Type,MealCardId")] CardMovement cardMovement)
-        {
-            if (id != cardMovement.CardMovementId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(cardMovement);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CardMovementExists(cardMovement.CardMovementId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId", cardMovement.MealCardId);
-            return View(cardMovement);
-        }
-
-        // GET: CardMovements/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.CardMovement == null)
-            {
-                return NotFound();
-            }
-
-            var cardMovement = await _context.CardMovement
-                .Include(c => c.MealCard)
-                .FirstOrDefaultAsync(m => m.CardMovementId == id);
-            if (cardMovement == null)
-            {
-                return NotFound();
-            }
-
-            return View(cardMovement);
-        }
-
-        // POST: CardMovements/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.CardMovement == null)
-            {
-                return Problem("Entity set 'SupermarketDbContext.CardMovement'  is null.");
-            }
-            var cardMovement = await _context.CardMovement.FindAsync(id);
-            if (cardMovement != null)
-            {
-                _context.CardMovement.Remove(cardMovement);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool CardMovementExists(int id)
-        {
-          return (_context.CardMovement?.Any(e => e.CardMovementId == id)).GetValueOrDefault();
-        }
     }
 }
