@@ -77,23 +77,45 @@ namespace Supermarket.Controllers
             else
             {
                 var clientCards = await _context.ClientCard.ToListAsync();
+                bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
 
                     foreach (var clientCard in clientCards)
                     {
-                        var newProductDiscount = new ProductDiscount
-                        {
-                            ProductId = productDiscount.ProductId,
-                            ClientCardId = clientCard.ClientCardId,
-                            Value = productDiscount.Value,
-                            StartDate = productDiscount.StartDate,
-                            EndDate = productDiscount.EndDate,
-                        };
+                        bool discountExistsForClient = await _context.ProductDiscount.AnyAsync(
+                            d => d.ProductId == productDiscount.ProductId &&
+                            d.ClientCardId == clientCard.ClientCardId &&
+                            d.Value == productDiscount.Value &&
+                            d.StartDate == productDiscount.StartDate &&
+                            d.EndDate == productDiscount.EndDate);
 
-                        _context.Add(newProductDiscount);
+                        if (!discountExistsForClient)
+                        {
+                            var newProductDiscount = new ProductDiscount
+                            {
+                                ProductId = productDiscount.ProductId,
+                                ClientCardId = clientCard.ClientCardId,
+                                Value = productDiscount.Value,
+                                StartDate = productDiscount.StartDate,
+                                EndDate = productDiscount.EndDate,
+                            };
+
+                            _context.Add(newProductDiscount);
+                        }
+                        else
+                        {
+                            duplicatedDiscounts = true;
+                        }
                     }
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "Product successfully created!";
-                    return RedirectToAction(nameof(Index));
+                    if (duplicatedDiscounts)
+                    {
+                        ModelState.AddModelError("", "One or more Product Discounts with the same values already exist for the same clients.");
+                    }
+                    else
+                    {
+                        await _context.SaveChangesAsync();
+                        TempData["SuccessMessage"] = "Product successfully created!";
+                        return RedirectToAction(nameof(Index));
+                    }
             }
         }
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
