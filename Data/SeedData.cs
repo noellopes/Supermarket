@@ -17,9 +17,9 @@ namespace Supermarket.Data
             PopulateWarehouseSection(db);
             PopulateSupplier(db);
             PopulateWarehouseSection_Product(db);
-            // PopulateReduceProduct(db);
+            PopulateReduceProduct(db);
             //PopulateEmployees(db);
-            // PopulateEmployeeEvaluations(db);
+            //PopulateEmployeeEvaluations(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db)
@@ -303,22 +303,44 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
+        private static void PopulateSupplier(SupermarketDbContext db)
+        {
+            if (db.Supplier.Any()) return;
+
+            db.Supplier.AddRange(
+                    new Supplier
+                    {
+                        Name = "Supplier Guarda",
+
+                    },
+                    new Supplier
+                    {
+                        Name = "Supplier Algarve",
+
+                    },
+                    new Supplier
+                    {
+                        Name = "Supplier Paris",
+
+                    }
+                );
+
             db.SaveChanges();
         }
-        
+
         private static void PopulateReduceProduct(SupermarketDbContext db)
         {
             if (db.ReduceProduct.Any()) return;
 
             db.ReduceProduct.AddRange(
-                    //new ReduceProduct
-                    //{
-                    //    Reason = "Product past its expiration date",
-                    //    Status = "Pending",
-                    //    Quantity = 10,
-                    //    Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
-                    //    WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section B4")!
-                    //},
+                    new ReduceProduct
+                    {
+                        Reason = "Product past its expiration date",
+                        Status = "Pending",
+                        Quantity = 10,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
+                        WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section B4")!
+                    },
                     new ReduceProduct
                     {
                         Reason = "Product past its expiration date",
@@ -326,15 +348,15 @@ namespace Supermarket.Data
                         Quantity = 10,
                         Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
-                    }//,
-                    //new ReduceProduct
-                    //{
-                    //    Reason = "Product past its expiration date",
-                    //    Status = "Pending",
-                    //    Quantity = 10,
-                    //    Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
-                    //    WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section D6")!
-                    //}
+                    },
+                    new ReduceProduct
+                    {
+                        Reason = "Product past its expiration date",
+                        Status = "Pending",
+                        Quantity = 10,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
+                        WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section D6")!
+                    }
                 );
 
             db.SaveChanges();
