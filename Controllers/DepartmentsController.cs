@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,8 +20,61 @@ namespace Supermarket.Controllers
         {
             _context = context;
         }
-    //pesquisa por nome do departamento 
-    public IActionResult pesqNomeTrue(string searchTerm)
+        public ActionResult CalcularTempoMedioAtendimento(int departamentoId)
+        { 
+            List<Tickets> tickets = TicketsBaseDados (departamentoId);
+
+            if (tickets.Any())
+            {
+                TimeSpan tempoMedio = CalcularTempoMedioAtendimento(tickets);
+                ViewBag.TempoMedio = tempoMedio.TotalMinutes;
+            }
+            else
+            {
+                ViewBag.TempoMedio = 0; 
+            }
+
+            return View();
+        }
+
+        // Método para obter os tickets associados a um departamento
+        private List<Tickets> TicketsBaseDados(int departamentoId)
+        {
+            using (var dbContext = new SupermarketDbContext(new DbContextOptions<SupermarketDbContext>()))
+            {
+                List<Tickets> tickets = dbContext.Tickets
+                    .Where(t => t.IDDepartments == departamentoId)
+                    .OrderBy(t => t.DataEmissao)
+                    .ToList();
+
+                return tickets;
+            }
+        }
+
+        // Método para calcular o tempo médio de atendimento
+        private TimeSpan CalcularTempoMedioAtendimento(List<Tickets> tickets)
+        {
+            List<TimeSpan> temposAtendimento = new List<TimeSpan>();
+
+            var options = new DbContextOptionsBuilder<SupermarketDbContext>()
+                .UseSqlServer("SupermarketDbContext") 
+                .Options;
+
+            using (var dbContext = new SupermarketDbContext(options))
+            {
+                for (int i = 1; i < tickets.Count; i++)
+                {
+                    TimeSpan tempoAtendimento = tickets[i].DataAtendimento - tickets[i - 1].DataAtendimento;
+                    temposAtendimento.Add(tempoAtendimento);
+                }
+            }
+
+            TimeSpan tempoMedio = TimeSpan.FromMinutes(temposAtendimento.Average(t => t.TotalMinutes));
+            return tempoMedio;
+        }
+
+        //pesquisa por nome do departamento 
+        public IActionResult pesqNomeTrue(string searchTerm)
     {
         var results = _context.Departments
         .Where(d => (d.StateDepartments.Equals(true)) && d.NameDepartments.Contains(searchTerm))

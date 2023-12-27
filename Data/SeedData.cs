@@ -53,8 +53,6 @@ namespace Supermarket.Data
             //        }
             //    );
             //}
-
-            db.SaveChanges();
             db.SaveChanges();
         }
         private static void PopulateTickets(SupermarketDbContext db)

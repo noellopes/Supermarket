@@ -11,13 +11,11 @@ namespace Supermarket.Models
         // Data de impressão do ticket.
         [Required]
         public DateTime DataEmissao { get; set; } = DateTime.Now;
-        //public DateTime DataEmissao { get; set; } = DateTime.Now ;
         // Data de impressão do ticket.
         public DateTime DataAtendimento { get; set; }
         // Número do ticket.
         [Required]
         public int NumeroDaSenha { get; set; }
-
         // Estado atual do ticket.
         public bool Estado { get; set; }
 
