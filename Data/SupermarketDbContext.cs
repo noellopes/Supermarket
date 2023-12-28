@@ -28,11 +28,11 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Funcao> Funcao { get; set; } = default!;
 
-        public DbSet<EmployeeEvaluation> AvaliacaoFuncionarios { get; set; } = default!;
+        public DbSet<EmployeeEvaluation> EmployeeEvaluation { get; set; } = default!;
 
         public DbSet<Employee> Employee { get; set; } = default!;
 
-        public DbSet<ProductDiscount> ProductDiscount { get; internal set; }
+        public DbSet<Supermarket.Models.ProductDiscount> ProductDiscount { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Product> Product { get; set; } = default!;
 
@@ -56,16 +56,24 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
-        public DbSet<ClientCard> ClientCard { get; set; } = default!;
+        public DbSet<Supermarket.Models.ClientCard> ClientCard { get; set; } = default!;
 
-        public DbSet<CategoryDiscount> CategoryDiscounts { get; set; } = default!;
+        public DbSet<Supermarket.Models.Client> Client { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.CategoryDiscount> CategoryDiscounts { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
 
         public DbSet<MealCard> MealCard { get; set; } = default!;
 
         public DbSet<CardMovement> CardMovement { get; set; } = default!;
+        public DbSet<Supermarket.Models.Ponto> Ponto { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.EmployeeSchedule> EmployeeSchedule { get; set; } = default!;
+
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
-
-
     }
 }
