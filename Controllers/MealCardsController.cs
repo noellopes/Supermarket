@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -20,10 +21,53 @@ namespace Supermarket.Controllers
         }
 
         // GET: MealCards
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string employee_name = "", bool sOEwithoutMC = false, bool sOEwithMC = false)
         {
-            var supermarketDbContext = _context.Employee.Include(m => m.MealCard);
-            return View(await supermarketDbContext.ToListAsync());
+            var employees = from b in _context.Employee.Include(m => m.MealCard) select b;
+
+            if (!string.IsNullOrEmpty(employee_name))
+            {
+                employees = employees.Where(x => x.Employee_Name.Contains(employee_name));
+            }
+
+            if (sOEwithoutMC)
+            {
+                employees = employees.Where(x => x.MealCard == null);
+            }
+
+            if (sOEwithMC)
+            {
+                employees = employees.Where(x => x.MealCard != null);
+            }
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await employees.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new MealCardEmployeesViewModel
+            {
+                Employees = await employees
+                    .OrderBy(b => b.Employee_Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfo = paging,
+                SearchName = employee_name,
+                SOEwithoutMC = sOEwithoutMC,
+                SOEwithMC = sOEwithMC,
+            };
+
+            return View(vm);
         }
 
         // GET: MealCards/Details/5
