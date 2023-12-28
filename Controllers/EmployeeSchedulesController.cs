@@ -22,9 +22,8 @@ namespace Supermarket.Controllers
         // GET: EmployeeSchedules
         public async Task<IActionResult> Index()
         {
-              return _context.EmployeeSchedule != null ? 
-                          View(await _context.EmployeeSchedule.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.EmployeeSchedule'  is null.");
+            var supermarketDbContext = _context.EmployeeSchedule.Include(e => e.Employee);
+            return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: EmployeeSchedules/Details/5
@@ -36,7 +35,8 @@ namespace Supermarket.Controllers
             }
 
             var employeeSchedule = await _context.EmployeeSchedule
-                .FirstOrDefaultAsync(m => m.ScheduleId == id);
+                .Include(e => e.Employee)
+                .FirstOrDefaultAsync(m => m.EmployeeScheduleId == id);
             if (employeeSchedule == null)
             {
                 return NotFound();
@@ -48,6 +48,7 @@ namespace Supermarket.Controllers
         // GET: EmployeeSchedules/Create
         public IActionResult Create()
         {
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
             return View();
         }
 
@@ -56,7 +57,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
+        public async Task<IActionResult> Create([Bind("EmployeeScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +65,7 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", employeeSchedule.EmployeeId);
             return View(employeeSchedule);
         }
 
@@ -80,6 +82,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", employeeSchedule.EmployeeId);
             return View(employeeSchedule);
         }
 
@@ -88,9 +91,9 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
         {
-            if (id != employeeSchedule.ScheduleId)
+            if (id != employeeSchedule.EmployeeScheduleId)
             {
                 return NotFound();
             }
@@ -104,7 +107,7 @@ namespace Supermarket.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeScheduleExists(employeeSchedule.ScheduleId))
+                    if (!EmployeeScheduleExists(employeeSchedule.EmployeeScheduleId))
                     {
                         return NotFound();
                     }
@@ -115,6 +118,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", employeeSchedule.EmployeeId);
             return View(employeeSchedule);
         }
 
@@ -127,7 +131,8 @@ namespace Supermarket.Controllers
             }
 
             var employeeSchedule = await _context.EmployeeSchedule
-                .FirstOrDefaultAsync(m => m.ScheduleId == id);
+                .Include(e => e.Employee)
+                .FirstOrDefaultAsync(m => m.EmployeeScheduleId == id);
             if (employeeSchedule == null)
             {
                 return NotFound();
@@ -157,7 +162,7 @@ namespace Supermarket.Controllers
 
         private bool EmployeeScheduleExists(int id)
         {
-          return (_context.EmployeeSchedule?.Any(e => e.ScheduleId == id)).GetValueOrDefault();
+          return (_context.EmployeeSchedule?.Any(e => e.EmployeeScheduleId == id)).GetValueOrDefault();
         }
     }
 }

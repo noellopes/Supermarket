@@ -30,7 +30,7 @@ namespace Supermarket.Data
 
         public DbSet<EmployeeEvaluation> EmployeeEvaluation { get; set; } = default!;
 
-        public DbSet<Employee> Employee { get; set; } = default!;
+        public DbSet<Supermarket.Models.Employee> Employee { get; set; } = default!;
 
         public DbSet<Supermarket.Models.ProductDiscount> ProductDiscount { get; set; } = default!;
 
@@ -62,7 +62,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.CategoryDiscount> CategoryDiscounts { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
+        //public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
 

@@ -19,24 +19,25 @@ namespace Supermarket.Controllers
             _context = context;
         }
 
-        // GET: CardMovements
-        public async Task<IActionResult> Index()
-        {
-            var supermarketDbContext = _context.CardMovement.Include(c => c.MealCard);
-            return View(await supermarketDbContext.ToListAsync());
-        }
+        //// GET: CardMovements
+        //public async Task<IActionResult> Index()
+        //{
+        //    var supermarketDbContext = _context.CardMovement.Include(c => c.MealCard);
+        //    return View(await supermarketDbContext.ToListAsync());
+        //}
 
         // GET: CardMovements/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int cardMovementId)
         {
+            var id = _context.CardMovement.Find(cardMovementId);
             if (id == null || _context.CardMovement == null)
             {
                 return NotFound();
             }
-
             var cardMovement = await _context.CardMovement
                 .Include(c => c.MealCard)
-                .FirstOrDefaultAsync(m => m.CardMovementId == id);
+                .ThenInclude(mc => mc.Employee)
+                .FirstOrDefaultAsync(m => m.CardMovementId == cardMovementId);
             if (cardMovement == null)
             {
                 return NotFound();
@@ -46,9 +47,10 @@ namespace Supermarket.Controllers
         }
 
         // GET: CardMovements/Create
-        public IActionResult Create()
+        public IActionResult Create(int mealCardId)
         {
-            ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId");
+            ViewData["MealCardId"] = new SelectList(_context.MealCard.Include(mc => mc.Employee), "MealCardId", "Employee.Employee_Name");
+            ViewData["MCID"] = mealCardId;
             return View();
         }
 
@@ -57,112 +59,53 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CardMovementId,Movement_Date,Value,Description,Type,MealCardId")] CardMovement cardMovement)
+        public async Task<IActionResult> Create([Bind("CardMovementId,Movement_Date,Value,Description,MealCardId")] CardMovement cardMovement)
         {
+            var mealCard = await _context.MealCard.FindAsync(cardMovement.MealCardId);
+            if (cardMovement.Value < 0 && cardMovement.Value < -mealCard.Balance)
+            {
+                ModelState.AddModelError("Value", "Saldo insuficiente para a transação de débito.");
+                ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId", cardMovement.MealCardId);
+                return View(cardMovement);
+            }
             if (ModelState.IsValid)
             {
+
+                if (cardMovement.Value < 0)
+                {
+
+                    cardMovement.Type = "Debit";
+                    if (mealCard != null)
+                    {
+                        mealCard.Balance += cardMovement.Value;
+                        _context.Update(mealCard);
+                    }
+                }
+                else
+                {
+                    cardMovement.Type = "Credit";
+
+
+                    if (mealCard != null)
+                    {
+                        mealCard.Balance += cardMovement.Value;
+                        _context.Update(mealCard);
+                    }
+                }
                 _context.Add(cardMovement);
+
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "MealCards", new { id = cardMovement.MealCardId });
             }
             ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId", cardMovement.MealCardId);
             return View(cardMovement);
         }
 
-        // GET: CardMovements/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult back(int mc)
         {
-            if (id == null || _context.CardMovement == null)
-            {
-                return NotFound();
-            }
-
-            var cardMovement = await _context.CardMovement.FindAsync(id);
-            if (cardMovement == null)
-            {
-                return NotFound();
-            }
-            ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId", cardMovement.MealCardId);
-            return View(cardMovement);
+            return RedirectToAction("Details", "MealCards", new { id = mc });
         }
 
-        // POST: CardMovements/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CardMovementId,Movement_Date,Value,Description,Type,MealCardId")] CardMovement cardMovement)
-        {
-            if (id != cardMovement.CardMovementId)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(cardMovement);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CardMovementExists(cardMovement.CardMovementId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId", cardMovement.MealCardId);
-            return View(cardMovement);
-        }
-
-        // GET: CardMovements/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.CardMovement == null)
-            {
-                return NotFound();
-            }
-
-            var cardMovement = await _context.CardMovement
-                .Include(c => c.MealCard)
-                .FirstOrDefaultAsync(m => m.CardMovementId == id);
-            if (cardMovement == null)
-            {
-                return NotFound();
-            }
-
-            return View(cardMovement);
-        }
-
-        // POST: CardMovements/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.CardMovement == null)
-            {
-                return Problem("Entity set 'SupermarketDbContext.CardMovement'  is null.");
-            }
-            var cardMovement = await _context.CardMovement.FindAsync(id);
-            if (cardMovement != null)
-            {
-                _context.CardMovement.Remove(cardMovement);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool CardMovementExists(int id)
-        {
-          return (_context.CardMovement?.Any(e => e.CardMovementId == id)).GetValueOrDefault();
-        }
     }
 }

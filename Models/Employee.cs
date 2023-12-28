@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 
 namespace Supermarket.Models
 {
@@ -54,47 +56,21 @@ namespace Supermarket.Models
         public required string Standard_Lunch_Hour { get; set; }
 
         [Required]
-        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
         public required string Standard_Lunch_Time { get; set; }
 
+
+
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}")]
+        public TimeSpan Employee_Time_Bank { get; set; }
+
         
-        public int Employee_Time_Bank { get; set; }
+
 
 
         //Ligação de 1 para 1 com Meal_Card
         public MealCard? MealCard { get; set; }
 
-
-        //Ligação de 1 para 1 com Horario de atendimento (Schedule)
-        //[Required]
-        //public Schedule Schedule { get; set; }
-
-        //Buscar a coleção das folgas (1 para muitos)
-        //public ICollection<Day_Off> Days_Off { get; set;}
-
-        //Buscar a coleção das Escalas (1 para muitos)
-        //+public ICollection<Scales>? Scales { get; set;}
-
-        //Buscar a coleção dos Pontos (1 para muitos)
-        //public ICollection<Point> Point { get; set;}
-
-        //Buscar a coleção dos Alerta (1 para muitos)
-        //public ICollection<Alerta> Alerta { get; set;}
-
-        //Buscar a coleção dos Abate_Funcionario (1 para muitos)
-        //public ICollection<Employee_Reduction> Employee_Reduction { get; set;}
-
-        //Buscar a coleção das Qualificação (Muitos para muitos)
-        //public ICollection<Qualifications> Qualifications { get; set;}
-
-        //Buscar a coleção do Departamento (Muitos para muitos)
-        //public ICollection<Departments> Departments { get; set;}
-
-
-
-
-
-
+       
 
     }
 }

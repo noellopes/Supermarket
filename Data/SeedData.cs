@@ -17,13 +17,15 @@ namespace Supermarket.Data
             PopulateWarehouseSection(db);
             PopulateWarehouseSection_Product(db);
             PopulateReduceProduct(db);
-            PopulateClients(db);
-            PopulateClientCard(db);
-            PopulateProductDiscounts(db);
+            // PopulateClients(db);
+            //PopulateClientCard(db);
+            //PopulateProductDiscounts(db);
             //PopulateEmployees(db);
             //PopulateEmployeeEvaluations(db);
             PopulateConfSub(db);
-            //PopulateEmployee(db);
+            PopulateEmployee(db);
+            PopulateMealCards(db);
+            PopulateCardMovements(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db)
@@ -316,63 +318,7 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-        private static void PopulateEmployees(SupermarketDbContext db)
-        {
-            if (db.Employee.Any()) return;
-
-            db.Employee.AddRange(
-                new Employee
-                {
-                    Employee_Address= "Rua das Oliveiras",
-                    Employee_Admission_Date= DateTime.Now,
-                    Employee_Birth_Date= DateTime.Now,
-                    Employee_Email="zeD@manga.com",
-                    Employee_Name="Jose",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    //Employee_Time_Bank= DateTime.Now,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                    Standard_Lunch_Time = "123"
-                },
-                new Employee
-                {
-                    Employee_Address = "Rua do azeite",
-                    Employee_Admission_Date = DateTime.Now,
-                    Employee_Birth_Date = DateTime.Now,
-                    Employee_Email = "zeD@manga.com",
-                    Employee_Name = "Maria",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    //Employee_Time_Bank = DateTime.Now,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                    Standard_Lunch_Time = "123"
-                },
-                new Employee
-                {
-                    Employee_Address = "Avenida Afonso Pena",
-                    Employee_Admission_Date = DateTime.Now,
-                    Employee_Birth_Date = DateTime.Now,
-                    Employee_Email = "zeD@manga.com",
-                    Employee_Name = "Lucas",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    //Employee_Time_Bank = DateTime.Now,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                    Standard_Lunch_Time = "123"
-                }
-                );
-
-            db.SaveChanges();
-        }
+     
 
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
         {
@@ -381,7 +327,7 @@ namespace Supermarket.Data
             db.EmployeeEvaluation.AddRange(
                 new EmployeeEvaluation
                 {
-                    Description= "Atendimento excelente!",
+                    Description = "Atendimento excelente!",
                     EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 8,
                 },
@@ -402,6 +348,7 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
+        /*
         private static void PopulateClients(SupermarketDbContext db)
         {
             if (db.Client.Any()) return;
@@ -441,7 +388,11 @@ namespace Supermarket.Data
                 }
                 );
             db.SaveChanges();
+
         }
+
+        
+        
         private static void PopulateClientCard(SupermarketDbContext db)
         {
             if (db.ClientCard.Any()) return;
@@ -469,6 +420,8 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
+        */
+        /*
         private static void PopulateProductDiscounts(SupermarketDbContext db)
         {
             if (db.ProductDiscount.Any()) return;
@@ -485,7 +438,7 @@ namespace Supermarket.Data
                 );
             db.SaveChanges();
         }
-
+        */
         private static void PopulateConfSub(SupermarketDbContext db)
         {
             if (db.SubsidySetup.Any()) return;
@@ -505,32 +458,77 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-
+      
         private static void PopulateEmployee(SupermarketDbContext db)
         {
             if (db.Employee.Any()) return;
 
+
             db.Employee.AddRange(
-                new Employee
-                {
-                    Employee_Address = "Rua da direita",
-                    Employee_Admission_Date = new DateTime(2023, 01, 05),
-                    Employee_Termination_Date = new DateTime(2023, 12, 31),
-                    Employee_Birth_Date = new DateTime(2002, 01, 01),
-                    Employee_Email = "test@gmail.com",
-                    Employee_Name = "Alberto",
-                    Employee_NIF = "123456789",
-                    Employee_Password = "0000",
-                    Employee_Phone = "987465321",
-                    Standard_Check_In_Time = "9:10",
-                    Standard_Check_Out_Time = "10:01",
-                    Standard_Lunch_Hour = "12:30",
-                    Standard_Lunch_Time="13:00",
-                    Employee_Time_Bank= 1,
-                }
+
+                new Employee { Employee_Name = "Afonso", Employee_Email = "Afonso@gmail.com", Employee_Password = "afonso123", Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1"},
+                new Employee { Employee_Name = "Jessica", Employee_Email = "Jessica@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837462856", Employee_NIF = "875436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
+                new Employee { Employee_Name = "Hugo", Employee_Email = "Hugo@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620559", Employee_NIF = "938475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
+                new Employee { Employee_Name = "Alberto", Employee_Email = "Alberto1@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843257712", Employee_NIF = "098764084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1"},
+                 new Employee { Employee_Name = "Afonso", Employee_Email = "Afonso1@gmail.com", Employee_Password = "afonso123", Employee_Phone = "123454789", Employee_NIF = "987655321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+                new Employee { Employee_Name = "Jessica", Employee_Email = "Jessica1@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837468856", Employee_NIF = "872436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
+                new Employee { Employee_Name = "Hugo", Employee_Email = "Hugo1@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620959", Employee_NIF = "238475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
+                new Employee { Employee_Name = "Alberto", Employee_Email = "Alberto1@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "849252712", Employee_NIF = "394749084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+                 new Employee { Employee_Name = "Afonso", Employee_Email = "Afonso2@gmail.com", Employee_Password = "afonso123", Employee_Phone = "143456789", Employee_NIF = "487654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+                new Employee { Employee_Name = "Jessica", Employee_Email = "Jessica2@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "827462856", Employee_NIF = "575436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
+                new Employee { Employee_Name = "Hugo", Employee_Email = "Hugo2@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975120959", Employee_NIF = "738475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
+                new Employee { Employee_Name = "Alberto", Employee_Email = "Alberto2@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "849257702", Employee_NIF = "898749084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+                 new Employee { Employee_Name = "Afonso", Employee_Email = "Afonso3@gmail.com", Employee_Password = "afonso123", Employee_Phone = "128256789", Employee_NIF = "444654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+                new Employee { Employee_Name = "Jessica", Employee_Email = "Jessica3@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837238856", Employee_NIF = "875242712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
+                new Employee { Employee_Name = "Hugo", Employee_Email = "Hugo3@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620579", Employee_NIF = "345675610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
+                new Employee { Employee_Name = "Alberto", Employee_Email = "Alberto3@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" }
+                );
+            db.SaveChanges();
+        }
+
+        private static void PopulateMealCards(SupermarketDbContext db)
+        {
+            if (db.MealCard.Any()) return;
+
+            db.MealCard.AddRange(
+                new MealCard { EmployeeId = 1}
+                );
+
+            db.SaveChanges( );
+        }
+
+
+        private static void PopulateCardMovements(SupermarketDbContext db)
+        {
+            if (db.CardMovement.Any()) return;
+
+            db.CardMovement.AddRange(
+                 new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                 new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200 , Type="Credit"},
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1 , Description = "Compra Supermercado", Movement_Date= DateTime.Now, Value=-200, Type = "Debit" }
                 );
 
             db.SaveChanges();
         }
+
     }
-}
+        
+        
+    }
+

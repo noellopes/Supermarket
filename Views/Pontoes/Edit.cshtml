@@ -1,36 +1,34 @@
 ﻿@model Supermarket.Models.Ponto
 
 @{
-    ViewData["Title"] = "Registrar Ponto";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Registro de Ponto</h1>
+<h1>Edit</h1>
 
 <h4>Ponto</h4>
 <hr />
-<div class="form-group">
-    <input type="submit" value="Registrar_Ponto" class="btn btn-primary" />
-</div>
-  <div class="row">
+<div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="PontoId" />
             <div class="form-group">
                 <label asp-for="EmployeeId" class="control-label"></label>
-                <input asp-for="EmployeeId" class="form-control" />
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
-           @* <div class="form-group">
+            <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
-            </div> *@
-            @* <div class="form-group">
+            </div>
+            <div class="form-group">
                 <label asp-for="CheckInTime" class="control-label"></label>
                 <input asp-for="CheckInTime" class="form-control" />
                 <span asp-validation-for="CheckInTime" class="text-danger"></span>
-            </div> *@
-            @* <div class="form-group">
+            </div>
+            <div class="form-group">
                 <label asp-for="CheckOutTime" class="control-label"></label>
                 <input asp-for="CheckOutTime" class="form-control" />
                 <span asp-validation-for="CheckOutTime" class="text-danger"></span>
@@ -44,7 +42,7 @@
                 <label asp-for="LunchEndTime" class="control-label"></label>
                 <input asp-for="LunchEndTime" class="form-control" />
                 <span asp-validation-for="LunchEndTime" class="text-danger"></span>
-            </div> *@
+            </div>
             <div class="form-group">
                 <label asp-for="DayBalance" class="control-label"></label>
                 <input asp-for="DayBalance" class="form-control" />
@@ -60,25 +58,15 @@
                 <input asp-for="Justificative" class="form-control" />
                 <span asp-validation-for="Justificative" class="text-danger"></span>
             </div>
-           @*  <div class="form-group">
-                <label asp-for="CheckInCoordenates" class="control-label"></label>
-                <input asp-for="CheckInCoordenates" class="form-control" />
-                <span asp-validation-for="CheckInCoordenates" class="text-danger"></span>
-            </div>
             <div class="form-group">
-                <label asp-for="CheckOutCoordenates" class="control-label"></label>
-                <input asp-for="CheckOutCoordenates" class="form-control" />
-                <span asp-validation-for="CheckOutCoordenates" class="text-danger"></span>
-            </div> *@
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
-</div>   
-<br />
+</div>
+
 <div>
-    <a asp-action="Index">Voltar</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

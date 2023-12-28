@@ -10,25 +10,23 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class PontosController : Controller
+    public class PontoesController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public PontosController(SupermarketDbContext context)
+        public PontoesController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: Pontos
+        // GET: Pontoes
         public async Task<IActionResult> Index()
         {
-              
-            return _context.Ponto != null ? 
-                          View(await _context.Ponto.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Ponto'  is null.");
+            var supermarketDbContext = _context.Ponto.Include(p => p.Employee);
+            return View(await supermarketDbContext.ToListAsync());
         }
 
-        // GET: Pontos/Details/5
+        // GET: Pontoes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Ponto == null)
@@ -37,6 +35,7 @@ namespace Supermarket.Controllers
             }
 
             var ponto = await _context.Ponto
+                .Include(p => p.Employee)
                 .FirstOrDefaultAsync(m => m.PontoId == id);
             if (ponto == null)
             {
@@ -46,32 +45,31 @@ namespace Supermarket.Controllers
             return View(ponto);
         }
 
-        // GET: Pontos/Create
+        // GET: Pontoes/Create
         public IActionResult Create()
         {
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
             return View();
         }
 
-        // POST: Pontos/Create
+        // POST: Pontoes/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PontoId,EmployeeId,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative,CheckInCoordenates,CheckOutCoordenates")] Ponto ponto)
+        public async Task<IActionResult> Create([Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative")] Ponto ponto)
         {
             if (ModelState.IsValid)
             {
-                ponto.Date = DateTime.Now;
-                ponto.CheckInTime = DateTime.Now.TimeOfDay;
-                ponto.CheckOutTime = DateTime.Now.TimeOfDay;
-                ponto.LunchStartTime = DateTime.Now.TimeOfDay;
-                ponto.LunchEndTime = DateTime.Now.TimeOfDay;
                 _context.Add(ponto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
             return View(ponto);
         }
 
-        // GET: Pontos/Edit/5
+        // GET: Pontoes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Ponto == null)
@@ -84,13 +82,16 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
             return View(ponto);
         }
 
-        // POST: Pontos/Edit/5
+        // POST: Pontoes/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative,CheckInCoordenates,CheckOutCoordenates")] Ponto ponto)
+        public async Task<IActionResult> Edit(int id, [Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,DayBalance,Status,Justificative")] Ponto ponto)
         {
             if (id != ponto.PontoId)
             {
@@ -117,10 +118,11 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
             return View(ponto);
         }
 
-        // GET: Pontos/Delete/5
+        // GET: Pontoes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Ponto == null)
@@ -129,6 +131,7 @@ namespace Supermarket.Controllers
             }
 
             var ponto = await _context.Ponto
+                .Include(p => p.Employee)
                 .FirstOrDefaultAsync(m => m.PontoId == id);
             if (ponto == null)
             {
@@ -138,7 +141,7 @@ namespace Supermarket.Controllers
             return View(ponto);
         }
 
-        // POST: Pontos/Delete/5
+        // POST: Pontoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
