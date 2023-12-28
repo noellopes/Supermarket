@@ -20,12 +20,52 @@ namespace Supermarket.Controllers
         }
 
         // GET: Employees
+        /*
         public async Task<IActionResult> Index()
         {
               return _context.Employee != null ? 
                           View(await _context.Employee.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
         }
+        */
+        public async Task<IActionResult> Index(int page = 1, string employee_name = "")
+        {
+            var employees = from b in _context.Employee select b;
+
+            if (!string.IsNullOrEmpty(employee_name))
+            {
+                employees = employees.Where(x => x.Employee_Name.Contains(employee_name));
+            }
+
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await employees.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new EmployeesViewModel
+            {
+                Employees = await employees
+                    .OrderBy(b => b.Employee_Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfo = paging,
+                SearchName = employee_name,
+            };
+
+            return View(vm);
+        }
+
 
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
