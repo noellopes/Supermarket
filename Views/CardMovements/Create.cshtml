@@ -12,11 +12,11 @@
         <form asp-action="Create">
             <div asp-validation-summary="All" class="text-danger"></div>            
             <div class="form-group">
-                <label asp-for="MealCardId" class="control-label"></label>
+                <label asp-for="MealCardId" class="control-label">Employee</label>
                 <select asp-for="MealCardId" class="form-control" asp-items="ViewBag.MealCardId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Movement_Date" class="control-label"></label>
+                <label asp-for="Movement_Date" class="control-label">Movement Date</label>
                 <input asp-for="Movement_Date" class="form-control" />
                 <span asp-validation-for="Movement_Date" class="text-danger"></span>
             </div>
@@ -39,8 +39,9 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Back" asp-controller="CardMovements" asp-route-mc="@ViewBag.MCID" class="btn btn-outline-dark button-text btn-sm">Back to MealCard Details</a>
 </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
