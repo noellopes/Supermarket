@@ -126,7 +126,7 @@
         else
         {
             <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-asp-page="1">First</a>
+                <a class="page-link" asp-action="Details" asp-controller="MealCards" asp-route-id="@Model.MealCard" asp-route-cardMovementPage="1">First</a>
             </li>
         }
 
@@ -149,7 +149,7 @@
             else
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                    <a class="page-link" asp-action="Details" asp-controller="MealCards" asp-route-id="@Model.MealCard" asp-route-cardMovementPage="@p">@p</a>
                 </li>
             }
         }
@@ -162,11 +162,8 @@
         else
         {
             <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-page="@Model.CardMovementPagingInfo.TotalPages">Last</a>
+                <a class="page-link" asp-action="Details" asp-controller="MealCards" asp-route-id="@Model.MealCard" asp-route-cardMovementPage="@Model.CardMovementPagingInfo.TotalPages">Last</a>
             </li>
         }
-
     </ul>
-
-
 </nav>

@@ -24,6 +24,8 @@ namespace Supermarket.Data
             //PopulateEmployeeEvaluations(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
+            PopulateMealCards(db);
+            PopulateCardMovements(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db)
@@ -480,7 +482,47 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-       
+        private static void PopulateMealCards(SupermarketDbContext db)
+        {
+            if (db.MealCard.Any()) return;
+
+            db.MealCard.AddRange(
+                new MealCard { EmployeeId = 1}
+                );
+
+            db.SaveChanges( );
+        }
+
+
+        private static void PopulateCardMovements(SupermarketDbContext db)
+        {
+            if (db.CardMovement.Any()) return;
+
+            db.CardMovement.AddRange(
+                 new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                 new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200 , Type="Credit"},
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
+                new CardMovement { MealCardId = 1 , Description = "Compra Supermercado", Movement_Date= DateTime.Now, Value=-200, Type = "Debit" }
+                );
+
+            db.SaveChanges();
+        }
+
     }
         
         
