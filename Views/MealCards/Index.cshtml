@@ -63,7 +63,7 @@
 </table>
 <nav aria-label="employees">
     <ul class="pagination">
-        @if (Model.PagingInfo.CurrentPage == 1)
+        @if (Model.MealCardPagingInfo.CurrentPage == 1)
         {
             <li class="page-item disabled">
                 <a class="page-link" href="#">First</a>
@@ -77,16 +77,16 @@
         }
 
         @{
-            int first = Model.PagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+            int first = Model.MealCardPagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
             if (first < 1) first = 1;
 
-            int last = Model.PagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-            if (last > Model.PagingInfo.TotalPages) last = Model.PagingInfo.TotalPages;
+            int last = Model.MealCardPagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+            if (last > Model.MealCardPagingInfo.TotalPages) last = Model.MealCardPagingInfo.TotalPages;
         }
 
         @for (int p = first; p <= last; p++)
         {
-            @if (p == Model.PagingInfo.CurrentPage)
+            @if (p == Model.MealCardPagingInfo.CurrentPage)
             {
                 <li class="page-item active" aria-current="page">
                     <a class="page-link" href="#">@p</a>
@@ -99,7 +99,7 @@
                 </li>
             }
         }
-        @if (Model.PagingInfo.CurrentPage == Model.PagingInfo.TotalPages)
+        @if (Model.MealCardPagingInfo.CurrentPage == Model.MealCardPagingInfo.TotalPages)
         {
             <li class="page-item disabled">
                 <a class="page-link" href="#">Last</a>
@@ -108,7 +108,7 @@
         else
         {
             <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages">Last</a>
+                <a class="page-link" asp-action="Index" asp-route-page="@Model.MealCardPagingInfo.TotalPages">Last</a>
             </li>
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -61,7 +62,7 @@ namespace Supermarket.Controllers
                     .Skip((paging.CurrentPage - 1) * paging.PageSize)
                     .Take(paging.PageSize)
                     .ToListAsync(),
-                PagingInfo = paging,
+                MealCardPagingInfo = paging,
                 SearchName = employee_name,
                 SOEwithoutMC = sOEwithoutMC,
                 SOEwithMC = sOEwithMC,
@@ -71,7 +72,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: MealCards/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int cardMovementPage = 1)
         {
             if (id == null || _context.MealCard == null)
             {
@@ -79,15 +80,48 @@ namespace Supermarket.Controllers
             }
 
             var mealCard = await _context.MealCard
-                .Include(m => m.Employee)
-                .Include(m => m.CardMovements)
-                .FirstOrDefaultAsync(m => m.MealCardId == id);
+        .Include(m => m.Employee)
+        .Include(m => m.CardMovements)
+        .FirstOrDefaultAsync(m => m.MealCardId == id);
+
+            var cardMovements = _context.CardMovement
+                .Include(c => c.MealCard)
+                .Where(c => c.MealCard.MealCardId == id);
             if (mealCard == null)
             {
                 return NotFound();
             }
-            
-            return View(mealCard);
+
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = cardMovementPage,
+                TotalItems = await cardMovements.CountAsync(),
+            };
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+
+
+            var vm = new MealCardEmployeesViewModel
+            {
+                Balance = mealCard.Balance,
+                EmployeeName = mealCard.Employee.Employee_Name,
+                MealCard = mealCard.MealCardId,
+                CardMovements = await cardMovements
+                .OrderBy(b => b.Movement_Date)
+                .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                CardMovementPagingInfo = paging,
+            };
+
+            return View(vm);
         }
 
         // GET: MealCards/Create
