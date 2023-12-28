@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
+using Supermarket.Data.Migrations.Supermarket;
 using Supermarket.Models;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -20,15 +22,38 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(int page = 1, string product = "", float minValue = 0, float maxValue = float.MaxValue, DateTime? startDate = null, DateTime? endDate = null)
         {
-            var producDiscounts = from b in _context.ProductDiscount.Include(p => p.ClientCard).Include(p => p.Product) select b;
+            var productDiscounts = from b in _context.ProductDiscount.Include(p => p.ClientCard).Include(p => p.Product) select b;
+            
+            if (product != "")
+            {
+                productDiscounts = productDiscounts.Where(x => x.Product.Name.Contains(product));
+            }
+            if (minValue > 0)
+            {
+                productDiscounts = productDiscounts.Where(pd => pd.Value >= minValue);
+            }
+
+            if (maxValue < float.MaxValue)
+            {
+                productDiscounts = productDiscounts.Where(pd => pd.Value <= maxValue);
+            }
+            if (startDate.HasValue)
+            {
+                productDiscounts = productDiscounts.Where(pd => pd.StartDate >= startDate.Value.Date);
+            }
+            if (endDate.HasValue)
+            {
+                productDiscounts = productDiscounts.Where(pd => pd.EndDate <= endDate.Value.Date);
+            }
 
             PagingInfo paging = new PagingInfo
             {
                 CurrentPage = page,
-                TotalItems = await producDiscounts.CountAsync(),
+                TotalItems = await productDiscounts.CountAsync(),
             };
+
             if (paging.CurrentPage <= 1)
             {
                 paging.CurrentPage = 1;
@@ -40,7 +65,7 @@ namespace Supermarket.Controllers
 
             var vm = new ProductDiscountsViewModel
             {
-                ProductDiscounts = await producDiscounts
+                ProductDiscounts = await productDiscounts
                     .OrderBy(b => b.Product.Name)
                     .Skip((paging.CurrentPage - 1) * paging.PageSize)
                     .Take(paging.PageSize)
@@ -119,12 +144,12 @@ namespace Supermarket.Controllers
                 }
                 if (duplicatedDiscounts)
                 {
-                    ModelState.AddModelError("", "One or more Product Discounts with the same values already exist for the same clients.");
+                    ModelState.AddModelError("", "One or more product Discounts with the same values already exist for the same clients.");
                 }
                 else
                 {
                     await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "Product successfully created!";
+                    TempData["SuccessMessage"] = "product successfully created!";
                     return RedirectToAction(nameof(Index));
                 }
         }
@@ -170,7 +195,7 @@ namespace Supermarket.Controllers
                     _context.Update(productDiscount);
                     await _context.SaveChangesAsync();
 
-                    TempData["SuccessMessage"] = "Product sucessful edited!";
+                    TempData["SuccessMessage"] = "product sucessful edited!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -225,7 +250,7 @@ namespace Supermarket.Controllers
                 _context.ProductDiscount.Remove(productDiscount);
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Product sucessful deleted";
+                TempData["SuccessMessage"] = "product sucessful deleted";
             }
             
             await _context.SaveChangesAsync();
