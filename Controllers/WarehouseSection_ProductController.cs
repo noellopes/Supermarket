@@ -224,6 +224,12 @@ namespace Supermarket.Controllers
                 .Include(w => w.Supplier)
                 .Include(w => w.WarehouseSection)
                 .FirstOrDefaultAsync(m => m.WarehouseSection_ProductId == id);
+
+            if (warehouseSection_Product.Quantity != 0)
+            {
+                ViewBag.Message = "Batch number cannot be eliminated because it has a quantity greater than 0";
+                return View("Delete", warehouseSection_Product);
+            }
             if (warehouseSection_Product == null)
             {
                 return NotFound();
@@ -248,7 +254,7 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", new { warehouseSectionId = warehouseSection_Product.WarehouseSectionId });
         }
 
         private bool WarehouseSection_ProductExists(int id)
