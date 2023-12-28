@@ -156,8 +156,30 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(shelft_ProductExhibition);
+
+                    // Buscar a entidade existente
+                    var existingShelft_ProductExhibition = await _context.Shelft_ProductExhibition
+                        .FirstOrDefaultAsync(wp => wp.ProductId == shelft_ProductExhibition.ProductId && wp.ShelfId == shelft_ProductExhibition.ShelfId);
+
+                    if (existingShelft_ProductExhibition != null)
+                    {
+                        // Manter o valor existente da propriedade Quantity
+                        shelft_ProductExhibition.Quantity = existingShelft_ProductExhibition.Quantity;
+
+                        // Atualizar todas as propriedades
+                        _context.Entry(existingShelft_ProductExhibition).CurrentValues.SetValues(shelft_ProductExhibition);
+                    }
+                    else
+                    {
+                        // Se a entidade não existe, adicioná-la ao contexto
+                        _context.Shelft_ProductExhibition.Update(shelft_ProductExhibition);
+                    }
+
+
                     await _context.SaveChangesAsync();
+
+
+
 
                     //ViewBag.Message = "Shelft Product Exhibition successfully edited.";
                     TempData["Message"] = "Shelft Product Exhibition successfully edited";

@@ -181,6 +181,7 @@ namespace Supermarket.Controllers
                     _context.Update(warehouseSection_Product);
                     await _context.SaveChangesAsync();
                     ViewBag.Message = " Warehouse Section Product successfully edited.";
+
                     warehouseSection_Product.WarehouseSection = await _context.WarehouseSection.FindAsync(warehouseSection_Product.WarehouseSectionId);
                     warehouseSection_Product = await _context.WarehouseSection_Product
                     .Include(w => w.Product)
