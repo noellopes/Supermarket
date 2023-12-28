@@ -60,10 +60,10 @@
 
 <h4>WarehouseSection</h4>
 
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage2))
+@if (!string.IsNullOrEmpty(TempData["ErrorMessage2"] as string))
 {
     <div class="alert alert-danger">
-        @ViewBag.ErrorMessage2
+        @TempData["ErrorMessage2"]
     </div>
 }
 

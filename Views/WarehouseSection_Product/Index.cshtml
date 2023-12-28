@@ -4,68 +4,91 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Product)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WarehouseSection)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReservedQuantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BatchNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ExpirationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Supplier)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WarehouseSection.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReservedQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BatchNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpirationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Supplier.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.WarehouseSection_ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.WarehouseSection_ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.WarehouseSection_ProductId">Delete</a>
-            </td>
-        </tr>
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .table th,
+    .table td {
+        background-color: #f8f8f8;
+        color: #000;
+        border: none;
+    }
+
+    .btn-create {
+        background-color: #28a745;
+        color: #fff;
+    }
+</style>
+
+<h1>Batch Number</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title">@ViewBag.WarehouseSectionName - Warehouse Section</h2>
+        <p class="card-text">Total Batch Number: @ViewBag.TotalWarehouseSectionsProduts</p>
+    </div>
+</div>
+
+
+
+@if (ViewBag.TotalWarehouseSectionsProduts != null && ViewBag.TotalWarehouseSectionsProduts > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Batch Number</th>
+                <th>Product</th>
+                <th>WareHouse Section</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var warehouseSectionProduct in Model)
+            {
+                <tr>
+                    <td>@warehouseSectionProduct.BatchNumber</td>
+                    <td>@warehouseSectionProduct.Product.Name,@warehouseSectionProduct.Product.Description </td>
+                    <td>@warehouseSectionProduct.WarehouseSection.Description</td>
+                    <td>@warehouseSectionProduct.Quantity</td>
+
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a asp-controller="WarehouseSection_Product" asp-action="Edit" asp-route-id="@warehouseSectionProduct.WarehouseSection_ProductId" class="btn btn-secondary">Edit</a>
+                            <a asp-controller="WarehouseSection_Product" asp-action="Details" asp-route-id="@warehouseSectionProduct.WarehouseSection_ProductId" class="btn btn-secondary">Details</a>
+                            <a asp-controller="WarehouseSection_Product" asp-action="Delete" asp-route-id="@warehouseSectionProduct.WarehouseSection_ProductId" class="btn btn-danger">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
+else
+{
+    <p class="card-text">No Warehouse Section found for this Warehouse.</p>
+}
+
+<a asp-action="Create" asp-route-warehousesectionId="@ViewBag.WarehouseId" class="btn btn-primary">
+    Create Warehouse Section
+</a>
+<a asp-action="Index" asp-controller="WarehouseSections" asp-route-warehouseid="@ViewBag.WarehouseId" class="btn btn-secondary">Back to Warehouse List</a>
+

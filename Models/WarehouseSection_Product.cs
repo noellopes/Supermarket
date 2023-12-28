@@ -24,7 +24,7 @@ namespace Supermarket.Models
 
         //Número de lote
         [Required]
-        [StringLength(20, MinimumLength = 3)]
+        [StringLength(10, MinimumLength = 3)]
         public required string BatchNumber { get; set; }
 
         //Data de validade
