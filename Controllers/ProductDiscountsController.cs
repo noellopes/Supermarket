@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using Supermarket.Data;
 using Supermarket.Data.Migrations.Supermarket;
 using Supermarket.Models;
@@ -22,7 +23,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts
-        public async Task<IActionResult> Index(int page = 1, string product = "", float minValue = 0, float maxValue = float.MaxValue, DateTime? startDate = null, DateTime? endDate = null)
+        public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
             var productDiscounts = from b in _context.ProductDiscount.Include(p => p.ClientCard).Include(p => p.Product) select b;
             
@@ -30,18 +31,13 @@ namespace Supermarket.Controllers
             {
                 productDiscounts = productDiscounts.Where(x => x.Product.Name.Contains(product));
             }
-            if (minValue > 0)
+            if (value.HasValue)
             {
-                productDiscounts = productDiscounts.Where(pd => pd.Value >= minValue);
-            }
-
-            if (maxValue < float.MaxValue)
-            {
-                productDiscounts = productDiscounts.Where(pd => pd.Value <= maxValue);
+                productDiscounts = productDiscounts.Where(x => x.Value == value.Value);
             }
             if (startDate.HasValue)
             {
-                productDiscounts = productDiscounts.Where(pd => pd.StartDate >= startDate.Value.Date);
+                productDiscounts = productDiscounts.Where(pd => pd.StartDate <= startDate.Value.Date && pd.StartDate >= startDate.Value.Date);
             }
             if (endDate.HasValue)
             {
