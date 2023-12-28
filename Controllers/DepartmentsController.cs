@@ -85,7 +85,7 @@ namespace Supermarket.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            var viewModel = new ProductsListViewModel
+            var viewModel = new DepListViewModel
             {
                 Departments = departments,
                 Pagination = pagination,
@@ -138,7 +138,7 @@ namespace Supermarket.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            var viewModel = new ProductsListViewModel
+            var viewModel = new DepListViewModel
             {
                 Departments = departments,
                 Pagination = pagination,
