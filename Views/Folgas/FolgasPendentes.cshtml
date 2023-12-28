@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "FolgasPendentes";
+}
+
+@model List<Folga>
+<h1>Folgas Pendentes de Aprovação</h1>
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>FuncionarioId</th>
+            <th></th>
+            <th></th>
+            <th>Pedido dia</th>>
+            <th></th>
+            <th></th>
+            <th>Início</th>
+            <th></th>
+            <th></th>
+            <th> Fim</th>
+            <th></th>
+            <th></th>
+            <th>Motivo</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+
+
+            
+
+
+
+
+
+
+        </tr>
+    </thead>
+    </table>
+
+@foreach (var folga in Model)
+{
+    <div><h4> @folga.Funcionario.Employee_Name</h4>
+        <p> @folga.DataPedido.ToString()</p>
+        <p> @folga.DataInicio.ToShortDateString()</p>
+        <p> @folga.DataFim.ToShortDateString()</p>
+        <p> @folga.motivo</p>
+        </div>
+
+        <form asp-controller="Folgas" asp-action="AprovarRejeitarFolga" asp-route-id="@folga.FolgaId" method="post"></form>
+
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label for="GestorId">Gestor Id</label>
+        <input type="text" name="GestorId" required/></div>
+        <div class="form-group"><label for="DataResultado:">Data Resultado</label>
+            <input type="date" name="DataResultado" required/> </div>
+        <button type="submit" name="aprovacao" value="aprovada">Aprovar</button>
+        <button type="submit" name="aprovacao" value="Rejeitada">Rejeitar</button>
+        
+}

@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "FolgasAprovadas";
+}
+@model List<Folga>
+<h1>Folgas Aprovadas</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th>FuncionarioId</th>
+            <th></th>
+            <th></th>
+            <th>GestorId</th>
+            <th></th>
+            <th></th>
+            <th>Pedido dia</th>>
+            <th></th>
+            <th></th>
+            <th>Aprovado dia</th>>
+            <th></th>
+            <th></th>
+            <th>Início</th>
+            <th></th>
+            <th></th>
+            <th> Fim</th>
+            <th></th>
+            <th></th>
+            <th>Motivo</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            </table>
+
+@foreach (var folga in Model)
+{
+    <div><h4>Folga de @folga.Funcionario.Employee_Name</h4>
+        <p>Gestor:@folga.GestorId</p>
+        <p>Aprovada a:@folga.DataResultado.ToString()</p>
+        <p>Pedida a @folga.DataPedido.ToString()</p>
+        <p>Início: @folga.DataInicio.ToShortDateString()</p>
+        <p>Fim: @folga.DataFim.ToShortDateString()</p>
+        <p>Motivo: @folga.motivo</p>
+
+        </div>
+}

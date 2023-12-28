@@ -62,9 +62,12 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
+                folga.Status = Folga.FolgaStatus.Pendente;//Quando a folga for inserida na base de dados muda o estado para "Pendente"
                 _context.Add(folga);
                 await _context.SaveChangesAsync();
+                TempData["SucessMessage"] = "A sua folga foi adicionada com sucesso";
                 return RedirectToAction(nameof(Index));
+                
             }
             
             
@@ -161,6 +164,54 @@ namespace Supermarket.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> FolgasPendentes()
+        {
+            var folgasPendentes = await _context.Folga.Where(f => f.Status == Folga.FolgaStatus.Pendente).Include(f=>f.Funcionario).ToListAsync();
+            return View(folgasPendentes);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult>AprovarFolga(int id, string aprovacao,int GestorId,DateTime DataResultado)
+        {
+            var folga = await _context.Folga.FindAsync(id);
+
+            if (folga != null)
+            {
+                if (aprovacao == "Aprovada")
+                {
+
+                
+                folga.Status = Folga.FolgaStatus.Aprovada;
+                    folga.GestorId = GestorId;
+                    folga.DataResultado = DataResultado;
+                    TempData["SuccessMessage"] = "Folga Aprovada";
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(FolgasAprovadas));
+
+            } else if (aprovacao == "Rejeitada")
+                {
+                    folga.Status = Folga.FolgaStatus.Rejeitada;
+                    folga.GestorId = GestorId;
+                    folga.DataResultado = DataResultado;
+                    TempData["SuccessMessage"] = "Folga rejeitada";
+                    await _context.SaveChangesAsync();
+                }
+                
+            
+
+            }
+            return RedirectToAction(nameof(FolgasPendentes));
+        }
+
+        public async Task<IActionResult> FolgasAprovadas()
+        {
+            var folgasAprovadas = await _context.Folga.Where(f => f.Status == Folga.FolgaStatus.Aprovada).ToListAsync();
+            return View(folgasAprovadas);
+        }
+
+
 
         private bool FolgaExists(int id)
         {
