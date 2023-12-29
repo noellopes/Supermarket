@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231226193610_Initial")]
+    [Migration("20231229185511_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -441,6 +441,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("LastCountDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("MinimumQuantity")
                         .HasColumnType("int");

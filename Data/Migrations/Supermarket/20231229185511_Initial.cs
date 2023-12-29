@@ -216,7 +216,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                     TotalQuantity = table.Column<int>(type: "int", nullable: false),
                     MinimumQuantity = table.Column<int>(type: "int", nullable: false),
                     UnitPrice = table.Column<double>(type: "float", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastCountDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

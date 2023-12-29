@@ -439,6 +439,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<DateTime>("LastCountDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("MinimumQuantity")
                         .HasColumnType("int");
 
