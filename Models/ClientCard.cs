@@ -16,7 +16,5 @@ namespace Supermarket.Models
 
         public Boolean Estado { get; set; } = true;
 
-        public ICollection<ProductDiscount> ProductDiscounts { get; set; }
-        
     }
 }

@@ -108,7 +108,7 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
         {
-            var clientCards = await _context.ClientCard.ToListAsync();
+            var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
             bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
 
                 foreach (var clientCard in clientCards)
