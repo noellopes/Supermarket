@@ -235,7 +235,8 @@ namespace Supermarket.Controllers
         {
             // Consulta para os produtos
             var productQuery = _context.Product
-                .Include(p => p.Brand);
+                .Include(p => p.Brand)
+                  .Where(p => p.UnitPrice > 25);
 
             // Executar a consulta e armazenar os resultados na ViewData
             var products = await productQuery.ToListAsync();
