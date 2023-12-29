@@ -29,7 +29,8 @@ namespace Supermarket.Data
             db.Brand.AddRange(
                     new Brand { Name = "Nivea" },
                     new Brand { Name = "Frankfurt" },
-                    new Brand { Name = "Lays" }
+                    new Brand { Name = "Lays" },
+                    new Brand { Name= "Monopoly" }
                 );
 
             db.SaveChanges();
@@ -42,7 +43,8 @@ namespace Supermarket.Data
             db.Category.AddRange(
                     new Category { Name = "Hygiene" },
                     new Category { Name = "Canned" },
-                    new Category { Name = "Drinks" }
+                    new Category { Name = "Drinks" },
+                     new Category { Name = "Games" }
                 );
 
             db.SaveChanges();
@@ -63,6 +65,18 @@ namespace Supermarket.Data
                         MinimumQuantity = 200,
                         UnitPrice = 5.99,
                         Status = "Unavailable"
+                    },
+
+                    new Product
+                    {
+                        Category = db.Category.FirstOrDefault(a => a.Name == "Games")!,
+                        Brand = db.Brand.FirstOrDefault(a => a.Name == "Monopoly")!,
+                        Name = "Monopoly Chance",
+                        Description = "Family Game",
+                        TotalQuantity = 26,
+                        MinimumQuantity = 10,
+                        UnitPrice = 25.99,
+                        Status = "Available"
                     },
                     new Product
                     {
@@ -178,11 +192,19 @@ namespace Supermarket.Data
                         Quantity = 0,
                         MinimumQuantity = 20
                     },
+
                     new Shelft_ProductExhibition
                     {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream.")!,
+                        Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 12")!,
+                        Quantity = 0,
+                        MinimumQuantity = 20
+                    },
+                    new Shelft_ProductExhibition
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Monopoly Chance" && a.Description == "Family Game")!,
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
-                        Quantity = 30,
+                        Quantity = 11,
                         MinimumQuantity = 10
                     },
                     new Shelft_ProductExhibition
@@ -263,6 +285,27 @@ namespace Supermarket.Data
                         Supplier = db.Supplier.FirstOrDefault(a => a.Name == "Supplier Guarda")
                     },
 
+                     new WarehouseSection_Product
+                     {
+                         Product = db.Product.FirstOrDefault(a => a.Name == "Monopoly Chance" && a.Description == "Family Game")!,
+                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
+                         BatchNumber = "R45",
+                         ExpirationDate = DateTime.Now,
+                         Quantity = 10,
+                         ReservedQuantity = 3,
+                         Supplier = db.Supplier.FirstOrDefault(a => a.Name == "Supplier Guarda")
+                     },
+
+                     new WarehouseSection_Product
+                     {
+                         Product = db.Product.FirstOrDefault(a => a.Name == "Monopoly Chance" && a.Description == "Family Game")!,
+                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
+                         BatchNumber = "Q45",
+                         ExpirationDate = DateTime.Now,
+                         Quantity = 5,
+                         ReservedQuantity = 1,
+                         Supplier = db.Supplier.FirstOrDefault(a => a.Name == "Supplier Guarda")
+                     },
 
                      new WarehouseSection_Product
                      {
