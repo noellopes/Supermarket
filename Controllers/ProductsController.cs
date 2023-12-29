@@ -185,13 +185,14 @@ namespace Supermarket.Controllers
         //    {
         //        _context.Product.Remove(product);
         //    }
-            
+
         //    await _context.SaveChangesAsync();
         //    return RedirectToAction(nameof(Index));
         //}
-
-        public async Task<IActionResult> RotativeProducts(int warehouseSectionId = 0, int shelfId = 0)
+        /*
+        public async Task<IActionResult> RotativeInventory(int selectedProductId = 0)
         {
+            
             // Consulta para as seções do armazém
             var warehouseSectionQuery = _context.WarehouseSection
                 .Include(ws => ws.Warehouse)
@@ -227,6 +228,51 @@ namespace Supermarket.Controllers
             // Selecionar a prateleira com base no shelfId
             var selectedShelf = shelves.FirstOrDefault(s => s.ShelfId == shelfId);
             ViewData["SelectedShelf"] = selectedShelf;
+
+            return View("RotativeInventory");*/
+
+        public async Task<IActionResult> RotativeProducts(int selectedProductId = 0)
+        {
+            // Consulta para os produtos
+            var productQuery = _context.Product
+                .Include(p => p.Brand);
+
+            // Executar a consulta e armazenar os resultados na ViewData
+            var products = await productQuery.ToListAsync();
+            ViewData["Products"] = products;
+
+            // Selecionar o produto com base no selectedProductId
+            var selectedProduct = products.FirstOrDefault(p => p.ProductId == selectedProductId);
+            ViewData["SelectedProduct"] = selectedProduct;
+
+            // Consulta para os WarehouseSection_Products com base no Product selecionado
+            var warehouseSectionProducts = await _context.WarehouseSection_Product
+         .Where(wp => wp.ProductId == selectedProductId)
+         .Include(wp => wp.WarehouseSection)
+          .ThenInclude(ws => ws.Warehouse)
+         .ToListAsync();
+
+            var selftProducts = await _context.Shelft_ProductExhibition
+       .Where(wp => wp.ProductId == selectedProductId)
+       .Include(wp => wp.Shelf)
+        .ThenInclude(ws => ws.Hallway)
+         .ThenInclude(ws => ws.Store)
+       .ToListAsync();
+
+            var selftProductsList = selftProducts.ToList();
+
+            var warehouseSectionProductsList = warehouseSectionProducts.ToList();
+
+            var totalWarehouseQuantity = warehouseSectionProductsList.Sum(wp => wp.Quantity);
+            var totalShelfQuantity = selftProductsList.Sum(sp => sp.Quantity);
+            var grandTotalQuantity = totalWarehouseQuantity + totalShelfQuantity;
+
+           
+            ViewData["TotalWarehouseQuantity"] = totalWarehouseQuantity;
+            ViewData["TotalShelfQuantity"] = totalShelfQuantity;
+            ViewData["GrandTotalQuantity"] = grandTotalQuantity;
+            ViewData["WarehouseSectionProductsList"] = warehouseSectionProductsList;
+            ViewData["SelftProductsList"] = selftProductsList;
 
             return View("RotativeInventory");
         }
