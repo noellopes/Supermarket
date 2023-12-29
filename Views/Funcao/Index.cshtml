@@ -78,7 +78,7 @@
 </table>
 @{
     int initialPage = Model.Pagination.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-    if (initialPage < 1) initialPage = 1;
+    if (initialPage <= 1) initialPage = 1;
     int lastPage = Model.Pagination.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
     if (lastPage > Model.Pagination.TotalPages) lastPage = Model.Pagination.TotalPages;
     int last = ((int)Model.Pagination.TotalPages) ;
