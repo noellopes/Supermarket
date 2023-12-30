@@ -55,11 +55,11 @@
         </form>
     </div>
 </div>
-<div>
+<div class="mt-4">
     <a asp-action="Create" class="btn btn-outline-success">Create New</a>
 </div>
-<table class="table">
-    <thead>
+<table class="table table-striped mt-4">
+    <thead class="table-dark">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.ProductDiscounts[0].Product)
@@ -92,8 +92,8 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductDiscountId" class="btn btn-info">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductDiscountId" class="btn btn-warning">Details</a> |
+                <a asp-action="Edit" asp-route-id="@item.ProductDiscountId" class="btn btn-info">Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.ProductDiscountId" class="btn btn-warning">Details</a> 
                 <a asp-action="Delete" asp-route-id="@item.ProductDiscountId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
@@ -102,7 +102,7 @@
 </table>
 
 <nav aria-label="ProductDiscount">
-    <ul class="pagination">
+    <ul class="pagination justify-content-center">
         @if (Model.PagingInfo.CurrentPage == 1)
         {
             <li class="page-item disabled">
