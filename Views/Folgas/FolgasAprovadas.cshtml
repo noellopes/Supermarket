@@ -37,7 +37,7 @@
 
 @foreach (var folga in Model)
 {
-    <div><h4>Folga de @folga.Funcionario.Employee_Name</h4>
+    <div><h4>Folga de @folga.Employee.Employee_Name</h4>
         <p>Gestor:@folga.GestorId</p>
         <p>Aprovada a:@folga.DataResultado.ToString()</p>
         <p>Pedida a @folga.DataPedido.ToString()</p>

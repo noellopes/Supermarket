@@ -42,7 +42,7 @@
 
 @foreach (var folga in Model)
 {
-    <div><h4> @folga.Funcionario.Employee_Name</h4>
+    <div><h4> @folga.Employee.Employee_Name</h4>
         <p> @folga.DataPedido.ToString()</p>
         <p> @folga.DataInicio.ToShortDateString()</p>
         <p> @folga.DataFim.ToShortDateString()</p>

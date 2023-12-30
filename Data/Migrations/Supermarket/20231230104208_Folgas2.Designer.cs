@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -11,9 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231230104208_Folgas2")]
+    partial class Folgas2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,7 +323,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<DateTime?>("DataResultado")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<int>("FuncionarioId")
                         .HasColumnType("int");
 
                     b.Property<int?>("GestorId")
@@ -334,7 +337,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasKey("FolgaId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("FuncionarioId");
 
                     b.ToTable("Folga");
                 });
@@ -901,7 +904,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                 {
                     b.HasOne("Supermarket.Models.Employee", "Funcionario")
                         .WithMany()
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("FuncionarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

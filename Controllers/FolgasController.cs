@@ -22,7 +22,7 @@ namespace Supermarket.Controllers
         // GET: Folgas
         public async Task<IActionResult> Index()
         {
-            var supermarketDbContext = _context.Folga.Include(f => f.Funcionario);
+            var supermarketDbContext = _context.Folga.Include(f => f.Employee);
             return View(await supermarketDbContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace Supermarket.Controllers
             }
 
             var folga = await _context.Folga
-                .Include(f => f.Funcionario)
+                .Include(f => f.Employee)
                 .FirstOrDefaultAsync(m => m.FolgaId == id);
             if (folga == null)
             {
@@ -87,7 +87,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", folga.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", folga.EmployeeId);
             return View(folga);
         }
 
@@ -123,7 +123,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", folga.FuncionarioId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", folga.EmployeeId);
             return View(folga);
         }
 
@@ -136,7 +136,7 @@ namespace Supermarket.Controllers
             }
 
             var folga = await _context.Folga
-                .Include(f => f.Funcionario)
+                .Include(f => f.Employee)
                 .FirstOrDefaultAsync(m => m.FolgaId == id);
             if (folga == null)
             {
@@ -167,7 +167,7 @@ namespace Supermarket.Controllers
 
         public async Task<IActionResult> FolgasPendentes()
         {
-            var folgasPendentes = await _context.Folga.Where(f => f.Status == Folga.FolgaStatus.Pendente).Include(f=>f.Funcionario).ToListAsync();
+            var folgasPendentes = await _context.Folga.Where(f => f.Status == Folga.FolgaStatus.Pendente).Include(f=>f.Employee).ToListAsync();
             return View(folgasPendentes);
         }
 
