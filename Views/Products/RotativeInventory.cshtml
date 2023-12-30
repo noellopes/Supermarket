@@ -14,7 +14,7 @@
             <option value="">-- All Products --</option>
             @foreach (var product in ViewData["Products"] as List<Product>)
             {
-                <option value="@product.ProductId">@product.Name, @product.Description, @product.Brand?.Name</option>
+                <option value="@product.ProductId">@product.Name, @product.Description, @product.Brand?.Name, @product.LastCountDate</option>
             }
         </select>
     </div>
