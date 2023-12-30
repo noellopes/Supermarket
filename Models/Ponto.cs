@@ -27,7 +27,7 @@ namespace Supermarket.Models
         //por exemplo: o josefino trabalha ate as 20:00, mas ele coitadinho ficou la mais um pouco para arrumar as caixas, e ficou la mais 1h,
         //com isso, o day Balance fica a +60min, que vai ser contabilidade (por mim) nas horas extras :)
 
-        public int DayBalance { get; set; }
+        public int DayBalance { get; set;}
 
 
 

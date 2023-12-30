@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Supermarket.Models.SubsidyCalculation>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalHoras)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ponto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubsidySetup)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalHoras)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ponto.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubsidySetup.SubsidySetupId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.SubsidyCalculationId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.SubsidyCalculationId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.SubsidyCalculationId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
