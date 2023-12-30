@@ -21,6 +21,19 @@
             <th>
                 @Html.DisplayNameFor(model => model.SubsidySetup)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ponto.CheckInTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ponto.CheckOutTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ponto.Employee)
+            </th>
+            <th>
+               Total Horas
+            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -33,9 +46,33 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Ponto.Status)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubsidySetup.SubsidySetupId)
-            </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubsidySetup.SubsidySetupId)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ponto.CheckInTime)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ponto.CheckOutTime)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ponto.EmployeeId)
+                </td>
+                <td>
+                    @{
+                        TimeSpan diff = item.Ponto.CheckOutTime - item.Ponto.CheckInTime;
+
+
+                        string diffFormatted = $"{(int)diff.TotalHours}h{diff.Minutes:D2}";
+
+                        @diffFormatted
+                    }
+                    </td>
+
             <td>
                 <a asp-action="Edit" asp-route-id="@item.SubsidyCalculationId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.SubsidyCalculationId">Details</a> |
