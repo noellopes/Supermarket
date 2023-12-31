@@ -159,5 +159,10 @@ namespace Supermarket.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult IndexTop()
+        {
+            return View();
+        }
     }
 }
