@@ -743,9 +743,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<int>("SubsidySetupId")
                         .HasColumnType("int");
 
-                    b.Property<float>("TotalHoras")
-                        .HasColumnType("real");
-
                     b.HasKey("SubsidyCalculationId");
 
                     b.HasIndex("PontoId");

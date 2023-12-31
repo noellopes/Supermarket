@@ -12,9 +12,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalHoras)
-            </th>
+
             <th>
                 <p>Data</p>
             </th>
@@ -44,9 +42,7 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalHoras)
-            </td>
+         
             <td>
                 @Html.DisplayFor(modelItem => item.Ponto.Date)
             </td>

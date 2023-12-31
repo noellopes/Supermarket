@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231230171105_test2")]
-    partial class test2
+    [Migration("20231231103154_teste1")]
+    partial class teste1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -745,9 +745,6 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.Property<int>("SubsidySetupId")
                         .HasColumnType("int");
-
-                    b.Property<float>("TotalHoras")
-                        .HasColumnType("real");
 
                     b.HasKey("SubsidyCalculationId");
 

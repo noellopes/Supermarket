@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class test2 : Migration
+    public partial class teste1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -489,7 +489,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                 {
                     SubsidyCalculationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TotalHoras = table.Column<float>(type: "real", nullable: false),
                     PontoId = table.Column<int>(type: "int", nullable: false),
                     SubsidySetupId = table.Column<int>(type: "int", nullable: false)
                 },
