@@ -1,13 +1,15 @@
 ﻿@model IEnumerable<Supermarket.Models.SubsidyCalculation>
 
+
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1> Subsidy Calculation</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
+
 </p>
 <table class="table">
     <thead>
@@ -97,15 +99,14 @@
                     }
                 </td>
 
-                
+               
 
 
-
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.SubsidyCalculationId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SubsidyCalculationId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SubsidyCalculationId">Delete</a>
-            </td>
+                  <td>
+                       <a asp-action="Edit" asp-route-id="@item.SubsidyCalculationId" class="btn btn-warning btn-smm">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.SubsidyCalculationId" class="btn btn-info btn-smm">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.SubsidyCalculationId" class="btn btn-danger btn-smm">Delete</a>
+                </td>
         </tr>
 }
     </tbody>
