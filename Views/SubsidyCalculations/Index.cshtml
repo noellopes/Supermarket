@@ -16,25 +16,29 @@
                 @Html.DisplayNameFor(model => model.TotalHoras)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ponto)
+                <p>Data</p>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SubsidySetup)
+                <p> Valor do subsidio </p>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ponto.CheckInTime)
+                <p> Hora de Entrada </p>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ponto.CheckOutTime)
+                <p> Hora de Saída </p>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ponto.Employee)
+                <p>Empregado</p>
             </th>
             <th>
-               Total Horas
+                <p>Total Horas</p>
             </th>
 
-            <th></th>
+            <th>
+                <p>Valor diario a receber</p>
+            </th>
+
+           
         </tr>
     </thead>
     <tbody>
@@ -44,11 +48,11 @@
                 @Html.DisplayFor(modelItem => item.TotalHoras)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Ponto.Status)
+                @Html.DisplayFor(modelItem => item.Ponto.Date)
             </td>
 
                 <td>
-                    @Html.DisplayFor(modelItem => item.SubsidySetup.SubsidySetupId)
+                    @Html.DisplayFor(modelItem => item.SubsidySetup.ValorSubsidioDiario)
                 </td>
 
                 <td>
@@ -71,7 +75,33 @@
 
                         @diffFormatted
                     }
-                    </td>
+                </td>
+
+                <td>
+                    @{
+                        double somaMensal =0;
+                        double diferencaEmHoras = diff.TotalHours;
+                        string valorReceber = " Nâo atingiu horas minimas, valor a receber: 0";
+
+                        if (diferencaEmHoras > 4 )
+
+                        {
+                            @Html.DisplayFor(modelItem => item.SubsidySetup.ValorSubsidioDiario)
+                           
+                        }
+                        else
+                        {
+                            @valorReceber;
+
+                        }
+
+
+                    }
+                </td>
+
+                
+
+
 
             <td>
                 <a asp-action="Edit" asp-route-id="@item.SubsidyCalculationId">Edit</a> |
