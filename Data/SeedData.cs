@@ -6,11 +6,11 @@ namespace Supermarket.Data
     {
         internal static void Populate(SupermarketDbContext db)
         {
-            //  PopulateBrand(db);
-            // PopulateCategory(db);
-            //PopulateProduct(db);
-            // PopulateStore(db);
-            /*
+            PopulateBrand(db);
+            PopulateCategory(db);
+            PopulateProduct(db);
+            PopulateStore(db);
+            
           PopulateHallway(db);
             PopulateShelf(db);
             PopulateShelft_ProductExhibition(db);
@@ -21,18 +21,17 @@ namespace Supermarket.Data
              PopulateClients(db);
             PopulateClientCard(db);
             PopulateProductDiscounts(db);
-           // PopulateEmployees(db);
-            PopulateEmployeeEvaluations(db);
+            //PopulateEmployeeEvaluations(db);
             PopulateConfSub(db);
            PopulateEmployee(db);
             PopulateMealCards(db);
             PopulateCardMovements(db);
 
-            */
+            
         }
 
 
-        /*
+        
         private static void PopulateBrand(SupermarketDbContext db)
         {
             if (db.Brand.Any()) return;
@@ -329,26 +328,26 @@ namespace Supermarket.Data
         {
             if (db.EmployeeEvaluation.Any()) return;
 
-            db.EmployeeEvaluation.AddRange(
-                new EmployeeEvaluation
-                {
-                    Description = "Atendimento excelente!",
-                    EmployeeId = db.Employee.First().EmployeeId,
-                    GradeNumber = 8,
-                },
-                new EmployeeEvaluation
-                {
-                    Description = "Muito rude...",
-                    EmployeeId = db.Employee.First().EmployeeId,
-                    GradeNumber = 3,
-                },
-                new EmployeeEvaluation
-                {
-                    Description = "Adorei. Muito prestativo!",
-                    EmployeeId = db.Employee.First().EmployeeId,
-                    GradeNumber = 10,
-                }
-                );
+            //db.EmployeeEvaluation.AddRange(
+            //    new EmployeeEvaluation
+            //    {
+            //        Description = "Atendimento excelente!",
+            //        EmployeeId = db.Employee.First().EmployeeId,
+            //        GradeNumber = 8,
+            //    },
+            //    new EmployeeEvaluation
+            //    {
+            //        Description = "Muito rude...",
+            //        EmployeeId = db.Employee.First().EmployeeId,
+            //        GradeNumber = 3,
+            //    },
+            //    new EmployeeEvaluation
+            //    {
+            //        Description = "Adorei. Muito prestativo!",
+            //        EmployeeId = db.Employee.First().EmployeeId,
+            //        GradeNumber = 10,
+            //    }
+            //    );
 
             db.SaveChanges();
         }
@@ -532,7 +531,7 @@ namespace Supermarket.Data
 
            db.SaveChanges();
        }
-        */
+        
         
     }
 

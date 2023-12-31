@@ -162,6 +162,8 @@ namespace Supermarket.Controllers
 
         public IActionResult IndexTop()
         {
+
+
             return View();
         }
     }
