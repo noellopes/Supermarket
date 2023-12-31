@@ -5,7 +5,6 @@
 
         public List<Employee> Employees { get; set; }
         public int EmployeeId { get; set; }
-
         public string Employee_Name { get; set; }
         public List<CardMovement> CardMovement { get; set; }
         public List<MealCard> MealCards { get; set; }
