@@ -114,7 +114,7 @@ namespace Supermarket.Controllers
                 EmployeeName = mealCard.Employee.Employee_Name,
                 MealCard = mealCard.MealCardId,
                 CardMovements = await cardMovements
-                .OrderBy(b => b.Movement_Date)
+                .OrderByDescending(b => b.Movement_Date)
                 .Skip((paging.CurrentPage - 1) * paging.PageSize)
                     .Take(paging.PageSize)
                     .ToListAsync(),
@@ -160,11 +160,39 @@ namespace Supermarket.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult IndexTop()
+        public async Task<IActionResult> IndexTop(DateTime? startDate, DateTime? endDate)
         {
+            if (!startDate.HasValue || !endDate.HasValue)
+            {
+                // Defina valores padrão ou lide com o caso em que as datas não foram fornecidas
+                startDate = DateTime.Today.AddDays(-7); // Exemplo: 7 dias atrás
+                endDate = DateTime.Today;
+            }
 
+            var cardMovements = await _context.CardMovement
+                .Include(c => c.MealCard)
+                .Include(c => c.MealCard.Employee)
+                .Where(c => c.Movement_Date >= startDate && c.Movement_Date <= endDate)
+                .ToListAsync();
 
-            return View();
+            var topEmployees = cardMovements
+                .GroupBy(c => c.MealCard.Employee)
+                .Select(group => new TopEmployeeSpending
+                {
+                    Employee = group.Key,
+                    TotalSpent = group.Where(c => c.Value < 0).Sum(c => c.Value) // Suponha que Amount seja a propriedade que representa o valor gasto em CardMovement
+                })
+                .OrderBy(x => x.TotalSpent)
+                .Take(10); // Você pode ajustar para a quantidade desejada
+
+            var vm = new MealCardTopViewModel
+            {
+                Start_Filter = (DateTime)startDate,
+                End_Filter = (DateTime)endDate,
+                TopEmployees = topEmployees.ToList()
+            };
+
+            return View(vm);
         }
     }
 }
