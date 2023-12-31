@@ -152,7 +152,8 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            // return RedirectToAction(nameof(Index));
+            return View("DeleteConfirmed", subsidySetup);
         }
 
         private bool SubsidySetupExists(int id)
