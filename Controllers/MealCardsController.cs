@@ -120,7 +120,6 @@ namespace Supermarket.Controllers
                     .ToListAsync(),
                 CardMovementPagingInfo = paging,
             };
-
             return View(vm);
         }
 
