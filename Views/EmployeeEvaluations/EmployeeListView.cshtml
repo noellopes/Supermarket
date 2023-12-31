@@ -106,8 +106,8 @@
             <td>
                 <a asp-controller="Employees" asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |
                 <a asp-controller="Employees"  asp-action="Details" asp-route-id="@item.EmployeeId">Details</a> |
-                <a asp-controller="Employees" asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
-                    <a asp-controller="EmployeeEvaluations" asp-action="EmployeeListView" asp-route-id="@item.EmployeeId">View employee evaluations</a>
+                <a asp-controller="Employees" asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a> |
+                <a asp-controller="EmployeeEvaluations" asp-action="index" asp-route-employeeId="@item.EmployeeId">View employee evaluations</a>
             </td>
         </tr>
 }

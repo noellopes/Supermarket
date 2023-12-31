@@ -14,7 +14,15 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="EmployeeId" class="control-label">Employee name</label>
-                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeesList"></select>
+                @if (ViewBag.LockEmployee == true)
+                {
+                    <select disabled="true" asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeesList"></select>
+                }
+                else
+                {
+                    <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeesList"></select>
+                }
+                
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>

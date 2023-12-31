@@ -34,7 +34,9 @@ namespace Supermarket.Controllers
             if(employeeId > 0)
             {
                 evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Employee!.EmployeeId == employeeId);
-                ViewBag.HideEmployeeName = true;
+                ViewBag.EmployeeName = _context.Employee.Find(employeeId)!.Employee_Name;
+                ViewBag.EmployeeId = employeeId;
+                ViewBag.AvgGrade = EmployeeGradeAsync(employeeId);
             }
 
             var pagination = new PagingInfo
@@ -77,9 +79,17 @@ namespace Supermarket.Controllers
         }
 
         // GET: EmployeeEvaluation/Create
-        public IActionResult Create()
+        public IActionResult Create(int employeeId = 0)
         {
-            ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
+            if(employeeId > 0)
+            {
+                ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>().Where(ee=>ee.EmployeeId==employeeId), "EmployeeId", "Employee_Name");
+                ViewBag.LockEmployee = true;
+            }
+            else
+            {
+                ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
+            }
             return View();
         }
 
