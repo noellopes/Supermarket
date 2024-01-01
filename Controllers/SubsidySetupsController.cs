@@ -62,7 +62,10 @@ namespace Supermarket.Controllers
             {
                 _context.Add(subsidySetup);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewBag.Message = "Setup successfully created.";
+                //   return RedirectToAction(nameof(Index));
+                return View("Details", subsidySetup);
+
             }
             return View(subsidySetup);
         }
@@ -80,6 +83,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+
             return View(subsidySetup);
         }
 
@@ -101,6 +105,11 @@ namespace Supermarket.Controllers
                 {
                     _context.Update(subsidySetup);
                     await _context.SaveChangesAsync();
+                    ViewBag.Message = "Setup successfully edited.";
+
+                  
+
+                    return View("Details", subsidySetup);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
