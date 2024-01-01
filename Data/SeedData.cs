@@ -449,21 +449,21 @@ namespace Supermarket.Data
             db.ClientCard.AddRange(
                 new ClientCard
                 {
-                    Client = db.Client.FirstOrDefault(b => b.ClientName == "João")!,
+                    Client = db.Client.FirstOrDefault(b => b.ClientBirth == new DateTime(1997, 9, 2))!,
                     ClientCardNumber = 123456,
                     Balance = 0,
                     Estado = true
                 },
                 new ClientCard
                 {
-                    Client = db.Client.FirstOrDefault(b => b.ClientName == "Rui")!,
+                    Client = db.Client.FirstOrDefault(b => b.ClientBirth == new DateTime(2002, 7, 22))!,
                     ClientCardNumber = 987654,
                     Balance = 0,
                     Estado = true
                 },
                 new ClientCard
                 {
-                    Client = db.Client.FirstOrDefault(b => b.ClientName == "Hugo")!,
+                    Client = db.Client.FirstOrDefault(b => b.ClientBirth == new DateTime(1970, 2, 12))!,
                     ClientCardNumber = 111223,
                     Balance = 0,
                     Estado = true
