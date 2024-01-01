@@ -13,13 +13,12 @@ namespace Supermarket.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
         }
 
         public DbSet<Folga> Folga { get; set; } = default!;
 
-       
+      
         public DbSet<Supermarket.Models.IssueType> IssueType { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Issues> Issues { get; set; } = default!;
