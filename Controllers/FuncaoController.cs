@@ -20,26 +20,37 @@ namespace Supermarket.Controllers
         }
 
         // GET: Funcao
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(int page = 1, string descricao ="", string funcao="" )
         {
+            var filtros = _context.Funcao.AsQueryable();
+           
+
+            if (descricao != "")
+            {
+                filtros = filtros.Where(f => f.DescricaoFuncao.Contains(descricao));
+            }
+            if (funcao != "")
+            {
+                filtros = filtros.Where(f => f.NomeFuncao.Contains(funcao));
+            }
+            
+
+            ViewBag.FiltroDescricao = descricao;
+            ViewBag.FiltroFuncao = funcao;
             var pagination = new PagingInfo
             {
                 CurrentPage = page,
                 PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
-                TotalItems = _context.Funcao.Count()
+                TotalItems = filtros.Count()
             };
-
             return View(
                 new FuncaoListViewModel {
-                    funcao = _context.Funcao.OrderBy( f => f.NomeFuncao)
+                    funcao = filtros.OrderBy( f => f.NomeFuncao)
                         .Skip((page-1)*pagination.PageSize).Take(pagination.PageSize),
                     Pagination = pagination 
                 }
             );
 
-              return _context.Funcao != null ? 
-                          View(await _context.Funcao.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
         }
 
         // GET: Funcao/Details/5
