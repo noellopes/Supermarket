@@ -130,7 +130,7 @@
         @if (Model.Pagination.CurrentPage != initialPage)
         {
             <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-page="1" aria-label="Previous">
+                <a class="page-link" asp-action="Index" asp-route-employeeName="@ViewBag.FilterEmployeeName" asp-route-description="@ViewBag.FilterDescription" asp-route-employeeId="@ViewBag.EmployeeId" asp-route-page="1" aria-label="Previous">
                     <span aria-hidden="true">
                         &laquo
                     </span>
@@ -147,8 +147,7 @@
             else
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index"
-                       asp-route-page="@p">@p</a>
+                    <a class="page-link" asp-action="Index" asp-route-employeeName="@ViewBag.FilterEmployeeName" asp-route-description="@ViewBag.FilterDescription" asp-route-employeeId="@ViewBag.EmployeeId" asp-route-page="@p">@p</a>
                 </li>
             }
         }
@@ -156,7 +155,7 @@
         @if (Model.Pagination.CurrentPage != Model.Pagination.TotalPages)
         {
             <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-page="@last" aria-label="Next">
+                <a class="page-link" asp-action="Index" asp-route-employeeName="@ViewBag.FilterEmployeeName" asp-route-description="@ViewBag.FilterDescription" asp-route-employeeId="@ViewBag.EmployeeId" asp-route-page="@last" aria-label="Next">
                     <span aria-hidden="true">
                         &raquo
                     </span>
@@ -165,7 +164,7 @@
         }
     </ul>
 </nav>
-<small style="color:gray" class="pagination justify-content-center"><i>Total Pages: @Model.Pagination.TotalItems </i></small>
+<small style="color:gray" class="pagination justify-content-center"><i>Total count: @Model.Pagination.TotalItems </i></small>
 
 <style>
 #subtitle{

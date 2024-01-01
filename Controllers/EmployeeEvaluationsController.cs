@@ -84,7 +84,7 @@ namespace Supermarket.Controllers
             if(employeeId > 0)
             {
                 ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>().Where(ee=>ee.EmployeeId==employeeId), "EmployeeId", "Employee_Name");
-                ViewBag.LockEmployee = true;
+                ViewBag.EmployeeId = employeeId;
             }
             else
             {
@@ -127,7 +127,7 @@ namespace Supermarket.Controllers
                 TempData["MessageError"] = "The employee evaluation has already been deleted!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
+            ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>().Where(ee => ee.EmployeeId == employeeEvaluation.EmployeeId), "EmployeeId", "Employee_Name");
             return View(employeeEvaluation);
         }
 
