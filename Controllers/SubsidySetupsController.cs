@@ -56,7 +56,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SubsidySetupId,HorasMinTrabalhadas,valorSubsidioDiario,DataPagamentoMensal")] SubsidySetup subsidySetup)
+        public async Task<IActionResult> Create([Bind("SubsidySetupId,HorasMinTrabalhadas,ValorSubsidioDiario,DataEntradaVigor")] SubsidySetup subsidySetup)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SubsidySetupId,HorasMinTrabalhadas,valorSubsidioDiario,DataPagamentoMensal")] SubsidySetup subsidySetup)
+        public async Task<IActionResult> Edit(int id, [Bind("SubsidySetupId,HorasMinTrabalhadas,ValorSubsidioDiario,DataEntradaVigor")] SubsidySetup subsidySetup)
         {
             if (id != subsidySetup.SubsidySetupId)
             {
@@ -152,8 +152,7 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            // return RedirectToAction(nameof(Index));
-            return View("DeleteConfirmed", subsidySetup);
+            return RedirectToAction(nameof(Index));
         }
 
         private bool SubsidySetupExists(int id)

@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Supermarket.Models.SubsidyCalculation>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1> Subsidy Calculation</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>
+                <p>Data</p>
+            </th>
+            <th>
+                <p> Valor do subsidio </p>
+            </th>
+            <th>
+                <p> Hora de Entrada </p>
+            </th>
+            <th>
+                <p> Hora de Saída </p>
+            </th>
+            <th>
+                <p>Empregado</p>
+            </th>
+            <th>
+                <p>Total Horas</p>
+            </th>
+
+            <th>
+                <p>Valor diario a receber</p>
+            </th>
+
+         
+
+           
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+         
+            <td>
+                @Html.DisplayFor(modelItem => item.Ponto.Date)
+            </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubsidySetup.ValorSubsidioDiario)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ponto.CheckInTime)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ponto.CheckOutTime)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ponto.EmployeeId)
+                </td>
+                <td>
+                    @{
+                        TimeSpan diff = item.Ponto.CheckOutTime - item.Ponto.CheckInTime;
+
+
+                        string diffFormatted = $"{(int)diff.TotalHours}h{diff.Minutes:D2}";
+
+                        @diffFormatted
+                    }
+                </td>
+
+                <td>
+                    @{
+                        double somaMensal =0;
+                        double diferencaEmHoras = diff.TotalHours;
+                        string valorReceber = " Nâo atingiu horas minimas, valor a receber: 0";
+
+                        if (diferencaEmHoras > 4 )
+
+                        {
+                            @Html.DisplayFor(modelItem => item.SubsidySetup.ValorSubsidioDiario)
+                           
+                        }
+                        else
+                        {
+                            @valorReceber;
+
+                        }
+
+
+                    }
+                </td>
+
+               
+
+
+                  <td>
+                       <a asp-action="Edit" asp-route-id="@item.SubsidyCalculationId" class="btn btn-warning btn-smm">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.SubsidyCalculationId" class="btn btn-info btn-smm">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.SubsidyCalculationId" class="btn btn-danger btn-smm">Delete</a>
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

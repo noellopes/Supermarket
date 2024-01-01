@@ -1,69 +1,25 @@
 ﻿@model IEnumerable<Supermarket.Models.SubsidySetup>
 
-   
 @{
     ViewData["Title"] = "Index";
 }
 
-<style>
-    body {
-        background-color: powderblue;
-        font-family: verdana;
-    }
+<h1>Index</h1>
 
-    th {
-        font-family:'Times New Roman', Times, serif;
-        font-size:20px;
-    }
-    .c{
-        background-color:cyan;
-       
-        color: white;
-        
-    }
-
-
-
-
-    .a (max-width: 500px) {
-
-        display:flex;
-        margin:20px;
-    }
-
-    table{
-        background-color: white;
-    }
-    .b{
-        background-color: white;
-    }
-</style>
-
-<div class="a">
-
-    <div class="c">
-        <h3> Ola seja Bem Vindo</h3>
-     
-    </div>
-
-<div class="b">
-<h1>Pagina de Configuraçao de Subsidio</h1>
-
-<p>
-    <a asp-action="Create" class="btn btn-danger btn-sm">Criar Novo</a>
-</p>
-
+<h2>
+    <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
+</h2>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.HorasMinTrabalhadas)
+                <p>Horas Minimas Trabalhadas</p>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ValorSubsidioDiario)
+             <p>  Valor Subsidio Diario</p>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataEntradaVigor)
+                <p>Data Entrada Vigor</p>
             </th>
             <th></th>
         </tr>
@@ -81,17 +37,11 @@
                 @Html.DisplayFor(modelItem => item.DataEntradaVigor)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.SubsidySetupId" class="btn btn-warning btn-sm">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.SubsidySetupId" class="btn btn-info btn-sm">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.SubsidySetupId" class="btn btn-danger btn-sm">Delete</a> |
-
-                 
-
+                    <a asp-action="Edit" asp-route-id="@item.SubsidySetupId" class="btn btn-warning btn-smm">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.SubsidySetupId" class="btn btn-info btn-smm">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.SubsidySetupId" class="btn btn-danger btn-smm">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
-</div>
-
-</div>
