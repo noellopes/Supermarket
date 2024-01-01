@@ -20,19 +20,32 @@ namespace Supermarket.Controllers
         }
 
         // GET: EmployeeEvaluation
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(int page = 1, string description = "", string employeeName = "")
         {
+            var evaluationsFiltered = _context.EmployeeEvaluation.Include(ee => ee.Employee).AsQueryable();
+            if(description != "")
+            {
+                evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Description!.Contains(description));
+            }
+            if(employeeName != "")
+            {
+                evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Employee!.Employee_Name.Contains(employeeName));
+            }
+
             var pagination = new PagingInfo
             {
                 CurrentPage = page,
                 PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
-                TotalItems = _context.EmployeeEvaluation.Count()
+                TotalItems = evaluationsFiltered.Count()
             };
+
+            ViewBag.FilterDescription = description;
+            ViewBag.FilterEmployeeName = employeeName;
 
             return View(
                 new EmployeeEvaluationListViewModel
                 {
-                    EmployeeEvaluation = _context.EmployeeEvaluation.Include(ee => ee.Employee).OrderByDescending(ee => ee.EvaluationDate)
+                    EmployeeEvaluation = evaluationsFiltered.OrderByDescending(ee => ee.EvaluationDate)
                         .Skip((page - 1) * pagination.PageSize).Take(pagination.PageSize),
                     Pagination = pagination
                 }
