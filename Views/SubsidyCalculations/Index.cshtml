@@ -68,8 +68,11 @@
                 </td>
                 <td>
                     @{
-                        DateTime entrada = DateTime.ParseExact(item.Ponto.CheckInTime, "HH:mm", null);
-                        DateTime saida = DateTime.ParseExact(item.Ponto.CheckOutTime, "HH:mm", null); 
+                       // DateTime entrada = DateTime.ParseExact(item.Ponto.CheckInTime, "HH:mm", null);
+                      //  DateTime saida = DateTime.ParseExact(item.Ponto.CheckOutTime, "HH:mm", null);
+
+                        TimeSpan entrada = TimeSpan.Parse(item.Ponto.CheckInTime);
+                        TimeSpan saida = TimeSpan.Parse(item.Ponto.CheckOutTime);
                         TimeSpan diff = saida - entrada;
 
 
