@@ -12,22 +12,37 @@ namespace Supermarket.Models
         public Employee? Employee { get; set; }
 
         [Required]
-        public DateTime Date { get; set; }
+        [DataType(DataType.Date)]
+        public required DateTime? Date { get; set; }
 
-        public TimeSpan CheckInTime { get; set; }
 
-        public TimeSpan CheckOutTime { get; set; }
+        [Required]
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
+        public required string CheckInTime { get; set; }
 
-        public TimeSpan LunchStartTime { get; set; }
 
-        public TimeSpan LunchEndTime { get; set; }
+        [Required]
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
+        public required string CheckOutTime { get; set; }
+
+        [Required]
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
+        public required string LunchStartTime { get; set; }
+
+        [Required]
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
+        public required string LunchEndTime { get; set; }
 
 
         //pode ser o tempo das horas extras ou vice versa
         //por exemplo: o josefino trabalha ate as 20:00, mas ele coitadinho ficou la mais um pouco para arrumar as caixas, e ficou la mais 1h,
         //com isso, o day Balance fica a +60min, que vai ser contabilidade (por mim) nas horas extras :)
 
-        public int DayBalance { get; set;}
+        [Required]
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
+        public required string RealCheckOutTime { get; set; }
+
+
 
 
 
@@ -41,7 +56,10 @@ namespace Supermarket.Models
 
         public string Justificative { get; set; } = "";
 
-     
+
+
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}")]
+        public TimeSpan ExtraHours { get; set; }
 
     }
 }
