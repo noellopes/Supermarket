@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -20,27 +21,66 @@ namespace Supermarket.Controllers
         }
 
         // GET: WarehouseSection_Product
-        public async Task<IActionResult> Index(int warehouseSectionId)
+        public async Task<IActionResult> Index(int warehouseSectionId, int page = 1, string product = "", string batch = "")
         {
-            var warehouseSections = await _context.WarehouseSection_Product
-             .Include(wp => wp.Product)
-             .Include(wp => wp.WarehouseSection)
-             .Where(h => h.WarehouseSectionId == warehouseSectionId)
-             .ToListAsync();
-
+            var warehouseSectionsQuery = _context.WarehouseSection_Product
+        .Include(wp => wp.Product)
+        .Include(wp => wp.WarehouseSection)
+        .Where(h => h.WarehouseSectionId == warehouseSectionId);
+            
             var WarehouseSectionName = _context.WarehouseSection.Find(warehouseSectionId)?.Description;
 
             ViewBag.WarehouseSectionId = warehouseSectionId;
+            TempData["CancelWarehouseSectionId"] = warehouseSectionId;
             ViewBag.WarehouseId = _context.WarehouseSection.Find(warehouseSectionId)?.WarehouseId;
             ViewBag.WarehouseSectionName = WarehouseSectionName;
-            ViewBag.WarehouseSections = warehouseSections;
-            ViewBag.TotalWarehouseSectionsProduts = warehouseSections.Count;
 
-            return View(warehouseSections);
+    
+
+            if (product != "")
+            {
+                warehouseSectionsQuery = warehouseSectionsQuery.Where(x => x.Product!.Name.Contains(product));
+            }
+            if (batch != "")
+            {
+                warehouseSectionsQuery = warehouseSectionsQuery.Where(b => b.BatchNumber.Contains(batch));
+            }
+
+            var totalWarehouseSectionsProducts = await warehouseSectionsQuery.CountAsync();
+            PagingInfoProduct paging = new PagingInfoProduct
+            {
+                CurrentPage = page,
+                TotalItems = totalWarehouseSectionsProducts,
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new ProductsWarehouseViewModel
+            {
+                WarehouseSections = await warehouseSectionsQuery
+                    .OrderBy(b => b.BatchNumber)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfoProduct = paging,
+                SearchProductBach = batch,
+                SearchProductProduct = product,
+            };
+            ViewBag.WarehouseSections = vm.WarehouseSections;
+            ViewBag.TotalWarehouseSectionsProduts = vm.PagingInfoProduct.TotalItems;
+
+            return View(vm);
         }
 
-        // GET: WarehouseSection_Product/Details/5
-        public async Task<IActionResult> Details(int? id)
+            // GET: WarehouseSection_Product/Details/5
+            public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.WarehouseSection_Product == null)
             {
