@@ -27,10 +27,7 @@ namespace Supermarket.Controllers
         .Include(wp => wp.Product)
         .Include(wp => wp.WarehouseSection)
         .Where(h => h.WarehouseSectionId == warehouseSectionId);
-
-            // Obter a contagem total antes de aplicar quaisquer filtros
-            var totalWarehouseSectionsProducts = await warehouseSectionsQuery.CountAsync();
-
+            
             var WarehouseSectionName = _context.WarehouseSection.Find(warehouseSectionId)?.Description;
 
             ViewBag.WarehouseSectionId = warehouseSectionId;
@@ -49,6 +46,7 @@ namespace Supermarket.Controllers
                 warehouseSectionsQuery = warehouseSectionsQuery.Where(b => b.BatchNumber.Contains(batch));
             }
 
+            var totalWarehouseSectionsProducts = await warehouseSectionsQuery.CountAsync();
             PagingInfoProduct paging = new PagingInfoProduct
             {
                 CurrentPage = page,

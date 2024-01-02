@@ -148,7 +148,7 @@ else
             else
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@p" asp-route-warehouseSectionId="@TempData["CancelWarehouseSectionId"]" asp-route-product="@Model.SearchProductProduct" asp-route-batch="@Model.SearchProductBach">@p</a>
+                    <a class="page-link" asp-action="Index" asp-route-warehouseSectionId="@TempData["CancelWarehouseSectionId"]"  asp-route-page="@p" asp-route-product="@Model.SearchProductProduct" asp-route-batch="@Model.SearchProductBach">@p</a>
                 </li>
             }
         }
@@ -162,7 +162,7 @@ else
         else
         {
             <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfoProduct.TotalPages" asp-route-warehouseSectionId="@TempData["CancelWarehouseSectionId"]" asp-route-product="@Model.SearchProductProduct" asp-route-batch="@Model.SearchProductBach">Last</a>
+                <a class="page-link" asp-action="Index" asp-route-warehouseSectionId="@TempData["CancelWarehouseSectionId"]" asp-route-page="@Model.PagingInfoProduct.TotalPages" asp-route-product="@Model.SearchProductProduct" asp-route-batch="@Model.SearchProductBach">Last</a>
             </li>
         }
     </ul>
