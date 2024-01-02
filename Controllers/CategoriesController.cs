@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -146,7 +147,13 @@ namespace Supermarket.Controllers
                 return Problem("Entity set 'SupermarketDbContext.Category'  is null.");
             }
             var category = await _context.Category.FindAsync(id);
-            if (category != null)
+            var product = await _context.Product.Where(p => p.BrandId == id).ToListAsync();
+            if (product != null)
+            {
+                ModelState.AddModelError(string.Empty, "There is a product with this category, can't be deleted.");
+                return View(category);
+            }
+            else if (category != null)
             {
                 _context.Category.Remove(category);
             }

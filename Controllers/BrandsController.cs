@@ -146,7 +146,12 @@ namespace Supermarket.Controllers
                 return Problem("Entity set 'SupermarketDbContext.Brand'  is null.");
             }
             var brand = await _context.Brand.FindAsync(id);
-            if (brand != null)
+            var product = await _context.Product.Where(p => p.BrandId == id).ToListAsync();
+            if (product != null)
+            {
+                ModelState.AddModelError(string.Empty, "There is a product with this brand, can't be deleted.");
+                return View(brand);
+            }else if(brand != null)
             {
                 _context.Brand.Remove(brand);
             }
