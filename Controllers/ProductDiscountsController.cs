@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Supermarket.Data;
-using Supermarket.Data.Migrations.Supermarket;
 using Supermarket.Models;
 using static System.Reflection.Metadata.BlobBuilder;
 
@@ -108,7 +107,7 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
         {
-            var clientCards = await _context.ClientCard.ToListAsync();
+            var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
             bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
 
                 foreach (var clientCard in clientCards)

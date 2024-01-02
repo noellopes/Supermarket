@@ -22,9 +22,8 @@ namespace Supermarket.Controllers
         // GET: ClientCards
         public async Task<IActionResult> Index()
         {
-              return _context.ClientCard != null ? 
-                          View(await _context.ClientCard.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
+            var supermarketDbContext = _context.ClientCard.Include(c => c.Client);
+            return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: ClientCards/Details/5
@@ -36,6 +35,7 @@ namespace Supermarket.Controllers
             }
 
             var clientCard = await _context.ClientCard
+                .Include(c => c.Client)
                 .FirstOrDefaultAsync(m => m.ClientCardId == id);
             if (clientCard == null)
             {
@@ -48,6 +48,7 @@ namespace Supermarket.Controllers
         // GET: ClientCards/Create
         public IActionResult Create()
         {
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName");
             return View();
         }
 
@@ -56,21 +57,15 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientCardId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
+        public async Task<IActionResult> Create([Bind("ClientCardId,ClientId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
         {
             if (ModelState.IsValid)
             {
-                var random = new Random();
-                bool isUnique = false;
-                while (!isUnique) 
-                {
-                    clientCard.ClientCardNumber = random.Next(100000, 999999);
-                    isUnique = !_context.ClientCard.Any(c => c.ClientCardNumber == clientCard.ClientCardNumber);
-                }
                 _context.Add(clientCard);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
@@ -87,6 +82,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
@@ -95,7 +91,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientCardId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
+        public async Task<IActionResult> Edit(int id, [Bind("ClientCardId,ClientId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
         {
             if (id != clientCard.ClientCardId)
             {
@@ -122,6 +118,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
@@ -134,6 +131,7 @@ namespace Supermarket.Controllers
             }
 
             var clientCard = await _context.ClientCard
+                .Include(c => c.Client)
                 .FirstOrDefaultAsync(m => m.ClientCardId == id);
             if (clientCard == null)
             {
