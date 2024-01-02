@@ -148,6 +148,7 @@ namespace Supermarket.Controllers
             }
             ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "BrandId", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Name", product.CategoryId);
+            ViewData["Status"] = new SelectList(Product.StatusList, product.Status);
             return View(product);
         }
 
