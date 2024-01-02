@@ -480,7 +480,7 @@ namespace Supermarket.Data
                 new ProductDiscount
                 {
                     Product = db.Product.FirstOrDefault(b => b.Name == "Cream")!,
-                    ClientCard = db.ClientCard.FirstOrDefault(b => b.ClientCardNumber == 987654)!,
+                    ClientCard = db.ClientCard.FirstOrDefault(b => b.ClientCardNumber == 123456)!,
                     Value = 10,
                     StartDate = new DateTime(2023, 12, 17),
                     EndDate = new DateTime(2023, 12, 21)

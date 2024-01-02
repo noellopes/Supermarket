@@ -24,23 +24,32 @@ namespace Supermarket.Controllers
         // GET: ProductDiscounts
         public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
-            var productDiscounts = from b in _context.ProductDiscount.Include(p => p.ClientCard).Include(p => p.Product) select b;
-            
+            var today = DateTime.Today;
+
+            var clientsWithBirthday = _context.ClientCard
+                .Include(c => c.Client)
+                .Where(c => c.Client.ClientBirth.Month == today.Month && c.Client.ClientBirth.Day == today.Day)
+                .ToList();
+
+            var clientIdsWithBirthday = clientsWithBirthday.Select(c => c.ClientCardId).ToList();
+
+            var productDiscounts = from b in _context.ProductDiscount.Include(p => p.ClientCard).Include(p => p.Product) select b; ;
+
             if (product != "")
             {
-                productDiscounts = productDiscounts.Where(x => x.Product.Name.Contains(product));
+                productDiscounts = productDiscounts.Where(b => b.Product.Name.Contains(product));
             }
             if (value.HasValue)
             {
-                productDiscounts = productDiscounts.Where(x => x.Value == value.Value);
+                productDiscounts = productDiscounts.Where(b => b.Value == value.Value);
             }
             if (startDate.HasValue)
             {
-                productDiscounts = productDiscounts.Where(pd => pd.StartDate <= startDate.Value.Date && pd.StartDate >= startDate.Value.Date);
+                productDiscounts = productDiscounts.Where(b => b.StartDate <= startDate.Value.Date && b.StartDate >= startDate.Value.Date);
             }
             if (endDate.HasValue)
             {
-                productDiscounts = productDiscounts.Where(pd => pd.EndDate <= endDate.Value.Date);
+                productDiscounts = productDiscounts.Where(b => b.EndDate <= endDate.Value.Date);
             }
 
             PagingInfo paging = new PagingInfo
@@ -66,6 +75,7 @@ namespace Supermarket.Controllers
                     .Take(paging.PageSize)
                     .ToListAsync(),
                 PagingInfo = paging,
+                ClientsWithBirthday = clientsWithBirthday,
             };
             return View(vm);
         }
@@ -79,8 +89,8 @@ namespace Supermarket.Controllers
             }
 
             var productDiscount = await _context.ProductDiscount
-                .Include(p => p.ClientCard)
-                .Include(p => p.Product)
+                .Include(b => b.ClientCard)
+                .Include(b => b.Product)
                 .FirstOrDefaultAsync(m => m.ProductDiscountId == id);
             if (productDiscount == null)
             {
@@ -106,18 +116,18 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Create([Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (ModelState.IsValid)
-        {
-            var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
-            bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
+            {
+                var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
+                bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
 
                 foreach (var clientCard in clientCards)
                 {
                     bool discountExistsForClient = await _context.ProductDiscount.AnyAsync(
-                        d => d.ProductId == productDiscount.ProductId &&
-                        d.ClientCardId == clientCard.ClientCardId &&
-                        d.Value == productDiscount.Value &&
-                        d.StartDate == productDiscount.StartDate &&
-                        d.EndDate == productDiscount.EndDate);
+                        b => b.ProductId == productDiscount.ProductId &&
+                        b.ClientCardId == clientCard.ClientCardId &&
+                        b.Value == productDiscount.Value &&
+                        b.StartDate == productDiscount.StartDate &&
+                        b.EndDate == productDiscount.EndDate);
 
                     if (!discountExistsForClient)
                     {
@@ -147,7 +157,7 @@ namespace Supermarket.Controllers
                     TempData["SuccessMessage"] = "product successfully created!";
                     return RedirectToAction(nameof(Index));
                 }
-        }
+            }
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
             return View(productDiscount);
@@ -247,14 +257,14 @@ namespace Supermarket.Controllers
 
                 TempData["SuccessMessage"] = "product sucessful deleted";
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductDiscountExists(int id)
         {
-          return (_context.ProductDiscount?.Any(e => e.ProductDiscountId == id)).GetValueOrDefault();
+            return (_context.ProductDiscount?.Any(e => e.ProductDiscountId == id)).GetValueOrDefault();
         }
     }
 }
