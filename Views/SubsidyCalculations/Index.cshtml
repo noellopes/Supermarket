@@ -11,7 +11,7 @@
     <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
 
 </p>
-<table class="table">
+<table class="table table-success table-striped">
     <thead>
         <tr>
 
@@ -64,11 +64,13 @@
                 </td>
 
                 <td>
-                    @Html.DisplayFor(modelItem => item.Ponto.Employee.Employee_Name)
+                    @Html.DisplayFor(modelItem => item.Ponto.EmployeeId)
                 </td>
                 <td>
                     @{
-                        TimeSpan diff = item.Ponto.CheckOutTime - item.Ponto.CheckInTime;
+                        DateTime entrada = DateTime.ParseExact(item.Ponto.CheckInTime, "HH:mm", null);
+                        DateTime saida = DateTime.ParseExact(item.Ponto.CheckOutTime, "HH:mm", null); 
+                        TimeSpan diff = saida - entrada;
 
 
                         string diffFormatted = $"{(int)diff.TotalHours}h{diff.Minutes:D2}";
@@ -79,6 +81,7 @@
 
                 <td>
                     @{
+
                         double somaMensal =0;
                         double diferencaEmHoras = diff.TotalHours;
                         string valorReceber = " Nâo atingiu horas minimas, valor a receber: 0";
@@ -97,6 +100,10 @@
 
 
                     }
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ponto.Employee.Employee_Name)
                 </td>
 
                
