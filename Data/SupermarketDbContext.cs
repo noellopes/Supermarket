@@ -18,8 +18,8 @@ namespace Supermarket.Data
         }
 
         public DbSet<Folga> Folga { get; set; } = default!;
+        public DbSet<Supermarket.Models.SubsidyCalculation> SubsidyCalculation { get; set; } = default!;
 
-       
         public DbSet<Supermarket.Models.IssueType> IssueType { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Issues> Issues { get; set; } = default!;
