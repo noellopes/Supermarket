@@ -48,7 +48,7 @@ namespace Supermarket.Controllers
         // GET: ClientCards/Create
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientBirth");
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientBirth", clientCard.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
@@ -82,7 +82,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientBirth", clientCard.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
@@ -118,7 +118,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientBirth", clientCard.ClientId);
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
