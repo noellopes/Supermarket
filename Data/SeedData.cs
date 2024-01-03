@@ -320,8 +320,8 @@ namespace Supermarket.Data
         {
             if (db.Employee.Any()) return;
 
-           // db.Employee.AddRange(
-            //   new Employee
+            //db.Employee.AddRange(
+            //  new Employee
             //    {
             //        Employee_Address= "Rua das Oliveiras",
             //        Employee_Admission_Date= DateTime.Now,
