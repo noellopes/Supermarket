@@ -63,6 +63,9 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.ClientCard> ClientCard { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Supplier> Suppliers { get; set; } = default!;
+        
+        public DbSet<Supermarket.Models.MealCard> MealCards { get; set; } = default!;
 
     }
 }
