@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Microsoft.Extensions.DependencyInjection;
+using static System.Formats.Asn1.AsnWriter;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<GroupsDbContext>(options =>
@@ -34,6 +35,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(
         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
         options.Lockout.MaxFailedAccessAttempts = 5;
     })
+    
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI();
 
@@ -48,8 +50,9 @@ if (app.Environment.IsDevelopment()) {
     var db = serviceScope.ServiceProvider.GetService<SupermarketDbContext>();
     SeedData.Populate(db!);
 
-    //var userManager = serviceScope.ServiceProvider.GetService<UserManager<IdentityUser>>();
-    //SeedData.PopulateDevUsers(userManager);
+    var reqServScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+    var userManager = reqServScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    SeedData.PopulateDevUsers(userManager);
 } else {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
