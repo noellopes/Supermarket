@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231220154243_initial")]
-    partial class initial
+    [Migration("20240103160925_Folgas5")]
+    partial class Folgas5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -311,28 +311,33 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FolgaId"));
 
-                    b.Property<DateTime?>("DataFim")
-                        .IsRequired()
+                    b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DataInicio")
-                        .IsRequired()
+                    b.Property<DateTime>("DataInicio")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DataPedido")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Gestor")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime?>("DataResultado")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Motivo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("GestorId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("motivo")
+                        .HasColumnType("int");
 
                     b.HasKey("FolgaId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Folga");
                 });
@@ -885,6 +890,17 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             modelBuilder.Entity("Supermarket.Models.EmployeeEvaluation", b =>
+                {
+                    b.HasOne("Supermarket.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Folga", b =>
                 {
                     b.HasOne("Supermarket.Models.Employee", "Employee")
                         .WithMany()

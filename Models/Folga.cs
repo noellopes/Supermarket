@@ -12,11 +12,12 @@ namespace Supermarket.Models
         [Required]
 
         public int EmployeeId { get; set; }
+        public Employee? Employee { get; set; }
 
 
 
 
-        
+
         public int? GestorId { get; set; }
         public enum  FolgaStatus
         {
@@ -54,7 +55,7 @@ namespace Supermarket.Models
 
 
 
-        public Employee Employee { get; set; }
+        
 
 
 
