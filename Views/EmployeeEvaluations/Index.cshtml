@@ -119,7 +119,7 @@
 </table>
 @{
     int initialPage = Model.Pagination.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-    if (initialPage < 1) initialPage = 1;
+    if (initialPage <= 1) initialPage = 1;
     int lastPage = Model.Pagination.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
     if (lastPage > Model.Pagination.TotalPages) lastPage = Model.Pagination.TotalPages;
     int last = ((int)Model.Pagination.TotalPages);
@@ -127,7 +127,7 @@
 
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-        @if (Model.Pagination.CurrentPage != initialPage)
+        @if (Model.Pagination.CurrentPage > initialPage)
         {
             <li class="page-item">
                 <a class="page-link" asp-action="Index" asp-route-employeeName="@ViewBag.FilterEmployeeName" asp-route-description="@ViewBag.FilterDescription" asp-route-employeeId="@ViewBag.EmployeeId" asp-route-page="1" aria-label="Previous">
@@ -152,7 +152,7 @@
             }
         }
 
-        @if (Model.Pagination.CurrentPage != Model.Pagination.TotalPages)
+        @if (Model.Pagination.CurrentPage < Model.Pagination.TotalPages)
         {
             <li class="page-item">
                 <a class="page-link" asp-action="Index" asp-route-employeeName="@ViewBag.FilterEmployeeName" asp-route-description="@ViewBag.FilterDescription" asp-route-employeeId="@ViewBag.EmployeeId" asp-route-page="@last" aria-label="Next">

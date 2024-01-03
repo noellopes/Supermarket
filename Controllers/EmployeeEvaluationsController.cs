@@ -242,14 +242,23 @@ namespace Supermarket.Controllers
             }
 
             var Evaluations = _context.EmployeeEvaluation.Where(af => af.EmployeeId==Employee.EmployeeId).ToList();
-            var sum = 0;
-            foreach (var evaluation in Evaluations) 
+            if (Evaluations.Count < 1)
             {
-                sum += evaluation.GradeNumber;
+                //There are no evaluations for this employee
+                return 0;
             }
+            else
+            {
+                var sum = 0;
+                foreach (var evaluation in Evaluations)
+                {
+                    sum += evaluation.GradeNumber;
+                }
 
-            var mean = sum/ Evaluations.Count;
-            return mean;
+                var mean = sum / Evaluations.Count;
+                return mean;
+            }
+            
         }
     }
 }
