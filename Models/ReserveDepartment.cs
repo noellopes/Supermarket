@@ -18,9 +18,11 @@ namespace Supermarket.Models
         
         // FK EMPLOYEE
         //Relação de muitos para muitos
+        /*
         [Required]
         [ForeignKey("EmployeeId")]
         public required List<Employee> Employees { get; set; }
+        */
 
         //// FK DEPARTMENTS
         ////Relação de muitos para muitos

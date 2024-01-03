@@ -291,7 +291,8 @@ namespace Supermarket.Data {
                     Employee_NIF = "123",
                     Employee_Password = "123",
                     Employee_Phone = "123",
-                    Employee_Time_Bank= DateTime.Now,
+                    Employee_Termination_Date= DateTime.Now,
+                    Employee_Time_Bank = 1,
                     Standard_Lunch_Hour = "123",
                     Standard_Check_In_Time = "123",
                     Standard_Check_Out_Time = "123",
@@ -307,7 +308,8 @@ namespace Supermarket.Data {
                     Employee_NIF = "123",
                     Employee_Password = "123",
                     Employee_Phone = "123",
-                    Employee_Time_Bank = DateTime.Now,
+                    Employee_Termination_Date = DateTime.Now,
+                    Employee_Time_Bank = 1,
                     Standard_Lunch_Hour = "123",
                     Standard_Check_In_Time = "123",
                     Standard_Check_Out_Time = "123",
@@ -323,7 +325,8 @@ namespace Supermarket.Data {
                     Employee_NIF = "123",
                     Employee_Password = "123",
                     Employee_Phone = "123",
-                    Employee_Time_Bank = DateTime.Now,
+                    Employee_Termination_Date = DateTime.Now,
+                    Employee_Time_Bank = 1,
                     Standard_Lunch_Hour = "123",
                     Standard_Check_In_Time = "123",
                     Standard_Check_Out_Time = "123",
@@ -382,9 +385,6 @@ namespace Supermarket.Data {
             
         }
 
-        internal static void PopulateDevUsers(UserManager<IdentityUser>? userManager)
-        {
-            throw new NotImplementedException();
         private static void PopulateClients(SupermarketDbContext db) {
             if (db.Client.Any()) return;
 

@@ -15,11 +15,17 @@ namespace Supermarket.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
+            modelBuilder.Entity<Employee>().HasKey(e => e.EmployeeId);
+            modelBuilder.Entity<Employee>().Property(e => e.EmployeeId).UseIdentityColumn();
+
         }
 
         public DbSet<Folga> Folga { get; set; } = default!;
 
-       
+        public DbSet<Employee> Funcionarios { get; set; } = default!;
+
+        public DbSet<Employee> Employee { get; set; } = default!;
+
         public DbSet<Supermarket.Models.IssueType> IssueType { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Issues> Issues { get; set; } = default!;
@@ -73,10 +79,6 @@ namespace Supermarket.Data
 
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
-
-        public DbSet<Employee> Funcionarios { get; set; } = default!;
-
-        public DbSet<Employee> Employee { get; set; } = default!;
 
         public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
 
