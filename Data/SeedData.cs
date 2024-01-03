@@ -1,5 +1,4 @@
-﻿
-using Supermarket.Models;
+﻿using Supermarket.Models;
 
 namespace Supermarket.Data
 {
@@ -11,6 +10,9 @@ namespace Supermarket.Data
             PopulateCategory(db);
             PopulateProduct(db);
             PopulateStore(db);
+            PopulateSupplier(db);
+            PopulateEmployee(db);
+            PopulateMealCard(db);
             //PopulateHallway(db);
             //PopulateShelf(db);
             //PopulateShelft_ProductExhibition(db);
@@ -21,7 +23,7 @@ namespace Supermarket.Data
 
             //Nosso
             PopulateType(db);
-            PopulateExp(db);
+            PopulateIssueType(db);
         }
 
         private static void PopulateType(SupermarketDbContext db)
@@ -39,7 +41,7 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-        private static void PopulateExp(SupermarketDbContext db)
+        private static void PopulateIssueType(SupermarketDbContext db)
         {
             db.IssueType.AddRange(
                 new Models.IssueType { Name = "Cross-Contamination", IssueDescription = "Transfer of contaminants between products, often related to improper handling or storage" },
@@ -61,6 +63,118 @@ namespace Supermarket.Data
             
             db.SaveChanges();
         }
+        
+        private static void PopulateSupplier(SupermarketDbContext db)
+        {
+            db.Suppliers.AddRange(
+                new Models.Supplier { Name = "Global Foods Ltd" },
+                new Models.Supplier { Name = "Fresh Harvest Farms" },
+                new Models.Supplier { Name = "Pacific Seafood Co" },
+                new Models.Supplier { Name = "Quality Meats Inc" },
+                new Models.Supplier { Name = "Green Valley Grocers" },
+                new Models.Supplier { Name = "Sunrise Bakeries" },
+                new Models.Supplier { Name = "Golden Beverages LLC" },
+                new Models.Supplier { Name = "Nature's Best Produce" },
+                new Models.Supplier { Name = "Sweet Treats Confections" },
+                new Models.Supplier { Name = "Sunny Farms Dairy" },
+                new Models.Supplier { Name = "Premium Pet Supplies" },
+                new Models.Supplier { Name = "Tech Gadgets Distributors" },
+                new Models.Supplier { Name = "Office Essentials Co" },
+                new Models.Supplier { Name = "Home Goods Wholesale" }
+            );
+            
+            db.SaveChanges();
+        }
+
+        private static void PopulateMealCard(SupermarketDbContext db)
+        {
+            db.MealCards.AddRange(
+                new Models.MealCard{
+                    //MealCardId = 123,
+                    Balance = 100,
+                    EmployeeId = 1,
+                }
+            );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulateEmployee(SupermarketDbContext db)
+        {
+            db.Funcionarios.AddRange(
+                new Models.Employee
+                {
+                    //EmployeeId = 1,
+                    Employee_Address = "123 Main Street, Cityville",
+                    Employee_Admission_Date = DateTime.Parse("2023-01-15"),
+                    Employee_Birth_Date = DateTime.Parse("1990-05-20"),
+                    Employee_Email = "john.doe@example.com",
+                    Employee_Name = "John Doe",
+                    Employee_NIF = "123456789",
+                    Employee_Password = "password123",
+                    Employee_Phone = "555-1234",
+                    Employee_Time_Bank = DateTime.Parse("2023-05-20"),
+                    Hora_Almoco_Padrao = "12:00",
+                    Standard_Check_In_Time = "09:00",
+                    Standard_Check_Out_Time = "17:00",
+                    Standard_Lunch_Time = "01:00"
+                },
+                new Models.Employee
+                {
+                    //EmployeeId = 2,
+                    Employee_Address = "456 Oak Avenue, Townsville",
+                    Employee_Admission_Date = DateTime.Parse("2022-11-05"),
+                    Employee_Birth_Date = DateTime.Parse("1985-08-12"),
+                    Employee_Email = "jane.smith@example.com",
+                    Employee_Name = "Jane Smith",
+                    Employee_NIF = "987654321",
+                    Employee_Password = "securepass789",
+                    Employee_Phone = "555-5678",
+                    Employee_Time_Bank = DateTime.Parse("2022-12-15"),
+                    Hora_Almoco_Padrao = "12:30",
+                    Standard_Check_In_Time = "08:30",
+                    Standard_Check_Out_Time = "16:30",
+                    Standard_Lunch_Time = "01:00"
+                },
+                new Models.Employee
+                {
+                    //EmployeeId = 3,
+                    Employee_Address = "789 Pine Street, Villagetown",
+                    Employee_Admission_Date = DateTime.Parse("2022-09-10"),
+                    Employee_Birth_Date = DateTime.Parse("1982-03-25"),
+                    Employee_Email = "robert.james@example.com",
+                    Employee_Name = "Robert James",
+                    Employee_NIF = "654321987",
+                    Employee_Password = "securepassword456",
+                    Employee_Phone = "555-8765",
+                    Employee_Time_Bank = DateTime.Parse("2022-10-25"),
+                    Hora_Almoco_Padrao = "12:15",
+                    Standard_Check_In_Time = "09:15",
+                    Standard_Check_Out_Time = "17:15",
+                    Standard_Lunch_Time = "01:00"
+                },
+                new Models.Employee
+                {
+                    //EmployeeId = 4,
+                    Employee_Address = "567 Maple Avenue, Hamletville",
+                    Employee_Admission_Date = DateTime.Parse("2023-03-08"),
+                    Employee_Birth_Date = DateTime.Parse("1988-11-08"),
+                    Employee_Email = "susan.white@example.com",
+                    Employee_Name = "Susan White",
+                    Employee_NIF = "789012345",
+                    Employee_Password = "pass123word",
+                    Employee_Phone = "555-4321",
+                    Employee_Time_Bank = DateTime.Parse("2023-04-20"),
+                    Hora_Almoco_Padrao = "12:45",
+                    Standard_Check_In_Time = "08:45",
+                    Standard_Check_Out_Time = "16:45",
+                    Standard_Lunch_Time = "01:00"
+                }
+            );
+            db.SaveChanges();
+        }
+
+
         private static void PopulateBrand(SupermarketDbContext db)
         {
             if (db.Brand.Any()) return;
