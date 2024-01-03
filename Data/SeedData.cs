@@ -523,7 +523,6 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-
         internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager) {
             var user = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
 
