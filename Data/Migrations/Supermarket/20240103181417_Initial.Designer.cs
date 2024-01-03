@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231220151300_Initial")]
+    [Migration("20240103181417_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -378,7 +378,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasIndex("EmployeeId")
                         .IsUnique();
 
-                    b.ToTable("MealCard");
+                    b.ToTable("MealCards");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Product", b =>
@@ -603,11 +603,12 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.HasKey("SupplierId");
 
-                    b.ToTable("Supplier");
+                    b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Warehouse", b =>

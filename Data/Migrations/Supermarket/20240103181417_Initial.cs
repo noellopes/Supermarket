@@ -144,16 +144,16 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
-                name: "Supplier",
+                name: "Suppliers",
                 columns: table => new
                 {
                     SupplierId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Supplier", x => x.SupplierId);
+                    table.PrimaryKey("PK_Suppliers", x => x.SupplierId);
                 });
 
             migrationBuilder.CreateTable(
@@ -224,7 +224,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
-                name: "MealCard",
+                name: "MealCards",
                 columns: table => new
                 {
                     MealCardId = table.Column<int>(type: "int", nullable: false)
@@ -234,9 +234,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MealCard", x => x.MealCardId);
+                    table.PrimaryKey("PK_MealCards", x => x.MealCardId);
                     table.ForeignKey(
-                        name: "FK_MealCard_Funcionarios_EmployeeId",
+                        name: "FK_MealCards_Funcionarios_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Funcionarios",
                         principalColumn: "EmployeeId",
@@ -319,9 +319,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Issues_Supplier_SupplierId",
+                        name: "FK_Issues_Suppliers_SupplierId",
                         column: x => x.SupplierId,
-                        principalTable: "Supplier",
+                        principalTable: "Suppliers",
                         principalColumn: "SupplierId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -386,9 +386,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                 {
                     table.PrimaryKey("PK_CardMovement", x => x.CardMovementId);
                     table.ForeignKey(
-                        name: "FK_CardMovement_MealCard_MealCardId",
+                        name: "FK_CardMovement_MealCards_MealCardId",
                         column: x => x.MealCardId,
-                        principalTable: "MealCard",
+                        principalTable: "MealCards",
                         principalColumn: "MealCardId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -541,8 +541,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                 column: "IssueTypeId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MealCard_EmployeeId",
-                table: "MealCard",
+                name: "IX_MealCards_EmployeeId",
+                table: "MealCards",
                 column: "EmployeeId",
                 unique: true);
 
@@ -639,13 +639,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "WarehouseSection_Product");
 
             migrationBuilder.DropTable(
-                name: "MealCard");
+                name: "MealCards");
 
             migrationBuilder.DropTable(
                 name: "IssueType");
 
             migrationBuilder.DropTable(
-                name: "Supplier");
+                name: "Suppliers");
 
             migrationBuilder.DropTable(
                 name: "Shelf");
