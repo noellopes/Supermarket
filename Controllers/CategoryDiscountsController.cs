@@ -22,9 +22,8 @@ namespace Supermarket.Controllers
         // GET: CategoryDiscounts
         public async Task<IActionResult> Index()
         {
-              return _context.CategoryDiscounts != null ? 
-                          View(await _context.CategoryDiscounts.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.CategoryDiscount'  is null.");
+            var supermarketDbContext = _context.CategoryDiscounts.Include(c => c.Category);
+            return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: CategoryDiscounts/Details/5
@@ -36,6 +35,7 @@ namespace Supermarket.Controllers
             }
 
             var categoryDiscount = await _context.CategoryDiscounts
+                .Include(c => c.Category)
                 .FirstOrDefaultAsync(m => m.CategoryDiscountId == id);
             if (categoryDiscount == null)
             {
@@ -48,6 +48,7 @@ namespace Supermarket.Controllers
         // GET: CategoryDiscounts/Create
         public IActionResult Create()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
             return View();
         }
 
@@ -56,7 +57,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryDiscountId,Value,startDate,endDate")] CategoryDiscount categoryDiscount)
+        public async Task<IActionResult> Create([Bind("CategoryDiscountId,CategoryId,Value,StartDate,EndDate")] CategoryDiscount categoryDiscount)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +65,7 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", categoryDiscount.CategoryId);
             return View(categoryDiscount);
         }
 
@@ -80,6 +82,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", categoryDiscount.CategoryId);
             return View(categoryDiscount);
         }
 
@@ -88,7 +91,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryDiscountId,Value,startDate,endDate")] CategoryDiscount categoryDiscount)
+        public async Task<IActionResult> Edit(int id, [Bind("CategoryDiscountId,CategoryId,Value,StartDate,EndDate")] CategoryDiscount categoryDiscount)
         {
             if (id != categoryDiscount.CategoryDiscountId)
             {
@@ -115,6 +118,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name", categoryDiscount.CategoryId);
             return View(categoryDiscount);
         }
 
@@ -127,6 +131,7 @@ namespace Supermarket.Controllers
             }
 
             var categoryDiscount = await _context.CategoryDiscounts
+                .Include(c => c.Category)
                 .FirstOrDefaultAsync(m => m.CategoryDiscountId == id);
             if (categoryDiscount == null)
             {
@@ -143,7 +148,7 @@ namespace Supermarket.Controllers
         {
             if (_context.CategoryDiscounts == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.CategoryDiscount'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.CategoryDiscounts'  is null.");
             }
             var categoryDiscount = await _context.CategoryDiscounts.FindAsync(id);
             if (categoryDiscount != null)
