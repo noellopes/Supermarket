@@ -30,7 +30,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.EmployeeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a> |
+                <a asp-controller="EmployeeEvaluations" asp-action="index" asp-route-employeeId="@item.EmployeeId" class="btn btn-info btn-sm">View employee evaluations</a>
             </td>
         </tr>
 }
