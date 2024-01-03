@@ -54,9 +54,6 @@ namespace Supermarket.Controllers
             IQueryable<Departments> departmentsQuery = _context.Departments;
 
             var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
-            var startDate = DateTime.Now.AddDays(-30); // por exemplo, 30 dias atrás
-            var endDate = DateTime.Now; // data atual
-            var mediasPorDepartamento = await MediasPorDepartamento(startDate, endDate);
 
             departmentsQuery = departmentsQuery
                 .Where(d => d.StateDepartments.Equals(true));
@@ -90,13 +87,11 @@ namespace Supermarket.Controllers
                 Departments = departments,
                 Pagination = pagination,
                 SelectedPageSize = pageSize,
-                MediasPorDepartamento = mediasPorDepartamento
             };
 
             ViewData["SearchTerm"] = searchTerm;
             ViewData["PageSizes"] = new SelectList(pageSizes);
             ViewData["SelectedPageSize"] = pageSize;
-            ViewData["MediasPorDepartamento"] = mediasPorDepartamento;
 
             return View(viewModel);
         }
@@ -311,18 +306,6 @@ namespace Supermarket.Controllers
           return (_context.Departments?.Any(e => e.IDDepartments == id)).GetValueOrDefault();
         }
         //calculo da media no meu controlador 
-        public async Task<Dictionary<int, double>> MediasPorDepartamento(DateTime startDate, DateTime endDate)
-        {
-            var mediasPorDepartamento = await _context.Tickets
 
-                .Where(t => t.DataAtendimento >= startDate && t.DataAtendimento <= endDate)
-                .GroupBy(t => t.IDDepartments)
-                .ToDictionaryAsync(
-                    group => group.Key,
-                    group => group.Select(t => (t.DataAtendimento - t.DataEmissao).TotalMinutes).Average()
-                );
-
-            return mediasPorDepartamento;
-        }
     }
 }
