@@ -403,7 +403,7 @@ namespace Supermarket.Data {
                     Balance = 0,
                     Estado = true
                 },
-                new ClientCard {
+                new ClientCard { 
                     Client = db.Client.FirstOrDefault(b => b.ClientName == "Jacinta")!,
                     ClientCardNumber = 987654,
                     Balance = 0,
