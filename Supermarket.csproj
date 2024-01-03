@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\Supermarket\20231230122554_Folgas3.cs" />
+    <Compile Remove="Data\Migrations\Supermarket\20231230122554_Folgas3.Designer.cs" />
     <Compile Remove="Models\FuncionarioDepartamento.cs" />
   </ItemGroup>
 

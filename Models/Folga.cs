@@ -11,7 +11,7 @@ namespace Supermarket.Models
 
         [Required]
 
-        public int FuncionarioId { get; set; }
+        public int EmployeeId { get; set; }
 
 
 
@@ -54,7 +54,7 @@ namespace Supermarket.Models
 
 
 
-        public Employee Funcionario { get; set; }
+        public Employee Employee { get; set; }
 
 
 
