@@ -439,39 +439,6 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager) {
-            var user = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
-
-            if (!await userManager!.IsInRoleAsync(user, ROLE_ADMIN)) {
-                await userManager!.AddToRoleAsync(user, ROLE_ADMIN);
-            }
-        }
-
-        private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password) {
-            var user = await userManager.FindByNameAsync(username);
-
-            if (user == null) {
-                user = new IdentityUser(username);
-                await userManager.CreateAsync(user, password);
-            }
-
-            return user;
-        }
-
-        internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager) {
-            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
-
-        }
-
-        private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name) {
-            var role = await roleManager.FindByNameAsync(name);
-
-            if (role == null) {
-                role = new IdentityRole(name);
-                await roleManager.CreateAsync(role);
-            }
-        }
-
         private static void PopulateConfSub(SupermarketDbContext db)
         {
             if (db.SubsidySetup.Any()) return;
@@ -554,6 +521,40 @@ namespace Supermarket.Data {
                 );
 
             db.SaveChanges();
+        }
+
+
+        internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager) {
+            var user = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
+
+            if (!await userManager!.IsInRoleAsync(user, ROLE_ADMIN)) {
+                await userManager!.AddToRoleAsync(user, ROLE_ADMIN);
+            }
+        }
+
+        private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password) {
+            var user = await userManager.FindByNameAsync(username);
+
+            if (user == null) {
+                user = new IdentityUser(username);
+                await userManager.CreateAsync(user, password);
+            }
+
+            return user;
+        }
+
+        internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager) {
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
+
+        }
+
+        private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name) {
+            var role = await roleManager.FindByNameAsync(name);
+
+            if (role == null) {
+                role = new IdentityRole(name);
+                await roleManager.CreateAsync(role);
+            }
         }
     }
 }
