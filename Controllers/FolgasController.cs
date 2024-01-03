@@ -48,8 +48,8 @@ namespace Supermarket.Controllers
         // GET: Folgas/Create
         public IActionResult Create()
         {
-           
-            
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address");
+
             return View();
         }
 

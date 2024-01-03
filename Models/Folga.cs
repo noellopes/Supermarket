@@ -51,7 +51,7 @@ namespace Supermarket.Models
         public DateTime DataFim { get; set; }
 
         [Required]
-        public Motivo motivo { get; set; }
+        public Motivo? motivo { get; set; }
 
 
 

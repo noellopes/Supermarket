@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Supermarket
+namespace Supermarket.Migrations.SupermarketDb
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240102205718_Folgas")]
-    partial class Folgas
+    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,7 +320,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<DateTime?>("DataResultado")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FuncionarioId")
+                    b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<int?>("GestorId")
@@ -337,7 +334,7 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasKey("FolgaId");
 
-                    b.HasIndex("FuncionarioId");
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Folga");
                 });
@@ -902,13 +899,13 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             modelBuilder.Entity("Supermarket.Models.Folga", b =>
                 {
-                    b.HasOne("Supermarket.Models.Employee", "Funcionario")
+                    b.HasOne("Supermarket.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("FuncionarioId")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Funcionario");
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Hallway", b =>
