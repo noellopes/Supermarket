@@ -47,28 +47,49 @@
     </div>
 </div>
 
-<div class="card mb-3">
-    <div class="card-body">
-        <form asp-action="Index" method="get">
-            <p><strong>Search Batch Number</strong></p>
 
-            <input type="hidden" name="warehouseSectionId" value="@TempData["CancelWarehouseSectionId"]" />
 
-            <label for="product" class="control-label">Product</label>
+
+
+<div class="container mt-5">
+    <div class="card" id="meuCartao">
+        <div class="card-body">
+            <form asp-action="Index" method="get">
+                <p><strong>Search Batch Number</strong></p>
+
+                <input type="hidden" name="warehouseSectionId" value="@TempData["CancelWarehouseSectionId"]" />
+
+                <label for="product" class="control-label">Product</label>
                 <input name="product" type="search" class="form-control" value="@Model.SearchProductProduct" />
 
                 <label for="batch" class="control-label">Batch</label>
                 <input name="batch" type="search" class="form-control" value="@Model.SearchProductBach" />
 
-            <div class="mt-3">
-                <input class="btn btn-primary" type="submit" value="Search" />
-                <a asp-action="Index" asp-route-warehouseSectionid="@TempData["CancelWarehouseSectionId"]" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
+                <div class="mt-3">
+                    <input class="btn btn-primary" type="submit" value="Search" />
+                    <a asp-action="Index" asp-route-warehouseSectionid="@TempData["CancelWarehouseSectionId"]" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+
+
+        </div>
     </div>
 </div>
 
+<button class="btn btn-primary" onclick="toggleCard()">Ocultar/Mostrar</button>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+<script>
+    function toggleCard() {
+        var card = document.getElementById('meuCartao');
+        if (card.style.display === 'none' || card.style.display === '') {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    }
+</script>
 
 
 @if (ViewBag.TotalWarehouseSectionsProduts != null && ViewBag.TotalWarehouseSectionsProduts > 0)
