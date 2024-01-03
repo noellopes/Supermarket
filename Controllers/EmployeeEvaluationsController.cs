@@ -20,12 +20,43 @@ namespace Supermarket.Controllers
         }
 
         // GET: EmployeeEvaluation
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string description = "", string employeeName = "", int employeeId = 0)
         {
-            var Evaluations = _context.EmployeeEvaluation.Include(ee => ee.Employee);
-            return Evaluations != null ? 
-                          View(await Evaluations.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.EmployeeEvaluation'  is null.");
+            var evaluationsFiltered = _context.EmployeeEvaluation.Include(ee => ee.Employee).AsQueryable();
+            if(description != "")
+            {
+                evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Description!.Contains(description));
+            }
+            if(employeeName != "")
+            {
+                evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Employee!.Employee_Name.Contains(employeeName));
+            }
+            if(employeeId > 0)
+            {
+                evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Employee!.EmployeeId == employeeId);
+                ViewBag.EmployeeName = _context.Employee.Find(employeeId)!.Employee_Name;
+                ViewBag.EmployeeId = employeeId;
+                ViewBag.AvgGrade = EmployeeGradeAsync(employeeId);
+            }
+
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
+                TotalItems = evaluationsFiltered.Count()
+            };
+
+            ViewBag.FilterDescription = description;
+            ViewBag.FilterEmployeeName = employeeName;
+
+            return View(
+                new EmployeeEvaluationListViewModel
+                {
+                    EmployeeEvaluation = evaluationsFiltered.OrderByDescending(ee => ee.EvaluationDate)
+                        .Skip((page - 1) * pagination.PageSize).Take(pagination.PageSize),
+                    Pagination = pagination
+                }
+            );
         }
 
         // GET: EmployeeEvaluation/Details/5
@@ -48,9 +79,18 @@ namespace Supermarket.Controllers
         }
 
         // GET: EmployeeEvaluation/Create
-        public IActionResult Create()
+        public IActionResult Create(int employeeId = 0)
         {
-            ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
+            if(employeeId > 0)
+            {
+                ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>().Where(ee=>ee.EmployeeId==employeeId), "EmployeeId", "Employee_Name");
+                
+                ViewBag.EmployeeId = employeeId;
+            }
+            else
+            {
+                ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
+            }
             return View();
         }
 
@@ -62,7 +102,8 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Create([Bind("EmployeeEvaluationId,Description,GradeNumber,EmployeeId")] Supermarket.Models.EmployeeEvaluation employeeEvaluation)
         {
             if (ModelState.IsValid)
-            {
+            {   
+                employeeEvaluation.EvaluationDate = DateTime.Now;
                 _context.Add(employeeEvaluation);
                 await _context.SaveChangesAsync();
 
@@ -87,7 +128,7 @@ namespace Supermarket.Controllers
                 TempData["MessageError"] = "The employee evaluation has already been deleted!";
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
+            ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>().Where(ee => ee.EmployeeId == employeeEvaluation.EmployeeId), "EmployeeId", "Employee_Name");
             return View(employeeEvaluation);
         }
 
@@ -129,6 +170,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: EmployeeEvaluation/Delete/5
+        /*
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.EmployeeEvaluation == null)
@@ -147,8 +189,10 @@ namespace Supermarket.Controllers
 
             return View(employeeEvaluation);
         }
+        */
 
         // POST: EmployeeEvaluation/Delete/5
+        /*
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -168,6 +212,7 @@ namespace Supermarket.Controllers
             TempData["Message"] = "The employee evaluation has successfully been deleted!";
             return RedirectToAction(nameof(Index));
         }
+        */
 
         private bool EmployeeEvaluationExists(int id)
         {
@@ -175,13 +220,11 @@ namespace Supermarket.Controllers
         }
 
         // GET: EmployeeEvaluation/EmployeeView
-        public async Task<IActionResult> EmployeeView()
+        public async Task<IActionResult> EmployeeListView()
         {
-            var Employees = _context.Employee.Include(f=>EmployeeGradeAsync(f.EmployeeId));
-
-            return Employees != null ?
-                          View(await Employees.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.EmployeeEvaluation'  is null.");
+            return _context.Employee != null ?
+                        View(await _context.Employee.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
         }
 
         private float EmployeeGradeAsync(int? EmployeeId)
@@ -200,14 +243,23 @@ namespace Supermarket.Controllers
             }
 
             var Evaluations = _context.EmployeeEvaluation.Where(af => af.EmployeeId==Employee.EmployeeId).ToList();
-            var sum = 0;
-            foreach (var evaluation in Evaluations) 
+            if (Evaluations.Count < 1)
             {
-                sum += evaluation.GradeNumber;
+                //There are no evaluations for this employee
+                return 0;
             }
+            else
+            {
+                var sum = 0;
+                foreach (var evaluation in Evaluations)
+                {
+                    sum += evaluation.GradeNumber;
+                }
 
-            var mean = sum/ Evaluations.Count;
-            return mean;
+                var mean = sum / Evaluations.Count;
+                return mean;
+            }
+            
         }
     }
 }

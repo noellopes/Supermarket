@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Supermarket.Models;
-using System.Threading.Tasks;
 
 namespace Supermarket.Data {
     public class SeedData {
@@ -18,11 +17,14 @@ namespace Supermarket.Data {
             PopulateWarehouseSection(db);
             PopulateWarehouseSection_Product(db);
             PopulateReduceProduct(db);
+            PopulateEmployees(db);
+            PopulateEmployeeEvaluations(db);
+            PopulateFuncao(db);
             PopulateClients(db);
             PopulateClientCard(db);
             PopulateProductDiscounts(db);
-            //PopulateEmployees(db);
-            //PopulateEmployeeEvaluations(db);
+            PopulateEmployees(db);
+            PopulateEmployeeEvaluations(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
             PopulateMealCards(db);
@@ -285,58 +287,61 @@ namespace Supermarket.Data {
         private static void PopulateEmployees(SupermarketDbContext db) {
             if (db.Employee.Any()) return;
 
-            //db.Employee.AddRange(
-            //    new Employee
-            //    {
-            //        Employee_Address= "Rua das Oliveiras",
-            //        Employee_Admission_Date= DateTime.Now,
-            //        Employee_Birth_Date= DateTime.Now,
-            //        Employee_Email="zeD@manga.com",
-            //        Employee_Name="Jose",
-            //        Employee_NIF = "123",
-            //        Employee_Password = "123",
-            //        Employee_Phone = "123",
-            //        Employee_Time_Bank= DateTime.Now,
-            //        Standard_Lunch_Hour = "123",
-            //        Standard_Check_In_Time = "123",
-            //        Standard_Check_Out_Time = "123",
-            //        Standard_Lunch_Time = "123"
-            //    },
-            //    new Employee
-            //    {
-            //        Employee_Address = "Rua do azeite",
-            //        Employee_Admission_Date = DateTime.Now,
-            //        Employee_Birth_Date = DateTime.Now,
-            //        Employee_Email = "zeD@manga.com",
-            //        Employee_Name = "Maria",
-            //        Employee_NIF = "123",
-            //        Employee_Password = "123",
-            //        Employee_Phone = "123",
-            //        Employee_Time_Bank = DateTime.Now,
-            //        Standard_Lunch_Hour = "123",
-            //        Standard_Check_In_Time = "123",
-            //        Standard_Check_Out_Time = "123",
-            //        Standard_Lunch_Time = "123"
-            //    },
-            //    new Employee
-            //    {
-            //        Employee_Address = "Avenida Afonso Pena",
-            //        Employee_Admission_Date = DateTime.Now,
-            //        Employee_Birth_Date = DateTime.Now,
-            //        Employee_Email = "zeD@manga.com",
-            //        Employee_Name = "Lucas",
-            //        Employee_NIF = "123",
-            //        Employee_Password = "123",
-            //        Employee_Phone = "123",
-            //        Employee_Time_Bank = DateTime.Now,
-            //        Standard_Lunch_Hour = "123",
-            //        Standard_Check_In_Time = "123",
-            //        Standard_Check_Out_Time = "123",
-            //        Standard_Lunch_Time = "123"
-            //    }
-            //    );
+            db.Employee.AddRange(
+                new Employee
+                {
+                    Employee_Address= "Rua das Oliveiras",
+                    Employee_Admission_Date= DateTime.Now,
+                    Employee_Birth_Date= DateTime.Now,
+                    Employee_Email="zeD@manga.com",
+                    Employee_Name="Jose",
+                    Employee_NIF = "123",
+                    Employee_Password = "123",
+                    Employee_Phone = "123",
+                    Employee_Termination_Date= DateTime.Now,
+                    Employee_Time_Bank = 1,
+                    Standard_Lunch_Hour = "123",
+                    Standard_Check_In_Time = "123",
+                    Standard_Check_Out_Time = "123",
+                    Standard_Lunch_Time = "123"
+                },
+                new Employee
+                {
+                    Employee_Address = "Rua do azeite",
+                    Employee_Admission_Date = DateTime.Now,
+                    Employee_Birth_Date = DateTime.Now,
+                    Employee_Email = "zeD@manga.com",
+                    Employee_Name = "Maria",
+                    Employee_NIF = "123",
+                    Employee_Password = "123",
+                    Employee_Phone = "123",
+                    Employee_Termination_Date = DateTime.Now,
+                    Employee_Time_Bank = 1,
+                    Standard_Lunch_Hour = "123",
+                    Standard_Check_In_Time = "123",
+                    Standard_Check_Out_Time = "123",
+                    Standard_Lunch_Time = "123"
+                },
+                new Employee
+                {
+                    Employee_Address = "Avenida Afonso Pena",
+                    Employee_Admission_Date = DateTime.Now,
+                    Employee_Birth_Date = DateTime.Now,
+                    Employee_Email = "zeD@manga.com",
+                    Employee_Name = "Lucas",
+                    Employee_NIF = "123",
+                    Employee_Password = "123",
+                    Employee_Phone = "123",
+                    Employee_Termination_Date = DateTime.Now,
+                    Employee_Time_Bank = 1,
+                    Standard_Lunch_Hour = "123",
+                    Standard_Check_In_Time = "123",
+                    Standard_Check_Out_Time = "123",
+                   Standard_Lunch_Time = "123"
+                }
+                );
 
-            //db.SaveChanges();
+            db.SaveChanges();
         }
 
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db) {
@@ -358,9 +363,33 @@ namespace Supermarket.Data {
                     EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 10,
                 }
-                );
+            );
+
+            for (int i = 1; i<101; i++)
+            {
+                db.EmployeeEvaluation.Add(new EmployeeEvaluation
+                {
+                    Description = "avaliacao "+ i,
+                    EmployeeId = db.Employee.First().EmployeeId,
+                    GradeNumber = (i%10) +1,
+                });
+            }
 
             db.SaveChanges();
+        }
+
+        private static void PopulateFuncao(SupermarketDbContext db)
+        {
+            if (db.Funcao.Any()) return;
+            
+            for (int i = 0; i < 240; i++)
+            {
+                db.Funcao.Add(new Funcao { 
+                    NomeFuncao = "Funcao " + i, DescricaoFuncao  = "Descricao " + i
+                });
+            }
+            db.SaveChanges();
+            
         }
 
         private static void PopulateClients(SupermarketDbContext db) {
