@@ -17,19 +17,16 @@ namespace Supermarket.Data {
             PopulateWarehouseSection(db);
             PopulateWarehouseSection_Product(db);
             PopulateReduceProduct(db);
-            PopulateEmployees(db);
-            PopulateEmployeeEvaluations(db);
             PopulateFuncao(db);
             PopulateClients(db);
             PopulateClientCard(db);
             PopulateProductDiscounts(db);
-            PopulateEmployees(db);
-            PopulateEmployeeEvaluations(db);
+            //PopulateEmployees(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
             PopulateMealCards(db);
             PopulateCardMovements(db);
-
+            PopulateEmployeeEvaluations(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db) {
@@ -287,7 +284,7 @@ namespace Supermarket.Data {
         private static void PopulateEmployees(SupermarketDbContext db) {
             if (db.Employee.Any()) return;
 
-            db.Employee.AddRange(
+            /*db.Employee.AddRange(
                 new Employee
                 {
                     Employee_Address= "Rua das Oliveiras",
@@ -341,7 +338,7 @@ namespace Supermarket.Data {
                 }
                 );
 
-            db.SaveChanges();
+            db.SaveChanges();*/
         }
 
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db) {
