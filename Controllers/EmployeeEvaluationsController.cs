@@ -84,6 +84,7 @@ namespace Supermarket.Controllers
             if(employeeId > 0)
             {
                 ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>().Where(ee=>ee.EmployeeId==employeeId), "EmployeeId", "Employee_Name");
+                
                 ViewBag.EmployeeId = employeeId;
             }
             else
