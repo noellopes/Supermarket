@@ -49,8 +49,8 @@ namespace Supermarket.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
-            ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "BrandId", "Name");
-            ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Name");
+            ViewData["BrandId"] = new SelectList(_context.Brand, "BrandId", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,CategoryId,BrandId,Name,Description,TotalQuantity,MinimumQuantity,UnitPrice,Status")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,CategoryId,BrandId,Name,Description,TotalQuantity,MinimumQuantity,UnitPrice,Status,LastCountDate")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -107,7 +107,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,CategoryId,BrandId,Name,Description,TotalQuantity,MinimumQuantity,UnitPrice,Status")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,CategoryId,BrandId,Name,Description,TotalQuantity,MinimumQuantity,UnitPrice,Status,LastCountDate")] Product product)
         {
             if (id != product.ProductId)
             {
@@ -148,10 +148,11 @@ namespace Supermarket.Controllers
             }
             ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "BrandId", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Set<Category>(), "CategoryId", "Name", product.CategoryId);
+            ViewData["Status"] = new SelectList(Product.StatusList, product.Status);
             return View(product);
         }
 
-        //// GET: Products/Delete/5
+        // GET: Products/Delete/5
         //public async Task<IActionResult> Delete(int? id)
         //{
         //    if (id == null || _context.Product == null)
@@ -185,51 +186,58 @@ namespace Supermarket.Controllers
         //    {
         //        _context.Product.Remove(product);
         //    }
-            
+
         //    await _context.SaveChangesAsync();
         //    return RedirectToAction(nameof(Index));
         //}
 
-        public async Task<IActionResult> RotativeProducts(int warehouseSectionId = 0, int shelfId = 0)
+        public async Task<IActionResult> RotativeProducts(int selectedProductId = 0)
         {
-            // Consulta para as seções do armazém
-            var warehouseSectionQuery = _context.WarehouseSection
-                .Include(ws => ws.Warehouse)
-                .Include(ws => ws.Products)
-                .ThenInclude(wsp => wsp.Product.Category)
-                .Include(ws => ws.Products)
-                .ThenInclude(wsp => wsp.Product.Brand);
+            // Consulta para os produtos
+            var productQuery = _context.Product
+                .Include(p => p.Brand)
+                  .Where(p => p.UnitPrice > 25);
 
             // Executar a consulta e armazenar os resultados na ViewData
-            var warehouseSections = await warehouseSectionQuery.ToListAsync();
-            ViewData["WarehouseSections"] = warehouseSections;
+            var products = await productQuery.ToListAsync();
+            ViewData["Products"] = products;
 
-            // Selecionar a seção do armazém com base no warehouseSectionId
-            var selectedWarehouseSection = warehouseSections.FirstOrDefault(ws => ws.WarehouseSectionId == warehouseSectionId);
-            ViewData["SelectedWarehouseSection"] = selectedWarehouseSection;
+            // Selecionar o produto com base no selectedProductId
+            var selectedProduct = products.FirstOrDefault(p => p.ProductId == selectedProductId);
+            ViewData["SelectedProduct"] = selectedProduct;
 
-            // Consulta para as prateleiras
-            var shelfQuery = _context.Shelf
-                .Include(s => s.Hallway)
-                .Include(s => s.Product)
-                .ThenInclude(p => p.Product)
-                .ThenInclude(p => p.Brand)
-                .Include(s => s.Product)
-                .ThenInclude(p => p.Product)
-                .ThenInclude(p => p.Category)
-                .Include(s => s.Hallway)
-                .ThenInclude(h => h.Store);
+            // Consulta para os WarehouseSection_Products com base no Product selecionado
+            var warehouseSectionProducts = await _context.WarehouseSection_Product
+         .Where(wp => wp.ProductId == selectedProductId)
+         .Include(wp => wp.WarehouseSection)
+          .ThenInclude(ws => ws.Warehouse)
+         .ToListAsync();
 
-            // Executar a consulta e armazenar os resultados na ViewData
-            var shelves = await shelfQuery.ToListAsync();
-            ViewData["Shelf"] = shelves;
+            var selftProducts = await _context.Shelft_ProductExhibition
+       .Where(wp => wp.ProductId == selectedProductId)
+       .Include(wp => wp.Shelf)
+        .ThenInclude(ws => ws.Hallway)
+         .ThenInclude(ws => ws.Store)
+       .ToListAsync();
 
-            // Selecionar a prateleira com base no shelfId
-            var selectedShelf = shelves.FirstOrDefault(s => s.ShelfId == shelfId);
-            ViewData["SelectedShelf"] = selectedShelf;
+            var selftProductsList = selftProducts.ToList();
+
+            var warehouseSectionProductsList = warehouseSectionProducts.ToList();
+
+            var totalWarehouseQuantity = warehouseSectionProductsList.Sum(wp => wp.Quantity);
+            var totalShelfQuantity = selftProductsList.Sum(sp => sp.Quantity);
+            var grandTotalQuantity = totalWarehouseQuantity + totalShelfQuantity;
+
+
+            ViewData["TotalWarehouseQuantity"] = totalWarehouseQuantity;
+            ViewData["TotalShelfQuantity"] = totalShelfQuantity;
+            ViewData["GrandTotalQuantity"] = grandTotalQuantity;
+            ViewData["WarehouseSectionProductsList"] = warehouseSectionProductsList;
+            ViewData["SelftProductsList"] = selftProductsList;
 
             return View("RotativeInventory");
         }
+
         private bool ProductExists(int id)
         {
           return (_context.Product?.Any(e => e.ProductId == id)).GetValueOrDefault();

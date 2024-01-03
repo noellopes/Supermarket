@@ -59,7 +59,7 @@ namespace Supermarket.Controllers
             ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description");
             return View();
         }
-
+        
         // POST: ReduceProducts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -161,8 +161,17 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
-            ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
-            ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            if (reduceProduct.WarehouseSectionId != null)
+            {
+                ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            }
+            if (reduceProduct.ShelfId != null)
+            {
+                ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
+            }
+            
+            ViewData["Status"] = new SelectList(ReduceProduct.StatusList, reduceProduct.Status);
+
             return View(reduceProduct);
         }
 
@@ -177,6 +186,16 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+
+            var SectionProduct = await _context.WarehouseSection_Product
+                   .FirstOrDefaultAsync(m => m.ProductId == reduceProduct.ProductId && m.WarehouseSectionId == reduceProduct.WarehouseSectionId);
+            var ShelfProduct = await _context.Shelft_ProductExhibition
+                   .FirstOrDefaultAsync(m => m.ProductId == reduceProduct.ProductId && m.ShelfId == reduceProduct.ShelfId);
+
+            //if(SectionProduct == null)
+            //{
+            //    return NotFound();
+            //}
 
             if (ModelState.IsValid)
             {
@@ -199,8 +218,15 @@ namespace Supermarket.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
-            ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
-            ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            if (reduceProduct.WarehouseSectionId != null)
+            {
+                ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            }
+            if (reduceProduct.ShelfId != null)
+            {
+                ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
+            }
+            ViewData["Status"] = new SelectList(ReduceProduct.StatusList, reduceProduct.Status);
             return View(reduceProduct);
         }
 
@@ -226,8 +252,15 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
-            ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
-            ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            if (reduceProduct.WarehouseSectionId != null)
+            {
+                ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            }
+            if (reduceProduct.ShelfId != null)
+            {
+                ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
+            }
+            ViewData["Status"] = new SelectList(ReduceProduct.StatusList, reduceProduct.Status);
             return View(reduceProduct);
         }
 
@@ -264,8 +297,15 @@ namespace Supermarket.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
-            ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
-            ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            if (reduceProduct.WarehouseSectionId != null)
+            {
+                ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
+            }
+            if (reduceProduct.ShelfId != null)
+            {
+                ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
+            }
+            ViewData["Status"] = new SelectList(ReduceProduct.StatusList, reduceProduct.Status);
             return View(reduceProduct);
         }
 

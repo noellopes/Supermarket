@@ -3,13 +3,46 @@
 @{
     ViewData["Title"] = "Index";
 }
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa; /* Cor de fundo mais clara */
+        color: #343a40; /* Cor do texto mais escura */
+    }
 
-<h1>Index</h1>
+    h1 {
+        color: #007bff; /* Azul Bootstrap */
+        margin-top: 20px; /* Margem superior maior */
+    }
+
+    .card {
+        background-color: #fff; /* Cor de fundo do cartão */
+        border: 1px solid rgba(0, 0, 0, 0.125); /* Borda do cartão */
+        border-radius: 0.25rem; /* Borda arredondada */
+        padding: 20px; /* Espaçamento interno do cartão */
+        margin-bottom: 20px; /* Margem inferior do cartão */
+    }
+
+    .btn-group a {
+        margin-right: 5px; /* Espaçamento à direita entre os botões do grupo */
+    }
+
+    .table th,
+    .table td {
+        background-color: #f8f8f8; /* Cor de fundo alternativa (cinza mais claro) para as células da tabela */
+        color: #000; /* Cor do texto na tabela */
+        border: none; /* Remove bordas das células da tabela */
+    }
+</style>
+
+<div class="card">
+    <h1>Index</h1>
+</div>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
-<table class="table">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>
@@ -46,14 +79,17 @@
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Product.Name)
+                @Html.DisplayFor(modelItem => item.Product!.Name)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ReduceProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ReduceProductId">Details</a> |
-                <a asp-action="ConfirmStatus" asp-route-id="@item.ReduceProductId">ConfirmStatus</a>
+            <td >
+                <div class="btn-group" role="group" aria-label="Actions">
+                <a asp-action="Edit" asp-route-id="@item.ReduceProductId" class="btn btn-secondary">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.ReduceProductId" class="btn btn-secondary">Details</a>
+                <a asp-action="ConfirmStatus" asp-route-id="@item.ReduceProductId" class="btn btn-secondary">ConfirmStatus</a>
+                </div>
             </td>
         </tr>
 }
     </tbody>
 </table>
+

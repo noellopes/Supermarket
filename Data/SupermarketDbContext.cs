@@ -52,7 +52,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.WarehouseSection> WarehouseSection { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.WarehouseSection_Product> WarehouseSection_Product { get; set; } = default!;
+        
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
@@ -71,5 +71,9 @@ namespace Supermarket.Data
         public DbSet<CardMovement> CardMovement { get; set; } = default!;
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.Supplier> Supplier { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.WarehouseSection_Product> WarehouseSection_Product { get; set; } = default!;
     }
 }

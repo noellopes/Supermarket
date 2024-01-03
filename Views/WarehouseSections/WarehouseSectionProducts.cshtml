@@ -1,4 +1,14 @@
-﻿<style>
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<style>
     body {
         padding: 20px;
         background-color: #f8f9fa; /* Cor de fundo mais clara */
@@ -32,10 +42,8 @@
 
 <div class="container">
     <div class="card">
-        <h2 class="mt-4">@ViewBag.StoreName - Products</h2>
-
+        <h2 class="mt-4">@ViewBag.SectionName - Products</h2>
         <div class="lead">Total Products: @ViewBag.TotalProducts</div>
-       
     </div>
 
     <table class="table table-striped">
@@ -59,5 +67,8 @@
             }
         </tbody>
     </table>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Index" asp-route-warehouseId="@ViewBag.WarehouseId" class="btn btn-secondary">Back to List</a>
+
 </div>
+
+

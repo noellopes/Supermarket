@@ -1,217 +1,166 @@
 ﻿@{
     ViewData["Title"] = "Rotative Inventory";
 }
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
 
 <h1>Rotative Inventory</h1>
 
-  
-@{
-    // Recuperar as seções de armazém de ViewData
-    var warehouseSections = ViewData["WarehouseSections"] as IEnumerable<Supermarket.Models.WarehouseSection>;
-    int warehouseSectionId;
-    var selectedWarehouseSection = (Supermarket.Models.WarehouseSection)null;
-
-    // Verificar se WarehouseSectionId está presente nos parâmetros da consulta
-    if (int.TryParse(Context.Request.Query["WarehouseSectionId"], out warehouseSectionId) && warehouseSectionId > 0)
-    {
-        // Encontrar a seção de armazém selecionada
-        selectedWarehouseSection = warehouseSections?.FirstOrDefault(w => w.WarehouseSectionId == warehouseSectionId);
-    }
-}
-
 <form asp-controller="Products" asp-action="RotativeProducts" method="get">
     <div class="form-group">
-        <label for="WarehouseSectionId">Select Warehouse Section:</label>
-        <select name="WarehouseSectionId" class="form-control">
-            <!-- Dropdown para Seções de Armazém -->
-            <option value="">-- All Warehouse Sections --</option>
-            @if (warehouseSections != null)
+        <label for="SelectedProductId">Select Product:</label>
+        <select name="SelectedProductId" class="form-control">
+            <option value="">-- All Products --</option>
+            @foreach (var product in ViewData["Products"] as List<Product>)
             {
-                foreach (var warehouseSection in warehouseSections)
-                {
-                    <option value="@warehouseSection.WarehouseSectionId">@warehouseSection.Description,  @warehouseSection.Warehouse!.Name</option>
-                }
+                <option value="@product.ProductId">@product.Name, @product.Description, @product.Brand?.Name, @product.LastCountDate</option>
             }
         </select>
     </div>
-    <div style ="margin-top: 5px;">
-    <button type="submit" class="btn btn-primary">Submeter</button>
+    <div style="margin-top: 5px;">
+        <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>
 
-<div style="margin-top: 20px;">
-   
-    @if (warehouseSectionId > 0 && selectedWarehouseSection != null)
-    {
-        <h2>Selected Warehouse Section: @selectedWarehouseSection.Description</h2>
-        <p>Belongs to Warehouse: @selectedWarehouseSection.Warehouse!.Name</p>
+@if (ViewData["SelectedProduct"] != null)
+{
+    var selectedProduct = ViewData["SelectedProduct"] as Product;
 
-        @if (selectedWarehouseSection.Products != null && selectedWarehouseSection.Products.Any())
+    <h2>Selected Product: @selectedProduct.Name, @selectedProduct.Description, @selectedProduct.Brand?.Name</h2>
+
+    if (ViewData["WarehouseSectionProductsList"] != null)
+    {
+        var warehouseSectionProductsList = ViewData["WarehouseSectionProductsList"] as List<WarehouseSection_Product>;
+
+        if (warehouseSectionProductsList.Any())
         {
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name Product</th>
-                        <th>Description</th>
-                        <th>Brand</th>
-                        <th>Category</th>
+                        <th>Warehouse </th>
+                        <th>Warehouse Section</th>
+                        <th>Batch Number</th>
                         <th>Quantity</th>
-                        <th>Product count </th>
+                        <th>Count</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var warehouseSectionProduct in selectedWarehouseSection.Products)
+                    @foreach (var warehouseSectionProduct in warehouseSectionProductsList)
                     {
                         <tr>
+                            <td>@warehouseSectionProduct.WarehouseSection?.Warehouse.Name</td>
+                            <td>@warehouseSectionProduct.WarehouseSection?.Description</td>
+                            <td>@warehouseSectionProduct.BatchNumber</td>
+                            <td>@warehouseSectionProduct.Quantity</td>
                             <td>
-                                @if (warehouseSectionProduct.Product != null)
-                                {
-                                    @warehouseSectionProduct.Product.Name
-                                }
-                                else
-                                {
-                                    <span style="color: red;">Erro: Product not available</span>
-                                }
-                            </td>
-                            <td>
-                                @warehouseSectionProduct.Product!.Description
-                            </td>
-                            <td>
-                                @warehouseSectionProduct.Product.Brand!.Name
-                            </td>
-                            <td>
-                                @warehouseSectionProduct.Product.Category!.Name
-                            </td>
-                            <td>
-                                @warehouseSectionProduct.Quantity
-                            </td>
-                            <td>
-                                <input type="number" name="quantities[@warehouseSectionProduct.ProductId]" min="0" max="99999" value="0" />
+                                <input type="number" class="warehouse-quantity" value="@warehouseSectionProduct.Quantity" min="0" max="99999" />
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+
+            <h6>Total Warehouse  expected Quantity: @(ViewData["TotalWarehouseQuantity"] ?? 0)</h6>
+            <h5>Total Warehouse count Quantity: <span id="totalWarehouseQuantity">0</span></h5>
         }
         else
         {
-            <span style="color: red;"> No products available in this section of the warehouse.</span>
+            <span style="color: red;">No Warehouse Section Products available for the selected product.</span>
         }
+    }
+    
+
+
+@if (ViewData["SelftProductsList"] != null)
+{
+    var selftProductsList = ViewData["SelftProductsList"] as List<Shelft_ProductExhibition>;
+
+    if (selftProductsList.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Shelf</th>
+                    <th>Hallway</th>
+                    <th>Store</th>
+                    <th>Quantity</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var shelftProduct in selftProductsList)
+                {
+                    <tr>
+                        <td>@shelftProduct.Shelf?.Name</td>
+                        <td>@shelftProduct.Shelf?.Hallway?.Description</td>
+                        <td>@shelftProduct.Shelf?.Hallway?.Store?.Name</td>
+                        <td>@shelftProduct.Quantity</td>
+                        <td>
+                                <input type="number" class="shelf-quantity" value="@shelftProduct.Quantity" min="0" max="99999" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <h6>Total Shelf  expected Quantity: @(ViewData["TotalShelfQuantity"] ?? 0)</h6>
+        <h5>Total Shelf  count Quantity: <span id="totalShelfQuantity">0</span></h5>
+
+        <h6> Total  expected Quantity: @(ViewData["GrandTotalQuantity"] ?? 0)</h6>
+        <h5>Total count Quantity: <span id="totalQuantity">0</span></h5>
+
+     
     }
     else
     {
-        <p>Select a warehouse section to display corresponding products.</p>
-    }
-</div>
-
-
-
-
-
-
-
-
-@{
-    // Recuperar as prateleiras da  ViewData
-    var shelves = ViewData["Shelf"] as IEnumerable<Supermarket.Models.Shelf>;
-    int shelfId;
-    var selectedShelf = (Supermarket.Models.Shelf)null;
-
-    // Verificar se ShelfId está presente nos parâmetros da consulta
-    if (int.TryParse(Context.Request.Query["ShelfId"], out shelfId) && shelfId > 0)
-    {
-        // Encontrar a prateleira selecionada
-        selectedShelf = shelves?.FirstOrDefault(s => s.ShelfId == shelfId);
+        <span style="color: red;">No Shelf Products available for the selected product.</span>
     }
 }
-<div class="custom-margin" style="margin-top: 100px;">
-    <form asp-controller="Products" asp-action="RotativeProducts" method="get">
-        <div class="form-group">
-            <label for="ShelfId">Select Shelf:</label>
-            <!-- Dropdown para as prateleiras -->
-            <select name="ShelfId" class="form-control">
-                <option value="">-- All Shelves --</option>
-                @if (shelves != null)
-                {
-                    foreach (var shelf in shelves)
-                    {
-                        <option value="@shelf.ShelfId">@shelf.Name,@shelf.Hallway!.Description,@shelf.Hallway.Store!.Name</option>
-                    }
-                }
-            </select>
-        </div>
-        <div style="margin-top: 5px;">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-    </form>
+}
 
-    <div style="margin-top: 20px;">
 
-        @if (shelfId > 0 && selectedShelf != null)
-        {
-            <h2>Selected Shelf: @selectedShelf.Name</h2>
-            <p>Belongs to : @selectedShelf.Hallway!.Description, @selectedShelf.Hallway.Store!.Name  </p>
-         
-            @if (selectedShelf.Product != null && selectedShelf.Product.Any())
-            {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Name Product</th>
-                            <th>Description</th>
-                            <th>Brand</th>
-                            <th>Category</th>
-                            <th>Quantity</th>
-                            <th>Minimum Quantity</th>
-                            <th>Product count </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var shelfProductExhibition in selectedShelf.Product)
-                        {
-                            <tr>
-                                <td>
-                                    @if (shelfProductExhibition.Product != null)
-                                    {
-                                        @shelfProductExhibition.Product.Name
-                                    }
-                                    else
-                                    {
-                                        <span style="color: red;">Error: Product not available</span>
-                                    }
-                                </td>
-                                <td>
-                                    @shelfProductExhibition.Product!.Description
-                                </td>
-                                <td>
-                                    @shelfProductExhibition.Product.Brand!.Name
-                                </td>
-                                <td>
-                                    @shelfProductExhibition.Product.Category!.Name
 
-                                </td>
-                                <td>
-                                    @shelfProductExhibition.Quantity
-                                </td>
-                                <td>
-                                    @shelfProductExhibition.MinimumQuantity
-                                </td>
-                                <td>
-                                    <input type="number" name="quantities[@shelfProductExhibition.ProductId]" min="0" max="99999" value="0" />
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <span style="color: red;">No products available on this shelf.</span>
-            }
-        }
-        else
-        {
-            <p>Select a shelf to display corresponding products.</p>
-        }
-    </div>
-</div>
+<script>
+    // Função para calcular e exibir a soma total da quantidade da prateleira
+    function calculateTotalQuantity() {
+        var totalWarehouseQuantity = 0;
+        var totalShelfQuantity = 0;
+
+        // Iterar sobre as entradas de quantidade do armazém
+        $('.warehouse-quantity').each(function () {
+            // Obter o valor da entrada
+            var quantity = parseInt($(this).val()) || 0;
+            // Adicionar ao total
+            totalWarehouseQuantity += quantity;
+        });
+
+        // Iterar sobre as entradas de quantidade da prateleira
+        $('.shelf-quantity').each(function () {
+            // Obter o valor da entrada
+            var quantity = parseInt($(this).val()) || 0;
+            // Adicionar ao total
+            totalShelfQuantity += quantity;
+        });
+
+        // Calcular o total geral
+        var grandTotalQuantity = totalWarehouseQuantity + totalShelfQuantity;
+
+        // Exibir os totais
+        $('#totalWarehouseQuantity').text(totalWarehouseQuantity);
+        $('#totalShelfQuantity').text(totalShelfQuantity);
+        $('#grandTotalQuantity').text(grandTotalQuantity);
+
+        // Exibir a soma total dos dois inputs
+        $('#totalQuantity').text(grandTotalQuantity);
+    }
+
+    // Chamar a função ao carregar a página
+    $(document).ready(function () {
+        calculateTotalQuantity();
+
+        // Chamar a função quando o valor da entrada for alterado
+        $('.warehouse-quantity, .shelf-quantity').on('input', function () {
+            calculateTotalQuantity();
+        });
+    });
+</script>

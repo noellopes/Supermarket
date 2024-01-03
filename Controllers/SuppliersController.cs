@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,87 +10,87 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class CategoriesController : Controller
+    public class SuppliersController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public CategoriesController(SupermarketDbContext context)
+        public SuppliersController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: Suppliers
         public async Task<IActionResult> Index()
         {
-              return _context.Category != null ? 
-                          View(await _context.Category.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Category'  is null.");
+              return _context.Supplier != null ? 
+                          View(await _context.Supplier.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.Supplier'  is null.");
         }
 
-        // GET: Categories/Details/5
+        // GET: Suppliers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Supplier == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
+            var supplier = await _context.Supplier
+                .FirstOrDefaultAsync(m => m.SupplierId == id);
+            if (supplier == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(supplier);
         }
 
-        // GET: Categories/Create
+        // GET: Suppliers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Suppliers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,Name")] Category category)
+        public async Task<IActionResult> Create([Bind("SupplierId,Name")] Supplier supplier)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                _context.Add(supplier);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(supplier);
         }
 
-        // GET: Categories/Edit/5
+        // GET: Suppliers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Supplier == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category.FindAsync(id);
-            if (category == null)
+            var supplier = await _context.Supplier.FindAsync(id);
+            if (supplier == null)
             {
                 return NotFound();
             }
-            return View(category);
+            return View(supplier);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Suppliers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,Name")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("SupplierId,Name")] Supplier supplier)
         {
-            if (id != category.CategoryId)
+            if (id != supplier.SupplierId)
             {
                 return NotFound();
             }
@@ -100,12 +99,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(category);
+                    _context.Update(supplier);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.CategoryId))
+                    if (!SupplierExists(supplier.SupplierId))
                     {
                         return NotFound();
                     }
@@ -116,55 +115,49 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(supplier);
         }
 
-        // GET: Categories/Delete/5
+        // GET: Suppliers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Category == null)
+            if (id == null || _context.Supplier == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
-            if (category == null)
+            var supplier = await _context.Supplier
+                .FirstOrDefaultAsync(m => m.SupplierId == id);
+            if (supplier == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(supplier);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Suppliers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Category == null)
+            if (_context.Supplier == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.Category'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.Supplier'  is null.");
             }
-            var category = await _context.Category.FindAsync(id);
-            var product = await _context.Product.Where(p => p.BrandId == id).ToListAsync();
-            if (product != null)
+            var supplier = await _context.Supplier.FindAsync(id);
+            if (supplier != null)
             {
-                ModelState.AddModelError(string.Empty, "There is a product with this category, can't be deleted.");
-                return View(category);
-            }
-            else if (category != null)
-            {
-                _context.Category.Remove(category);
+                _context.Supplier.Remove(supplier);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool SupplierExists(int id)
         {
-          return (_context.Category?.Any(e => e.CategoryId == id)).GetValueOrDefault();
+          return (_context.Supplier?.Any(e => e.SupplierId == id)).GetValueOrDefault();
         }
     }
 }

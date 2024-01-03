@@ -3,57 +3,114 @@
 @{
     ViewData["Title"] = "Delete";
 }
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa; /* Cor de fundo mais clara */
+        color: #343a40; /* Cor do texto mais escura */
+    }
+
+    h1 {
+        color: #007bff; /* Azul Bootstrap */
+        margin-top: 20px; /* Margem superior maior */
+    }
+
+    .lead {
+        font-size: 1.25rem; /* Tamanho de fonte maior */
+        margin-bottom: 20px; /* Margem inferior maior */
+    }
+
+    .card {
+        background-color: #fff; /* Cor de fundo do cartão */
+        border: 1px solid rgba(0, 0, 0, 0.125); /* Borda do cartão */
+        border-radius: 0.25rem; /* Borda arredondada */
+        padding: 20px; /* Espaçamento interno do cartão */
+        margin-bottom: 20px; /* Margem inferior do cartão */
+    }
+
+        .card table {
+            width: 100%; /* Garante que a tabela ocupa 100% da largura do cartão */
+            margin-bottom: 0; /* Remove a margem inferior da tabela */
+        }
+
+            .card table th,
+            .card table td {
+                padding: 12px; /* Adiciona um preenchimento adequado nas células da tabela */
+                text-align: left; /* Alinha o texto à esquerda nas células */
+            }
+</style>
+
 @if (ViewBag.Message != null)
 {
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <h4 class="alert-heading">Error</h4>
-        <p>@ViewBag.Message</p>
-        <a asp-action="Index">Back to List</a>
-    </div>
-    
+ 
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <h4 class="alert-heading">Error</h4>
+            <p>@ViewBag.Message</p>
+        <a asp-controller="WarehouseSection_Product" asp-action="Index" asp-route-warehouseSectionId="@Model.WarehouseSectionId" class="btn btn-secondary">Back to List</a>
+        </div>
+   
 }
 else
 {
-<h1>Delete</h1>
+    <div class="card">
+        <h1>Delete</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+        <h3>Are you sure you want to delete this?</h3>
+        <div>
+            <h4>Warehouse Section Product</h4>
+            <hr />
+            <dl class="row">
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Product)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.Product.Description)
+                </dd>
+                <dt class="col-sm-2">
+                    Warehouse Section
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.WarehouseSection.Description)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.Quantity)
+                </dd>
+                <dt class="col-sm-2">
+                    Reserved Quantity
+                </dt>
+
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.ReservedQuantity)
+                </dd>
+                <dt class="col-sm-2">
+                    Batch Number
+                </dt>
+
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.BatchNumber)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.ExpirationDate)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.ExpirationDate)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.Supplier)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.Supplier.Name)
+                </dd>
+            </dl>
+    
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="WarehouseSection_ProductId" />
+                <input type="submit" value="Delete" class="btn btn-danger" />
+                <a asp-controller="WarehouseSection_Product" asp-action="Index" asp-route-warehouseSectionId="@Model.WarehouseSection.WarehouseSectionId" class="btn btn-secondary">Back to List</a>
+            </form>
+        </div>
+    </div>
 }
-<div>
-    <h4>Warehouse Section Product Info</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Product)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Product.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.WarehouseSection)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.WarehouseSection.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReservedQuantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReservedQuantity)
-        </dd>
-    </dl>
-    @if (ViewBag.Message == null){
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="ProductId" />
-        <input type="hidden" asp-for="WarehouseSectionId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-    }
-</div>
-
