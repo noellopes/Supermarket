@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Supermarket.Models.ProductPurchaseSupplier>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchaseSupplier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AskedQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveredQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstimateDeliveryTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DeliveredDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LineTotal)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchaseSupplier.PurchaseSupplierId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AskedQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveredQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstimateDeliveryTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveredDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LineTotal)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ProductPurchaseSupplierId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ProductPurchaseSupplierId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProductPurchaseSupplierId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
