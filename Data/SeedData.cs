@@ -501,5 +501,19 @@ namespace Supermarket.Data
                 await userManager.CreateAsync(user, password);
             }
         }
+
+        internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager) {
+            await EnsureRoleIsCreatedAsync(roleManager!, "Administrator");
+
+        }
+
+        private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name) {
+            var role = await roleManager.FindByNameAsync(name);
+
+            if (role == null) {
+                role = new IdentityRole(name);
+                await roleManager.CreateAsync(role);
+            }
+        }
     }
 }
