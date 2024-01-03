@@ -22,7 +22,8 @@ namespace Supermarket.Controllers
         // GET: SubsidyCalculations
         public async Task<IActionResult> Index()
         {
-            var supermarketDbContext = _context.SubsidyCalculation.Include(s => s.Ponto).Include(s => s.SubsidySetup);
+            var supermarketDbContext = _context.SubsidyCalculation.Include(s => s.Ponto);
+
             return View(await supermarketDbContext.ToListAsync());
         }
 
@@ -36,7 +37,7 @@ namespace Supermarket.Controllers
 
             var subsidyCalculation = await _context.SubsidyCalculation
                 .Include(s => s.Ponto)
-                .Include(s => s.SubsidySetup)
+                //.Include(s => s.SubsidySetup)
                 .FirstOrDefaultAsync(m => m.SubsidyCalculationId == id);
             if (subsidyCalculation == null)
             {
@@ -68,7 +69,7 @@ namespace Supermarket.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PontoId"] = new SelectList(_context.Ponto, "PontoId", "Status", subsidyCalculation.PontoId);
-            ViewData["SubsidySetupId"] = new SelectList(_context.SubsidySetup, "SubsidySetupId", "SubsidySetupId", subsidyCalculation.SubsidySetupId);
+          //  ViewData["SubsidySetupId"] = new SelectList(_context.SubsidySetup, "SubsidySetupId", "SubsidySetupId", subsidyCalculation.SubsidySetupId);
             return View(subsidyCalculation);
         }
 
@@ -86,7 +87,7 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
             ViewData["PontoId"] = new SelectList(_context.Ponto, "PontoId", "Status", subsidyCalculation.PontoId);
-            ViewData["SubsidySetupId"] = new SelectList(_context.SubsidySetup, "SubsidySetupId", "SubsidySetupId", subsidyCalculation.SubsidySetupId);
+          //  ViewData["SubsidySetupId"] = new SelectList(_context.SubsidySetup, "SubsidySetupId", "SubsidySetupId", subsidyCalculation.SubsidySetupId);
             return View(subsidyCalculation);
         }
 
@@ -123,7 +124,7 @@ namespace Supermarket.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PontoId"] = new SelectList(_context.Ponto, "PontoId", "Status", subsidyCalculation.PontoId);
-            ViewData["SubsidySetupId"] = new SelectList(_context.SubsidySetup, "SubsidySetupId", "SubsidySetupId", subsidyCalculation.SubsidySetupId);
+            //ViewData["SubsidySetupId"] = new SelectList(_context.SubsidySetup, "SubsidySetupId", "SubsidySetupId", subsidyCalculation.SubsidySetupId);
             return View(subsidyCalculation);
         }
 
@@ -137,7 +138,7 @@ namespace Supermarket.Controllers
 
             var subsidyCalculation = await _context.SubsidyCalculation
                 .Include(s => s.Ponto)
-                .Include(s => s.SubsidySetup)
+               // .Include(s => s.SubsidySetup)
                 .FirstOrDefaultAsync(m => m.SubsidyCalculationId == id);
             if (subsidyCalculation == null)
             {

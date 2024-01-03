@@ -18,9 +18,7 @@
             <th>
                 <p>Data</p>
             </th>
-            <th>
-                <p> Valor do subsidio </p>
-            </th>
+            
             <th>
                 <p> Hora de Entrada </p>
             </th>
@@ -51,9 +49,7 @@
                 @Html.DisplayFor(modelItem => item.Ponto.Date)
             </td>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.SubsidySetup.ValorSubsidioDiario)
-                </td>
+               
 
                 <td>
                     @Html.DisplayFor(modelItem => item.Ponto.CheckInTime)
@@ -68,8 +64,7 @@
                 </td>
                 <td>
                     @{
-                       // DateTime entrada = DateTime.ParseExact(item.Ponto.CheckInTime, "HH:mm", null);
-                      //  DateTime saida = DateTime.ParseExact(item.Ponto.CheckOutTime, "HH:mm", null);
+                       
 
                         TimeSpan entrada = TimeSpan.Parse(item.Ponto.CheckInTime);
                         TimeSpan saida = TimeSpan.Parse(item.Ponto.CheckOutTime);
@@ -85,19 +80,24 @@
                 <td>
                     @{
 
-                        double somaMensal =0;
+                        double VALOR_DIARIO_RECEBER = 6;
+
                         double diferencaEmHoras = diff.TotalHours;
-                        string valorReceber = " Nâo atingiu horas minimas, valor a receber: 0";
+                        string SEM_VALOR_DIARIO = " valor a receber: 0€";
 
                         if (diferencaEmHoras > 4 )
 
                         {
-                            @Html.DisplayFor(modelItem => item.SubsidySetup.ValorSubsidioDiario)
+                           
+                            @($"{VALOR_DIARIO_RECEBER}{"€"}")
+                            ;
+
+                            //    @Html.DisplayFor(modelItem => item.SubsidySetup.ValorSubsidioDiario)
                            
                         }
                         else
                         {
-                            @valorReceber;
+                            @SEM_VALOR_DIARIO;
 
                         }
 
@@ -105,13 +105,7 @@
                     }
                 </td>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Ponto.Employee.Employee_Name)
-                </td>
-
-               
-
-
+                
                   <td>
                        <a asp-action="Edit" asp-route-id="@item.SubsidyCalculationId" class="btn btn-warning btn-smm">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.SubsidyCalculationId" class="btn btn-info btn-smm">Details</a>

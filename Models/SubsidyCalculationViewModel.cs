@@ -2,11 +2,10 @@
 {
     public class SubsidyCalculationViewModel
     {
-        public List<SubsidyCalculation> subsidyCalculations { get; set; }
-     //   public Ponto Pontoes { get; set; }
-        public List<Ponto> Pontoes { get; set; }
-       // public List<SubsidySetup> SubsidySetupList { get; set; }
+        public List<Ponto> Pontos { get; set; }
+
         public PagingInfo PagingInfo { get; set; }
+        public DateTime? SearchMonth { get; set; }
 
     }
 }
