@@ -62,10 +62,16 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Create([Bind("CardMovementId,Movement_Date,Value,Description,MealCardId")] CardMovement cardMovement)
         {
             var mealCard = await _context.MealCard.FindAsync(cardMovement.MealCardId);
+            if (cardMovement.Movement_Date < DateTime.Now)
+            {
+                ModelState.AddModelError("Movement_Date", "Não pode registar movimentos no passado.");
+                ViewData["MealCardId"] = new SelectList(_context.MealCard.Include(mc => mc.Employee), "MealCardId", "Employee.Employee_Name", cardMovement.MealCardId);
+                return View(cardMovement);
+            }
             if (cardMovement.Value < 0 && cardMovement.Value < -mealCard.Balance)
             {
                 ModelState.AddModelError("Value", "Saldo insuficiente para a transação de débito.");
-                ViewData["MealCardId"] = new SelectList(_context.MealCard, "MealCardId", "MealCardId", cardMovement.MealCardId);
+                ViewData["MealCardId"] = new SelectList(_context.MealCard.Include(mc => mc.Employee), "MealCardId", "Employee.Employee_Name", cardMovement.MealCardId);
                 return View(cardMovement);
             }
             if (ModelState.IsValid)
