@@ -22,8 +22,9 @@ namespace Supermarket.Controllers
         // GET: Formations
         public async Task<IActionResult> Index()
         {
-            var supermarketDbContext = _context.Formation.Include(f => f.Employee);
-            return View(await supermarketDbContext.ToListAsync());
+              return _context.Formation != null ? 
+                          View(await _context.Formation.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.Formation'  is null.");
         }
 
         // GET: Formations/Details/5
@@ -35,7 +36,6 @@ namespace Supermarket.Controllers
             }
 
             var formation = await _context.Formation
-                .Include(f => f.Employee)
                 .FirstOrDefaultAsync(m => m.FormationId == id);
             if (formation == null)
             {
@@ -48,7 +48,6 @@ namespace Supermarket.Controllers
         // GET: Formations/Create
         public IActionResult Create()
         {
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address");
             return View();
         }
 
@@ -57,7 +56,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FormationId,PontuacaoFormation,EmployeeId")] Formation formation)
+        public async Task<IActionResult> Create([Bind("FormationId,Formation_Name")] Formation formation)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +64,6 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", formation.EmployeeId);
             return View(formation);
         }
 
@@ -82,7 +80,6 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", formation.EmployeeId);
             return View(formation);
         }
 
@@ -91,7 +88,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FormationId,PontuacaoFormation,EmployeeId")] Formation formation)
+        public async Task<IActionResult> Edit(int id, [Bind("FormationId,Formation_Name")] Formation formation)
         {
             if (id != formation.FormationId)
             {
@@ -118,7 +115,6 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", formation.EmployeeId);
             return View(formation);
         }
 
@@ -131,7 +127,6 @@ namespace Supermarket.Controllers
             }
 
             var formation = await _context.Formation
-                .Include(f => f.Employee)
                 .FirstOrDefaultAsync(m => m.FormationId == id);
             if (formation == null)
             {
