@@ -23,7 +23,7 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Brand != null ? 
-                          View(await _context.Brand.ToListAsync()) :
+                          View(await _context.Brand.OrderBy(i => i.Name).ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Brand'  is null.");
         }
 
