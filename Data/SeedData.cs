@@ -187,7 +187,7 @@ namespace Supermarket.Data
             db.Shelft_ProductExhibition.AddRange(
                     new Shelft_ProductExhibition
                     {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream")!,
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
                         Quantity = 0,
                         MinimumQuantity = 20
@@ -195,7 +195,7 @@ namespace Supermarket.Data
 
                     new Shelft_ProductExhibition
                     {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream")!,
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 12")!,
                         Quantity = 0,
                         MinimumQuantity = 20
@@ -209,7 +209,7 @@ namespace Supermarket.Data
                     },
                     new Shelft_ProductExhibition
                     {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips")!,
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
                         Quantity = 15,
                         MinimumQuantity = 10
@@ -276,7 +276,7 @@ namespace Supermarket.Data
             db.WarehouseSection_Product.AddRange(
                     new WarehouseSection_Product
                     {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream")!,
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
                         BatchNumber = "D45",
                         ExpirationDate = DateTime.Now,
@@ -309,7 +309,7 @@ namespace Supermarket.Data
 
                      new WarehouseSection_Product
                      {
-                         Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
+                         Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips")!,
                          WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
                          BatchNumber = "C65",
                          ExpirationDate = DateTime.Now,
@@ -322,7 +322,7 @@ namespace Supermarket.Data
 
                     new WarehouseSection_Product
                     {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages")!,
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section B4")!,
                         BatchNumber = "B65",
                         ExpirationDate = DateTime.Now,
@@ -332,7 +332,7 @@ namespace Supermarket.Data
                     },
                     new WarehouseSection_Product
                     {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips")!,
 
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section D6")!,
                         BatchNumber = "A45",
@@ -381,7 +381,7 @@ namespace Supermarket.Data
                         Reason = "Product past its expiration date",
                         Status = "Pending",
                         Quantity = 10,
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages")!,
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section B4")!
                     },
                     new ReduceProduct
@@ -389,7 +389,7 @@ namespace Supermarket.Data
                         Reason = "Product past its expiration date",
                         Status = "Pending",
                         Quantity = 10,
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages")!,
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
                     },
                     new ReduceProduct
@@ -397,7 +397,7 @@ namespace Supermarket.Data
                         Reason = "Product past its expiration date",
                         Status = "Pending",
                         Quantity = 10,
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips")!,
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section D6")!
                     }
                 );
