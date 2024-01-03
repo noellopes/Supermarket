@@ -4,12 +4,12 @@ namespace Supermarket.Models
 {
     public class EmployeeSchedule
     {
-        [Key]
-        [Required]
-        public int ScheduleId {  get; set; }
+        public int EmployeeScheduleId {  get; set; }
 
-        [Required]
+        
         public int EmployeeId { get; set; }
+
+        public Employee? Employee { get; set; }
 
         public DateTime Date { get; set; }
         public TimeSpan CheckInTime { get; set; }

@@ -1,4 +1,4 @@
-﻿@model Supermarket.Models.ReserveDepartment
+﻿@model Supermarket.Models.SubsidyCalculation
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,18 +6,20 @@
 
 <h1>Edit</h1>
 
-<h4>ReserveDepartment</h4>
+<h4>SubsidyCalculation</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ReserveDepartmentId" />
+            <input type="hidden" asp-for="SubsidyCalculationId" />
+      
             <div class="form-group">
-                <label asp-for="NumeroDeFunc" class="control-label"></label>
-                <input asp-for="NumeroDeFunc" class="form-control" />
-                <span asp-validation-for="NumeroDeFunc" class="text-danger"></span>
+                <label asp-for="PontoId" class="control-label"></label>
+                <select asp-for="PontoId" class="form-control" asp-items="ViewBag.PontoId"></select>
+                <span asp-validation-for="PontoId" class="text-danger"></span>
             </div>
+           
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -29,6 +31,3 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
