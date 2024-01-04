@@ -48,7 +48,7 @@ namespace Supermarket.Controllers
         // GET: Folgas/Create
         public IActionResult Create()
         {
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address");
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
 
             return View();
         }
@@ -87,7 +87,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", folga.EmployeeId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", folga.EmployeeId);
             return View(folga);
         }
 
@@ -123,7 +123,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Address", folga.EmployeeId);
+            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", folga.EmployeeId);
             return View(folga);
         }
 

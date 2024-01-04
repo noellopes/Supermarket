@@ -8,6 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
+    <Content Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\Application\20240103142051_InitialCreate.cs" />
+    <Compile Remove="Data\Migrations\Application\20240103142051_InitialCreate.Designer.cs" />
+    <Compile Remove="Data\Migrations\Application\20240103230807_Test1.cs" />
+    <Compile Remove="Data\Migrations\Application\20240103230807_Test1.Designer.cs" />
+    <Compile Remove="Data\Migrations\Application\ApplicationDbContextModelSnapshot.cs" />
     <Compile Remove="Data\Migrations\Supermarket\20231230122554_Folgas3.cs" />
     <Compile Remove="Data\Migrations\Supermarket\20231230122554_Folgas3.Designer.cs" />
     <Compile Remove="Models\FuncionarioDepartamento.cs" />
