@@ -20,12 +20,52 @@ namespace Supermarket.Controllers
         }
 
         // GET: Employees
+        /*
         public async Task<IActionResult> Index()
         {
               return _context.Employee != null ? 
                           View(await _context.Employee.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
         }
+        */
+        public async Task<IActionResult> Index(int page = 1, string employee_name = "")
+        {
+            var employees = from b in _context.Employee select b;
+
+            if (!string.IsNullOrEmpty(employee_name))
+            {
+                employees = employees.Where(x => x.Employee_Name.Contains(employee_name));
+            }
+
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await employees.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new EmployeesViewModel
+            {
+                Employees = await employees
+                    .OrderBy(b => b.Employee_Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfo = paging,
+                SearchName = employee_name,
+            };
+
+            return View(vm);
+        }
+
 
         // GET: Employees/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -37,13 +77,52 @@ namespace Supermarket.Controllers
 
             var employee = await _context.Employee
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
+
             if (employee == null)
             {
                 return NotFound();
             }
 
+            CalculateWorkingHours(employee);
+
             return View(employee);
         }
+
+        private void CalculateWorkingHours(Employee employee)
+        {
+            if (!string.IsNullOrEmpty(employee.Standard_Check_In_Time) && !string.IsNullOrEmpty(employee.Standard_Check_Out_Time))
+            {
+                DateTime inTime = DateTime.Parse(employee.Standard_Check_In_Time);
+                DateTime outTime = DateTime.Parse(employee.Standard_Check_Out_Time);
+
+                if (outTime > inTime)
+                {
+                    TimeSpan workingHours = outTime - inTime;
+                    employee.Employee_Time_Bank = workingHours;
+                }
+                else
+                {
+                    employee.Employee_Time_Bank = TimeSpan.Zero;
+                }
+            }
+        }
+
+
+
+        private async Task<bool> IsEmailUnique(string email)
+        {
+            return await _context.Employee.AllAsync(e => e.Employee_Email != email);
+        }
+        private async Task<bool> IsPhoneUnique(string phone)
+        {
+            return await _context.Employee.AllAsync(e => e.Employee_Phone != phone);
+        }
+
+        private async Task<bool> IsNIFUnique(string nif)
+        {
+            return await _context.Employee.AllAsync(e => e.Employee_NIF != nif);
+        }
+
 
         // GET: Employees/Create
         public IActionResult Create()
@@ -56,10 +135,28 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,Employee_Time_Bank")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time")] Employee employee)
         {
             if (ModelState.IsValid)
             {
+                if (!await IsEmailUnique(employee.Employee_Email))
+                {
+                    ModelState.AddModelError("Employee_Email", "Email is already in use.");
+                    return View(employee);
+                }
+
+                if (!await IsPhoneUnique(employee.Employee_Phone))
+                {
+                    ModelState.AddModelError("Employee_Phone", "Phone number is already in use.");
+                    return View(employee);
+                }
+
+                if (!await IsNIFUnique(employee.Employee_NIF))
+                {
+                    ModelState.AddModelError("Employee_NIF", "NIF is already in use.");
+                    return View(employee);
+                }
+
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
