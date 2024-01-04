@@ -305,15 +305,7 @@ namespace Supermarket.Controllers
         {
           return (_context.Departments?.Any(e => e.IDDepartments == id)).GetValueOrDefault();
         }
-        //calclo da media  
-        public ActionResult TicketAverage(int IdDepartments)
-        {
-         //carrega os dados da tabela tict
-            var tickets = _context.Tickets
-                .Where(t => t.DataEmissao >= DateTime.Today && t.DataAtendimento >= DateTime.Today&& t.IDDepartments== IdDepartments)
-                .ToList();
-
-            return View();
-        }
+ 
+    
     }
 }
