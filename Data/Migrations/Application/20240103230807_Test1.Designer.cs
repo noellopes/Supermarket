@@ -9,11 +9,16 @@ using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Application
+namespace Supermarket.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<< HEAD:Data/Migrations/Application/20240103230807_Test1.Designer.cs
     [Migration("20240103230807_Test1")]
     partial class Test1
+=======
+    [Migration("20240103161752_Folgas6")]
+    partial class Folgas6
+>>>>>>> da2f09602e811f1a19803636609c78ea0f53047c:Migrations/20240103161752_Folgas6.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
