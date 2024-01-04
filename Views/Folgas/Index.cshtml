@@ -7,34 +7,34 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Criar Novo Pedido de Folga</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.GestorId)
+                GestorId
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                Status 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataPedido)
+                Data do Pedido 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataResultado)
+                Data da Aprovação/Rejeição
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataInicio)
+                Data de Início
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataFim)
+                Data de Fim
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.motivo)
+                Motivo
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EmployeeId)
+                Id do Funcionário
             </th>
             <th></th>
         </tr>
@@ -67,9 +67,9 @@
                 @Html.DisplayFor(modelItem => item.Employee.Employee_Address)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FolgaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FolgaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FolgaId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.FolgaId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.FolgaId">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.FolgaId">Eliminar</a>
             </td>
         </tr>
 }
