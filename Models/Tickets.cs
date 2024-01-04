@@ -7,7 +7,6 @@ namespace Supermarket.Models
         // Chave primária da entidade. O atributo [Key] é usado para marcar a chave primária.
         [Key]
         public int TicketId { get; set; }
-
         // Data de impressão do ticket.
         [Required]
         public DateTime DataEmissao { get; set; } = DateTime.Now;
@@ -21,7 +20,19 @@ namespace Supermarket.Models
 
         // Estado atual do ticket.
         public bool Prioritario { get; set; }
-
+        //para calcular valores das datas 
+        public double TotalMinutesDifference
+        {
+            get
+            {
+                if (DataEmissao != default && DataAtendimento != default)
+                {
+                    TimeSpan difference = DataAtendimento - DataEmissao;
+                    return difference.TotalMinutes;
+                }
+                return 0; // se nada for feito retorna 
+            }
+        }
         // Chave estrangeira para o departamento. Relaciona-se a outra entidade chamada "Departments".
         public int IDDepartments { get; set; }
         public Departments? Departments { get; set; }
