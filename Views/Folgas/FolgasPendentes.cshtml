@@ -5,51 +5,18 @@
 
 @model List<Folga>
 <h1>Folgas Pendentes de Aprovação</h1>
-<table>
-    <thead>
-        <tr>
-            <th></th>
-            <th>FuncionarioId</th>
-            <th></th>
-            <th></th>
-            <th>Pedido dia</th>>
-            <th></th>
-            <th></th>
-            <th>Início</th>
-            <th></th>
-            <th></th>
-            <th> Fim</th>
-            <th></th>
-            <th></th>
-            <th>Motivo</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
 
-
-            
-
-
-
-
-
-
-        </tr>
-    </thead>
-    </table>
 
 @foreach (var folga in Model)
 {
-    <div><h4> @folga.Employee.Employee_Name</h4>
-        <p> @folga.DataPedido.ToString()</p>
-        <p> @folga.DataInicio.ToShortDateString()</p>
-        <p> @folga.DataFim.ToShortDateString()</p>
-        <p> @folga.motivo</p>
-        </div>
+    <div><h4> Funcionário:@folga.Employee.Employee_Name</h4>
+        <p> Pedida em: @folga.DataPedido.ToString()</p>
+        <p> Data de Início:@folga.DataInicio.ToShortDateString()</p>
+        <p> Data de Fim:@folga.DataFim.ToShortDateString()</p>
+        <p> Motivo da folga: @folga.motivo</p>
+        
 
-        <form asp-controller="Folgas" asp-action="AprovarRejeitarFolga" asp-route-id="@folga.FolgaId" method="post"></form>
+        <form asp-controller="Folgas" asp-action="AprovarFolga" asp-route-id="@folga.FolgaId" method="post">
 
         @Html.AntiForgeryToken()
         <div class="form-group">
@@ -57,7 +24,11 @@
         <input type="text" name="GestorId" required/></div>
         <div class="form-group"><label for="DataResultado:">Data Resultado</label>
             <input type="date" name="DataResultado" required/> </div>
-        <button type="submit" name="aprovacao" value="aprovada">Aprovar</button>
+        <button type="submit" name="aprovacao" value="Aprovada">Aprovar</button>
         <button type="submit" name="aprovacao" value="Rejeitada">Rejeitar</button>
+        </form>
+        <br>
+        <br>
+        </div>
         
 }

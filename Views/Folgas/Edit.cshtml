@@ -15,7 +15,9 @@
             <input type="hidden" asp-for="FolgaId" />
             <div class="form-group">
                 <label asp-for="EmployeeId" class="control-label">Id do Funcionário</label>
-                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"><option value="">Selecione o seu nome</option></select></select>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"><option value="">Selecione o seu nome</option></select>
+
+
 
             </div>
             <div class="form-group">
@@ -30,7 +32,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="motivo" class="control-label"></label>
-                <select asp-for="motivo" class="form-control"></select>
+                <select asp-for="motivo" asp-items=" Html.GetEnumSelectList<Folga.Motivo>()" class="form-control"> <option value="">Selecione o Motivo</option></select>
                 <span asp-validation-for="motivo" class="text-danger"></span>
             </div>
             <div class="form-group">

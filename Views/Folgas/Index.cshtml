@@ -4,7 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Folgas</h1>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert_success" role="alert">@TempData["SuccessMessage"]</div>
+}
 
 <p>
     <a asp-action="Create">Criar Novo Pedido de Folga</a>
@@ -64,7 +68,7 @@
                 @Html.DisplayFor(modelItem => item.motivo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Employee.Employee_Address)
+                @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.FolgaId">Editar</a> |

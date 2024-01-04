@@ -58,14 +58,14 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FolgaId,FuncionarioId,GestorId,Status,DataPedido,DataResultado,DataInicio,DataFim,motivo")] Folga folga)
+        public async Task<IActionResult> Create([Bind("FolgaId,EmployeeId,GestorId,Status,DataPedido,DataResultado,DataInicio,DataFim,motivo")] Folga folga)
         {
             if (ModelState.IsValid)
             {
                 folga.Status = Folga.FolgaStatus.Pendente;//Quando a folga for inserida na base de dados muda o estado para "Pendente"
                 _context.Add(folga);
                 await _context.SaveChangesAsync();
-                TempData["SucessMessage"] = "A sua folga foi adicionada com sucesso";
+                TempData["SuccessMessage"] = "A sua folga foi adicionada com sucesso";
                 return RedirectToAction(nameof(Index));
                 
             }
@@ -87,7 +87,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", folga.EmployeeId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", folga.EmployeeId);
             return View(folga);
         }
 
@@ -96,7 +96,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FolgaId,FuncionarioId,GestorId,Status,DataPedido,DataResultado,DataInicio,DataFim,motivo")] Folga folga)
+        public async Task<IActionResult> Edit(int id, [Bind("FolgaId,EmployeeId,GestorId,Status,DataPedido,DataResultado,DataInicio,DataFim,motivo")] Folga folga)
         {
             if (id != folga.FolgaId)
             {
@@ -106,9 +106,10 @@ namespace Supermarket.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
+                {folga.Status = Folga.FolgaStatus.Pendente;//Quando a folga for inserida na base de dados muda o estado para "Pendente
                     _context.Update(folga);
                     await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "A sua folga foi alterada com sucesso";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -123,7 +124,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FuncionarioId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", folga.EmployeeId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", folga.EmployeeId);
             return View(folga);
         }
 
@@ -162,6 +163,7 @@ namespace Supermarket.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "A sua folga foi eliminada com sucesso";
             return RedirectToAction(nameof(Index));
         }
 
@@ -187,8 +189,8 @@ namespace Supermarket.Controllers
                     folga.GestorId = GestorId;
                     folga.DataResultado = DataResultado;
                     TempData["SuccessMessage"] = "Folga Aprovada";
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(FolgasAprovadas));
+                    
+                    
 
             } else if (aprovacao == "Rejeitada")
                 {
@@ -198,8 +200,11 @@ namespace Supermarket.Controllers
                     TempData["SuccessMessage"] = "Folga rejeitada";
                     await _context.SaveChangesAsync();
                 }
-                
-            
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(FolgasPendentes));
+
+
+
 
             }
             return RedirectToAction(nameof(FolgasPendentes));
