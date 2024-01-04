@@ -6,11 +6,11 @@ namespace Supermarket.Models
 {
     public class Folga
     {
-        [Key]
+        
         public int FolgaId { get; set; }
 
-        [Required]
-
+        
+        
         public int EmployeeId { get; set; }
         public Employee? Employee { get; set; }
 
