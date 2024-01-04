@@ -1,7 +1,7 @@
 ﻿@model Supermarket.Models.Ponto
 
 @{
-    ViewData["Title"] = "Editar Registro de Ponto";
+    ViewData["Title"] = "Edit";
 }
 
 <h1>Edit</h1>
@@ -15,7 +15,7 @@
             <input type="hidden" asp-for="PontoId" />
             <div class="form-group">
                 <label asp-for="EmployeeId" class="control-label"></label>
-                <input asp-for="EmployeeId" class="form-control" />
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -44,9 +44,9 @@
                 <span asp-validation-for="LunchEndTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DayBalance" class="control-label"></label>
-                <input asp-for="DayBalance" class="form-control" />
-                <span asp-validation-for="DayBalance" class="text-danger"></span>
+                <label asp-for="RealCheckOutTime" class="control-label"></label>
+                <input asp-for="RealCheckOutTime" class="form-control" />
+                <span asp-validation-for="RealCheckOutTime" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Status" class="control-label"></label>
@@ -58,16 +58,11 @@
                 <input asp-for="Justificative" class="form-control" />
                 <span asp-validation-for="Justificative" class="text-danger"></span>
             </div>
-            @* <div class="form-group">
-                <label asp-for="CheckInCoordenates" class="control-label"></label>
-                <input asp-for="CheckInCoordenates" class="form-control" />
-                <span asp-validation-for="CheckInCoordenates" class="text-danger"></span>
-            </div>
             <div class="form-group">
-                <label asp-for="CheckOutCoordenates" class="control-label"></label>
-                <input asp-for="CheckOutCoordenates" class="form-control" />
-                <span asp-validation-for="CheckOutCoordenates" class="text-danger"></span>
-            </div> *@
+                <label asp-for="ExtraHours" class="control-label"></label>
+                <input asp-for="ExtraHours" class="form-control" />
+                <span asp-validation-for="ExtraHours" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -76,9 +71,11 @@
 </div>
 
 <div>
-    <a asp-action="Index">Voltar</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
