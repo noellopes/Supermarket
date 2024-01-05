@@ -60,10 +60,10 @@ namespace Supermarket.Data
             if (db.Tickets.Any()) return;
 
             db.Tickets.AddRange(
-               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = new DateTime(2028, 04, 30, 12, 30, 0), NumeroDaSenha = 1, Estado = true, Prioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho")},
-               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = new DateTime(2028, 06, 21, 15, 30, 0), NumeroDaSenha = 2, Estado = true, Prioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Peixaria") },
-               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = new DateTime(2028, 11, 13, 10, 00, 0), NumeroDaSenha = 3, Estado = true, Prioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Congelados") } ,
-               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = new DateTime(2028, 08, 22, 11, 30, 0), NumeroDaSenha = 4, Estado = true, Prioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Take-Way") }
+               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = DateTime.Now.AddMinutes(15), NumeroDaSenha = 1, Estado = true, Prioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho")},
+               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = DateTime.Now.AddMinutes(5), NumeroDaSenha = 2, Estado = true, Prioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Peixaria") },
+               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = DateTime.Now.AddMinutes(11), NumeroDaSenha = 3, Estado = true, Prioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Congelados") } ,
+               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = DateTime.Now.AddMinutes(20), NumeroDaSenha = 4, Estado = true, Prioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Take-Way") }
             );
             db.SaveChanges();
         }
