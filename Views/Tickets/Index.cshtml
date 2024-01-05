@@ -1,14 +1,31 @@
 ﻿@model IEnumerable<Supermarket.Models.Tickets>
 
+<img class="position-relative start-50 translate-middle-x" width="540" height="540" src="~/images/Tickets banner.png" />
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tickets";
 }
 
-<h1>Index</h1>
+<div class="row">
+<div class="col card mt-5" style="width: 18rem;">
+    
+    <div class="card-body">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+            <a asp-action="Create"><img width="256" height="256" src="https://pngimg.com/uploads/plus/plus_PNG106.png" alt="Card image cap"></a>
+    </div>
+
+</div>
+<div class="col card mt-5" style="width: 18rem;">
+
+    <div class="card-body">
+
+            <a asp-action="Create"><img width="256" height="256" src="~/images/P+.png" alt="Card image cap"></a>
+    </div>
+
+</div>
+</div>
+    
+
 <div class="row">
 @foreach (var item in Model) {
     <div class="col mt-3">
