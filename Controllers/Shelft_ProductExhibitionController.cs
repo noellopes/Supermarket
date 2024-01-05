@@ -137,7 +137,8 @@ namespace Supermarket.Controllers
                     _context.Update(shelft_ProductExhibition);
                     await _context.SaveChangesAsync();
 
-                    ViewBag.Message = "Shelft Product Exhibition successfully edited.";
+                    //ViewBag.Message = "Shelft Product Exhibition successfully edited.";
+                    TempData["Message"] = "Warehouse Section Product successfully created.";
                     return RedirectToAction("Details", new { productId = shelft_ProductExhibition.ProductId, shelfId = shelft_ProductExhibition.ShelfId });
                 }
                 catch (DbUpdateConcurrencyException)

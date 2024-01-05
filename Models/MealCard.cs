@@ -11,7 +11,7 @@ namespace Supermarket.Models
         public int MealCardId { get; set; }
 
         [Required]
-        public int Balance { get; set; }
+        public int Balance { get; set; } = 0;
 
         // Chave estrangeira para o funcionario
         [DisplayName("Employee")]
@@ -20,7 +20,7 @@ namespace Supermarket.Models
         // Propriedade de navegação para o funcionario associado a este cartão
         public Employee? Employee { get; set; }
 
-        public ICollection<CardMovement>? Movements { get; set; }
+        public ICollection<CardMovement>? CardMovements { get; set; }
 
 
     }

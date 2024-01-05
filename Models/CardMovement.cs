@@ -15,11 +15,11 @@ namespace Supermarket.Models
 
         public string Description { get; set; }
 
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         public int MealCardId { get; set; }
 
-        public MealCard MealCard { get; set; }
+        public MealCard? MealCard { get; set; }
 
     }
 }

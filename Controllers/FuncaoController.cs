@@ -20,8 +20,23 @@ namespace Supermarket.Controllers
         }
 
         // GET: Funcao
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
+                TotalItems = _context.Funcao.Count()
+            };
+
+            return View(
+                new FuncaoListViewModel {
+                    funcao = _context.Funcao.OrderBy( f => f.NomeFuncao)
+                        .Skip((page-1)*pagination.PageSize).Take(pagination.PageSize),
+                    Pagination = pagination 
+                }
+            );
+
               return _context.Funcao != null ? 
                           View(await _context.Funcao.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
@@ -56,15 +71,40 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao Funcao)
+        public async Task<IActionResult> Create([Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao funcao)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(Funcao);
+                try
+                {
+                    bool funcaoExiste = await _context.Funcao.AnyAsync(
+                        f => f.NomeFuncao == funcao.NomeFuncao || f.FuncaoId == funcao.FuncaoId);
+                    if (!funcaoExiste)
+                    {
+                        _context.Add(funcao);
+                        await _context.SaveChangesAsync();
+
+                        ViewBag.Mensagem = "Funcao Criada com sucesso";
+                        
+                        return View("Details", funcao);
+                    }
+                    else //funcao existe
+                    {
+                        TempData["Mensagem"] = "Este Funcao ja existe";
+                        //ModelState.AddModelError("", "Este Funcao ja existe");
+                    }
+                    
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(Exception ex)
+                {
+                    //return ex;
+                }
+                _context.Add(funcao);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(Funcao);
+            return View(funcao);
         }
 
         // GET: Funcao/Edit/5
@@ -88,9 +128,9 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao Funcao)
+        public async Task<IActionResult> Edit(int id, [Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao funcao)
         {
-            if (id != Funcao.FuncaoId)
+            if (id != funcao.FuncaoId)
             {
                 return NotFound();
             }
@@ -100,34 +140,52 @@ namespace Supermarket.Controllers
                 try
                 {
                     bool funcaoExiste = await _context.Funcao.AnyAsync(
-                        f => f.NomeFuncao == Funcao.NomeFuncao || f.FuncaoId == Funcao.FuncaoId);
+                        f => f.NomeFuncao == funcao.NomeFuncao || f.FuncaoId == funcao.FuncaoId);
 
                     bool funcaoIgual = await _context.Funcao.AnyAsync(
-                        f => (f.NomeFuncao == Funcao.NomeFuncao || f.FuncaoId == Funcao.FuncaoId) && f.DescricaoFuncao == Funcao.DescricaoFuncao);
+                        f => (f.NomeFuncao == funcao.NomeFuncao || f.FuncaoId == funcao.FuncaoId) && f.DescricaoFuncao == funcao.DescricaoFuncao);
                     if (funcaoExiste)
                     {
-                        if (!funcaoIgual) {
-                            _context.Update(Funcao);
-                            await _context.SaveChangesAsync();
-                            TempData["MensagemPositiva"] = "Edicao de uma funcao ja existente com sucesso";
-                            return RedirectToAction(nameof(Index));
+                        if (!funcaoIgual)
+                        {
+                            _context.Update(funcao);
+                            /*bool funcaoExiste = await _context.Funcao.AnyAsync(
+                            f => f.NomeFuncao == Funcao.NomeFuncao || f.FuncaoId == Funcao.FuncaoId);
+
+                            bool funcaoIgual = await _context.Funcao.AnyAsync(
+                            f => (f.NomeFuncao == Funcao.NomeFuncao || f.FuncaoId == Funcao.FuncaoId) && f.DescricaoFuncao == Funcao.DescricaoFuncao);*/
+                        }
+                        if (funcaoExiste)
+                        {
+                            if (!funcaoIgual)
+                            {
+                                _context.Update(funcao);
+                                await _context.SaveChangesAsync();
+                                TempData["MensagemPositiva"] = "Edicao de uma funcao ja existente com sucesso";
+                                return RedirectToAction(nameof(Index));
+                            }
+                            else
+                            {
+                                TempData["Mensagem"] = "funcao identica";
+                                return RedirectToAction(nameof(Index));
+                            }
                         }
                         else
                         {
-                            TempData["Mensagem"] = "funcao identica";
-                            return RedirectToAction(nameof(Index));
+                            _context.Update(funcao);
+                            await _context.SaveChangesAsync();
+                            TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
+                            return View("Details", funcao);
+                            _context.Update(funcao);
+                            await _context.SaveChangesAsync();
+                            TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
+                            return View("Details", funcao);
                         }
-                    }
-                    else{
-                        _context.Update(Funcao);
-                        await _context.SaveChangesAsync();
-                        TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
-                        return View("Details", Funcao);
                     }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FuncaoExists(Funcao.FuncaoId))
+                    if (!FuncaoExists(funcao.FuncaoId))
                     {
                         return NotFound();
                     }
@@ -138,7 +196,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(Funcao);
+            return View(funcao);
         }
 
         // GET: Funcao/Delete/5
@@ -153,7 +211,8 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.FuncaoId == id);
             if (Funcao == null)
             {
-                return NotFound();
+                TempData["MensagemPositiva"] = "A funcao foi deletada com sucesso";
+                return RedirectToAction(nameof(Index));
             }
 
             return View(Funcao);
@@ -171,6 +230,7 @@ namespace Supermarket.Controllers
             var Funcao = await _context.Funcao.FindAsync(id);
             if (Funcao != null)
             {
+                TempData["MensagemPositiva"] = "A funcao foi deletada com sucesso";
                 _context.Funcao.Remove(Funcao);
             }
             

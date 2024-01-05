@@ -22,9 +22,8 @@ namespace Supermarket.Controllers
         // GET: ClientCards
         public async Task<IActionResult> Index()
         {
-              return _context.ClientCard != null ? 
-                          View(await _context.ClientCard.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
+            var supermarketDbContext = _context.ClientCard.Include(c => c.Client);
+            return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: ClientCards/Details/5
@@ -36,7 +35,8 @@ namespace Supermarket.Controllers
             }
 
             var clientCard = await _context.ClientCard
-                .FirstOrDefaultAsync(m => m.ClientCard_Id == id);
+                .Include(c => c.Client)
+                .FirstOrDefaultAsync(m => m.ClientCardId == id);
             if (clientCard == null)
             {
                 return NotFound();
@@ -48,6 +48,7 @@ namespace Supermarket.Controllers
         // GET: ClientCards/Create
         public IActionResult Create()
         {
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName");
             return View();
         }
 
@@ -56,7 +57,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientCard_Id,ClientCard_Number,Balance")] ClientCard clientCard)
+        public async Task<IActionResult> Create([Bind("ClientCardId,ClientId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +65,7 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
@@ -80,6 +82,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
@@ -88,9 +91,9 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientCard_Id,ClientCard_Number,Balance")] ClientCard clientCard)
+        public async Task<IActionResult> Edit(int id, [Bind("ClientCardId,ClientId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
         {
-            if (id != clientCard.ClientCard_Id)
+            if (id != clientCard.ClientCardId)
             {
                 return NotFound();
             }
@@ -104,7 +107,7 @@ namespace Supermarket.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientCardExists(clientCard.ClientCard_Id))
+                    if (!ClientCardExists(clientCard.ClientCardId))
                     {
                         return NotFound();
                     }
@@ -115,6 +118,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
@@ -127,7 +131,8 @@ namespace Supermarket.Controllers
             }
 
             var clientCard = await _context.ClientCard
-                .FirstOrDefaultAsync(m => m.ClientCard_Id == id);
+                .Include(c => c.Client)
+                .FirstOrDefaultAsync(m => m.ClientCardId == id);
             if (clientCard == null)
             {
                 return NotFound();
@@ -157,7 +162,7 @@ namespace Supermarket.Controllers
 
         private bool ClientCardExists(int id)
         {
-          return (_context.ClientCard?.Any(e => e.ClientCard_Id == id)).GetValueOrDefault();
+          return (_context.ClientCard?.Any(e => e.ClientCardId == id)).GetValueOrDefault();
         }
     }
 }
