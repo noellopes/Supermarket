@@ -10,13 +10,16 @@
 
  <form asp-action="Afluencias" method="get">
     <p><strong>Search dates</strong></p>
-
-    <label for="dataEmissao" class="control-label">Data Inicial</label>
-    <input type="datetime-local" class="form-control" value="@SearchDataIntervaloInicial" />
-   
+    <div class="row">
+        <div class="col-6">
+    <label for="dataEmissao" class="control-label ">Data Inicial</label>
+    <input type="datetime-local" class="form-control" value="@ViewBag.SearchDataIntervaloInicial" />
+        </div>
+        <div class="col-6">
     <label for="dataEmissao" class="control-label">Data Final</label>
-    <input type="datetime-local" class="form-control" value="@Model.SearchDataIntervaloFinal" />
-
+    <input type="datetime-local" class="form-control" value="@ViewBag.SearchDataIntervaloFinal" />
+        </div>
+    </div>
  
 
     <div class="mt-3">
@@ -40,7 +43,7 @@
                 @foreach (var ticket in item.Tickets)
                 {
                     <div class="accordion-body">
-                        <strong>#@ticket.NumeroDaSenha | 
+                        #@ticket.NumeroDaSenha | 
                             
                             Estado:  @(ticket.Estado ? "Atendido" : "Não atendido") |
                             @if (ticket.IDDepartments == 0)
@@ -55,7 +58,7 @@
                             }
                         
                         Emitido em: @ticket.DataEmissao |
-                        </strong>
+                        
                     </div>
                    
                 }
@@ -119,4 +122,4 @@
 }
     </tbody>
     </table> *@
-<a class="btn btn-secondary" asp-area="Schedules" asp-action="Index">Voltar atrás</a>
+<a class="btn btn-secondary mt-5" asp-area="Schedules" asp-action="Index">Voltar atrás</a>
