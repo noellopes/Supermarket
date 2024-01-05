@@ -53,8 +53,6 @@ namespace Supermarket.Data
             //        }
             //    );
             //}
-
-            db.SaveChanges();
             db.SaveChanges();
         }
         private static void PopulateTickets(SupermarketDbContext db)
@@ -62,7 +60,7 @@ namespace Supermarket.Data
             if (db.Tickets.Any()) return;
 
             db.Tickets.AddRange(
-               new Tickets { DataEmissao = DateTime.Now, DataAtendimento = new DateTime(2028, 04, 30, 12, 30, 0), NumeroDaSenha = 1, Estado = true, Prioritario = false, IDDepartments = db.Departments.Where(a => a.NameDepartments == "Peixaria").Select(a => a.IDDepartments).FirstOrDefault() }
+               new Tickets { DataEmissao = DateTime.Now, DataAtendimento = new DateTime(2028, 04, 30, 12, 30, 0), NumeroDaSenha = 1, Estado = true, Prioritario = false, Departments = db.Departments.FirstOrDefault(a => a.NameDepartments == "Talho")}
             );
             db.SaveChanges();
         }
