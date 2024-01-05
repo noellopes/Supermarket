@@ -1,4 +1,4 @@
-﻿@model Supermarket.Models.Issues
+﻿@model Supermarket.Models.ExpiredProducts
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,27 +6,32 @@
 
 <h1>Edit</h1>
 
-<h4>Issues</h4>
+<h4>Expired Products</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IssueId" />
+            <input type="hidden" asp-for="ExpiredProductId" />
             <div class="form-group">
                 <label asp-for="ProductId" class="control-label"></label>
                 <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
                 <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="IssueTypeId" class="control-label"></label>
-                <select asp-for="IssueTypeId" class="form-control" asp-items="ViewBag.IssueTypeId"></select>
-                <span asp-validation-for="IssueTypeId" class="text-danger"></span>
+                <label asp-for="FabricationDate" class="control-label"></label>
+                <input asp-for="FabricationDate" class="form-control" />
+                <span asp-validation-for="FabricationDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="ExpirationDate" class="control-label"></label>
+                <input asp-for="ExpirationDate" class="form-control" />
+                <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BarCode" class="control-label"></label>
+                <input asp-for="BarCode" class="form-control" />
+                <span asp-validation-for="BarCode" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SupplierId" class="control-label"></label>
@@ -37,16 +42,6 @@
                 <label asp-for="EmployeeId" class="control-label"></label>
                 <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IssueRegisterDate" class="control-label"></label>
-                <input asp-for="IssueRegisterDate" class="form-control" />
-                <span asp-validation-for="IssueRegisterDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Severity" class="control-label"></label>
-                <select asp-for="Severity" class="form-control"></select>
-                <span asp-validation-for="Severity" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
