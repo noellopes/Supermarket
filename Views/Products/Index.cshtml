@@ -23,15 +23,15 @@
         margin-bottom: 20px;
     }
 
-    .table tr {
+    /* .table tr {
         border: 1px solid rgba(10, 10, 10, 0.15);
-    }
+    } */
 
-    .table th, .table td {
+    /* .table th, .table td {
         background-color: white; 
         color: black;
         border: none;
-    }
+    } */
 </style>
 
 <div class="tbconfig">
@@ -50,7 +50,7 @@
 else 
 {
     <table class="table-responsive">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>
@@ -66,8 +66,23 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model) {
-                    <tr>
+                @foreach (var item in Model)
+                {
+                    string rowColor;
+                    switch (item.Status)
+                    {
+                        case "Available":
+                            rowColor = "table-success";
+                            break;
+                        case "Unavailable":
+                            rowColor = "table-warning";
+                            break;
+                        default:
+                            rowColor = "table-danger";
+                            break;
+                    }
+
+                    <tr class="@rowColor">
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
@@ -79,8 +94,8 @@ else
                         </td>
                         <td>
                             <div role="group" aria-label="Actions">
-                                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-primary">Edit</a>
-                                    <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-secondary">Details</a>
+                                <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-primary">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-secondary">Details</a>
                             </div>
                         </td>
                     </tr>
