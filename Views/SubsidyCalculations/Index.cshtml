@@ -21,7 +21,7 @@
             <input name="employee_name" type="search" class="form-control" value="@Model.SearchName" />
 
             <div class="mt-3">
-                <input class="btn btn-primary" type="submit" value="Search" />
+                <input class="btn btn-primary" type="submit" value="Search"/>
                 <a class="btn btn-secondary" asp-action="Index">Cancel</a>
             </div>
         </form>
@@ -35,7 +35,7 @@
         <tr>
 
             <th>
-                <p>Data</p>
+                    <p>Empregado</p>
             </th>
             
             <th>
@@ -45,15 +45,17 @@
                 <p> Hora de Saída </p>
             </th>
             <th>
-                <p>Empregado</p>
-            </th>
-            <th>
                 <p>Total Horas</p>
             </th>
-
+                <th>
+                    <p>Valor diario a receber</p>
+                </th>
             <th>
-                <p>Valor diario a receber</p>
+                <p>Data</p>
             </th>
+            
+
+           
 
          
 
@@ -66,7 +68,8 @@
         <tr>
          
             <td>
-                @Html.DisplayFor(modelItem => item.Date)
+                        @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
+                
             </td>
 
                
@@ -79,13 +82,11 @@
                     @Html.DisplayFor(modelItem => item.CheckOutTime)
                 </td>
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
-                </td>
+               
                 <td>
                     
                     @{
-                        TimeSpan diff = TimeSpan.FromHours(0);
+                       // TimeSpan diff = TimeSpan.FromHours(0);
                       //  TimeSpan diff = TimeSpan.Parse(item.Ponto.CheckOutTime) -TimeSpan.Parse(item.Ponto.CheckInTime);
                         string diffFormatted;
 
@@ -94,7 +95,7 @@
                         TimeSpan entrada = TimeSpan.Parse(item.CheckInTime);
 
                         TimeSpan saida = TimeSpan.Parse(item.CheckOutTime);
-                            diff = saida - entrada;
+                            TimeSpan diff = saida - entrada;
                     //  }
                         
 
@@ -110,11 +111,12 @@
                     @{
 
                         double VALOR_DIARIO_RECEBER = 6;
+                            double VALOR_DIARIO_RECEB = 5;
 
                         double diferencaEmHoras = diff.TotalHours;
                         string SEM_VALOR_DIARIO = " valor a receber: 0€";
 
-                        if (diferencaEmHoras > 4 )
+                            if (diferencaEmHoras > 4 && item.Date.Value.Year == DateTime.Today.Year)
 
                         {
                            
@@ -123,16 +125,23 @@
 
                            
                         }
-                        else
+                            else if (diferencaEmHoras > 3 && item.Date.Value.Year < DateTime.Today.Year)
                         {
-                            @SEM_VALOR_DIARIO;
-
-                        }
+                                @($" valor a recebr: {VALOR_DIARIO_RECEB}{"€"}")
+                                ;
+                               
+                            }
+                            else
+                            {
+                                @SEM_VALOR_DIARIO
+                            }
 
 
                     }
                 </td>
-
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
                
                   
         </tr>
