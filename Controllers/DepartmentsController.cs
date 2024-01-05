@@ -20,43 +20,13 @@ namespace Supermarket.Controllers
         {
             _context = context;
         }
-    //pesquisa por nome do departamento 
-            public IActionResult pesqNomeTrue(string searchTerm)
-    {
-        var results = _context.Departments
-        .Where(d => (d.StateDepartments.Equals(true)) && d.NameDepartments.Contains(searchTerm))
-        .ToList();
-
-            if (results.Count == 0)
-        {
-          ViewBag.Message = "Nenhum resultado encontrado para a pesquisa.";
-        }
-
-        return View("Index", results);
-    }
-        //pesquisa por nome do departamentoInop 
-        public IActionResult pesqNomeFalse(string searchTerm)
-        {
-            var results = _context.Departments
-                .Where(d => (d.StateDepartments.Equals(false)) && d.NameDepartments.Contains(searchTerm))
-                .ToList();
-            if (results.Count == 0)
-            {
-                ViewBag.Message = "Nenhum resultado encontrado para a pesquisa.";
-            }
-
-            return View("DepInop", results);
-        }
 
         // GET: Departments
         public async Task<IActionResult> Index(string searchTerm, int page = 1, int pageSize = 2)
         {
             IQueryable<Departments> departmentsQuery = _context.Departments;
-
+            
             var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
-
-            departmentsQuery = departmentsQuery
-                .Where(d => d.StateDepartments.Equals(true));
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
@@ -87,7 +57,28 @@ namespace Supermarket.Controllers
                 Departments = departments,
                 Pagination = pagination,
                 SelectedPageSize = pageSize,
+
             };
+            // Aqui você pode percorrer os departamentos e calcular a diferença de tempo para cada ticket
+            foreach (var department in departments)
+            {
+                // Supondo que você queira calcular a diferença para o primeiro ticket associado ao departamento
+                var firstTicket = _context.Tickets.FirstOrDefault(t => t.IDDepartments == department.IDDepartments);
+                if (firstTicket != null && firstTicket.DataAtendimento.HasValue)
+                {
+                    DateTime dataInicio = firstTicket.DataAtendimento.Value;
+                    DateTime dataFim = firstTicket.DataEmissao;
+
+                    TimeSpan diferenca = dataInicio- dataFim;
+
+             
+
+                    viewModel.TimeDifference = diferenca;
+
+                    
+
+                }
+            }
 
             ViewData["SearchTerm"] = searchTerm;
             ViewData["PageSizes"] = new SelectList(pageSizes);
