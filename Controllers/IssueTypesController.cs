@@ -20,11 +20,29 @@ namespace Supermarket.Controllers
         }
 
         // GET: IssueTypes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return _context.IssueType != null ?
-                        View(await _context.IssueType.ToListAsync()) :
-                        Problem("Entity set 'SupermarketDbContext.IssueType'  is null.");
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
+                TotalItems = _context.IssueType.Count()
+            };
+
+            return View(
+                new IssueTypeListViewModel
+                {
+                    IssueType = _context.IssueType.OrderBy(it => it.Name)
+                                                  .Skip((page - 1) * pagination.PageSize)
+                                                  .Take(pagination.PageSize),
+                    
+                    Pagination = pagination
+                }
+            );
+
+           // return _context.IssueType != null ?
+                      //  View(await _context.IssueType.ToListAsync()) :
+                       // Problem("Entity set 'SupermarketDbContext.IssueType'  is null.");
         }
 
         // GET: IssueTypes/Details/5
