@@ -221,15 +221,15 @@ namespace Supermarket.Controllers
 
         public async Task<IActionResult> Afluencias(DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null)
         {
-            ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
+            //ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
             //procuraDataInicial = DateTime.Now;
             //procuraDataFinal = new DateTime(2030, 04, 30, 12, 30, 0);
 
                 var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
                 //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
-
-
-                if (procuraDataInicial != null)
+                
+                
+            if (procuraDataInicial != null)
                 {
                     tickets = tickets.Where(x => x.DataEmissao! >= procuraDataInicial);
                 }
