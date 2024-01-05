@@ -3,7 +3,7 @@
     public class AfluenciasViewModel
     {
         public List<Tickets> Tickets { get; set; }
-
+        public List<Departments> DepartmentsList { get; set; }
         public Departments? Departments { get; set; }
         public PagingInfo PagingInfo { get; set; }
 

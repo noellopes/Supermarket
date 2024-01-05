@@ -227,7 +227,7 @@ namespace Supermarket.Controllers
 
             var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
             //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
-
+            var departments = from b in _context.Departments.Include(b => b.Tickets) select b;
 
             if (procuraDataInicial != null)
             {
@@ -246,7 +246,7 @@ namespace Supermarket.Controllers
                 Tickets = await tickets
                 .OrderBy(b => b.DataEmissao)
                   .ToListAsync(),
-
+                DepartmentsList = await departments.OrderBy(b => b.NameDepartments).ToListAsync(),
                 SearchDataIntervaloInicial = procuraDataInicial,
                 SearchDataIntervaloFinal = procuraDataFinal
                 //SearchButtonDepartment = departmentButtonName,
