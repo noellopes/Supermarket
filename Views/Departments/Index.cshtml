@@ -79,19 +79,26 @@
             <td>
                     @if (Model.TimeDifferences.Count > 0)
                     {
+                        // Inicializa o índice atual para rastrear o item em Model.Departments
                         int currentIndex = 0;
+                        // Itera sobre cada departamento em Model.Departments
                         foreach (var departmentItem in Model.Departments)
                         {
+                            // Verifica se o departamento atual é o mesmo que o item na tabela
                             if (departmentItem == item)
                             {
-                                <p>@Model.TimeDifferences[currentIndex].ToString(@"hh\:mm")</p>
+                                // Exibe a diferença de tempo correspondente ao item
+                                @Model.TimeDifferences[currentIndex].ToString(@"hh\:mm")
+                                // Encerra o loop, pois encontramos a correspondência
                                 break;
                             }
+                            // Incrementa o índice para rastrear o próximo item em Model.Departments
                             currentIndex++;
                         }
                     }
                     else
                     {
+                        // Se não houver diferenças de tempo, exibe "N/A"
                         <p>N/A</p>
                     }
             </td>
