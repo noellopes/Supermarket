@@ -103,15 +103,15 @@ namespace Supermarket.Controllers
             return View(vm);
         }
 
-*/
+
 
         public async Task<IActionResult> Index(int page = 1, string SearchName = "")
         {
 
 
 
-            var pontos = from b in _context.SubsidyCalculation select b;
-
+            var pontos = from b in _context.Ponto select b;
+            /*
             if (SearchName != "")
             {
                 pontos = pontos.Where(x => x.Ponto.Employee.Employee_Name.Contains(SearchName));
@@ -137,7 +137,7 @@ namespace Supermarket.Controllers
             var vm = new SubsidyCalculationViewModel
             {
                 SubsidyCalculations = await pontos
-                    .OrderBy(b => b.Ponto.Employee.Employee_Name)
+                    //.OrderBy(b => b.Ponto.Employee.Employee_Name)
                     .Skip((paging.CurrentPage - 1) * paging.PageSize)
                     .Take(paging.PageSize)
                     .ToListAsync(),
@@ -148,6 +148,53 @@ namespace Supermarket.Controllers
 
             return View(vm);
         }
+*/
+
+        public async Task<IActionResult> Index(int page = 1, string employee_name="")
+        {
+            // Obtém todos os pontos sem modificar a lista completa
+            var allPoints = await _context.Ponto.Include(p => p.Employee).ToListAsync();
+
+            var employees = _context.Ponto.AsQueryable();  // Certifique-se de que 'date' seja IQueryable<Ponto>
+
+            if (!string.IsNullOrEmpty(employee_name))
+            {
+                employees = employees.Where(x => x.Employee.Employee_Name.Contains(employee_name));
+            }
+
+
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await employees.CountAsync(),  // Agora, 'CountAsync' deve funcionar corretamente
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new SubsidyCalculationViewModel
+            {
+                Pontos = await employees
+                    .OrderBy(x => x.Employee.Employee_Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),  // Agora, 'ToListAsync' deve funcionar corretamente
+                PagingInfo = paging,
+                SearchName = employee_name,
+            };
+
+            // Calcular as horas extras para cada Ponto no ViewModel
+
+            return View(vm);
+        }
+
+
 
         // GET: SubsidyCalculations/Details/5
         public async Task<IActionResult> Details(int? id)
