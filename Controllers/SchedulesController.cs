@@ -239,20 +239,35 @@ namespace Supermarket.Controllers
                 tickets = tickets.Where(x => x.DataEmissao! <= procuraDataFinal);
             }
 
+            // Create a model that combines departments and their corresponding tickets
+            var model = new List<AfluenciasViewModel>();
 
-
-            var am = new AfluenciasViewModel
+            foreach (var department in departments)
             {
-                Tickets = await tickets
-                .OrderBy(b => b.DataEmissao)
-                  .ToListAsync(),
-                DepartmentsList = await departments.OrderBy(b => b.NameDepartments).ToListAsync(),
-                SearchDataIntervaloInicial = procuraDataInicial,
-                SearchDataIntervaloFinal = procuraDataFinal
-                //SearchButtonDepartment = departmentButtonName,
-            };
+                var am = new AfluenciasViewModel
+                {
+                    Department = department,
+                    Tickets = tickets.Where(t => t.IDDepartments == department.IDDepartments).OrderBy(t => t.DataEmissao).ToList(),
+                     SearchDataIntervaloInicial = procuraDataInicial,
+                    SearchDataIntervaloFinal = procuraDataFinal
+                };
 
-            return View(am);
+                model.Add(am);
+            }
+
+            //var am = new AfluenciasViewModel
+            //{
+            //    Tickets = await tickets
+            //    .OrderBy(b => b.DataEmissao)
+            //    .Where(b=>b.IDDepartments)
+            //      .ToListAsync(),
+            //    DepartmentsList = await departments.OrderBy(b => b.NameDepartments).ToListAsync(),
+            //    SearchDataIntervaloInicial = procuraDataInicial,
+            //    SearchDataIntervaloFinal = procuraDataFinal
+            //    //SearchButtonDepartment = departmentButtonName,
+            //};
+
+            return View(model);
 
 
 

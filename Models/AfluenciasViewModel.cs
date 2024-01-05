@@ -3,8 +3,7 @@
     public class AfluenciasViewModel
     {
         public List<Ticket> Tickets { get; set; }
-        public List<Department> DepartmentsList { get; set; }
-        public Department? Departments { get; set; }
+        public Department? Department { get; set; }
         public PagingInfo PagingInfo { get; set; }
 
         public DateTime? SearchDataIntervaloInicial { get; set; } = null;
