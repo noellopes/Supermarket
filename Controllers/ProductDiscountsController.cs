@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using Supermarket.Data;
 using Supermarket.Models;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -20,10 +22,52 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
-            var supermarketDbContext = _context.ProductDiscount.Include(p => p.ClientCard).Include(p => p.Product);
-            return View(await supermarketDbContext.ToListAsync());
+            var productDiscounts = from b in _context.ProductDiscount.Include(b => b.ClientCard).Include(b => b.Product) select b;
+            
+            if (product != "")
+            {
+                productDiscounts = productDiscounts.Where(b => b.Product.Name.Contains(product));
+            }
+            if (value.HasValue)
+            {
+                productDiscounts = productDiscounts.Where(b => b.Value == value.Value);
+            }
+            if (startDate.HasValue)
+            {
+                productDiscounts = productDiscounts.Where(b => b.StartDate <= startDate.Value.Date && b.StartDate >= startDate.Value.Date);
+            }
+            if (endDate.HasValue)
+            {
+                productDiscounts = productDiscounts.Where(b => b.EndDate <= endDate.Value.Date);
+            }
+
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await productDiscounts.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new ProductDiscountsViewModel
+            {
+                ProductDiscounts = await productDiscounts
+                    .OrderBy(b => b.Product.Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfo = paging,
+            };
+            return View(vm);
         }
 
         // GET: ProductDiscounts/Details/5
@@ -35,8 +79,8 @@ namespace Supermarket.Controllers
             }
 
             var productDiscount = await _context.ProductDiscount
-                .Include(p => p.ClientCard)
-                .Include(p => p.Product)
+                .Include(b => b.ClientCard)
+                .Include(b => b.Product)
                 .FirstOrDefaultAsync(m => m.ProductDiscountId == id);
             if (productDiscount == null)
             {
@@ -63,22 +107,46 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
         {
-            bool productDiscountExists = await _context.ProductDiscount.AnyAsync(
-                b => b.ProductId == productDiscount.ProductId && 
-                     b.ClientCardId == productDiscount.ClientCardId && 
-                     b.Value == productDiscount.Value);
+            var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
+            bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
 
-            if (productDiscountExists)
-            {
-                ModelState.AddModelError("", "Another Product Discount with the same Product, Card Number, and Value already exists.");
-            }
-            else
-            {
-                _context.Add(productDiscount);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Product successfully created!";
-                return RedirectToAction(nameof(Index));
-            }
+                foreach (var clientCard in clientCards)
+                {
+                    bool discountExistsForClient = await _context.ProductDiscount.AnyAsync(
+                        b => b.ProductId == productDiscount.ProductId &&
+                        b.ClientCardId == clientCard.ClientCardId &&
+                        b.Value == productDiscount.Value &&
+                        b.StartDate == productDiscount.StartDate &&
+                        b.EndDate == productDiscount.EndDate);
+
+                    if (!discountExistsForClient)
+                    {
+                        var newProductDiscount = new ProductDiscount
+                        {
+                            ProductId = productDiscount.ProductId,
+                            ClientCardId = clientCard.ClientCardId,
+                            Value = productDiscount.Value,
+                            StartDate = productDiscount.StartDate,
+                            EndDate = productDiscount.EndDate,
+                        };
+
+                        _context.Add(newProductDiscount);
+                    }
+                    else
+                    {
+                        duplicatedDiscounts = true;
+                    }
+                }
+                if (duplicatedDiscounts)
+                {
+                    ModelState.AddModelError("", "One or more product Discounts with the same values already exist for the same clients.");
+                }
+                else
+                {
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "product successfully created!";
+                    return RedirectToAction(nameof(Index));
+                }
         }
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
@@ -122,7 +190,7 @@ namespace Supermarket.Controllers
                     _context.Update(productDiscount);
                     await _context.SaveChangesAsync();
 
-                    TempData["SuccessMessage"] = "Product sucessful edited!";
+                    TempData["SuccessMessage"] = "product sucessful edited!";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -177,7 +245,7 @@ namespace Supermarket.Controllers
                 _context.ProductDiscount.Remove(productDiscount);
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = "Product sucessful deleted";
+                TempData["SuccessMessage"] = "product sucessful deleted";
             }
             
             await _context.SaveChangesAsync();

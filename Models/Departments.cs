@@ -1,27 +1,31 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace Supermarket.Models
 {
     public class Departments
     {
         // Chave primária
-        public required int ID_Departments { get; set; }
-
+        [Key]
+        public int IDDepartments { get; set; }
         // Nome do Departamento
         [Required(ErrorMessage = "The Department Name field is mandatory.")]
         [StringLength(100, ErrorMessage = "The Department Name field must have a maximum of 100 characters.")]
-        public required string Name_Departments { get; set; }
-
+        public required string NameDepartments { get; set; }
         // Descrição do Departamento
         [StringLength(255, ErrorMessage = "The Department Description field must have a maximum of 255 characters.")]
-        public required string Description_Departments { get; set; }
-
-        // Chave estrangeira para o ID_Horario
-        public int ID_Schedule { get; set; }
-
-        // Propriedade de navegação para o Horario relacionado
-        public Schedule? Schedule { get; set; }
+        public required string DescriptionDepartments { get; set; }
+        // Descrição do Estado do departamento
+        public required bool StateDepartments { get; set; }
+        // Qualificaçao funcionario no Departamento
+        [StringLength(155, ErrorMessage = "The Department Description field must have a maximum of 155 characters.")]
+        public required string SkillsDepartments { get; set; }
+        //Quantidade de senhas que cada gestor de departamento definir para o calculo da media
+        [Required(ErrorMessage = "O campo QuatDepMed é obrigatório.")]
+        [Range(1, 100, ErrorMessage = "O valor de QuatDepMed deve ser maior que 0 e me que 100.")]
+        public required int QuatDepMed { get; set; }
 
     }
 }
+

@@ -107,10 +107,17 @@ namespace Supermarket.Controllers
             }
 
 
+            var balance = _context.CardMovement
+                .Include(c => c.MealCard)
+                .Where(c => c.MealCard.MealCardId == id)
+                .Sum(c => c.Value);
+
+            mealCard.Balance = balance;
+            await _context.SaveChangesAsync();
 
             var vm = new MealCardEmployeesViewModel
             {
-                Balance = mealCard.Balance,
+                Balance = balance,
                 EmployeeName = mealCard.Employee.Employee_Name,
                 MealCard = mealCard.MealCardId,
                 CardMovements = await cardMovements
