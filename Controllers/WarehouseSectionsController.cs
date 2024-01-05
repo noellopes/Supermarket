@@ -20,21 +20,61 @@ namespace Supermarket.Controllers
         }
 
         // GET: WarehouseSections
-        public async Task<IActionResult> Index(int warehouseId)
+        public async Task<IActionResult> Index(int warehouseId, int page = 1, string descripition = "")
         {
-            var warehouseSections = await _context.WarehouseSection
-             .Where(h => h.WarehouseId == warehouseId)
-             .ToListAsync();
+            TempData["CancelWarehouseId"] = warehouseId;
+
+            var warehouseSections =  _context.WarehouseSection
+             .Where(h => h.WarehouseId == warehouseId);
+           
 
             var WarehouseName = _context.Warehouse.Find(warehouseId)?.Name;
 
+            if (descripition != "")
+            {
+                warehouseSections = warehouseSections.Where(x => x.Description.Contains(descripition));
+            }
+            
+            
             ViewBag.WarehouseId = warehouseId;
             ViewBag.WarehouseName = WarehouseName;
             ViewBag.WarehouseSections = warehouseSections;
-            ViewBag.TotalWarehouseSections = warehouseSections.Count;
+            
 
-            return View(warehouseSections);
+
+            var totalWarehouseSection = await warehouseSections.CountAsync();
+            PagingInfoProduct paging = new PagingInfoProduct
+            {
+                CurrentPage = page,
+                TotalItems = totalWarehouseSection,
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new WarehouseSectionViewModel
+            {
+                WarehouseSection = await warehouseSections
+                    .OrderBy(b => b.Description)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfoProduct = paging,
+                SearchDescription = descripition,
+               
+            };
+            ViewBag.WarehouseSection = vm.WarehouseSection;
+            ViewBag.TotalWarehouseSections = vm.PagingInfoProduct.TotalItems;
+
+            return View(vm);
         }
+    
 
         // GET: WarehouseSections/Details/5
         public async Task<IActionResult> Details(int? id)
