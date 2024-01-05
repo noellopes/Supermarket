@@ -25,7 +25,7 @@ namespace Supermarket.Models
         [Required(ErrorMessage = "O campo QuatDepMed é obrigatório.")]
         [Range(1, 100, ErrorMessage = "O valor de QuatDepMed deve ser maior que 0 e me que 100.")]
         public required int QuatDepMed { get; set; }
-
+        public ICollection<Tickets>? Tickets { get; set; }
     }
 }
 

@@ -225,21 +225,21 @@ namespace Supermarket.Controllers
             //procuraDataInicial = DateTime.Now;
             //procuraDataFinal = new DateTime(2030, 04, 30, 12, 30, 0);
 
-                var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
-                //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
-                
-                
+            var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
+            //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
+
+
             if (procuraDataInicial != null)
-                {
-                    tickets = tickets.Where(x => x.DataEmissao! >= procuraDataInicial);
-                }
+            {
+                tickets = tickets.Where(x => x.DataEmissao! >= procuraDataInicial);
+            }
 
             if (procuraDataFinal != null)
             {
                 tickets = tickets.Where(x => x.DataEmissao! <= procuraDataFinal);
             }
 
-           
+
 
             var am = new AfluenciasViewModel
             {
@@ -257,6 +257,6 @@ namespace Supermarket.Controllers
 
 
         }
-        }
+    }
     }
 
