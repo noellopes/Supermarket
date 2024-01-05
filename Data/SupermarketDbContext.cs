@@ -83,7 +83,10 @@ namespace Supermarket.Data
         public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Supplier> Suppliers { get; set; } = default!;
+
         public DbSet<Supermarket.Models.MealCard> MealCards { get; set; } = default!;
+        
+        public DbSet<Supermarket.Models.ExpiredProducts> ExpiredProducts { get; set; } = default!;
 
     }
 }

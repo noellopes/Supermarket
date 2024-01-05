@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Supermarket.Models.ExpiredProducts>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Expired Products</h1>
+
+<p>
+    <a asp-action="Create">Add New Expired Product</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FabricationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpirationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BarCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Supplier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FabricationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpirationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BarCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Supplier.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ExpiredProductId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ExpiredProductId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ExpiredProductId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
