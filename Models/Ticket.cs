@@ -20,19 +20,7 @@ namespace Supermarket.Models
 
         // Estado atual do ticket.
         public bool Prioritario { get; set; }
-        //para calcular valores das datas 
-        public double TotalMinutesDifference
-        {
-            get
-            {
-                if (DataEmissao != default && DataAtendimento != default)
-                {
-                    TimeSpan difference = DataAtendimento - DataEmissao;
-                    return difference.TotalMinutes;
-                }
-                return 0; // se nada for feito retorna 
-            }
-        }
+
         // Chave estrangeira para o departamento. Relaciona-se a outra entidade chamada "Departments".
         public int IDDepartments { get; set; }
         public Department? Departments { get; set; }
