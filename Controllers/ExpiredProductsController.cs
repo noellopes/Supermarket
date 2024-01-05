@@ -20,10 +20,41 @@ namespace Supermarket.Controllers
         }
 
         // GET: ExpiredProducts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string product = "", string barcode = "", string supplier = "", string employee = "")
         {
-            var supermarketDbContext = _context.ExpiredProducts.Include(e => e.Employee).Include(e => e.Product).Include(e => e.Supplier);
-            return View(await supermarketDbContext.ToListAsync());
+
+            var expiredproducts = from i in _context.ExpiredProducts
+                    .Include(p => p.Product)
+                    .Include(s => s.Supplier)
+                    .Include(e => e.Employee)
+            select i;
+
+            if (product != "") expiredproducts = expiredproducts.Where(x => x.Product!.Name.Contains(product));
+
+            if (barcode != "") expiredproducts = expiredproducts.Where(x => x.BarCode!.Contains(barcode));
+
+            if (supplier != "") expiredproducts = expiredproducts.Where(x => x.Supplier!.Name.Contains(supplier));
+
+            if (employee != "") expiredproducts = expiredproducts.Where(x => x.Employee!.Employee_Name.Contains(employee));
+
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
+                TotalItems = expiredproducts.Count()
+            };
+
+            return View(
+                new ExpiredProductsListViewModel
+                {
+                    ExpiredProducts = expiredproducts.OrderByDescending(i => i.Product.Name).Skip((page - 1) * pagination.PageSize).Take(pagination.PageSize),
+                    Pagination = pagination,
+                    SearchProduct = product,
+                    SearchEmployee = employee,
+                    SearchSupplier = supplier
+                }
+            );
+            //return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: ExpiredProducts/Details/5
