@@ -43,6 +43,8 @@ namespace Supermarket.Data
 
         private static void PopulateIssueType(SupermarketDbContext db)
         {
+            if (db.IssueType.Any()) return;
+
             db.IssueType.AddRange(
                 new Models.IssueType { Name = "Cross-Contamination", IssueDescription = "Transfer of contaminants between products, often related to improper handling or storage" },
                 new Models.IssueType { Name = "Customer Complaints", IssueDescription = "Issues reported by customers regarding the quality or safety of products" },
@@ -66,6 +68,8 @@ namespace Supermarket.Data
         
         private static void PopulateSupplier(SupermarketDbContext db)
         {
+            if (db.Suppliers.Any()) return;
+
             db.Suppliers.AddRange(
                 new Models.Supplier { Name = "Global Foods Ltd" },
                 new Models.Supplier { Name = "Fresh Harvest Farms" },
@@ -88,11 +92,22 @@ namespace Supermarket.Data
 
         private static void PopulateMealCard(SupermarketDbContext db)
         {
+            if (db.MealCards.Any()) return;
+
             db.MealCards.AddRange(
                 new Models.MealCard{
-                    //MealCardId = 123,
                     Balance = 100,
                     EmployeeId = 1,
+                },
+                new Models.MealCard
+                {
+                    Balance = 75,
+                    EmployeeId = 2,
+                },
+                new Models.MealCard
+                {
+                    Balance = 50,
+                    EmployeeId = 3,
                 }
             );
 
@@ -101,6 +116,8 @@ namespace Supermarket.Data
 
         private static void PopulateEmployee(SupermarketDbContext db)
         {
+            if (db.Funcionarios.Any()) return;
+
             db.Funcionarios.AddRange(
                 new Models.Employee
                 {
