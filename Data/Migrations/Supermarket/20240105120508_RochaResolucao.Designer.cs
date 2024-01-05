@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Migrations
+namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240105120508_RochaResolucao")]
+    partial class RochaResolucao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -918,7 +921,7 @@ namespace Supermarket.Migrations
             modelBuilder.Entity("Supermarket.Models.Tickets", b =>
                 {
                     b.HasOne("Supermarket.Models.Departments", "Departments")
-                        .WithMany("Tickets")
+                        .WithMany()
                         .HasForeignKey("DepartmentsIDDepartments");
 
                     b.Navigation("Departments");
@@ -952,11 +955,6 @@ namespace Supermarket.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("WarehouseSection");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.Departments", b =>
-                {
-                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Employee", b =>

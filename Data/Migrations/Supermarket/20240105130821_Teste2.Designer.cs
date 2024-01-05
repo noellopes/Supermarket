@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Migrations
+namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240105130821_Teste2")]
+    partial class Teste2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

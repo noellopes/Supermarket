@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,12 +15,12 @@ namespace Supermarket.Controllers
     public class SchedulesController : Controller
     {
         private readonly SupermarketDbContext _context;
-        
+
         public SchedulesController(SupermarketDbContext context)
         {
             _context = context;
         }
-        public async Task<IActionResult> Index (int page = 1, string departmentName = "" /*int departmentButtonName = 0*/)
+        public async Task<IActionResult> Index(int page = 1, string departmentName = "" /*int departmentButtonName = 0*/)
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
 
@@ -108,7 +109,7 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ScheduleId,StartDate,EndDate,DailyStartTime,DailyFinishTime,IDDepartments")] Schedule schedule)
         {
-           
+
             if (ModelState.IsValid)
             {
                 _context.Add(schedule);
@@ -207,14 +208,55 @@ namespace Supermarket.Controllers
             {
                 _context.Schedule.Remove(schedule);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ScheduleExists(int id)
         {
-          return (_context.Schedule?.Any(e => e.ScheduleId == id)).GetValueOrDefault();
+            return (_context.Schedule?.Any(e => e.ScheduleId == id)).GetValueOrDefault();
+        }
+
+
+        public async Task<IActionResult> Afluencias(DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null)
+        {
+            //ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
+            //procuraDataInicial = DateTime.Now;
+            //procuraDataFinal = new DateTime(2030, 04, 30, 12, 30, 0);
+
+            var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
+            //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
+            var departments = from b in _context.Departments.Include(b => b.Tickets) select b;
+
+            if (procuraDataInicial != null)
+            {
+                tickets = tickets.Where(x => x.DataEmissao! >= procuraDataInicial);
+            }
+
+            if (procuraDataFinal != null)
+            {
+                tickets = tickets.Where(x => x.DataEmissao! <= procuraDataFinal);
+            }
+
+
+
+            var am = new AfluenciasViewModel
+            {
+                Tickets = await tickets
+                .OrderBy(b => b.DataEmissao)
+                  .ToListAsync(),
+                DepartmentsList = await departments.OrderBy(b => b.NameDepartments).ToListAsync(),
+                SearchDataIntervaloInicial = procuraDataInicial,
+                SearchDataIntervaloFinal = procuraDataFinal
+                //SearchButtonDepartment = departmentButtonName,
+            };
+
+            return View(am);
+
+
+
         }
     }
-}
+    }
+
