@@ -212,7 +212,7 @@ namespace Supermarket.Controllers
 
         public async Task<IActionResult> FolgasAprovadas()
         {
-            var folgasAprovadas = await _context.Folga.Where(f => f.Status == Folga.FolgaStatus.Aprovada).ToListAsync();
+            var folgasAprovadas = await _context.Folga.Where(f => f.Status == Folga.FolgaStatus.Aprovada).Include(f => f.Employee).ToListAsync();
             return View(folgasAprovadas);
         }
 
