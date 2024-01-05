@@ -24,7 +24,7 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Category != null ? 
-                          View(await _context.Category.ToListAsync()) :
+                          View(await _context.Category.OrderBy(c => c.Name).ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Category'  is null.");
         }
 
