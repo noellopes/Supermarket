@@ -74,5 +74,7 @@ namespace Supermarket.Data
 
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
+        public DbSet<TakeAwayCategory> TakeAwayCategory { get; set; } = default!;
+        public DbSet<TakeAwayProduct> TakeAwayProduct { get; set; } = default!;
     }
 }
