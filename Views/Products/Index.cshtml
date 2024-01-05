@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Supermarket.Models.Product>
+﻿@model ProductViewModel
+@using Supermarket.Models
 
 @{
     ViewData["Title"] = "Index";
@@ -7,67 +8,73 @@
 <style>
     body {
         padding: 20px;
-        background-color: white;    
+        background-color: white;
     }
 
     h1 {
-        color: blue; 
-        margin-top: 20px; 
+        color: blue;
+        margin-top: 20px;
     }
 
     .tbconfig {
         background-color: whitesmoke;
-        border: 1px solid rgba(10, 10, 10, 0.15); 
-        border-radius: 0.25rem; 
-        padding: 20px; 
-        margin-bottom: 20px;
-    }
-
-    .table tr {
         border: 1px solid rgba(10, 10, 10, 0.15);
-    }
-
-    .table th, .table td {
-        background-color: white; 
-        color: black;
-        border: none;
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
     }
 </style>
 
 <div class="tbconfig">
     <h1>Index</h1>
-    <p>Total Products: @Model.Count()</p>
+    @* <p>Total Products: @Model.Count()</p> *@
+    <p>Total Products: @ViewBag.totalProduct</p>
 </div>
 
 <p>
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
 
-@if (Model.Count() == 0)
+@if (Model.Product.Count() == 0)
 {
     <p class="tbconfig">There are no products yet, start by creating one.</p>
-} 
-else 
+}
+else
 {
     <table class="table-responsive">
-        <table class="table table-bordered table-striped">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Name)
+                        @Html.DisplayNameFor(model => model.Product[0].Name)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Description)
+                        @Html.DisplayNameFor(model => model.Product[0].Description)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.UnitPrice)
+                        @Html.DisplayNameFor(model => model.Product[0].UnitPrice)
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model) {
-                    <tr>
+                @foreach (var item in Model.Product)
+                {
+                    string rowColor;
+                    switch (item.Status)
+                    {
+                        case "Available":
+                            rowColor = "table-success";
+                            break;
+                        case "Unavailable":
+                            rowColor = "table-warning";
+                            break;
+                        default:
+                            rowColor = "table-danger";
+                            break;
+                    }
+
+                    <tr class="@rowColor">
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
                         </td>
@@ -79,8 +86,8 @@ else
                         </td>
                         <td>
                             <div role="group" aria-label="Actions">
-                                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-primary">Edit</a>
-                                    <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-secondary">Details</a>
+                                <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-primary">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-secondary">Details</a>
                             </div>
                         </td>
                     </tr>
@@ -88,4 +95,57 @@ else
             </tbody>
         </table>
     </table>
+
+    <nav aria-label="products">
+        <ul class="pagination">
+            @if (Model.PagingInfoProduct.CurrentPage == 1)
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">First</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+                </li>
+            }
+
+            @{
+                int first = Model.PagingInfoProduct.CurrentPage - PagingInfoProduct.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                if (first < 1) first = 1;
+
+                int last = Model.PagingInfoProduct.CurrentPage + PagingInfoProduct.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                if (last > Model.PagingInfoProduct.TotalPages) last = Model.PagingInfoProduct.TotalPages;
+            }
+
+            @for (int p = first; p <= last; p++)
+            {
+                @if (p == Model.PagingInfoProduct.CurrentPage)
+                {
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link" href="#">@p</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                    </li>
+                }
+            }
+            @if (Model.PagingInfoProduct.CurrentPage == Model.PagingInfoProduct.TotalPages)
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Last</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfoProduct.TotalPages">Last</a>
+                </li>
+            }
+        </ul>
+    </nav>
 }
