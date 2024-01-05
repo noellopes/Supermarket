@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Supermarket.Models.SubsidyCalculation>
+﻿@model Supermarket.Models.SubsidyCalculationViewModel
 
 
 @{
@@ -11,6 +11,25 @@
     <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
 
 </p>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form asp-action="Index" method="get">
+            <p><strong>Search Employee</strong></p>
+
+            <label for="Name" class="control-label">Name</label>
+            <input name="employee_name" type="search" class="form-control" value="@Model.SearchName" />
+
+            <div class="mt-3">
+                <input class="btn btn-primary" type="submit" value="Search" />
+                <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
 <table class="table table-success table-striped">
     <thead>
         <tr>
@@ -42,7 +61,8 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model.SubsidyCalculations )
+        {
         <tr>
          
             <td>
@@ -60,21 +80,30 @@
                 </td>
 
                 <td>
-                    @Html.DisplayFor(modelItem => item.Ponto.EmployeeId)
+                    @Html.DisplayFor(modelItem => item.Ponto.Employee.Employee_Name)
                 </td>
                 <td>
+                    
                     @{
-                       
+                        TimeSpan diff = TimeSpan.FromHours(0);
+                      //  TimeSpan diff = TimeSpan.Parse(item.Ponto.CheckOutTime) -TimeSpan.Parse(item.Ponto.CheckInTime);
+                        string diffFormatted;
 
+                     //  @if ( item.Ponto != null && item.Ponto.CheckInTime != null)
+                   //   {
                         TimeSpan entrada = TimeSpan.Parse(item.Ponto.CheckInTime);
+
                         TimeSpan saida = TimeSpan.Parse(item.Ponto.CheckOutTime);
-                        TimeSpan diff = saida - entrada;
+                            diff = saida - entrada;
+                    //  }
+                        
 
-
-                        string diffFormatted = $"{(int)diff.TotalHours}h{diff.Minutes:D2}";
+                         diffFormatted = $"{(int)diff.TotalHours}h{diff.Minutes:D2}";
 
                         @diffFormatted
                     }
+                    
+                    
                 </td>
 
                 <td>
@@ -89,10 +118,9 @@
 
                         {
                            
-                            @($"{VALOR_DIARIO_RECEBER}{"€"}")
+                            @($" valor a recebr: {VALOR_DIARIO_RECEBER}{"€"}")
                             ;
 
-                            //    @Html.DisplayFor(modelItem => item.SubsidySetup.ValorSubsidioDiario)
                            
                         }
                         else
@@ -105,13 +133,71 @@
                     }
                 </td>
 
-                
-                  <td>
-                       <a asp-action="Edit" asp-route-id="@item.SubsidyCalculationId" class="btn btn-warning btn-smm">Edit</a>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.SubsidyCalculationId" class="btn btn-warning btn-smm">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.SubsidyCalculationId" class="btn btn-info btn-smm">Details</a>
                     <a asp-action="Delete" asp-route-id="@item.SubsidyCalculationId" class="btn btn-danger btn-smm">Delete</a>
                 </td>
+                  
         </tr>
+          
 }
     </tbody>
 </table>
+
+<nav aria-label="employees">
+    <ul class="pagination">
+        @if (Model.PagingInfo.CurrentPage == 1)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">First</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-asp-page="1">First</a>
+            </li>
+        }
+
+        @{
+            int first = Model.PagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+            if (first < 1) first = 1;
+
+            int last = Model.PagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+            if (last > Model.PagingInfo.TotalPages) last = Model.PagingInfo.TotalPages;
+        }
+
+        @for (int p = first; p <= last; p++)
+        {
+            @if (p == Model.PagingInfo.CurrentPage)
+            {
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">@p</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                </li>
+            }
+        }
+        @if (Model.PagingInfo.CurrentPage == Model.PagingInfo.TotalPages)
+        {
+            <li class="page-item disabled">
+                <a class="page-link" href="#">Last</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages">Last</a>
+            </li>
+        }
+
+    </ul>
+
+
+</nav>
+
