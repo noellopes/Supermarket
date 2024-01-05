@@ -22,7 +22,7 @@ namespace Supermarket.Controllers
         // GET: Issues
         public async Task<IActionResult> Index()
         {
-            var supermarketDbContext = _context.Issues.Include(i => i.IssueType);
+            var supermarketDbContext = _context.Issues.Include(i => i.Employee).Include(i => i.IssueType).Include(i => i.Product).Include(i => i.Supplier);
             return View(await supermarketDbContext.ToListAsync());
         }
 
@@ -35,7 +35,10 @@ namespace Supermarket.Controllers
             }
 
             var issues = await _context.Issues
+                .Include(i => i.Employee)
                 .Include(i => i.IssueType)
+                .Include(i => i.Product)
+                .Include(i => i.Supplier)
                 .FirstOrDefaultAsync(m => m.IssueId == id);
             if (issues == null)
             {
@@ -48,7 +51,10 @@ namespace Supermarket.Controllers
         // GET: Issues/Create
         public IActionResult Create()
         {
-            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "IssueDescription");
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name");
+            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "Name");
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name");
             return View();
         }
 
@@ -57,7 +63,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IssueId,IssueTypeId,Description,IssueRegisterDate,Severity")] Issues issues)
+        public async Task<IActionResult> Create([Bind("IssueId,ProductId,IssueTypeId,Description,SupplierId,EmployeeId,IssueRegisterDate,Severity")] Issues issues)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +71,10 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "IssueDescription", issues.IssueTypeId);
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name", issues.EmployeeId);
+            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "Name", issues.IssueTypeId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", issues.ProductId);
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name", issues.SupplierId);
             return View(issues);
         }
 
@@ -82,7 +91,10 @@ namespace Supermarket.Controllers
             {
                 return View("IssueDeleted");
             }
-            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "IssueDescription", issues.IssueTypeId);
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name", issues.EmployeeId);
+            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "Name", issues.IssueTypeId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", issues.ProductId);
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name", issues.SupplierId);
             return View(issues);
         }
 
@@ -91,7 +103,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IssueId,IssueTypeId,Description,IssueRegisterDate,Severity")] Issues issues)
+        public async Task<IActionResult> Edit(int id, [Bind("IssueId,ProductId,IssueTypeId,Description,SupplierId,EmployeeId,IssueRegisterDate,Severity")] Issues issues)
         {
             if (id != issues.IssueId)
             {
@@ -118,7 +130,10 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "IssueDescription", issues.IssueTypeId);
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name", issues.EmployeeId);
+            ViewData["IssueTypeId"] = new SelectList(_context.IssueType, "IssueTypeId", "Name", issues.IssueTypeId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", issues.ProductId);
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "Name", issues.SupplierId);
             return View(issues);
         }
 
@@ -131,7 +146,10 @@ namespace Supermarket.Controllers
             }
 
             var issues = await _context.Issues
+                .Include(i => i.Employee)
                 .Include(i => i.IssueType)
+                .Include(i => i.Product)
+                .Include(i => i.Supplier)
                 .FirstOrDefaultAsync(m => m.IssueId == id);
             if (issues == null)
             {
@@ -155,7 +173,7 @@ namespace Supermarket.Controllers
             {
                 _context.Issues.Remove(issues);
             }
-
+            
             await _context.SaveChangesAsync();
             //return RedirectToAction(nameof(Index));
             return View("DeleteCompleted", issues);
@@ -163,7 +181,7 @@ namespace Supermarket.Controllers
 
         private bool IssuesExists(int id)
         {
-            return (_context.Issues?.Any(e => e.IssueId == id)).GetValueOrDefault();
+          return (_context.Issues?.Any(e => e.IssueId == id)).GetValueOrDefault();
         }
     }
 }
