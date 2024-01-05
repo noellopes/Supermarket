@@ -2,9 +2,9 @@
 {
     public class AfluenciasViewModel
     {
-        public List<Tickets> Tickets { get; set; }
-        public List<Departments> DepartmentsList { get; set; }
-        public Departments? Departments { get; set; }
+        public List<Ticket> Tickets { get; set; }
+        public List<Department> DepartmentsList { get; set; }
+        public Department? Departments { get; set; }
         public PagingInfo PagingInfo { get; set; }
 
         public DateTime? SearchDataIntervaloInicial { get; set; } = null;

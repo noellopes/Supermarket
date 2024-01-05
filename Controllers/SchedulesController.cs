@@ -22,7 +22,7 @@ namespace Supermarket.Controllers
         }
         public async Task<IActionResult> Index(int page = 1, string departmentName = "" /*int departmentButtonName = 0*/)
         {
-            ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
+            ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
             var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
             //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
@@ -98,7 +98,7 @@ namespace Supermarket.Controllers
         // GET: Schedules/Create
         public IActionResult Create()
         {
-            ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
+            ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
             return View();
         }
 
@@ -126,7 +126,7 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
 
-            ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
+            ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
             if (id == null || _context.Schedule == null)
             {

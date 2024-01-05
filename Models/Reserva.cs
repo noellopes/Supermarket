@@ -20,7 +20,7 @@ namespace Supermarket.Models
         // FK DEPARTMENTS
         public int DepartmentsId { get; set; }
 
-        public Departments? Departments { get; set; }
+        public Department? Departments { get; set; }
 
 
         /* FK SENHAS

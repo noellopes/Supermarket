@@ -68,8 +68,8 @@ namespace Supermarket.Data
 
         public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }
 
-        public DbSet<Departments> Departments { get; set; }
+        public DbSet<Department> Departments { get; set; }
 
-        public DbSet<Tickets> Tickets { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
     }
 }

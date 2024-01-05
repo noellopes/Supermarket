@@ -2,7 +2,7 @@
 
 namespace Supermarket.Models
 {
-    public class Tickets { 
+    public class Ticket { 
 
         // Chave primária da entidade. O atributo [Key] é usado para marcar a chave primária.
         [Key]
@@ -26,7 +26,7 @@ namespace Supermarket.Models
 
         // Chave estrangeira para o departamento. Relaciona-se a outra entidade chamada "Departments".
         public int IDDepartments { get; set; }
-        public Departments? Departments { get; set; }
+        public Department? Departments { get; set; }
 
         // Chave estrangeira para o cartão do cliente. "ClientCard".
         // public int ClientCard { get; set; }

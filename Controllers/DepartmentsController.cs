@@ -24,7 +24,7 @@ namespace Supermarket.Controllers
         // GET: Departments
         public async Task<IActionResult> Index(string searchTerm, int page = 1, int pageSize = 2)
         {
-            IQueryable<Departments> departmentsQuery = _context.Departments;
+            IQueryable<Department> departmentsQuery = _context.Departments;
             
             var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
 
@@ -93,7 +93,7 @@ namespace Supermarket.Controllers
         public IActionResult IndexInop(string searchTerm, int page = 1, int pageSize = 2)
         {
 
-            IQueryable<Departments> departmentsQuery = _context.Departments;
+            IQueryable<Department> departmentsQuery = _context.Departments;
             //numero de paginas que da para seelecionar
             var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
 
@@ -170,7 +170,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Departments departments)
+        public async Task<IActionResult> Create([Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department departments)
         {
             if (ModelState.IsValid)
             {
@@ -215,7 +215,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Departments departments)
+        public async Task<IActionResult> Edit(int id, [Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department departments)
         {
             if (id != departments.IDDepartments)
             {
