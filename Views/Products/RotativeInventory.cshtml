@@ -116,6 +116,8 @@
         <span style="color: red;">No Shelf Products available for the selected product.</span>
     }
 }
+    <a asp-action="RotativeProducts" asp-route-selectedProductId="@selectedProduct.ProductId" asp-route-isButtonClicked="true">Clique aqui</a>
+
 }
 
 
@@ -162,5 +164,8 @@
         $('.warehouse-quantity, .shelf-quantity').on('input', function () {
             calculateTotalQuantity();
         });
+
+
+
     });
 </script>
