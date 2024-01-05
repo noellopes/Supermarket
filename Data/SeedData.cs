@@ -21,7 +21,6 @@ namespace Supermarket.Data {
             PopulateClients(db);
             PopulateClientCard(db);
             PopulateProductDiscounts(db);
-            //PopulateEmployees(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
             PopulateMealCards(db);
@@ -281,66 +280,6 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        private static void PopulateEmployees(SupermarketDbContext db) {
-            if (db.Employee.Any()) return;
-
-            /*db.Employee.AddRange(
-                new Employee
-                {
-                    Employee_Address= "Rua das Oliveiras",
-                    Employee_Admission_Date= DateTime.Now,
-                    Employee_Birth_Date= DateTime.Now,
-                    Employee_Email="zeD@manga.com",
-                    Employee_Name="Jose",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    Employee_Termination_Date= DateTime.Now,
-                    Employee_Time_Bank = 1,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                    Standard_Lunch_Time = "123"
-                },
-                new Employee
-                {
-                    Employee_Address = "Rua do azeite",
-                    Employee_Admission_Date = DateTime.Now,
-                    Employee_Birth_Date = DateTime.Now,
-                    Employee_Email = "zeD@manga.com",
-                    Employee_Name = "Maria",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    Employee_Termination_Date = DateTime.Now,
-                    Employee_Time_Bank = 1,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                    Standard_Lunch_Time = "123"
-                },
-                new Employee
-                {
-                    Employee_Address = "Avenida Afonso Pena",
-                    Employee_Admission_Date = DateTime.Now,
-                    Employee_Birth_Date = DateTime.Now,
-                    Employee_Email = "zeD@manga.com",
-                    Employee_Name = "Lucas",
-                    Employee_NIF = "123",
-                    Employee_Password = "123",
-                    Employee_Phone = "123",
-                    Employee_Termination_Date = DateTime.Now,
-                    Employee_Time_Bank = 1,
-                    Standard_Lunch_Hour = "123",
-                    Standard_Check_In_Time = "123",
-                    Standard_Check_Out_Time = "123",
-                   Standard_Lunch_Time = "123"
-                }
-                );
-
-            db.SaveChanges();*/
-        }
-
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db) {
             if (db.EmployeeEvaluation.Any()) return;
 
@@ -503,7 +442,8 @@ namespace Supermarket.Data {
                  new Employee { Employee_Name = "Afonso Macedo", Employee_Email = "Afonso3@gmail.com", Employee_Password = "afonso123", Employee_Phone = "128256789", Employee_NIF = "444654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
                 new Employee { Employee_Name = "Jessica Matos", Employee_Email = "Jessica3@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837238856", Employee_NIF = "875242712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Hugo Pedreira", Employee_Email = "Hugo3@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620579", Employee_NIF = "345675610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
-                new Employee { Employee_Name = "Alberto Queirós", Employee_Email = "Alberto3@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" }
+                new Employee { Employee_Name = "Alberto Queirós", Employee_Email = "Alberto3@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+                new Employee { Employee_Name = "Employee", Employee_Email = "employee@ipg.pt", Employee_Password = "Secret#123", Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" }
                 );
             db.SaveChanges();
         }
@@ -555,6 +495,28 @@ namespace Supermarket.Data {
             if (!await userManager!.IsInRoleAsync(user, ROLE_ADMIN)) {
                 await userManager!.AddToRoleAsync(user, ROLE_ADMIN);
             }
+
+            var costumer = await EnsureUserIsCreatedAsync(userManager!, "costumer@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(costumer, "Avaliar_Funcionarios"))
+            {
+                await userManager!.AddToRoleAsync(costumer, "Avaliar_Funcionarios");
+            }
+
+            var employee = await EnsureUserIsCreatedAsync(userManager!, "employee@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(employee, "Avaliar_Funcionarios"))
+            {
+                await userManager!.AddToRoleAsync(employee, "Avaliar_Funcionarios");
+            }
+            if (!await userManager!.IsInRoleAsync(employee, "Role_Funcionario"))
+            {
+                await userManager!.AddToRoleAsync(employee, "Role_Funcionario");
+            }
+
+            var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(manager, "Avaliar_Funcionarios"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Avaliar_Funcionarios");
+            }
         }
 
         private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password) {
@@ -570,7 +532,8 @@ namespace Supermarket.Data {
 
         internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager) {
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
-
+            await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
+            await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
         }
 
         private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name) {
