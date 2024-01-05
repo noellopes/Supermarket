@@ -20,10 +20,56 @@ namespace Supermarket.Controllers
         }
 
         // GET: Issues
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string product = "", string issuetype = "", string supplier = "", string employee = "")
         {
             var supermarketDbContext = _context.Issues.Include(i => i.Employee).Include(i => i.IssueType).Include(i => i.Product).Include(i => i.Supplier);
-            return View(await supermarketDbContext.ToListAsync());
+
+            var issues = from i in _context.Issues.Include(p => p.Product)
+                                                  .Include(it => it.IssueType)
+                                                  .Include(s => s.Supplier)
+                                                  .Include(e => e.Employee)
+                         select i;
+            if (product != "")
+            {
+                issues = issues.Where(x => x.Product!.Name.Contains(product));
+            }
+
+            if (issuetype != "")
+            {
+                issues = issues.Where(x => x.IssueType!.Name.Contains(issuetype));
+            }
+
+            if (supplier != "")
+            {
+                issues = issues.Where(x => x.Supplier!.Name.Contains(supplier));
+            }
+
+            if (employee != "")
+            {
+                issues = issues.Where(x => x.Employee!.Employee_Name.Contains(employee));
+            }
+
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
+                TotalItems = issues.Count()
+            };
+
+            return View(
+                new IssuesListViewModel
+                {
+                    Issues = issues.OrderByDescending(i => i.IssueRegisterDate)
+                                                 .Skip((page - 1) * pagination.PageSize)
+                                                 .Take(pagination.PageSize),
+                    Pagination = pagination,
+                    SearchProduct = product,
+                    SearchIssueType = issuetype,
+                    SearchEmployee = employee,
+                    SearchSupplier = supplier
+                }
+            );
+            //return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: Issues/Details/5
@@ -173,7 +219,7 @@ namespace Supermarket.Controllers
             {
                 _context.Issues.Remove(issues);
             }
-            
+
             await _context.SaveChangesAsync();
             //return RedirectToAction(nameof(Index));
             return View("DeleteCompleted", issues);
@@ -181,7 +227,7 @@ namespace Supermarket.Controllers
 
         private bool IssuesExists(int id)
         {
-          return (_context.Issues?.Any(e => e.IssueId == id)).GetValueOrDefault();
+            return (_context.Issues?.Any(e => e.IssueId == id)).GetValueOrDefault();
         }
     }
 }

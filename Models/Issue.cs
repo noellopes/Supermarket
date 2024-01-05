@@ -42,7 +42,7 @@ namespace Supermarket.Models
         [Required]
         [DataType(DataType.DateTime)]
         [Display(Name = "Registration date")]
-        public DateTime IssueRegisterDate { get; set; }  //Registration date for the issue
+        public DateTime IssueRegisterDate { get; set; } = DateTime.Now;
 
         [Required]
         [EnumDataType(typeof(Severity))]
