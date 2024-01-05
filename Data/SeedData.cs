@@ -7,12 +7,12 @@ namespace Supermarket.Data
 
         internal static void Populate(SupermarketDbContext db)
         {
-            PopulateDepartments(db);
+            PopulateDepartment(db);
             PopulateSchedules(db);
             PopulateTickets(db);
 
         }
-        private static void PopulateDepartments(SupermarketDbContext db)
+        private static void PopulateDepartment(SupermarketDbContext db)
         {
             if (db.Departments.Any()) return;
 
