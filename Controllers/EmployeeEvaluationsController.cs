@@ -54,7 +54,7 @@ namespace Supermarket.Controllers
                 //cannot show own evaluations
                 if (user!.UserName == _context.Employee.Find(employeeId)!.Employee_Email)
                 {
-                    return View("Unauthorized");
+                    return Forbid();
                 }
                 evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Employee!.EmployeeId == employeeId);
                 ViewBag.EmployeeName = _context.Employee.Find(employeeId)!.Employee_Name;
@@ -104,15 +104,21 @@ namespace Supermarket.Controllers
         // GET: EmployeeEvaluation/Create
         public IActionResult Create(int employeeId = 0)
         {
-            if(employeeId > 0)
+            IdentityUser? user = _userManager!.GetUserAsync(User).Result;
+            if (employeeId > 0)
             {
+                //cannot show own evaluations
+                if (user!.UserName == _context.Employee.Find(employeeId)!.Employee_Email)
+                {
+                    return Forbid();
+                }
                 ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>().Where(ee=>ee.EmployeeId==employeeId), "EmployeeId", "Employee_Name");
-                
                 ViewBag.EmployeeId = employeeId;
             }
             else
             {
-                ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
+                
+                ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>().Where(ee => ee.Employee_Email != user!.UserName), "EmployeeId", "Employee_Name");
             }
             return View();
         }

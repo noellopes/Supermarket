@@ -48,7 +48,7 @@
                     <a asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.EmployeeId">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
-                    @if (User.IsInRole("Avaliar_Funcionarios"))
+                    @if (User.IsInRole("Avaliar_Funcionarios") && (item.Employee_Email!= User.Identity!.Name))
                     {
                         <a asp-controller="EmployeeEvaluations" asp-action="index" asp-route-employeeId="@item.EmployeeId" class="btn btn-info btn-sm">View employee evaluations</a>
                     }
