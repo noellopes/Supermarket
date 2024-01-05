@@ -12,7 +12,7 @@ namespace Supermarket.Controllers
 {
     public class TicketsController : Controller
     {
-        private static int ticketCount = 0;
+        
         private readonly SupermarketDbContext _context;
 
         public TicketsController(SupermarketDbContext context)
@@ -79,10 +79,9 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Tickets tickets)
         {
-            // Increment the ticket count
-            ticketCount++;
-            // Pass the ticket count to the view
-            ViewBag.TicketCount = ticketCount;
+           
+          
+
             if (ModelState.IsValid)
             {
                 _context.Add(tickets);

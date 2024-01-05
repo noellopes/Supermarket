@@ -13,16 +13,16 @@ namespace Supermarket.Models
         public DateTime DataEmissao { get; set; } = DateTime.Now;
         //public DateTime DataEmissao { get; set; } = DateTime.Now ;
         // Data de impressão do ticket.
-        public DateTime DataAtendimento { get; set; }
+        public DateTime? DataAtendimento { get; set; } = null;
         // Número do ticket.
         [Required]
         public int NumeroDaSenha { get; set; }
 
         // Estado atual do ticket.
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = false;
 
         // Estado atual do ticket.
-        public bool Prioritario { get; set; }
+        public bool Prioritario { get; set; } = false;
 
         // Chave estrangeira para o departamento. Relaciona-se a outra entidade chamada "Departments".
         public int IDDepartments { get; set; }
