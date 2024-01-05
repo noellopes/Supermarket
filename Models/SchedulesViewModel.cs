@@ -4,7 +4,7 @@
     {
         public List<Schedule> Schedules { get; set; }
 
-        public Departments? Departments { get; set; }
+        public Department? Departments { get; set; }
         public PagingInfo PagingInfo { get; set; }
 
         public string SearchDepartment { get; set; } = string.Empty;

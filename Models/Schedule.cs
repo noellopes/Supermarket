@@ -17,6 +17,6 @@ namespace Supermarket.Models
         [DataType(DataType.Time)]
         public DateTime DailyFinishTime { get; set; } = new DateTime(2099, 04, 30, 18, 00, 0);
         public int IDDepartments { get; set; }
-        public Departments? Departments { get; set; }
+        public Department? Departments { get; set; }
     }
 }
