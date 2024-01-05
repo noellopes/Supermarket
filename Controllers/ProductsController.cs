@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Supermarket.Controllers
 {
@@ -191,43 +192,105 @@ namespace Supermarket.Controllers
         //    return RedirectToAction(nameof(Index));
         //}
 
-        public async Task<IActionResult> RotativeProducts(int selectedProductId = 0)
+        public async Task<IActionResult> RotativeProducts(int selectedProductId = 0, bool isButtonClicked = false, List<int> shelfIds = null, List<int> newQuantities = null)
         {
-            // Consulta para os produtos
-            var productQuery = _context.Product
+           /*
+            var currentDate = DateTime.Now.Date; // Usando apenas a parte da data, sem incluir a hora
+            var products = await _context.Product
                 .Include(p => p.Brand)
-                  .Where(p => p.UnitPrice > 25);
+                .Where(p => p.UnitPrice > 25)
+                .ToListAsync();
 
-            // Executar a consulta e armazenar os resultados na ViewData
-            var products = await productQuery.ToListAsync();
-            ViewData["Products"] = products;
+            // Aplicar a condição de data no lado do cliente
+            var filteredProducts = products
+                .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= 0)
+                .ToList();
 
-            // Selecionar o produto com base no selectedProductId
-            var selectedProduct = products.FirstOrDefault(p => p.ProductId == selectedProductId);
+            ViewData["Products"] = filteredProducts;
+
+            var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
+            ViewData["SelectedProduct"] = selectedProduct;
+           */
+
+           
+            var currentDate = DateTime.Now.Date; // Usando apenas a parte da data, sem incluir a hora
+
+            var expensiveProducts = await _context.Product
+                .Include(p => p.Brand)
+                .Where(p => p.UnitPrice > 25)
+                .ToListAsync();
+
+            var mostCommonProducts = _context.ReduceProduct
+     .Include(rp => rp.Product)
+         .ThenInclude(p => p.Brand)
+     .GroupBy(rp => rp.ProductId)
+     .OrderByDescending(g => g.Count())
+     .Take(2)
+     .Select(g => g.First().Product)  
+     .ToList();
+
+            var filteredProducts = expensiveProducts
+                .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= 0)
+                .ToList();
+
+            filteredProducts.AddRange(mostCommonProducts
+    .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= 0));
+
+            var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
+
+            ViewData["Products"] = filteredProducts;
             ViewData["SelectedProduct"] = selectedProduct;
 
-            // Consulta para os WarehouseSection_Products com base no Product selecionado
+
+            if (isButtonClicked)
+            {
+                // Update LastCountDate
+                selectedProduct.LastCountDate = DateTime.Now;
+
+                // Update quantities for associated shelves
+                if (shelfIds != null && newQuantities != null && shelfIds.Count == newQuantities.Count)
+                {
+                    // Loop through shelves and update quantities
+                    for (int i = 0; i < shelfIds.Count; i++)
+                    {
+                        // Find the corresponding Shelft_ProductExhibition
+                        var shelftProduct = await _context.Shelft_ProductExhibition
+                            .FirstOrDefaultAsync(wp => wp.ProductId == selectedProductId && wp.ShelfId == shelfIds[i]);
+
+                        // If found, update the quantity
+                        if (shelftProduct != null)
+                        {
+                            shelftProduct.Quantity = newQuantities[i];
+                        }
+                    }
+
+                    // Save changes to the database
+                    await _context.SaveChangesAsync();
+                }
+
+                // Redirect to RotativeProducts action with SelectedProductId set to 0
+                return RedirectToAction("RotativeProducts", new { SelectedProductId = 0 });
+            }
+
             var warehouseSectionProducts = await _context.WarehouseSection_Product
-         .Where(wp => wp.ProductId == selectedProductId)
-         .Include(wp => wp.WarehouseSection)
-          .ThenInclude(ws => ws.Warehouse)
-         .ToListAsync();
+                .Where(wp => wp.ProductId == selectedProductId)
+                .Include(wp => wp.WarehouseSection)
+                .ThenInclude(ws => ws.Warehouse)
+                .ToListAsync();
 
             var selftProducts = await _context.Shelft_ProductExhibition
-       .Where(wp => wp.ProductId == selectedProductId)
-       .Include(wp => wp.Shelf)
-        .ThenInclude(ws => ws.Hallway)
-         .ThenInclude(ws => ws.Store)
-       .ToListAsync();
+                .Where(wp => wp.ProductId == selectedProductId)
+                .Include(wp => wp.Shelf)
+                .ThenInclude(ws => ws.Hallway)
+                .ThenInclude(ws => ws.Store)
+                .ToListAsync();
 
             var selftProductsList = selftProducts.ToList();
-
             var warehouseSectionProductsList = warehouseSectionProducts.ToList();
 
             var totalWarehouseQuantity = warehouseSectionProductsList.Sum(wp => wp.Quantity);
             var totalShelfQuantity = selftProductsList.Sum(sp => sp.Quantity);
             var grandTotalQuantity = totalWarehouseQuantity + totalShelfQuantity;
-
 
             ViewData["TotalWarehouseQuantity"] = totalWarehouseQuantity;
             ViewData["TotalShelfQuantity"] = totalShelfQuantity;
@@ -236,7 +299,11 @@ namespace Supermarket.Controllers
             ViewData["SelftProductsList"] = selftProductsList;
 
             return View("RotativeInventory");
+
         }
+
+
+        
 
         private bool ProductExists(int id)
         {
