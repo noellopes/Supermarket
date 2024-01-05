@@ -1,0 +1,80 @@
+﻿@using Supermarket.Models
+@model AfluenciasViewModel
+@{
+    ViewData["Title"] = "Afluencias";
+}
+
+<h1>Afluencias</h1>
+
+
+
+<form asp-action="Afluencias" method="get">
+    <p><strong>Search dates</strong></p>
+
+    <label for="dataEmissao" class="control-label">Data Inicial</label>
+    <input type="datetime-local" class="form-control" value="@Model.SearchDataIntervaloInicial" />
+   
+    <label for="dataEmissao" class="control-label">Data Final</label>
+    <input type="datetime-local" class="form-control" value="@Model.SearchDataIntervaloFinal" />
+
+ 
+
+    <div class="mt-3">
+        <input class="btn btn-primary" type="submit" value="Search" />
+        <a class="btn btn-secondary" asp-action="Afluencias">Cancel</a>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Data de Emissão
+            </th>
+            <th>
+                Data de Atendimento
+            </th>
+            <th>
+                Número da Senha
+            </th>
+            <th>
+                Estado
+            </th>
+            <th>
+                Prioritário
+            </th>
+            <th>
+                ID do Departamento
+            </th>
+            
+
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.Tickets)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataEmissao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataAtendimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroDaSenha)
+            </td>
+            <td>
+                    @(item.Estado ? "Atendido" : "Não atendido")
+            </td>
+            <td>
+                    @(item.Prioritario ? "Sim" : "Não")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDDepartments)
+            </td>
+            
+        </tr>
+}
+    </tbody>
+    </table>
+<a class="btn btn-secondary" asp-area="Schedules" asp-action="Index">Voltar atrás</a>
