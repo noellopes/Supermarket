@@ -78,10 +78,12 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.EmployeeSchedule> EmployeeSchedule { get; set; } = default!;
 
-
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
 
         public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.Supplier> Suppliers { get; set; } = default!;
+
 
     }
 }
