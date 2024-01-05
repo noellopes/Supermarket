@@ -21,10 +21,47 @@ namespace Supermarket.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string name = "")
         {
             var supermarketDbContext = _context.Product.Include(p => p.Brand).Include(p => p.Category);
-            return View(await supermarketDbContext.ToListAsync());
+            //return View(await supermarketDbContext.ToListAsync());
+
+            var products = from b in _context.Product select b;
+
+            if (name != "")
+            {
+                products = products.Where(x => x.Name.Contains(name));
+            }
+
+            PagingInfoProduct paging = new PagingInfoProduct
+            {
+                CurrentPage = page,
+                TotalItems = await products.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new ProductViewModel
+            {
+                Product = await products
+                    .OrderBy(b => b.Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfoProduct = paging,
+                SearchName = name,
+            };
+
+            ViewBag.totalProduct = vm.PagingInfoProduct.TotalItems;
+
+            return View(vm);
         }
 
         // GET: Products/Details/5
