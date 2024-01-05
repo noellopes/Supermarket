@@ -51,32 +51,34 @@ namespace Supermarket.Controllers
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
-
+                
             var viewModel = new DepListViewModel
             {
                 Departments = departments,
                 Pagination = pagination,
                 SelectedPageSize = pageSize,
-
+                TimeDifferences = new List<TimeSpan>()
             };
             // Aqui você pode percorrer os departamentos e calcular a diferença de tempo para cada ticket
             foreach (var department in departments)
             {
-                // Supondo que você queira calcular a diferença para o primeiro ticket associado ao departamento
+                // Procura o primeiro ticket associado ao departamento
                 var firstTicket = _context.Tickets.FirstOrDefault(t => t.IDDepartments == department.IDDepartments);
+                // Verifica se existe um ticket associado e se a data de atendimento tem valor
                 if (firstTicket != null && firstTicket.DataAtendimento.HasValue)
                 {
+                    // Obtém as datas de início (DataAtendimento) e fim (DataEmissao)
                     DateTime dataInicio = firstTicket.DataAtendimento.Value;
                     DateTime dataFim = firstTicket.DataEmissao;
-
+                    // Calcula a diferença de tempo entre as duas datas
                     TimeSpan diferenca = dataInicio- dataFim;
-
-             
-
-                    viewModel.TimeDifference = diferenca;
-
-                    
-
+                    // Adiciona a diferença de tempo à lista de diferenças de tempo no viewModel
+                    viewModel.TimeDifferences.Add(diferenca);
+                }
+                else
+                {
+                    // Se não existir ticket ou se a data de atendimento não tiver valor, adiciona TimeSpan.Zero à lista
+                    viewModel.TimeDifferences.Add(TimeSpan.Zero);
                 }
             }
 
