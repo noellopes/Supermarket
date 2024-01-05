@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 
 namespace Supermarket.Data {
     public class SeedData {
-        private const string ROLE_ADMIN = "Administrator";
+        private const string ROLE_ADMIN1 = "Funcionário";
+        private const string ROLE_ADMIN2 = "Gestor";
 
         internal static void Populate(SupermarketDbContext db) {
             PopulateBrand(db);
@@ -524,10 +525,11 @@ namespace Supermarket.Data {
         }
 
         internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager) {
-            var user = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
+            var user1 = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
+            var user2 = await EnsureUserIsCreatedAsync(userManager!, "anasilva_pinhel@hotmail.com", "Informatica_1706869");
 
-            if (!await userManager!.IsInRoleAsync(user, ROLE_ADMIN)) {
-                await userManager!.AddToRoleAsync(user, ROLE_ADMIN);
+            if (!await userManager!.IsInRoleAsync(user1, "Funcionário")) {
+                await userManager!.AddToRoleAsync(user2, "Gestor");
             }
         }
 
@@ -543,8 +545,8 @@ namespace Supermarket.Data {
         }
 
         internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager) {
-            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
-
+            await EnsureRoleIsCreatedAsync(roleManager!, "Funcionário");
+            await EnsureRoleIsCreatedAsync(roleManager!, "Gestor");
         }
 
         private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name) {
