@@ -21,11 +21,48 @@ namespace Supermarket.Controllers
         }
 
         // GET: Categories
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string name = "")
         {
-              return _context.Category != null ? 
-                          View(await _context.Category.OrderBy(c => c.Name).ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Category'  is null.");
+            var categories = from b in _context.Category select b;
+
+            if (name != "")
+            {
+                categories = categories.Where(x => x.Name.Contains(name));
+            }
+
+            PagingInfoProduct paging = new PagingInfoProduct
+            {
+                CurrentPage = page,
+                TotalItems = await categories.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new CategoriesViewModel
+            {
+                Categories = await categories
+                    .OrderBy(b => b.Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfoProduct = paging,
+                SearchName = name,
+            };
+
+            //var totalCategories = await categories.CountAsync()
+            ViewBag.totalCategories = vm.PagingInfoProduct.TotalItems;
+
+            return View(vm);
+            //return _context.Category != null ? 
+            //              View(await _context.Category.OrderBy(c => c.Name).ToListAsync()) :
+            //              Problem("Entity set 'SupermarketDbContext.Category'  is null.");
         }
 
         // GET: Categories/Details/5
