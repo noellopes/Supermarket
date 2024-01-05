@@ -31,15 +31,15 @@
                 @Html.DisplayFor(modelItem => item.Formation.Formation_Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Employee.Employee_Address)
+                @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NotaAtribuida)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FormationEmployeeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FormationEmployeeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FormationEmployeeId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.FormationEmployeeId" class="btn btn-primary">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.FormationEmployeeId" class="btn btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.FormationEmployeeId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }

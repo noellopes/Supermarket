@@ -9,17 +9,18 @@ namespace Supermarket.Models
         [Key]
         public int FormationEmployeeId { get; set; }
 
-        [Required]
+        
         [ForeignKey("FormationId")]
         public int FormationId { get; set; }
+        public  required Formation? Formation { get; set; }
 
-        public Formation Formation { get; set; }
-        [Required]
+        
         [ForeignKey("EmployeeId")]
         public int EmployeeId { get; set; }
-        public Employee Employee { get; set; }
+        public  required Employee? Employee { get; set; }
 
         [Required]
-        public float NotaAtribuida { get; set; }
+        [Range(0, 100, ErrorMessage = "O valor deve estar entre 0 e 100")]
+        public int NotaAtribuida { get; set; }
     }
 }
