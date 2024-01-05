@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,7 +21,7 @@ namespace Supermarket.Controllers
             _context = context;
         }
     //pesquisa por nome do departamento 
-    public IActionResult pesqNomeTrue(string searchTerm)
+            public IActionResult pesqNomeTrue(string searchTerm)
     {
         var results = _context.Departments
         .Where(d => (d.StateDepartments.Equals(true)) && d.NameDepartments.Contains(searchTerm))
@@ -48,20 +49,17 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments
-        public IActionResult Index(string searchTerm, int page = 1, int pageSize = 2)
+        public async Task<IActionResult> Index(string searchTerm, int page = 1, int pageSize = 2)
         {
-
             IQueryable<Departments> departmentsQuery = _context.Departments;
-            //numero de paginas que da para seelecionar
+
             var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
 
-            // Filtra apenas os departamentos ativos
             departmentsQuery = departmentsQuery
                 .Where(d => d.StateDepartments.Equals(true));
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                // Aplica a pesquisa se o termo de pesquisa não estiver vazio
                 departmentsQuery = departmentsQuery
                     .Where(d => d.NameDepartments.Contains(searchTerm));
             }
@@ -84,20 +82,20 @@ namespace Supermarket.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            var viewModel = new ProductsListViewModel
+            var viewModel = new DepListViewModel
             {
                 Departments = departments,
                 Pagination = pagination,
-                SelectedPageSize = pageSize
+                SelectedPageSize = pageSize,
             };
 
-            // Passa o termo de pesquisa para a view, se houver
             ViewData["SearchTerm"] = searchTerm;
             ViewData["PageSizes"] = new SelectList(pageSizes);
             ViewData["SelectedPageSize"] = pageSize;
 
             return View(viewModel);
         }
+
         // GET: DepartmentsInop
         public IActionResult IndexInop(string searchTerm, int page = 1, int pageSize = 2)
         {
@@ -135,7 +133,7 @@ namespace Supermarket.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            var viewModel = new ProductsListViewModel
+            var viewModel = new DepListViewModel
             {
                 Departments = departments,
                 Pagination = pagination,
@@ -307,5 +305,7 @@ namespace Supermarket.Controllers
         {
           return (_context.Departments?.Any(e => e.IDDepartments == id)).GetValueOrDefault();
         }
+ 
+    
     }
 }

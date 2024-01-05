@@ -1,4 +1,4 @@
-﻿@model ProductsListViewModel
+﻿@model DepListViewModel
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using Microsoft.AspNetCore.Mvc.ViewFeatures
 @{
@@ -74,7 +74,15 @@
                     @Html.DisplayFor(modelItem => item.QuatDepMed)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.QuatDepMed)
+                    @if (ViewData["TempoMedio"] != null)
+                    {
+                        <p>Tempo Médio de Atendimento: @ViewData["TempoMedio"] minutos</p>
+                    }
+                    else
+                    {
+                        <p>N/A.</p>
+                    }
+
                 </td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Edit,Details,Delete">

@@ -1,4 +1,4 @@
-﻿@model ProductsListViewModel
+﻿@model DepListViewModel
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using Microsoft.AspNetCore.Mvc.ViewFeatures
 @{
@@ -51,11 +51,12 @@
              Numero de senhas para a calculo media 
             </th>
             <th>
-             Tempo de atendimento medio por dia 
+                Média de Tempo de Serviço (minutos)
             </th>
             <th></th>
         </tr>
     </thead>
+
     <tbody>
         @foreach (var item in Model.Departments)
         {
@@ -76,7 +77,7 @@
                 @Html.DisplayFor(modelItem => item.QuatDepMed)
             </td>
             <td>
-                10mins
+               
             </td>
             <td>
                 <div class="btn-group" role="group" aria-label="Edit,Details,Delete">
