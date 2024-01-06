@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240105111356_AtualizarFolgas")]
-    partial class AtualizarFolgas
+    [Migration("20240106081849_AtualizarDatas")]
+    partial class AtualizarDatas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

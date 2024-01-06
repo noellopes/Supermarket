@@ -286,9 +286,8 @@ namespace Supermarket.Data {
         private static void PopulateEmployees(SupermarketDbContext db) {
             if (db.Employee.Any()) return;
 
-            //db.Employee.AddRange(
-            //  new Employee
-            //    {
+           // db.Employee.AddRange(
+            // new Employee
             //        Employee_Address= "Rua das Oliveiras",
             //        Employee_Admission_Date= DateTime.Now,
             //        Employee_Birth_Date= DateTime.Now,
@@ -463,7 +462,7 @@ namespace Supermarket.Data {
 
             db.Employee.AddRange(
 
-                new Employee { Employee_Name = "Afonso Almeida", Employee_Email = "Afonso@gmail.com", Employee_Password = "afonso123", Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+                new Employee { Employee_Name = "Afonso Almeida", Employee_Email = "anasilva_pinhel@hotmail.com", Employee_Password = "Informatica_1706869", Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
                 new Employee { Employee_Name = "Jessica Azevedo", Employee_Email = "Jessica@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837462856", Employee_NIF = "875436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Hugo Braga", Employee_Email = "Hugo@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620559", Employee_NIF = "938475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Alberto Barros", Employee_Email = "Alberto1@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843257712", Employee_NIF = "098764084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
@@ -524,12 +523,100 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager) {
+        internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager)
+        {
             var user1 = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
-            var user2 = await EnsureUserIsCreatedAsync(userManager!, "anasilva_pinhel@hotmail.com", "Informatica_1706869");
+            var user2 = await EnsureUserIsCreatedAsync(userManager!, "anasilva_pinhel@hotmail.com", "Informatica_123");
+            var user3 = await EnsureUserIsCreatedAsync(userManager!, "Afonso@gmail.com", "Afonso#123");
+            var user4 = await EnsureUserIsCreatedAsync(userManager!, "Hugo@gmail.com", "Hugo#123");
+            var user5 = await EnsureUserIsCreatedAsync(userManager!, "Alberto1@gmail.com", "Alberto#123");
+            var user6 = await EnsureUserIsCreatedAsync(userManager!, "Afonso1@gmail.com", "AfonsoI#123");
+            var user7 = await EnsureUserIsCreatedAsync(userManager!, "Jessica1@gmail.com", "JessicaI#123");
+            var user8 = await EnsureUserIsCreatedAsync(userManager!, "Hugo1@gmail.com", "HugoI#123");
+            var user9 = await EnsureUserIsCreatedAsync(userManager!, "Alberto2@gmail.com", "AlbertoI#123");
+            var user10 = await EnsureUserIsCreatedAsync(userManager!, "Afonso2@gmail.com", "AfonsoII#123");
+            var user11 = await EnsureUserIsCreatedAsync(userManager!, "Jessica2@gmail.com", "JessicaII#123");
+            var user12 = await EnsureUserIsCreatedAsync(userManager!, "Hugo2@gmail.com", "HugoII#123");
+            var user13 = await EnsureUserIsCreatedAsync(userManager!, "Afonso3@gmail.com", "AfonsoIII#123");
+            var user14 = await EnsureUserIsCreatedAsync(userManager!, "Jessica3@gmail.com", "JessicaIII#123");
+            var user15 = await EnsureUserIsCreatedAsync(userManager!, "Hugo3@gmail.com", "HugoIII#123");
+            var user17 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
+            var user18 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
 
-            if (!await userManager!.IsInRoleAsync(user1, "Funcionário")) {
-                await userManager!.AddToRoleAsync(user2, "Gestor");
+
+
+
+
+            if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
+            {
+                await userManager!.AddToRoleAsync(user1, "Gestor");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user2, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user2, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user3, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user3, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user4, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user4, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user5, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user5, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user6, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user6, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user5, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user5, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user7, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user7, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user8, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user8, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user9, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user9, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user10, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user10, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user11, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user11, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user12, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user12, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user13, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user13, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user14, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user14, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user15, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user15, "Funcionário");
             }
         }
 

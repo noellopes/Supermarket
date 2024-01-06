@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class AtualizarFolgas : Migration
+    public partial class AtualizarDatas : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -314,10 +314,10 @@ namespace Supermarket.Data.Migrations.Supermarket
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     GestorId = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: true),
-                    DataPedido = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DataResultado = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataPedido = table.Column<DateTime>(type: "date", nullable: true),
+                    DataResultado = table.Column<DateTime>(type: "date", nullable: true),
+                    DataInicio = table.Column<DateTime>(type: "date", nullable: false),
+                    DataFim = table.Column<DateTime>(type: "date", nullable: false),
                     motivo = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
