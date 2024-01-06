@@ -22,9 +22,14 @@ namespace Supermarket.Controllers
         // GET: Alerts
         public async Task<IActionResult> Index()
         {
-              return _context.Alert != null ? 
-                          View(await _context.Alert.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Alert'  is null.");
+            var alert = await _context.Alert.Where(a => a.Status == "Not Seen").ToListAsync();
+            return View(alert);
+        }
+
+        public async Task<IActionResult> IndexAll([Bind("AlertId,Role,Status,Date,Description")] Alert alert)
+        {
+            var alerts = await _context.Alert.ToListAsync();
+            return View(alerts);
         }
 
         // GET: Alerts/Details/5
