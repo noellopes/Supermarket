@@ -5,15 +5,11 @@
 }
 
 <h1>Issue Types</h1>
-
 <p>
     @if (User.IsInRole("Create_Edit_Del_IssueType"))
     {
-        <div class="d-grid gap-2">
-            <a asp-action="Create" class="btn btn-primary">Create New</a>
-        </div>
+        <a asp-action="Create" class="btn btn-primary">Add New Issue Type</a>
     }
-    
 </p>
 <table class="table">
     <thead>
@@ -40,14 +36,14 @@
 
                     @if (User.IsInRole("Create_Edit_Del_IssueType"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.IssueTypeId">Edit  </a>
-                        <a asp-action="Details" asp-route-id="@item.IssueTypeId">Details  </a>
-                        <a asp-action="Delete" asp-route-id="@item.IssueTypeId">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@item.IssueTypeId" class="btn btn-warning">Edit  </a>
+                        <a asp-action="Details" asp-route-id="@item.IssueTypeId" class="btn btn-info">Details  </a>
+                        <a asp-action="Delete" asp-route-id="@item.IssueTypeId" class="btn btn-danger">Delete</a>
 
                     }
                     else
                     {
-                        <a asp-action="Details" asp-route-id="@item.IssueTypeId">Details  </a>
+                        <a asp-action="Details" asp-route-id="@item.IssueTypeId" class="btn btn-info">Details  </a>
                     }
             </td>
         </tr>
