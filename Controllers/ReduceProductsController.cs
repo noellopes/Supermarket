@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Supermarket.Controllers
 {
@@ -73,6 +76,7 @@ namespace Supermarket.Controllers
                    .FirstOrDefaultAsync(m => m.ProductId == reduceProduct.ProductId && m.WarehouseSectionId == reduceProduct.WarehouseSectionId);
             var ShelfProduct = await _context.Shelft_ProductExhibition
                    .FirstOrDefaultAsync(m => m.ProductId == reduceProduct.ProductId && m.ShelfId == reduceProduct.ShelfId);
+            var product = await _context.Product.Where(a => a.ProductId == reduceProduct.ProductId).FirstOrDefaultAsync();
 
             if (ModelState.IsValid)
             {
@@ -89,6 +93,14 @@ namespace Supermarket.Controllers
                             if (reduceProduct.Quantity < SectionProduct.Quantity)
                             {
                                 _context.Add(reduceProduct);
+                                await _context.SaveChangesAsync();
+                                var str = new string("A new ReduceProduct has been created: " + product!.Name + ", " + reduceProduct.Quantity) + "chosed to be reduced";
+                                Alert alert = new Alert
+                                {
+                                    Role = "Test",
+                                    Description = str
+                                };
+                                _context.Add(alert);
                                 await _context.SaveChangesAsync();
                                 return RedirectToAction(nameof(Index));
                             }
