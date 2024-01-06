@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,89 +10,87 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class ClientsController : Controller
+    public class AlertsController : Controller
     {
         private readonly SupermarketDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public ClientsController(SupermarketDbContext context, UserManager<IdentityUser> userManager)
+        public AlertsController(SupermarketDbContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
-        // GET: Clients
+        // GET: Alerts
         public async Task<IActionResult> Index()
         {
-              return _context.Client != null ? 
-                          View(await _context.Client.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Client'  is null.");
+              return _context.Alert != null ? 
+                          View(await _context.Alert.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.Alert'  is null.");
         }
 
-        // GET: Clients/Details/5
+        // GET: Alerts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Client == null)
+            if (id == null || _context.Alert == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Client
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
+            var alert = await _context.Alert
+                .FirstOrDefaultAsync(m => m.AlertId == id);
+            if (alert == null)
             {
                 return NotFound();
             }
 
-            return View(client);
+            return View(alert);
         }
 
-        // GET: Clients/Create
+        // GET: Alerts/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Clients/Create
+        // POST: Alerts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientId,ClientName,ClientAdress,ClientEmail,ClientBirth")] Client client)
+        public async Task<IActionResult> Create([Bind("AlertId,Role,Status,Date,Description")] Alert alert)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(client);
+                _context.Add(alert);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(client);
+            return View(alert);
         }
 
-        // GET: Clients/Edit/5
+        // GET: Alerts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Client == null)
+            if (id == null || _context.Alert == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Client.FindAsync(id);
-            if (client == null)
+            var alert = await _context.Alert.FindAsync(id);
+            if (alert == null)
             {
                 return NotFound();
             }
-            return View(client);
+            return View(alert);
         }
 
-        // POST: Clients/Edit/5
+        // POST: Alerts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientId,ClientName,ClientAdress,ClientEmail,ClientBirth")] Client client)
+        public async Task<IActionResult> Edit(int id, [Bind("AlertId,Role,Status,Date,Description")] Alert alert)
         {
-            if (id != client.ClientId)
+            if (id != alert.AlertId)
             {
                 return NotFound();
             }
@@ -102,12 +99,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(client);
+                    _context.Update(alert);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClientExists(client.ClientId))
+                    if (!AlertExists(alert.AlertId))
                     {
                         return NotFound();
                     }
@@ -118,49 +115,49 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(client);
+            return View(alert);
         }
 
-        // GET: Clients/Delete/5
+        // GET: Alerts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Client == null)
+            if (id == null || _context.Alert == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Client
-                .FirstOrDefaultAsync(m => m.ClientId == id);
-            if (client == null)
+            var alert = await _context.Alert
+                .FirstOrDefaultAsync(m => m.AlertId == id);
+            if (alert == null)
             {
                 return NotFound();
             }
 
-            return View(client);
+            return View(alert);
         }
 
-        // POST: Clients/Delete/5
+        // POST: Alerts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Client == null)
+            if (_context.Alert == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.Client'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.Alert'  is null.");
             }
-            var client = await _context.Client.FindAsync(id);
-            if (client != null)
+            var alert = await _context.Alert.FindAsync(id);
+            if (alert != null)
             {
-                _context.Client.Remove(client);
+                _context.Alert.Remove(alert);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientExists(int id)
+        private bool AlertExists(int id)
         {
-          return (_context.Client?.Any(e => e.ClientId == id)).GetValueOrDefault();
+          return (_context.Alert?.Any(e => e.AlertId == id)).GetValueOrDefault();
         }
     }
 }

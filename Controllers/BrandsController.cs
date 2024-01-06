@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+    [Authorize]
     public class BrandsController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -79,6 +81,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Brands/Create
+        //[Authorize]
         public IActionResult Create()
         {
             return View();
@@ -89,6 +92,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize]
         public async Task<IActionResult> Create([Bind("BrandId,Name")] Brand brand)
         {
             if (ModelState.IsValid)

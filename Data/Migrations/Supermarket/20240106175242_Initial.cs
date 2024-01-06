@@ -12,6 +12,22 @@ namespace Supermarket.Data.Migrations.Supermarket
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Alert",
+                columns: table => new
+                {
+                    AlertId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Alert", x => x.AlertId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Brand",
                 columns: table => new
                 {
@@ -242,8 +258,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                 {
                     ClientCardId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientId = table.Column<int>(type: "int", nullable: true),
-                    ClientCardNumber = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    ClientCardNumber = table.Column<int>(type: "int", nullable: false),
                     Balance = table.Column<float>(type: "real", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -254,7 +270,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                         name: "FK_ClientCard_Client_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Client",
-                        principalColumn: "ClientId");
+                        principalColumn: "ClientId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -336,35 +353,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                         column: x => x.WarehouseId,
                         principalTable: "Warehouse",
                         principalColumn: "WarehouseId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductDiscount",
-                columns: table => new
-                {
-                    ProductDiscountId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ClientCardId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    Value = table.Column<float>(type: "real", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductDiscount", x => x.ProductDiscountId);
-                    table.ForeignKey(
-                        name: "FK_ProductDiscount_ClientCard_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "ClientCard",
-                        principalColumn: "ClientCardId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductDiscount_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
-                        principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -628,11 +616,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductDiscount_ProductId",
-                table: "ProductDiscount",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ReduceProduct_ProductId",
                 table: "ReduceProduct",
                 column: "ProductId");
@@ -687,10 +670,16 @@ namespace Supermarket.Data.Migrations.Supermarket
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Alert");
+
+            migrationBuilder.DropTable(
                 name: "CardMovement");
 
             migrationBuilder.DropTable(
                 name: "CategoryDiscounts");
+
+            migrationBuilder.DropTable(
+                name: "ClientCard");
 
             migrationBuilder.DropTable(
                 name: "EmployeeEvaluation");
@@ -703,9 +692,6 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             migrationBuilder.DropTable(
                 name: "Issues");
-
-            migrationBuilder.DropTable(
-                name: "ProductDiscount");
 
             migrationBuilder.DropTable(
                 name: "ProductExpiration");
@@ -726,10 +712,10 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "MealCard");
 
             migrationBuilder.DropTable(
-                name: "IssueType");
+                name: "Client");
 
             migrationBuilder.DropTable(
-                name: "ClientCard");
+                name: "IssueType");
 
             migrationBuilder.DropTable(
                 name: "Shelf");
@@ -745,9 +731,6 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             migrationBuilder.DropTable(
                 name: "Employee");
-
-            migrationBuilder.DropTable(
-                name: "Client");
 
             migrationBuilder.DropTable(
                 name: "Hallway");
