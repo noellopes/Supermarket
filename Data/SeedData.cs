@@ -29,6 +29,7 @@ namespace Supermarket.Data {
             PopulateSupplier(db);
             PopulateType(db);
             PopulateIssueType(db);
+            PopulatePurchase(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db) {
@@ -662,6 +663,19 @@ namespace Supermarket.Data {
                 new Models.IssueType { Name = "Mislabeling", IssueDescription = "Incorrect or misleading product labeling, including inaccurate nutritional information or allergen details" },
                 new Models.IssueType { Name = "Out-of-Stock", IssueDescription = "Products unavailable for purchase despite being listed as in-stock" },
                 new Models.IssueType { Name = "Sanitation and Cleanliness", IssueDescription = "Concerns related to the cleanliness and hygiene of the supermarket premises" }
+              );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulatePurchase(SupermarketDbContext db)
+        {
+            if (db.Purchase.Any()) return;
+
+            db.Purchase.AddRange(
+                new Models.Purchase { ProductId = 1, SupplierId = 1, DeliveredQuantity = 30, DeliveryDate = new DateTime(2024, 01, 01, 00, 00, 00, 00) },
+                new Models.Purchase { ProductId = 2, SupplierId = 2, DeliveredQuantity = 50, DeliveryDate = new DateTime(2024, 01, 02, 00, 00, 00, 00) },
+                new Models.Purchase { ProductId = 3, SupplierId = 3, DeliveredQuantity = 70, DeliveryDate = new DateTime(2024, 01, 03, 00, 00, 00, 00) }
               );
 
             db.SaveChanges();
