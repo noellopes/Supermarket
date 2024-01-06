@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+
     public class IssuesController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -20,6 +22,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Issues
+        [Authorize(Roles = "View_Issues")]
         public async Task<IActionResult> Index(int page = 1, string product = "", string issuetype = "", string supplier = "", string employee = "")
         {
             var supermarketDbContext = _context.Issues.Include(i => i.Employee).Include(i => i.IssueType).Include(i => i.Product).Include(i => i.Supplier);
@@ -73,6 +76,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Issues/Details/5
+        [Authorize(Roles = "View_Issues")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Issues == null)
@@ -95,6 +99,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Issues/Create
+        [Authorize(Roles = "Create_Issue")]
         public IActionResult Create()
         {
             ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name");
@@ -109,6 +114,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Create_Issue")]
         public async Task<IActionResult> Create([Bind("IssueId,ProductId,IssueTypeId,Description,SupplierId,EmployeeId,IssueRegisterDate,Severity")] Issues issues)
         {
             if (ModelState.IsValid)
@@ -125,6 +131,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Issues/Edit/5
+        [Authorize(Roles = "Edit_Del_Issue")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Issues == null)
@@ -149,6 +156,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Edit_Del_Issue")]
         public async Task<IActionResult> Edit(int id, [Bind("IssueId,ProductId,IssueTypeId,Description,SupplierId,EmployeeId,IssueRegisterDate,Severity")] Issues issues)
         {
             if (id != issues.IssueId)
@@ -184,6 +192,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Issues/Delete/5
+        [Authorize(Roles = "Edit_Del_Issue")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Issues == null)
@@ -208,6 +217,7 @@ namespace Supermarket.Controllers
         // POST: Issues/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Edit_Del_Issue")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Issues == null)

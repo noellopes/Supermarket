@@ -543,11 +543,43 @@ namespace Supermarket.Data {
             {
                 await userManager!.AddToRoleAsync(employee, "Role_Funcionario");
             }
+            if (!await userManager!.IsInRoleAsync(employee, "View_IssueType"))
+            {
+                await userManager!.AddToRoleAsync(employee, "View_IssueType");
+            }
+            if (!await userManager!.IsInRoleAsync(employee, "View_Issues"))
+            {
+                await userManager!.AddToRoleAsync(employee, "View_Issues");
+            }
+            if (!await userManager!.IsInRoleAsync(employee, "Create_Issue"))
+            {
+                await userManager!.AddToRoleAsync(employee, "Create_Issue");
+            }
 
             var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
             if (!await userManager!.IsInRoleAsync(manager, "Avaliar_Funcionarios"))
             {
                 await userManager!.AddToRoleAsync(manager, "Avaliar_Funcionarios");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "View_IssueType"))
+            {
+                await userManager!.AddToRoleAsync(manager, "View_IssueType");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "View_Issues"))
+            {
+                await userManager!.AddToRoleAsync(manager, "View_Issues");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "Create_Issue"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Create_Issue");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "Create_Edit_Del_IssueType"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Create_Edit_Del_IssueType");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "Edit_Del_Issue"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Edit_Del_Issue");
             }
         }
 
@@ -566,7 +598,14 @@ namespace Supermarket.Data {
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
             await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
+            await EnsureRoleIsCreatedAsync(roleManager!, "View_IssueType");
+            await EnsureRoleIsCreatedAsync(roleManager!, "Create_Edit_Del_IssueType");
+            await EnsureRoleIsCreatedAsync(roleManager!, "View_Issues");            
+            await EnsureRoleIsCreatedAsync(roleManager!, "Create_Issue");
+            await EnsureRoleIsCreatedAsync(roleManager!, "Edit_Del_Issue");
         }
+
+        
 
         private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name) {
             var role = await roleManager.FindByNameAsync(name);

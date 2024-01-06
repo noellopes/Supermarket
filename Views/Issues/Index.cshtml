@@ -82,10 +82,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Severity)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IssueId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IssueId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IssueId">Delete</a>
+            <td>               
+                    @if (User.IsInRole("Edit_Del_Issue"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.IssueId">Edit  </a>
+                        <a asp-action="Details" asp-route-id="@item.IssueId">Details  </a>
+                        <a asp-action="Delete" asp-route-id="@item.IssueId">Delete</a>
+                        
+                    }else
+                    {
+                        <a asp-action="Details" asp-route-id="@item.IssueId">Details  </a>
+                    }
+                    
             </td>
         </tr>
 }
