@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Supermarket.Models.Product>
+
+@{
+    ViewData["Title"] = "Restore Exposure";
+}
+
+<style>
+    body {
+        padding: 20px;
+        background-color: white;
+    }
+
+    h1 {
+        color: blue;
+        margin-top: 20px;
+    }
+
+    .tbconfig {
+        background-color: whitesmoke;
+        border: 1px solid rgba(10, 10, 10, 0.15);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="tbconfig">
+    <h1>Index</h1>
+</div>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Shelf
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewData["ProductsToRestore"] is IEnumerable<Supermarket.Models.Shelft_ProductExhibition> productsToRestore && productsToRestore != null)
+        {
+            foreach (var product in productsToRestore)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Product.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Product.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Shelf.Name)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@product.ProductId">Details</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">No products to restore</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -425,8 +425,32 @@ namespace Supermarket.Controllers
 
         }
 
+        public async Task<IActionResult> RestoreExposure()
+        {
+            var productsToRestore = await _context.Shelft_ProductExhibition
+                .Include(sp => sp.Product)
+                .Where(sp => sp.Quantity < sp.MinimumQuantity)
+                .Include(wp => wp.Shelf)
+                .ToListAsync();
 
-        
+            //var productsToGet = await _context.WarehouseSection_Product
+            //    .Include(wp => wp.Product)
+            //    .Where(wp => wp.ProductId == productsToRestore.Pr && wp.Quantity > 0)
+            //    .OrderBy(wp => wp.ExpirationDate)
+            //    .Include(wp => wp.WarehouseSection)
+            //    .ThenInclude(wp => wp.Warehouse)
+            //    .ToListAsync();
+
+            // Add this line for debugging
+            Console.WriteLine($"Number of products to restore: {productsToRestore.Count}");
+
+            ViewData["ProductsToRestore"] = productsToRestore.ToList();
+
+            return View("RestoreExposure");
+        }
+
+
+
 
         private bool ProductExists(int id)
         {
