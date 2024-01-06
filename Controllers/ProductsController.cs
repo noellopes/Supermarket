@@ -340,6 +340,14 @@ namespace Supermarket.Controllers
                     // Save changes to the database
                     await _context.SaveChangesAsync();
 
+                    Alert alert = new Alert
+                    {
+                        Role = "Test",
+                        Description = "A new Rotative Inventory was been made for product:  " + selectedProduct.Name + " in" + selectedProduct.LastCountDate
+                    };
+                    _context.Add(alert);
+                    await _context.SaveChangesAsync();
+
 
                     return RedirectToAction("RotativeProducts", new
                     {

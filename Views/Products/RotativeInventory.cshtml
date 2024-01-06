@@ -4,7 +4,28 @@
 <head>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
 
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="card">
 <h1>Rotative Inventory</h1>
 
 <form asp-controller="Products" asp-action="RotativeProducts" method="get">
@@ -25,6 +46,9 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>
+</div>
+
+
 
 @if (ViewData["SelectedProduct"] != null)
 {
@@ -38,7 +62,7 @@
 
         if (warehouseSectionProductsList.Any())
         {
-            <table class="table">
+                    <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Warehouse </th>
@@ -81,7 +105,7 @@
 
     if (selftProductsList.Any())
     {
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Shelf</th>
@@ -125,7 +149,7 @@
     <a asp-action="RotativeProducts"
     
        asp-route-selectedProductId="@selectedProduct.ProductId"
-   asp-route-isButtonClicked="true">Clique aqui</a>
+       asp-route-isButtonClicked="true" class="btn btn-secondary">Submit inventory</a>
    // <a asp-action="RotativeProducts" asp-route-selectedStringDate="@TempData["SelectedStringDate"]" asp-route-selectedNumber="@TempData["SelectedNumber"]" asp-route-selectedPrice="@TempData["SelectedPrice"]" asp-route-selectedProductId="@selectedProduct.ProductId" asp-route-isButtonClicked="true">Clique aqui</a>
 }
 
