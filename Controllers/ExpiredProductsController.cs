@@ -64,19 +64,16 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.ExpiredProducts == null)
-            {
                 return NotFound();
-            }
 
             var expiredProducts = await _context.ExpiredProducts
                 .Include(e => e.Employee)
                 .Include(e => e.Product)
                 .Include(e => e.Supplier)
                 .FirstOrDefaultAsync(m => m.ExpiredProductId == id);
+
             if (expiredProducts == null)
-            {
-                return NotFound();
-            }
+                return View("ExpiredProductDeleted");
 
             return View(expiredProducts);
         }
@@ -116,18 +113,17 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ExpiredProducts == null)
-            {
                 return NotFound();
-            }
 
             var expiredProducts = await _context.ExpiredProducts.FindAsync(id);
+
             if (expiredProducts == null)
-            {
-                return NotFound();
-            }
+                return View("ExpiredProductDeleted");
+
             ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name", expiredProducts.EmployeeId);
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", expiredProducts.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name", expiredProducts.SupplierId);
+
             return View(expiredProducts);
         }
 
@@ -175,19 +171,16 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.ExpiredProducts == null)
-            {
                 return NotFound();
-            }
 
             var expiredProducts = await _context.ExpiredProducts
                 .Include(e => e.Employee)
                 .Include(e => e.Product)
                 .Include(e => e.Supplier)
                 .FirstOrDefaultAsync(m => m.ExpiredProductId == id);
+
             if (expiredProducts == null)
-            {
-                return NotFound();
-            }
+                return View("ExpiredProductDeleted");
 
             return View(expiredProducts);
         }
@@ -199,17 +192,20 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.ExpiredProducts == null)
-            {
                 return Problem("Entity set 'SupermarketDbContext.ExpiredProducts'  is null.");
-            }
-            var expiredProducts = await _context.ExpiredProducts.FindAsync(id);
+            
+            var expiredProducts = await _context.ExpiredProducts
+                .Include(p => p.Product)
+                .Include(s => s.Supplier)
+                .Include(e => e.Employee)
+                .FirstOrDefaultAsync(m => m.ExpiredProductId == id);
+
             if (expiredProducts != null)
-            {
                 _context.ExpiredProducts.Remove(expiredProducts);
-            }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return View("DeleteCompleted", expiredProducts);
         }
 
         private bool ExpiredProductsExists(int id)
