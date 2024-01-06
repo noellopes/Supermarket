@@ -122,6 +122,17 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
+                /*coluna para mostrar se o desconto é aplicavél ou não*/
+                <td>
+                    @if (item.StartDate <= DateTime.Today && item.EndDate >= DateTime.Today)
+                    {
+                        <span style="color: green;">Applicable</span>
+                    }
+                    else
+                    {
+                        <span style="color: red;">Not Applicable</span>
+                    }
+                </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.ProductDiscountId" class="btn btn-info">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.ProductDiscountId" class="btn btn-warning">Details</a>
