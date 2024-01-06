@@ -15,8 +15,6 @@
         margin-top: 20px; /* Margem superior maior */
     }
 
-
-
     .card {
         background-color: #fff; /* Cor de fundo do cartão */
         border: 1px solid rgba(0, 0, 0, 0.125); /* Borda do cartão */
@@ -30,15 +28,14 @@
 
 </style>
 <div class="card">
-<h1>Not Seen Alert List</h1>
+<h1>Alert List</h1>
 </div>
 
-<table class="table table-striped">
 <form asp-action="IndexAll">
-    <input type="submit" value="See Alerts Seen"/>
+    <input type="submit" value="See Alerts Seen" class="btn btn-success" />
 </form>
 
-
+<table class="table">
     <thead>
         <tr>
             <th>
