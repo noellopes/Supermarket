@@ -28,7 +28,7 @@ namespace Supermarket.Controllers
 
         public async Task<IActionResult> IndexAll([Bind("AlertId,Role,Status,Date,Description")] Alert alert)
         {
-            var alerts = await _context.Alert.ToListAsync();
+            var alerts = await _context.Alert.Where(a => a.Status == "Seen").ToListAsync();
             return View(alerts);
         }
 
