@@ -270,7 +270,7 @@ namespace Supermarket.Controllers
         }
         public async Task<IActionResult> RotativeProducts(string? selectedStringDate, int? selectedNumber, float? selectedPrice, int selectedProductId = 0, bool isButtonClicked = false)
         {
-         
+            
 
             if (selectedStringDate != null && selectedNumber != null && selectedPrice != null)
             {
@@ -329,9 +329,7 @@ namespace Supermarket.Controllers
 
                 ViewData["Products"] = filteredProducts;
                 ViewData["SelectedProduct"] = selectedProduct;
-                TempData["SelectedStringDate"] = Date;
-                TempData["SelectedNumber"] = int.Parse(Number.ToString());
-                TempData["SelectedPrice"] = float.Parse(Price.ToString());
+              
 
 
                 if (isButtonClicked)
@@ -346,9 +344,9 @@ namespace Supermarket.Controllers
                     return RedirectToAction("RotativeProducts", new
                     {
                         selectedProductId = 0,
-                        selectedStringDate = TempData["SelectedStringDate"],
-                        selectedNumber = TempData["SelectedNumber"],
-                        selectedPrice = TempData["SelectedPrice"]
+                        selectedStringDate = Date,
+                        selectedNumber = Number,
+                        selectedPrice = Price
                     });
 
 
@@ -383,6 +381,7 @@ namespace Supermarket.Controllers
                 ViewData["Products"] = filteredProducts;
                 ViewData["SelectedProduct"] = selectedProduct;
 
+               
 
                 if (isButtonClicked)
                 {
