@@ -133,6 +133,7 @@ namespace Supermarket.Controllers
                 .Include(b => b.ClientCard)
                 .Include(b => b.Product)
                 .FirstOrDefaultAsync(b => b.ProductDiscountId == id);
+
             if (productDiscount == null)
             {
                 return NotFound();
@@ -167,7 +168,7 @@ namespace Supermarket.Controllers
                         b => b.ProductId == productDiscount.ProductId &&
                         b.ClientCardId == clientCard.ClientCardId &&
                         b.Value == productDiscount.Value);
-
+                        
                     if (!discountExistsForClient)
                     {
                         var newProductDiscount = new ProductDiscount

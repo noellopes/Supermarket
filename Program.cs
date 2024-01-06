@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Microsoft.Extensions.DependencyInjection;
+using static System.Formats.Asn1.AsnWriter;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<GroupsDbContext>(options =>
@@ -12,6 +13,12 @@ builder.Services.AddDbContext<SupermarketDbContext>(options =>
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+/*builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<SupermarketDbContext>()
+    .AddDefaultUI();
+*/
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -34,12 +41,17 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(
         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
         options.Lockout.MaxFailedAccessAttempts = 5;
     })
+    
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI();
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+var reqServScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+var roleManager = reqServScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+SeedData.PopulateRolesAsync(roleManager).Wait();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
@@ -48,8 +60,8 @@ if (app.Environment.IsDevelopment()) {
     var db = serviceScope.ServiceProvider.GetService<SupermarketDbContext>();
     SeedData.Populate(db!);
 
-    //var userManager = serviceScope.ServiceProvider.GetService<UserManager<IdentityUser>>();
-    //SeedData.PopulateDevUsers(userManager);
+    var userManager = reqServScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    SeedData.PopulateDevUsers(userManager);
 } else {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.

@@ -15,11 +15,18 @@ namespace Supermarket.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
+            modelBuilder.Entity<Employee>().HasKey(e => e.EmployeeId);
+            modelBuilder.Entity<Employee>().Property(e => e.EmployeeId).UseIdentityColumn();
+
         }
 
         public DbSet<Folga> Folga { get; set; } = default!;
+        public DbSet<Supermarket.Models.SubsidyCalculation> SubsidyCalculation { get; set; } = default!;
 
-       
+        public DbSet<Employee> Funcionarios { get; set; } = default!;
+
+        public DbSet<Employee> Employee { get; set; } = default!;
+
         public DbSet<Supermarket.Models.IssueType> IssueType { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Issues> Issues { get; set; } = default!;
@@ -29,8 +36,6 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Funcao> Funcao { get; set; } = default!;
 
         public DbSet<EmployeeEvaluation> EmployeeEvaluation { get; set; } = default!;
-
-        public DbSet<Employee> Employee { get; set; } = default!;
 
         public DbSet<Supermarket.Models.ProductDiscount> ProductDiscount { get; set; } = default!;
 
@@ -62,7 +67,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.CategoryDiscount> CategoryDiscounts { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
+        //public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
 
@@ -73,7 +78,15 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.EmployeeSchedule> EmployeeSchedule { get; set; } = default!;
 
-
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
+
+        public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.Supplier> Suppliers { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.MealCard> MealCards { get; set; } = default!;
+        
+        public DbSet<Supermarket.Models.ExpiredProducts> ExpiredProducts { get; set; } = default!;
+
     }
 }
