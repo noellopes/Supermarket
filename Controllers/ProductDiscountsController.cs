@@ -148,7 +148,7 @@ namespace Supermarket.Controllers
         public IActionResult Create()
         {
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber");
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
+            ViewData["ProductList"] = _context.Product.Select(p => new SelectListItem { Value = p.ProductId.ToString(), Text = p.Name }).ToList();
             return View();
         }
 

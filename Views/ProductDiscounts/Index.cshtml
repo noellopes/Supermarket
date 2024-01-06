@@ -57,8 +57,8 @@
 </div>
 @if (Model.ClientsWithBirthday != null && Model.ClientsWithBirthday.Any())
 {
-    <h2>Clients with Birthday Today</h2>
-    <a asp-action="CreateBirthdayDiscount" asp-controller="ProductDiscounts" class="btn btn-outline-success">Create birthday discount</a>
+    <h3>Clients with Birthday Today</h3>
+    <a asp-action="CreateBirthdayDiscount" asp-controller="ProductDiscounts" class="btn btn-outline-success">Create Birthday Discount</a>
     <table class="table table-striped mt-4">
         <thead class="table-dark">
             <tr>
@@ -122,7 +122,6 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
-                /*coluna para mostrar se o desconto é aplicavél ou não*/
                 <td>
                     @if (item.StartDate <= DateTime.Today && item.EndDate >= DateTime.Today)
                     {

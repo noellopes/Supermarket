@@ -13,8 +13,25 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ProductId" class="control-label"></label>
-                <select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>
+                <label asp-for="ProductId" class="control-label">Select Product</label>
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in ViewData["ProductList"] as List<SelectListItem>)
+                        {
+                            <tr>
+                                <td>
+                                    <label>
+                                        <input type="radio" name="ProductId" value="@product.Value" />
+                                        @product.Text
+                                    </label>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Value" class="control-label"></label>
