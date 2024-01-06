@@ -5,7 +5,21 @@
 <style>
     body {
         padding: 20px;
-        background-color: white;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
     }
 
     .button-group {
@@ -35,9 +49,13 @@
 </style>
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+   
     @if (User.IsInRole("Stock Administrator"))
     {
+        <div class="card">
+            <h1 class="display-4">Welcome Stock Administrator</h1>
+        </div>
+
         <div>
             <a asp-controller="Categories" asp-action="Index" class="btn btn-primary">Categories</a>
             <a asp-controller="Brands" asp-action="Index" class="btn btn-primary">Brands</a>
@@ -49,6 +67,9 @@
 
     @if (User.IsInRole("Stock Operator"))
     {
+        <div class="card">
+            <h1 class="display-4">Welcome Stock Operator</h1>
+        </div>
         <div>
             <a asp-controller="Categories" asp-action="Index" class="btn btn-primary">Categories</a>
             <a asp-controller="Brands" asp-action="Index" class="btn btn-primary">Brands</a>

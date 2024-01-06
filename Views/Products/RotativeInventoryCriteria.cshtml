@@ -2,7 +2,32 @@
     ViewData["Title"] = "Rotative Inventory Criteria";
 }
 
-<h2>Rotative Inventory Criteria</h2>
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+
+
+<div class="card">
+    <h1>Choose a Rotative Inventory Criteria</h1>
+</div>
+
 
 <form asp-controller="Products" asp-action="RotativeInventoryCriteria" method="get">
     <div class="form-group">
@@ -17,7 +42,7 @@
             <option value="ReduceProductPriceDate">ReduceProduct and Price and Date</option>
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
 </form>
 
 @if (ViewBag.selectedCritial == "Date")
@@ -35,7 +60,7 @@
                     <option value="2day">Last 2 days</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Submit Date</button>
+            <button type="submit" class="btn btn-primary  mt-3">Submit Date</button>
         </div>
     </form>
 }
@@ -48,7 +73,7 @@
                 <label for="SelectedNumber">Enter how many of the most common elements for reduce Product:</label>
                 <input type="number" id="SelectedNumber" name="SelectedNumber" class="form-control" max="99999" />
             </div>
-            <button type="submit" class="btn btn-primary">Submit Number</button>
+            <button type="submit" class="btn btn-primary  mt-3">Submit Number</button>
         </div>
     </form>
 }
@@ -62,7 +87,7 @@
                 <label for="SelectedPrice">Put a Price:</label>
                 <input type="number" id="SelectedPrice" name="SelectedPrice" class="form-control" step="0.01" min="0.01" max="99999.99" />
             </div>
-            <button type="submit" class="btn btn-primary">Submit Number</button>
+            <button type="submit" class="btn btn-primary mt-3">Submit Price</button>
         </div>
     </form>
 }
@@ -85,7 +110,7 @@
                     <option value="2day">Last 2 days</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Submit Number</button>
+            <button type="submit" class="btn btn-primary  mt-3">Submit </button>
         </div>
 
     </form>
@@ -109,7 +134,7 @@
                     <option value="2day">Last 2 days</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Submit Number</button>
+            <button type="submit" class="btn btn-primary  mt-3">Submit </button>
         </div>
 
     </form>
@@ -138,7 +163,7 @@
                 <label for="SelectedPrice">Put a Price:</label>
                 <input type="number" id="SelectedPrice" name="SelectedPrice" class="form-control" step="0.01" min="0.01" max="99999.99" />
             </div>
-            <button type="submit" class="btn btn-primary">Submit Number</button>
+            <button type="submit" class="btn btn-primary  mt-3">Submit</button>
         </div>
 
     </form>

@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Supermarket.Controllers
 {
@@ -73,6 +76,7 @@ namespace Supermarket.Controllers
                    .FirstOrDefaultAsync(m => m.ProductId == reduceProduct.ProductId && m.WarehouseSectionId == reduceProduct.WarehouseSectionId);
             var ShelfProduct = await _context.Shelft_ProductExhibition
                    .FirstOrDefaultAsync(m => m.ProductId == reduceProduct.ProductId && m.ShelfId == reduceProduct.ShelfId);
+            var product = await _context.Product.Where(a => a.ProductId == reduceProduct.ProductId).FirstOrDefaultAsync();
 
             if (ModelState.IsValid)
             {
@@ -86,9 +90,18 @@ namespace Supermarket.Controllers
                     {
                         if (SectionProduct!.Quantity > 0)
                         {
-                            if (reduceProduct.Quantity < SectionProduct.Quantity)
+                            if (reduceProduct.Quantity <= SectionProduct.Quantity)
                             {
                                 _context.Add(reduceProduct);
+                                await _context.SaveChangesAsync();
+                                var str = new string("A new ReduceProduct has been created: " + product!.Name + ", " + reduceProduct.Quantity) + "chosed to be reduced";
+                                Alert alert = new Alert
+                                {
+                                    Role = "Stock Administrator",
+                                    Description = str,
+                                    Function = "reduceProducts"
+                                };
+                                _context.Add(alert);
                                 await _context.SaveChangesAsync();
                                 return RedirectToAction(nameof(Index));
                             }
@@ -273,6 +286,11 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmStatus(int id, [Bind("ReduceProductId,Reason,Status,Date,Quantity,ProductId,WarehouseSectionId,ShelfId")] ReduceProduct reduceProduct)
         {
+            var productW = await _context.WarehouseSection_Product.Where(a => a.ProductId == reduceProduct.ProductId && a.WarehouseSectionId == reduceProduct.WarehouseSectionId && a.Quantity >= reduceProduct.Quantity).FirstOrDefaultAsync();
+            var productS = await _context.Shelft_ProductExhibition.Where(a => a.ProductId == reduceProduct.ProductId && a.ShelfId == reduceProduct.ShelfId && a.Quantity >= reduceProduct.Quantity).FirstOrDefaultAsync();
+
+            
+
             if (id != reduceProduct.ReduceProductId)
             {
                 return NotFound();
@@ -284,6 +302,22 @@ namespace Supermarket.Controllers
                 {
                     _context.Update(reduceProduct);
                     await _context.SaveChangesAsync();
+                    if (reduceProduct.Status == "Confirmed")
+                    {
+                        if (productW != null)
+                        {
+                            productW.Quantity -= reduceProduct.Quantity;
+                            _context.Update(productW);
+                            await _context.SaveChangesAsync();
+                        }
+                        if (productS != null)
+                        {
+                            productS.Quantity -= reduceProduct.Quantity;
+                            _context.Update(productS);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {

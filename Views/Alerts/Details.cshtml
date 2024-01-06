@@ -35,8 +35,10 @@
             @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
+
+    <a asp-controller="@ViewBag.Func" asp-action="Index">ss</a>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.AlertId">Edit</a> |
+    <a  asp-action="Edit" asp-route-id="@Model?.AlertId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
