@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Supermarket.Data;
 using Supermarket.Models;
 using static NuGet.Packaging.PackagingConstants;
@@ -10,16 +11,24 @@ namespace Supermarket.Controllers
     {
         
         private readonly SupermarketDbContext _context;
+        private readonly IMemoryCache _memoryCache;
 
-        public OrderController(SupermarketDbContext context)
+        public OrderController(SupermarketDbContext context,IMemoryCache cache)
         {
             _context = context;
+            _memoryCache = cache;
         }
 
         public async Task<IActionResult> Index()
         {
-            var supermarketDbContext = _context.User_Order;
-            return View(await supermarketDbContext.ToListAsync());
+            var id = _memoryCache.Get<int>("customerId");
+            var supermarketDbContext = _context.User_Order.Include("Order")
+                                            .Include("Product")
+                                            .Include("Order.Customer")
+                                            .Include("Product.Category")
+                                            .Where(x=> x.Order.CustomerId == id);
+            var orders = await supermarketDbContext.ToListAsync();
+            return View(orders);
         }
 
         // CREATE: Create a new order

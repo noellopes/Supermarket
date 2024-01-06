@@ -7,10 +7,10 @@ namespace Supermarket.Models
         public int Id { get; set; }
 
         [Required]
-        public required string Status { get; set; } = "Preparing";
+        public string Status { get; set; } = "Preparing";
 
         [Required]
-        public required float TotalPrice { get; set; }
+        public float TotalPrice { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime OrderDate { get; set; } = DateTime.Now;
