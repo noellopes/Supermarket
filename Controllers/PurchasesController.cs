@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,13 +21,51 @@ namespace Supermarket.Controllers
         }
 
         // GET: Purchases
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "View_Reports")]
+        public async Task<IActionResult> Index(int page = 1, string product = "", string supplier = "")
         {
-            var supermarketDbContext = _context.Purchase.Include(p => p.Product).Include(p => p.Supplier);
-            return View(await supermarketDbContext.ToListAsync());
+            var purchase = from i in _context.Purchase.Include(p => p.Product)                                      
+                                                      .Include(s => s.Supplier)                                                      
+                         select i;
+            if (product != "")
+            {
+                purchase = purchase.Where(x => x.Product!.Name.Contains(product));
+            }
+                        
+            if (supplier != "")
+            {
+                purchase = purchase.Where(x => x.Supplier!.Name.Contains(supplier));
+            }
+
+            
+            //if (deliverydate != "")
+            //{
+            //    purchase = purchase.Where(x => x.DeliveryDate!.Contains(deliverydate));
+            //}
+            
+
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
+                TotalItems = purchase.Count()
+            };
+
+            return View(
+                new PurchaseListViewModel
+                {
+                    Purchase = purchase.OrderByDescending(i => i.DeliveryDate)
+                                       .Skip((page - 1) * pagination.PageSize)
+                                                 .Take(pagination.PageSize),
+                    Pagination = pagination,
+                    SearchProduct = product,
+                    SearchSupplier = supplier                  
+                }
+            );
         }
 
         // GET: Purchases/Details/5
+        [Authorize(Roles = "View_Reports")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Purchase == null)
@@ -47,6 +86,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Purchases/Create
+        [Authorize(Roles = "Create_Reports")]        
         public IActionResult Create()
         {
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
@@ -59,6 +99,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Create_Reports")]
         public async Task<IActionResult> Create([Bind("PurchaseId,ProductId,SupplierId,DeliveredQuantity,DeliveryDate")] Purchase purchase)
         {
             if (ModelState.IsValid)
@@ -72,7 +113,8 @@ namespace Supermarket.Controllers
             return View(purchase);
         }
 
-        // GET: Purchases/Edit/5
+        // GET: Purchases/Edit/5        
+        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Purchase == null)
@@ -95,6 +137,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> Edit(int id, [Bind("PurchaseId,ProductId,SupplierId,DeliveredQuantity,DeliveryDate")] Purchase purchase)
         {
             if (id != purchase.PurchaseId)
@@ -128,6 +171,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Purchases/Delete/5
+        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Purchase == null)
@@ -150,6 +194,7 @@ namespace Supermarket.Controllers
         // POST: Purchases/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Purchase == null)
