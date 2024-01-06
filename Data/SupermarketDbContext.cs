@@ -79,7 +79,6 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.EmployeeSchedule> EmployeeSchedule { get; set; } = default!;
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
-<<<<<<< HEAD
 
         public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
 
@@ -91,8 +90,6 @@ namespace Supermarket.Data
         
         public DbSet<Supermarket.Models.Purchase> Purchase { get; set; } = default!;
 
-=======
         public object Pontos { get; internal set; }
->>>>>>> Grupo2
     }
 }
