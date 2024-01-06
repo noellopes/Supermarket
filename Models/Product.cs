@@ -47,9 +47,5 @@ namespace Supermarket.Models
         public ICollection<Shelft_ProductExhibition>? Shelf { get; set; }
 
         public ICollection<WarehouseSection_Product>? WarehouseSection { get; set; }
-
-
-
-
     }
 }

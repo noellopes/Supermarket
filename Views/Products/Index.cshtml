@@ -33,6 +33,33 @@
         var card = document.getElementById('SearchArea');
         card.style.display = card.style.display === 'none' ? 'block' : 'none';
     }
+
+    function filterByStatus(status) {
+        console.log('Filtering by status:', status);
+
+        // Log the current class names of the rows
+        $('tbody tr').each(function () {
+            console.log($(this).attr('class'));
+        });
+
+        // Hide all rows
+        $('tbody tr').hide();
+
+        // Show rows with the selected status
+        $('tbody tr.' + status).show();
+    }
+
+    function resetFilter() {
+        console.log('Resetting filter');
+
+        // Log the current class names of the rows
+        $('tbody tr').each(function () {
+            console.log($(this).attr('class'));
+        });
+
+        // Show all rows
+        $('tbody tr').show();
+    }
 </script>
 
 <div class="tbconfig">
@@ -49,6 +76,7 @@
             <p><strong>Search Product</strong></p>
 
             <input type="hidden" name="productId" value="@Model.Product" />
+            <input type="hidden" name="status" value="@Model.FilterStatus" />
 
             <label for="name" class="control-label">Name</label>
             <input name="name" type="search" class="form-control" value="@Model.SearchName" />
@@ -67,6 +95,13 @@
 <p>
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
+
+<div class="btn-group" role="group" aria-label="Filter by Status">
+    <a asp-action="Index" asp-route-status="Available" class="btn btn-secondary">Available</a>
+    <a asp-action="Index" asp-route-status="Unavailable" class="btn btn-secondary">Unavailable</a>
+    <a asp-action="Index" asp-route-status="Discontinued" class="btn btn-secondary">Discontinued</a>
+    <a asp-action="Index" class="btn btn-secondary">Reset</a>
+</div>
 
 @if (Model.Product.Count() == 0)
 {
@@ -102,8 +137,11 @@ else
                         case "Unavailable":
                             rowColor = "table-warning";
                             break;
-                        default:
+                        case "Discontinued":
                             rowColor = "table-danger";
+                            break;
+                        default:
+                            rowColor = "";
                             break;
                     }
 

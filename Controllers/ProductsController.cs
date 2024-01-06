@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Supermarket.Data;
 using Supermarket.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -23,7 +24,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(int page = 1, string name = "")
+        public async Task<IActionResult> Index(int page = 1, string name = "", int? productId = null, string status = "")
         {
             var supermarketDbContext = _context.Product.Include(p => p.Brand).Include(p => p.Category);
             //return View(await supermarketDbContext.ToListAsync());
@@ -33,6 +34,16 @@ namespace Supermarket.Controllers
             if (name != "")
             {
                 products = products.Where(x => x.Name.Contains(name));
+            }
+
+            if (productId.HasValue)
+            {
+                products = products.Where(x => x.ProductId == productId);
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                products = products.Where(x => x.Status == status);
             }
 
             PagingInfoProduct paging = new PagingInfoProduct
