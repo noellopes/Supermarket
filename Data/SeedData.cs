@@ -4,6 +4,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Data {
     public class SeedData {
+        private const string ROLE_ADMIN = "Administrator";
         private const string ROLE_ADMIN1 = "Funcionário";
         private const string ROLE_ADMIN2 = "Gestor";
 
