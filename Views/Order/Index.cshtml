@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Supermarket.Models.User_Order>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.DeliveryDate)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.ProductList)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.Order.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Order.TotalPrice)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order.OrderDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order.DeliveryDate)
+                </td>
+                @* <td>
+                    @Html.DisplayFor(modelItem => item.ProductList)
+                </td> *@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Order.TotalPrice)
+            </tr>
+        }
+    </tbody>
+</table>

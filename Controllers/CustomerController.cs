@@ -32,7 +32,7 @@ namespace Supermarket.Controllers
                 }
                  _context.Customers.Add(customer);
                 _context.SaveChanges();
-                return Redirect("/Customer/CustomerList");
+                return Redirect("/Customer/LoginCustomer");
             }
             catch (Exception ex)
             {
@@ -41,6 +41,29 @@ namespace Supermarket.Controllers
             }
 
         }
+
+        [HttpPost]
+        public IActionResult CustomerLogin(string email,string password)
+        {
+            var customer = _context.Customers.FirstOrDefault(c =>c.CustomerEmail.Equals(email) 
+             &&  c.Password.Equals(password));
+            
+
+            if (customer != null)
+            {
+                return RedirectToAction("CustomerList", "Customer");
+            }
+            return Redirect("/Customer/LoginCustomer");
+        }
+
+        public IActionResult LoginCustomer()
+        {
+           
+            return View();
+        }
+
+      
+
 
         public IActionResult CustomerList()
         {

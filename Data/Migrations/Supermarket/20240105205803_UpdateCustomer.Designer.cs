@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -11,9 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240105205803_UpdateCustomer")]
+    partial class UpdateCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -813,59 +816,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("SubsidySetup");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.TakeAwayCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TakeAwayCategory");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.TakeAwayProduct", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EstimatedPreparationTimeAsMinutes")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("QuantityReserved")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("TakeAwayProduct");
-                });
-
             modelBuilder.Entity("Supermarket.Models.Warehouse", b =>
                 {
                     b.Property<int>("WarehouseId")
@@ -1124,17 +1074,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("Product");
 
                     b.Navigation("Shelf");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.TakeAwayProduct", b =>
-                {
-                    b.HasOne("Supermarket.Models.TakeAwayCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Supermarket.Models.WarehouseSection", b =>
