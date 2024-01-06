@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -20,11 +21,48 @@ namespace Supermarket.Controllers
         }
 
         // GET: Warehouses
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string name = "", string adress = "")
         {
-              return _context.Warehouse != null ? 
-                          View(await _context.Warehouse.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Warehouse'  is null.");
+            var warehouses = from b in _context.Warehouse select b;
+
+            if (name != "")
+            {
+                warehouses = warehouses.Where(x => x.Name.Contains(name));
+            }
+
+            if (adress != "")
+            {
+                warehouses = warehouses.Where(x => x.Adress.Contains(adress));
+            }
+
+            PagingInfoProduct paging = new PagingInfoProduct
+            {
+                CurrentPage = page,
+                TotalItems = await warehouses.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new WarehouseViewModel
+            {
+                Warehouse = await warehouses
+                    .OrderBy(b => b.Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfoProduct = paging,
+                SearchName = name,
+                SearchAdress = adress,
+            };
+
+            return View(vm);
         }
 
         // GET: Warehouses/Details/5

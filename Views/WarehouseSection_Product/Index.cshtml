@@ -36,8 +36,21 @@
         background-color: #28a745;
         color: #fff;
     }
-</style>
+      #meuCartao {
+        display: block;
+    }
 
+    nav[aria-label="WarehouseSections"] {
+        margin-top: 2%;
+    }
+</style>
+<script>
+    function toggleCard() {
+        var card = document.getElementById('meuCartao');
+        card.style.display = card.style.display === 'none' ? 'block' : 'none';
+    }
+
+</script>
 <h1>Batch Number</h1>
 
 <div class="card">
@@ -76,21 +89,9 @@
     </div>
 </div>
 
-<button class="btn btn-primary" onclick="toggleCard()">Ocultar/Mostrar</button>
+<button class="btn btn-primary" onclick="toggleCard()">Hide/Show search</button>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<script>
-    function toggleCard() {
-        var card = document.getElementById('meuCartao');
-        if (card.style.display === 'none' || card.style.display === '') {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    }
-</script>
-
 
 @if (ViewBag.TotalWarehouseSectionsProduts != null && ViewBag.TotalWarehouseSectionsProduts > 0)
 {
@@ -187,5 +188,11 @@ else
             </li>
         }
     </ul>
+
 </nav>
+
+
+
+
+
 

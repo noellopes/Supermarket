@@ -52,6 +52,8 @@ namespace Supermarket.Data
 
         private static void PopulateProduct(SupermarketDbContext db)
         {
+            DateTime specificLastCountDate = new DateTime(2023, 1, 2);
+
             if (db.Product.Any()) return;
 
             db.Product.AddRange(
@@ -64,7 +66,8 @@ namespace Supermarket.Data
                         TotalQuantity = 0,
                         MinimumQuantity = 200,
                         UnitPrice = 5.99,
-                        Status = "Unavailable"
+                        Status = "Unavailable",
+                        LastCountDate= specificLastCountDate
                     },
 
                     new Product
@@ -76,7 +79,8 @@ namespace Supermarket.Data
                         TotalQuantity = 26,
                         MinimumQuantity = 10,
                         UnitPrice = 25.99,
-                        Status = "Available"
+                        Status = "Available",
+                        LastCountDate = specificLastCountDate
                     },
                     new Product
                     {
@@ -87,7 +91,8 @@ namespace Supermarket.Data
                         TotalQuantity = 150,
                         MinimumQuantity = 50,
                         UnitPrice = 1.49,
-                        Status = "Available"
+                        Status = "Available",
+                        LastCountDate = specificLastCountDate
                     },
                     new Product
                     {
@@ -98,7 +103,8 @@ namespace Supermarket.Data
                         TotalQuantity = 75,
                         MinimumQuantity = 50,
                         UnitPrice = 2.29,
-                        Status = "Available"
+                        Status = "Available",
+                        LastCountDate = specificLastCountDate
                     }
                 );
 

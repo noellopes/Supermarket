@@ -4,9 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Supermarket.Data;
 using Supermarket.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Supermarket.Controllers
 {
@@ -20,10 +24,57 @@ namespace Supermarket.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string name = "", int? productId = null, string status = "")
         {
             var supermarketDbContext = _context.Product.Include(p => p.Brand).Include(p => p.Category);
-            return View(await supermarketDbContext.ToListAsync());
+            //return View(await supermarketDbContext.ToListAsync());
+
+            var products = from b in _context.Product select b;
+
+            if (name != "")
+            {
+                products = products.Where(x => x.Name.Contains(name));
+            }
+
+            if (productId.HasValue)
+            {
+                products = products.Where(x => x.ProductId == productId);
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                products = products.Where(x => x.Status == status);
+            }
+
+            PagingInfoProduct paging = new PagingInfoProduct
+            {
+                CurrentPage = page,
+                TotalItems = await products.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new ProductViewModel
+            {
+                Product = await products
+                    .OrderBy(b => b.Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfoProduct = paging,
+                SearchName = name,
+            };
+
+            ViewBag.totalProduct = vm.PagingInfoProduct.TotalItems;
+
+            return View(vm);
         }
 
         // GET: Products/Details/5
@@ -190,44 +241,168 @@ namespace Supermarket.Controllers
         //    await _context.SaveChangesAsync();
         //    return RedirectToAction(nameof(Index));
         //}
-
-        public async Task<IActionResult> RotativeProducts(int selectedProductId = 0)
+        public async Task<IActionResult> RotativeInventoryCriteria(string criterial, string selectedDate = "", int? SelectedNumber=0,float? SelectedPrice=0)
         {
-            // Consulta para os produtos
-            var productQuery = _context.Product
-                .Include(p => p.Brand)
-                  .Where(p => p.UnitPrice > 25);
+            var selectedCritial = criterial;
 
-            // Executar a consulta e armazenar os resultados na ViewData
-            var products = await productQuery.ToListAsync();
-            ViewData["Products"] = products;
+            ViewBag.selectedCritial = selectedCritial;
 
-            // Selecionar o produto com base no selectedProductId
-            var selectedProduct = products.FirstOrDefault(p => p.ProductId == selectedProductId);
-            ViewData["SelectedProduct"] = selectedProduct;
+            if (selectedDate != "" || SelectedNumber > 0 || SelectedPrice > 0)
+            {
+                TempData["SelectedStringDate"] = selectedDate;
+                TempData["SelectedNumber"] = SelectedNumber.ToString(); 
+                TempData["SelectedPrice"] = SelectedPrice.ToString(); 
 
-            // Consulta para os WarehouseSection_Products com base no Product selecionado
+                return RedirectToAction("RotativeProducts", new
+                {
+                    
+                    selectedStringDate = selectedDate,
+                    selectedNumber = SelectedNumber,
+                    selectedPrice = SelectedPrice
+                });
+            }
+
+            return View();
+        }
+        public async Task<IActionResult> RotativeProducts(string selectedStringDate, int? selectedNumber, float? selectedPrice, int selectedProductId = 0, bool isButtonClicked = false)
+        {
+            
+
+            if (TempData["SelectedPrice"] != null && TempData["SelectedNumber"] != null && TempData["SelectedStringDate"] !=null)
+            {
+                var Date = TempData["SelectedStringDate"].ToString();
+                var Number = int.Parse(TempData["SelectedNumber"].ToString());
+                var Price = float.Parse(TempData["SelectedPrice"].ToString());
+
+                var currentDate = DateTime.Now.Date;
+                int days = 0;
+                switch (Date)
+                {
+                    case "Month":
+                        days = 31;
+                        break;
+
+                    case "2Week":
+                        days = 14;
+                        break;
+
+                    case "week":
+                        days = 7;
+                        break;
+                    case "2day":
+                        days = 2;
+                        break;
+                }
+
+                var expensiveProducts = await _context.Product
+                    .Include(p => p.Brand)
+                    .Where(p => p.UnitPrice > 35)
+                    .ToListAsync();
+
+                var mostCommonProducts = _context.ReduceProduct
+         .Include(rp => rp.Product)
+             .ThenInclude(p => p.Brand)
+         .GroupBy(rp => rp.ProductId)
+         .OrderByDescending(g => g.Count())
+         .Take(Number)
+         .Select(g => g.First().Product)
+         .ToList();
+
+                var filteredProducts = expensiveProducts
+                    .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days)
+                    .ToList();
+
+                filteredProducts.AddRange(mostCommonProducts
+                .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days)
+                .Distinct()
+            );
+
+                var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
+
+                ViewData["Products"] = filteredProducts;
+                ViewData["SelectedProduct"] = selectedProduct;
+
+
+                if (isButtonClicked)
+                {
+                    // Update LastCountDate
+                    selectedProduct.LastCountDate = DateTime.Now;
+
+                    // Save changes to the database
+                    await _context.SaveChangesAsync();
+
+
+                    return RedirectToAction("RotativeProducts", new
+                    {
+                        SelectedProductId = 0,
+                        selectedStringDate = Date,
+                        selectedNumber = Number,
+                        selectedPrice = Price
+                    });
+
+
+                }
+            }
+            else
+            {
+                var currentDate = DateTime.Now.Date;
+                var expensiveProducts = await _context.Product
+              .Include(p => p.Brand)
+              .Where(p => p.UnitPrice > 25)
+              .ToListAsync();
+
+                var mostCommonProducts = _context.ReduceProduct
+         .Include(rp => rp.Product)
+             .ThenInclude(p => p.Brand)
+         .GroupBy(rp => rp.ProductId)
+         .OrderByDescending(g => g.Count())
+         .Take(2)
+         .Select(g => g.First().Product)
+         .ToList();
+
+                var filteredProducts = expensiveProducts
+             .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= 2)
+             .ToList();
+
+                filteredProducts.AddRange(mostCommonProducts
+        .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= 2));
+
+                var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
+
+                ViewData["Products"] = filteredProducts;
+                ViewData["SelectedProduct"] = selectedProduct;
+
+
+                if (isButtonClicked)
+                {
+                    // Update LastCountDate
+                    selectedProduct.LastCountDate = DateTime.Now;
+
+                    // Save changes to the database
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("RotativeProducts", new { SelectedProductId = 0 });
+                }
+
+            }
             var warehouseSectionProducts = await _context.WarehouseSection_Product
-         .Where(wp => wp.ProductId == selectedProductId)
-         .Include(wp => wp.WarehouseSection)
-          .ThenInclude(ws => ws.Warehouse)
-         .ToListAsync();
+                .Where(wp => wp.ProductId == selectedProductId)
+                .Include(wp => wp.WarehouseSection)
+                .ThenInclude(ws => ws.Warehouse)
+                .ToListAsync();
 
             var selftProducts = await _context.Shelft_ProductExhibition
-       .Where(wp => wp.ProductId == selectedProductId)
-       .Include(wp => wp.Shelf)
-        .ThenInclude(ws => ws.Hallway)
-         .ThenInclude(ws => ws.Store)
-       .ToListAsync();
+                .Where(wp => wp.ProductId == selectedProductId)
+                .Include(wp => wp.Shelf)
+                .ThenInclude(ws => ws.Hallway)
+                .ThenInclude(ws => ws.Store)
+                .ToListAsync();
 
             var selftProductsList = selftProducts.ToList();
-
             var warehouseSectionProductsList = warehouseSectionProducts.ToList();
 
             var totalWarehouseQuantity = warehouseSectionProductsList.Sum(wp => wp.Quantity);
             var totalShelfQuantity = selftProductsList.Sum(sp => sp.Quantity);
             var grandTotalQuantity = totalWarehouseQuantity + totalShelfQuantity;
-
 
             ViewData["TotalWarehouseQuantity"] = totalWarehouseQuantity;
             ViewData["TotalShelfQuantity"] = totalShelfQuantity;
@@ -236,7 +411,11 @@ namespace Supermarket.Controllers
             ViewData["SelftProductsList"] = selftProductsList;
 
             return View("RotativeInventory");
+
         }
+
+
+        
 
         private bool ProductExists(int id)
         {

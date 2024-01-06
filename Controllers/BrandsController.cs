@@ -20,11 +20,44 @@ namespace Supermarket.Controllers
         }
 
         // GET: Brands
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string name = "")
         {
-              return _context.Brand != null ? 
-                          View(await _context.Brand.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Brand'  is null.");
+            var brands = from b in _context.Brand select b;
+
+            if (name != "")
+            {
+                brands = brands.Where(x => x.Name.Contains(name));
+            }
+
+            PagingInfoProduct paging = new PagingInfoProduct
+            {
+                CurrentPage = page,
+                TotalItems = await brands.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new BrandViewModel
+            {
+                Brands = await brands
+                    .OrderBy(b => b.Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfoProduct = paging,
+                SearchName = name,
+            };
+
+            ViewBag.totalBrands = vm.PagingInfoProduct.TotalItems;
+
+            return View(vm);
         }
 
         // GET: Brands/Details/5
