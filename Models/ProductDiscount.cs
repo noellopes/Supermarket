@@ -6,7 +6,7 @@ namespace Supermarket.Models
     public class ProductDiscount
     {
         public int ProductDiscountId { get; set; }
-        public int ClientCardId { get; set; }
+        //public int ClientCardId { get; set; }
         [ForeignKey(nameof(ProductId))]
         public ClientCard? clientCard { get; set; }
         public int ProductId { get; set; }

@@ -11,7 +11,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class BrandsController : Controller
     {
         private readonly SupermarketDbContext _context;
