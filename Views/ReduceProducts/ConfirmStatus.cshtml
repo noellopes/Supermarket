@@ -1,0 +1,155 @@
+﻿@model Supermarket.Models.ReduceProduct
+
+@{
+    ViewData["Title"] = "Confirm";
+}
+
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+    .select-card {
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        cursor: pointer;
+    }
+
+        .select-card:hover {
+            background-color: #f8f8f8;
+        }
+</style>
+
+<div class="card">
+    <h1>ConfirmStatus</h1>
+</div>  
+<div class="card">
+<h4>ReduceProduct</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Product)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Product!.Name), @Html.DisplayFor(model => model.Product!.Brand!.Name)
+        </dd>
+        @if (Model.WarehouseSection != null)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.WarehouseSection)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.WarehouseSection!.Description), @Html.DisplayFor(model => model.WarehouseSection!.Warehouse!.Name)
+            </dd>
+        }
+        @if (Model.Shelf != null)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Shelf)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Shelf!.Name), @Html.DisplayFor(model => model.Shelf!.Hallway!.Description), @Html.DisplayFor(model => model.Shelf!.Hallway!.Store!.Name)
+            </dd>
+        }
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Reason)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Reason)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <form asp-action="ConfirmStatus">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ReduceProductId" />
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-control" asp-items="ViewBag.Status"></select>
+            </div>
+            <div class="form-group" style="display: none;">
+                <label asp-for="ProductId" class="control-label"></label>
+                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display: none;">
+                <label asp-for="Reason" class="control-label"></label>
+                <input asp-for="Reason" class="form-control" />
+                <span asp-validation-for="Reason" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display: none;">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+                <div class="form-group" style="display: none;">
+                    <label asp-for="WarehouseSectionId" class="control-label"></label>
+                    <select asp-for="WarehouseSectionId" id="Warehouse" class="form-control" asp-items="ViewBag.WarehouseSectionId"></select>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label asp-for="ShelfId" class="control-label"></label>
+                    <select asp-for="ShelfId" id="Store" class="form-control" asp-items="ViewBag.ShelfId"></select>
+                </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

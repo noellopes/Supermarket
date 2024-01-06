@@ -79,6 +79,7 @@ namespace Supermarket.Controllers
             }
 
             var productDiscount = await _context.ProductDiscount
+
                 .Include(b => b.ClientCard)
                 .Include(b => b.Product)
                 .FirstOrDefaultAsync(m => m.ProductDiscountId == id);
@@ -93,8 +94,7 @@ namespace Supermarket.Controllers
         // GET: ProductDiscounts/Create
         public IActionResult Create()
         {
-            ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber");
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description");
             return View();
         }
 
@@ -103,9 +103,10 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
+        public async Task<IActionResult> Create([Bind("ProductDiscountId,ProductId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (ModelState.IsValid)
+
         {
             var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
             bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
@@ -150,6 +151,7 @@ namespace Supermarket.Controllers
         }
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
+
             return View(productDiscount);
         }
 
@@ -166,8 +168,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", productDiscount.ProductId);
             return View(productDiscount);
         }
 
@@ -176,7 +177,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductDiscountId,ProductId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (id != productDiscount.ProductDiscountId)
             {
@@ -190,7 +191,9 @@ namespace Supermarket.Controllers
                     _context.Update(productDiscount);
                     await _context.SaveChangesAsync();
 
+
                     TempData["SuccessMessage"] = "product sucessful edited!";
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -205,8 +208,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", productDiscount.ProductId);
             return View(productDiscount);
         }
 
@@ -219,7 +221,6 @@ namespace Supermarket.Controllers
             }
 
             var productDiscount = await _context.ProductDiscount
-                .Include(p => p.ClientCard)
                 .Include(p => p.Product)
                 .FirstOrDefaultAsync(m => m.ProductDiscountId == id);
             if (productDiscount == null)
@@ -243,9 +244,11 @@ namespace Supermarket.Controllers
             if (productDiscount != null)
             {
                 _context.ProductDiscount.Remove(productDiscount);
+
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "product sucessful deleted";
+
             }
             
             await _context.SaveChangesAsync();

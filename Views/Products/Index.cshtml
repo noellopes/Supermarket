@@ -1,77 +1,222 @@
-﻿@model IEnumerable<Supermarket.Models.Product>
+﻿@model ProductViewModel
+@using Supermarket.Models
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<style>
+    body {
+        padding: 20px;
+        background-color: white;
+    }
+
+    h1 {
+        color: blue;
+        margin-top: 20px;
+    }
+
+    .tbconfig {
+        background-color: whitesmoke;
+        border: 1px solid rgba(10, 10, 10, 0.15);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<script>
+    function toggleSearchArea() {
+        var card = document.getElementById('SearchArea');
+        card.style.display = card.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function filterByStatus(status) {
+        console.log('Filtering by status:', status);
+
+        // Log the current class names of the rows
+        $('tbody tr').each(function () {
+            console.log($(this).attr('class'));
+        });
+
+        // Hide all rows
+        $('tbody tr').hide();
+
+        // Show rows with the selected status
+        $('tbody tr.' + status).show();
+    }
+
+    function resetFilter() {
+        console.log('Resetting filter');
+
+        // Log the current class names of the rows
+        $('tbody tr').each(function () {
+            console.log($(this).attr('class'));
+        });
+
+        // Show all rows
+        $('tbody tr').show();
+    }
+</script>
+
+<div class="tbconfig">
+    <h1>Index</h1>
+    @* <p>Total Products: @Model.Count()</p> *@
+    <p>Total Products: @ViewBag.totalProduct</p>
+</div>
+
+<button class="btn btn-primary mb-3" onclick="toggleSearchArea()">Hide/Show Search Product</button>
+
+<div id="SearchArea" class="container">
+    <div class="tbconfig">
+        <form asp-action="Index" method="get">
+            <p><strong>Search Product</strong></p>
+
+            <input type="hidden" name="productId" value="@Model.Product" />
+            <input type="hidden" name="status" value="@Model.FilterStatus" />
+
+            <label for="name" class="control-label">Name</label>
+            <input name="name" type="search" class="form-control" value="@Model.SearchName" />
+
+
+            <div class="mt-3">
+                <input class="btn btn-primary" type="submit" value="Search" />
+                <a asp-action="Index" asp-route-warehouseid="@Model.Product" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+
+
+    </div>
+ </div>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalQuantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MinimumQuantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UnitPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Brand.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MinimumQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-            </td>
-        </tr>
+
+<div class="btn-group" role="group" aria-label="Filter by Status">
+    <a asp-action="Index" asp-route-status="Available" class="btn btn-secondary">Available</a>
+    <a asp-action="Index" asp-route-status="Unavailable" class="btn btn-secondary">Unavailable</a>
+    <a asp-action="Index" asp-route-status="Discontinued" class="btn btn-secondary">Discontinued</a>
+    <a asp-action="Index" class="btn btn-secondary">Reset</a>
+</div>
+
+@if (Model.Product.Count() == 0)
+{
+    <p class="tbconfig">There are no products yet, start by creating one.</p>
 }
-    </tbody>
-</table>
+else
+{
+    <table class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Product[0].Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Product[0].Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Product[0].UnitPrice)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Product)
+                {
+                    string rowColor;
+                    switch (item.Status)
+                    {
+                        case "Available":
+                            rowColor = "table-success";
+                            break;
+                        case "Unavailable":
+                            rowColor = "table-warning";
+                            break;
+                        case "Discontinued":
+                            rowColor = "table-danger";
+                            break;
+                        default:
+                            rowColor = "";
+                            break;
+                    }
+
+                    <tr class="@rowColor">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnitPrice) €
+                        </td>
+                        <td>
+                            <div role="group" aria-label="Actions">
+                                <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-primary">Edit</a>
+                                <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-secondary">Details</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </table>
+
+    <nav aria-label="products">
+        <ul class="pagination">
+            @if (Model.PagingInfoProduct.CurrentPage == 1)
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">First</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+                </li>
+            }
+
+            @{
+                int first = Model.PagingInfoProduct.CurrentPage - PagingInfoProduct.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                if (first < 1) first = 1;
+
+                int last = Model.PagingInfoProduct.CurrentPage + PagingInfoProduct.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                if (last > Model.PagingInfoProduct.TotalPages) last = Model.PagingInfoProduct.TotalPages;
+            }
+
+            @for (int p = first; p <= last; p++)
+            {
+                @if (p == Model.PagingInfoProduct.CurrentPage)
+                {
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link" href="#">@p</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                    </li>
+                }
+            }
+            @if (Model.PagingInfoProduct.CurrentPage == Model.PagingInfoProduct.TotalPages)
+            {
+                <li class="page-item disabled">
+                    <a class="page-link" href="#">Last</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfoProduct.TotalPages">Last</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

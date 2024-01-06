@@ -4,45 +4,124 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
 
-<h4>ReduceProduct</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Reason" class="control-label"></label>
-                <input asp-for="Reason" class="form-control" />
-                <span asp-validation-for="Reason" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductId" class="control-label"></label>
-                <select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="WarehouseSectionId" class="control-label"></label>
-                <select asp-for="WarehouseSectionId" class ="form-control" asp-items="ViewBag.WarehouseSectionId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ShelfId" class="control-label"></label>
-                <select asp-for="ShelfId" class ="form-control" asp-items="ViewBag.ShelfId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+    .select-card {
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        cursor: pointer;
+    }
+
+        .select-card:hover {
+            background-color: #f8f8f8;
+        }
+</style>
+
+<div class="card">
+    <h1>Create</h1>
 </div>
 
+<div class="card">
+    <h4>ReduceProduct</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label class="control-label">Select Where is the Product</label>
+                    <select id="selectWhere" class="form-control" onchange="test()">
+                        <option value="1">Warehouse</option>
+                        <option value="2">Store</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="WarehouseSectionId" class="control-label"></label>
+                    <select asp-for="WarehouseSectionId" id="Warehouse" class="form-control" asp-items="ViewBag.WarehouseSectionId" onChange="teste1"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ShelfId" class="control-label"></label>
+                    <select asp-for="ShelfId" id="Store" disabled class="form-control" asp-items="ViewBag.ShelfId"></select>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ProductId" class="control-label"></label>
+                    <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Reason" class="control-label"></label>
+                    <input asp-for="Reason" class="form-control" />
+                    <span asp-validation-for="Reason" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Quantity" class="control-label"></label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function test() {
+        var select1 = document.getElementById("Warehouse");
+        var select2 = document.getElementById("Store");
+        select1.disabled = !select1.disabled
+        select2.disabled = !select1.disabled;
+    }
+    function teste1() {
+
+    }
+</script>
+
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
 @section Scripts {

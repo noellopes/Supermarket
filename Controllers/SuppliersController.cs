@@ -10,87 +10,87 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class EmployeeSchedulesController : Controller
+    public class SuppliersController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public EmployeeSchedulesController(SupermarketDbContext context)
+        public SuppliersController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: EmployeeSchedules
+        // GET: Suppliers
         public async Task<IActionResult> Index()
         {
-              return _context.EmployeeSchedule != null ? 
-                          View(await _context.EmployeeSchedule.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.EmployeeSchedule'  is null.");
+              return _context.Supplier != null ? 
+                          View(await _context.Supplier.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.Supplier'  is null.");
         }
 
-        // GET: EmployeeSchedules/Details/5
+        // GET: Suppliers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.EmployeeSchedule == null)
+            if (id == null || _context.Supplier == null)
             {
                 return NotFound();
             }
 
-            var employeeSchedule = await _context.EmployeeSchedule
-                .FirstOrDefaultAsync(m => m.ScheduleId == id);
-            if (employeeSchedule == null)
+            var supplier = await _context.Supplier
+                .FirstOrDefaultAsync(m => m.SupplierId == id);
+            if (supplier == null)
             {
                 return NotFound();
             }
 
-            return View(employeeSchedule);
+            return View(supplier);
         }
 
-        // GET: EmployeeSchedules/Create
+        // GET: Suppliers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: EmployeeSchedules/Create
+        // POST: Suppliers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
+        public async Task<IActionResult> Create([Bind("SupplierId,Name")] Supplier supplier)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employeeSchedule);
+                _context.Add(supplier);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(employeeSchedule);
+            return View(supplier);
         }
 
-        // GET: EmployeeSchedules/Edit/5
+        // GET: Suppliers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.EmployeeSchedule == null)
+            if (id == null || _context.Supplier == null)
             {
                 return NotFound();
             }
 
-            var employeeSchedule = await _context.EmployeeSchedule.FindAsync(id);
-            if (employeeSchedule == null)
+            var supplier = await _context.Supplier.FindAsync(id);
+            if (supplier == null)
             {
                 return NotFound();
             }
-            return View(employeeSchedule);
+            return View(supplier);
         }
 
-        // POST: EmployeeSchedules/Edit/5
+        // POST: Suppliers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
+        public async Task<IActionResult> Edit(int id, [Bind("SupplierId,Name")] Supplier supplier)
         {
-            if (id != employeeSchedule.ScheduleId)
+            if (id != supplier.SupplierId)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(employeeSchedule);
+                    _context.Update(supplier);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeScheduleExists(employeeSchedule.ScheduleId))
+                    if (!SupplierExists(supplier.SupplierId))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,49 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(employeeSchedule);
+            return View(supplier);
         }
 
-        // GET: EmployeeSchedules/Delete/5
+        // GET: Suppliers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.EmployeeSchedule == null)
+            if (id == null || _context.Supplier == null)
             {
                 return NotFound();
             }
 
-            var employeeSchedule = await _context.EmployeeSchedule
-                .FirstOrDefaultAsync(m => m.ScheduleId == id);
-            if (employeeSchedule == null)
+            var supplier = await _context.Supplier
+                .FirstOrDefaultAsync(m => m.SupplierId == id);
+            if (supplier == null)
             {
                 return NotFound();
             }
 
-            return View(employeeSchedule);
+            return View(supplier);
         }
 
-        // POST: EmployeeSchedules/Delete/5
+        // POST: Suppliers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.EmployeeSchedule == null)
+            if (_context.Supplier == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.EmployeeSchedule'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.Supplier'  is null.");
             }
-            var employeeSchedule = await _context.EmployeeSchedule.FindAsync(id);
-            if (employeeSchedule != null)
+            var supplier = await _context.Supplier.FindAsync(id);
+            if (supplier != null)
             {
-                _context.EmployeeSchedule.Remove(employeeSchedule);
+                _context.Supplier.Remove(supplier);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EmployeeScheduleExists(int id)
+        private bool SupplierExists(int id)
         {
-          return (_context.EmployeeSchedule?.Any(e => e.ScheduleId == id)).GetValueOrDefault();
+          return (_context.Supplier?.Any(e => e.SupplierId == id)).GetValueOrDefault();
         }
     }
 }

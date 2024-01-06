@@ -5,6 +5,7 @@
     ViewData["Title"] = "Products Discounts";
 }
 
+
 <h1>Product Discounts</h1>
 
 @if (TempData["SuccessMessage"] != null)
@@ -66,6 +67,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProductDiscounts[0].Value)
+
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ProductDiscounts[0].StartDate)
@@ -80,7 +82,9 @@
 @foreach (var item in Model.ProductDiscounts) {
         <tr>
             <td>
+
                 @Html.DisplayFor(modelItem => item.Product.Name)
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Value)
@@ -92,9 +96,11 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
+
                 <a asp-action="Edit" asp-route-id="@item.ProductDiscountId" class="btn btn-info">Edit</a> 
                 <a asp-action="Details" asp-route-id="@item.ProductDiscountId" class="btn btn-warning">Details</a> 
                 <a asp-action="Delete" asp-route-id="@item.ProductDiscountId" class="btn btn-danger">Delete</a>
+
             </td>
         </tr>
 }

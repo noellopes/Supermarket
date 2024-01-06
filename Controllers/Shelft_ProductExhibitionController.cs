@@ -48,10 +48,13 @@ namespace Supermarket.Controllers
         }
 
         // GET: Shelft_ProductExhibition/Create
-        public IActionResult Create()
+        public IActionResult Create(int? shelfId)
         {
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
-            ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name");
+            ViewBag.ErrorMessage = TempData["ErrorMessage"] as string;
+            ViewBag.ShelfId2 = shelfId;
+            ViewBag.ShelfIdName = _context.Shelf.Find(shelfId.Value)?.Name;
+            ViewBag.ProductIdOptions = new SelectList(_context.Product, "ProductId", "Name");
+
             return View();
         }
 
@@ -65,30 +68,49 @@ namespace Supermarket.Controllers
             if (ModelState.IsValid)
             {
                 bool Shelft_ProductExhibitionExists = await _context.Shelft_ProductExhibition.AnyAsync(
-               s => s.ProductId == shelft_ProductExhibition.ProductId
-               && s.ShelfId == shelft_ProductExhibition.ShelfId);
+                    s => s.ProductId == shelft_ProductExhibition.ProductId
+                    && s.ShelfId == shelft_ProductExhibition.ShelfId);
+
                 if (Shelft_ProductExhibitionExists)
                 {
-                    ModelState.AddModelError("", "Another Shelft Product Exhibition Exists with the same Product and Shelf already exists.");
+
+                    TempData["ErrorMessage"] = "Another Shelft Product Exhibition Exists with the same Product and Shelf already exists.";
                 }
                 else
                 {
-                    _context.Add(shelft_ProductExhibition);
-                    _context.Add(shelft_ProductExhibition);
-                    await _context.Entry(shelft_ProductExhibition)
-                    .Reference(wp => wp.Product)
-                    .LoadAsync();
-                    await _context.Entry(shelft_ProductExhibition)
-                    .Reference(wp => wp.Shelf)
-                    .LoadAsync();
-                    await _context.SaveChangesAsync();
-                    ViewBag.Message = "Shelft Product Exhibition successfully created.";
-                    return View("Details", shelft_ProductExhibition);
+                    try
+                    {
+                        _context.Add(shelft_ProductExhibition);
+                        await _context.SaveChangesAsync();
+
+                        // Load references
+                        await _context.Entry(shelft_ProductExhibition)
+                            .Reference(wp => wp.Product)
+                            .LoadAsync();
+                        await _context.Entry(shelft_ProductExhibition)
+                            .Reference(wp => wp.Shelf)
+                            .LoadAsync();
+
+                        ViewBag.Message = "Shelft Product Exhibition successfully created.";
+
+                        // Redirect to the "Details" action with the associated shelf ID
+                        return RedirectToAction("Details", "Shelves", new { id = shelft_ProductExhibition.ShelfId });
+                    }
+                    catch (DbUpdateException)
+                    {
+                        // Handle any exceptions that might occur during saving changes
+                        // You can log the exception or show an error message to the user
+                        ModelState.AddModelError("", "An error occurred while saving the data.");
+                    }
                 }
             }
+
+            // If ModelState is not valid or there was an exception, return to the "Create" view with errors and the same shelf ID
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", shelft_ProductExhibition.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", shelft_ProductExhibition.ShelfId);
-            return View(shelft_ProductExhibition);
+
+        
+            return RedirectToAction("Create", "shelft_ProductExhibition", new { shelfId = shelft_ProductExhibition.ShelfId });
         }
 
         // GET: Shelft_ProductExhibition/Edit/5
@@ -134,11 +156,33 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(shelft_ProductExhibition);
+
+                    // Buscar a entidade existente
+                    var existingShelft_ProductExhibition = await _context.Shelft_ProductExhibition
+                        .FirstOrDefaultAsync(wp => wp.ProductId == shelft_ProductExhibition.ProductId && wp.ShelfId == shelft_ProductExhibition.ShelfId);
+
+                    if (existingShelft_ProductExhibition != null)
+                    {
+                        // Manter o valor existente da propriedade Quantity
+                        shelft_ProductExhibition.Quantity = existingShelft_ProductExhibition.Quantity;
+
+                        // Atualizar todas as propriedades
+                        _context.Entry(existingShelft_ProductExhibition).CurrentValues.SetValues(shelft_ProductExhibition);
+                    }
+                    else
+                    {
+                        // Se a entidade não existe, adicioná-la ao contexto
+                        _context.Shelft_ProductExhibition.Update(shelft_ProductExhibition);
+                    }
+
+
                     await _context.SaveChangesAsync();
 
+
+
+
                     //ViewBag.Message = "Shelft Product Exhibition successfully edited.";
-                    TempData["Message"] = "Warehouse Section Product successfully created.";
+                    TempData["Message"] = "Shelft Product Exhibition successfully edited";
                     return RedirectToAction("Details", new { productId = shelft_ProductExhibition.ProductId, shelfId = shelft_ProductExhibition.ShelfId });
                 }
                 catch (DbUpdateConcurrencyException)
@@ -202,7 +246,7 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("ShelfProducts", "Shelves", new { shelfId = shelft_ProductExhibition.ShelfId });
         }
 
         private bool Shelft_ProductExhibitionExists(int id)

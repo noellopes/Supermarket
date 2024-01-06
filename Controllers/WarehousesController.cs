@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -20,11 +21,48 @@ namespace Supermarket.Controllers
         }
 
         // GET: Warehouses
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string name = "", string adress = "")
         {
-              return _context.Warehouse != null ? 
-                          View(await _context.Warehouse.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Warehouse'  is null.");
+            var warehouses = from b in _context.Warehouse select b;
+
+            if (name != "")
+            {
+                warehouses = warehouses.Where(x => x.Name.Contains(name));
+            }
+
+            if (adress != "")
+            {
+                warehouses = warehouses.Where(x => x.Adress.Contains(adress));
+            }
+
+            PagingInfoProduct paging = new PagingInfoProduct
+            {
+                CurrentPage = page,
+                TotalItems = await warehouses.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new WarehouseViewModel
+            {
+                Warehouse = await warehouses
+                    .OrderBy(b => b.Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfoProduct = paging,
+                SearchName = name,
+                SearchAdress = adress,
+            };
+
+            return View(vm);
         }
 
         // GET: Warehouses/Details/5
@@ -185,6 +223,52 @@ namespace Supermarket.Controllers
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+        public IActionResult WarehouseProducts(int warehouseId)
+        {
+            var warehouseInfo = _context.Warehouse
+                .Where(w => w.WarehouseId == warehouseId)
+                .Select(w => new
+                {
+                    WarehouseName = w.Name
+                })
+                .FirstOrDefault();
+
+            if (warehouseInfo == null)
+            {
+                return NotFound();
+            }
+
+            var warehouseProducts = _context.WarehouseSection_Product
+            .Where(wp => wp.WarehouseSection.WarehouseId == warehouseId && wp.Product != null)
+            .Include(wp => wp.Product)
+            .ThenInclude(p => p.Brand)
+            .AsEnumerable() 
+            .GroupBy(wp => new
+            {
+                ProductId = wp.ProductId,
+                Name = wp.Product.Name,
+                Description = wp.Product.Description,
+                Brand = wp.Product.Brand
+            })
+            .Select(group => new
+            {
+                ProductId = group.Key.ProductId,
+                ProductName = group.Key.Name,
+                ProductDescription = group.Key.Description,
+                BrandName = group.Key.Brand != null ? group.Key.Brand.Name : "No Brand",
+                Quantity = group.Sum(p => p.Quantity)
+            })
+            .ToList();
+
+
+
+
+            ViewBag.WarehouseName = warehouseInfo.WarehouseName;
+            ViewBag.TotalWarehouseProducts = warehouseProducts.Count;
+            ViewBag.WarehouseProducts = warehouseProducts;
+
+            return View();
         }
 
         private bool WarehouseExists(int id)

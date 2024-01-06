@@ -16,8 +16,7 @@ namespace Supermarket.Models
         [StringLength(50), MinLength(3)]
         required public string ClientEmail { get; set; }
         [Required]
-        required public DateTime ClientBirth {  get; set; }
-        public Boolean Estado { get; set; } = true;
+        required public DateTime ClientBirth {  get; set; } 
 
 
     }
