@@ -16,6 +16,9 @@
             {
                 <option value="@product.ProductId">@product.Name, @product.Description, @product.Brand?.Name, @product.LastCountDate</option>
             }
+            <input type="hidden" name="SelectedStringDate" value="@TempData["SelectedStringDate"]" />
+            <input type="hidden" name="SelectedNumber" value="@TempData["SelectedNumber"]" />
+            <input type="hidden" name="SelectedPrice" value="@TempData["SelectedPrice"]" />
         </select>
     </div>
     <div style="margin-top: 5px;">
