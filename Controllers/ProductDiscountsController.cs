@@ -21,19 +21,60 @@ namespace Supermarket.Controllers
             _context = context;
         }
 
+        // GET: ProductDiscounts/CreateBirthdayDiscount
+        public IActionResult CreateBirthdayDiscount()
+        {
+            ViewData["ProductList"] = new SelectList(_context.Product, "ProductId", "Name");
+            return View(new ProductDiscount());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task <IActionResult> CreateBirthdayDiscount(ProductDiscount productDiscount)
+        {
+            if (ModelState.IsValid)
+            {
+                var today = DateTime.Today;
+
+                var clientsWithBirthday = _context.ClientCard
+                    .Include(b => b.Client)
+                    .Where(b => b.Client.ClientBirth.Month == today.Month && b.Client.ClientBirth.Day == today.Day)
+                    .ToList();
+
+                foreach (var clientCard in clientsWithBirthday)
+                {
+                    var newProductDiscount = new ProductDiscount
+                    {
+                        ProductId = productDiscount.ProductId,
+                        ClientCardId = clientCard.ClientCardId,
+                        Value = productDiscount.Value,
+                        StartDate = DateTime.Today.AddDays(7),
+                        EndDate = DateTime.Today.AddDays(14),
+                    };
+
+                    _context.Add(newProductDiscount);
+                }
+
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Birthday Discount Created with Sucess!";
+                return RedirectToAction(nameof(Index));
+            }
+                
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
+            return View(productDiscount);
+        }
         // GET: ProductDiscounts
         public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
             var today = DateTime.Today;
 
             var clientsWithBirthday = _context.ClientCard
-                .Include(c => c.Client)
-                .Where(c => c.Client.ClientBirth.Month == today.Month && c.Client.ClientBirth.Day == today.Day)
+                .Include(b => b.Client)
+                .Where(b => b.Client.ClientBirth.Month == today.Month && b.Client.ClientBirth.Day == today.Day)
                 .ToList();
 
-            var clientIdsWithBirthday = clientsWithBirthday.Select(c => c.ClientCardId).ToList();
+            var clientIdsWithBirthday = clientsWithBirthday.Select(b => b.ClientCardId).ToList();
 
-            var productDiscounts = from b in _context.ProductDiscount.Include(p => p.ClientCard).Include(p => p.Product) select b; ;
+            var productDiscounts = from b in _context.ProductDiscount.Include(b => b.ClientCard).Include(b => b.Product) select b; ;
 
             if (product != "")
             {
@@ -91,7 +132,7 @@ namespace Supermarket.Controllers
             var productDiscount = await _context.ProductDiscount
                 .Include(b => b.ClientCard)
                 .Include(b => b.Product)
-                .FirstOrDefaultAsync(m => m.ProductDiscountId == id);
+                .FirstOrDefaultAsync(b => b.ProductDiscountId == id);
             if (productDiscount == null)
             {
                 return NotFound();
@@ -125,9 +166,7 @@ namespace Supermarket.Controllers
                     bool discountExistsForClient = await _context.ProductDiscount.AnyAsync(
                         b => b.ProductId == productDiscount.ProductId &&
                         b.ClientCardId == clientCard.ClientCardId &&
-                        b.Value == productDiscount.Value &&
-                        b.StartDate == productDiscount.StartDate &&
-                        b.EndDate == productDiscount.EndDate);
+                        b.Value == productDiscount.Value);
 
                     if (!discountExistsForClient)
                     {
@@ -154,7 +193,7 @@ namespace Supermarket.Controllers
                 else
                 {
                     await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "product successfully created!";
+                    TempData["SuccessMessage"] = "Product successfully created!";
                     return RedirectToAction(nameof(Index));
                 }
             }
