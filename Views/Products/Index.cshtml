@@ -1,6 +1,9 @@
 ﻿@model ProductViewModel
 @using Supermarket.Models
 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 @{
     ViewData["Title"] = "Index";
 }
@@ -25,11 +28,41 @@
     }
 </style>
 
+<script>
+    function toggleSearchArea() {
+        var card = document.getElementById('SearchArea');
+        card.style.display = card.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+
 <div class="tbconfig">
     <h1>Index</h1>
     @* <p>Total Products: @Model.Count()</p> *@
     <p>Total Products: @ViewBag.totalProduct</p>
 </div>
+
+<button class="btn btn-primary mb-3" onclick="toggleSearchArea()">Hide/Show Search Product</button>
+
+<div id="SearchArea" class="container">
+    <div class="tbconfig">
+        <form asp-action="Index" method="get">
+            <p><strong>Search Product</strong></p>
+
+            <input type="hidden" name="productId" value="@Model.Product" />
+
+            <label for="name" class="control-label">Name</label>
+            <input name="name" type="search" class="form-control" value="@Model.SearchName" />
+
+
+            <div class="mt-3">
+                <input class="btn btn-primary" type="submit" value="Search" />
+                <a asp-action="Index" asp-route-warehouseid="@Model.Product" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+
+
+    </div>
+ </div>
 
 <p>
     <a asp-action="Create" class="btn btn-success">Create New</a>
