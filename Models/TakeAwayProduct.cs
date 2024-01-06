@@ -27,7 +27,7 @@ namespace Supermarket.Models
         [Required]
         [Range(1,30,ErrorMessage = "Estimated Preparation time must be between 1 and 30 minutes")]
         public int EstimatedPreparationTimeAsMinutes { get; set; }
+        public List<Order> Order { get; set; }
 
-        
     }
 }
