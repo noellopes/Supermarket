@@ -28,5 +28,7 @@ namespace Supermarket.Models
         public int EstimatedPreparationTimeAsMinutes { get; set; }
         public List<TakeAwayProduct> Products { get; set; }
 
+        public List<User_Order> UserOrders { get; set; }
+
     }
 }
