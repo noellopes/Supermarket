@@ -90,7 +90,7 @@ namespace Supermarket.Controllers
                     {
                         if (SectionProduct!.Quantity > 0)
                         {
-                            if (reduceProduct.Quantity < SectionProduct.Quantity)
+                            if (reduceProduct.Quantity <= SectionProduct.Quantity)
                             {
                                 _context.Add(reduceProduct);
                                 await _context.SaveChangesAsync();
@@ -285,6 +285,11 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmStatus(int id, [Bind("ReduceProductId,Reason,Status,Date,Quantity,ProductId,WarehouseSectionId,ShelfId")] ReduceProduct reduceProduct)
         {
+            var productW = await _context.WarehouseSection_Product.Where(a => a.ProductId == reduceProduct.ProductId && a.WarehouseSectionId == reduceProduct.WarehouseSectionId && a.Quantity >= reduceProduct.Quantity).FirstOrDefaultAsync();
+            var productS = await _context.Shelft_ProductExhibition.Where(a => a.ProductId == reduceProduct.ProductId && a.ShelfId == reduceProduct.ShelfId && a.Quantity >= reduceProduct.Quantity).FirstOrDefaultAsync();
+
+            
+
             if (id != reduceProduct.ReduceProductId)
             {
                 return NotFound();
@@ -296,6 +301,22 @@ namespace Supermarket.Controllers
                 {
                     _context.Update(reduceProduct);
                     await _context.SaveChangesAsync();
+                    if (reduceProduct.Status == "Confirmed")
+                    {
+                        if (productW != null)
+                        {
+                            productW.Quantity -= reduceProduct.Quantity;
+                            _context.Update(productW);
+                            await _context.SaveChangesAsync();
+                        }
+                        if (productS != null)
+                        {
+                            productS.Quantity -= reduceProduct.Quantity;
+                            _context.Update(productS);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
