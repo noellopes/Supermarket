@@ -18,6 +18,7 @@ namespace Supermarket.Models
         public Supplier? Supplier { get; set; }
 
         [Required]
+        [Display(Name = "Delivered Quantity")]
         public int DeliveredQuantity { get; set; }
 
         [Required]
