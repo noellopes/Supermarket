@@ -49,6 +49,9 @@
     <tbody>
         @if (ViewData["ProductsToRestore"] is IEnumerable<Supermarket.Models.Shelft_ProductExhibition> productsToRestore && productsToRestore != null)
         {
+            @if (ViewData["ProductsToGet"] is IEnumerable<Supermarket.Models.Shelft_ProductExhibition> productsToGet && productsToGet != null)
+            {
+            
             foreach (var product in productsToRestore)
             {
                 <tr>
@@ -62,9 +65,14 @@
                         @Html.DisplayFor(modelItem => product.Shelf.Name)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => productsToGet.Where(a => a.ProductId == product.ProductId).FirstOrDefault())
+                    </td>
+                    <td>
                         <a asp-action="Details" asp-route-id="@product.ProductId">Details</a>
                     </td>
                 </tr>
+            }
+
             }
         }
         else

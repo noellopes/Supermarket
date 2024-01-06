@@ -440,6 +440,20 @@ namespace Supermarket.Controllers
                 .Include(wp => wp.Shelf)
                 .ToListAsync();
 
+            List<WarehouseSection_Product> productsToGet = await _context.WarehouseSection_Product
+                .Include(wp => wp.Product)
+                .Include(wp => wp.WarehouseSection)
+                .Where(wp => wp.Product == null)
+                .ToListAsync();
+            foreach (var item in productsToRestore)
+            {
+                productsToGet = await _context.WarehouseSection_Product
+                    .Include(wp => wp.Product)
+                    .Where(wp => wp.ProductId == item.ProductId && wp.Quantity > 0)
+                    .OrderBy(wp => wp.ExpirationDate)
+                    .Include(wp => wp.WarehouseSection)
+                    .ToListAsync();
+            }
             //var productsToGet = await _context.WarehouseSection_Product
             //    .Include(wp => wp.Product)
             //    .Where(wp => wp.ProductId == productsToRestore.Pr && wp.Quantity > 0)
@@ -452,6 +466,7 @@ namespace Supermarket.Controllers
             Console.WriteLine($"Number of products to restore: {productsToRestore.Count}");
 
             ViewData["ProductsToRestore"] = productsToRestore.ToList();
+            ViewData["ProductsToGet"] = productsToGet.ToList();
 
             return View("RestoreExposure");
         }
