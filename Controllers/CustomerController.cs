@@ -56,7 +56,7 @@ namespace Supermarket.Controllers
             if (customer != null)
             {
                 _memoryCache.Set("customerId", customer.CustomerId);
-                return RedirectToAction("PlaceOrder", "TakeAwayProduct",new { id = customer.CustomerId });
+                return Redirect("/Customer/CustomerList");
             }
             return Redirect("/Customer/LoginCustomer");
         }
