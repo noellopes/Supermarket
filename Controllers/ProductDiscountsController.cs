@@ -21,11 +21,61 @@ namespace Supermarket.Controllers
             _context = context;
         }
 
+        // GET: ProductDiscounts/CreateBirthdayDiscount
+        public IActionResult CreateBirthdayDiscount()
+        {
+            ViewData["ProductList"] = new SelectList(_context.Product, "ProductId", "Name");
+            return View(new ProductDiscount());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task <IActionResult> CreateBirthdayDiscount(ProductDiscount productDiscount)
+        {
+            if (ModelState.IsValid)
+            {
+                var today = DateTime.Today;
+
+                var clientsWithBirthday = _context.ClientCard
+                    .Include(b => b.Client)
+                    .Where(b => b.Client.ClientBirth.Month == today.Month && b.Client.ClientBirth.Day == today.Day)
+                    .ToList();
+
+                foreach (var clientCard in clientsWithBirthday)
+                {
+                    var newProductDiscount = new ProductDiscount
+                    {
+                        ProductId = productDiscount.ProductId,
+                        ClientCardId = clientCard.ClientCardId,
+                        Value = productDiscount.Value,
+                        StartDate = DateTime.Today.AddDays(7),
+                        EndDate = DateTime.Today.AddDays(14),
+                    };
+
+                    _context.Add(newProductDiscount);
+                }
+
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Birthday Discount Created with Sucess!";
+                return RedirectToAction(nameof(Index));
+            }
+                
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
+            return View(productDiscount);
+        }
         // GET: ProductDiscounts
         public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
-            var productDiscounts = from b in _context.ProductDiscount.Include(b => b.ClientCard).Include(b => b.Product) select b;
-            
+            var today = DateTime.Today;
+
+            var clientsWithBirthday = _context.ClientCard
+                .Include(b => b.Client)
+                .Where(b => b.Client.ClientBirth.Month == today.Month && b.Client.ClientBirth.Day == today.Day)
+                .ToList();
+
+            var clientIdsWithBirthday = clientsWithBirthday.Select(b => b.ClientCardId).ToList();
+
+            var productDiscounts = from b in _context.ProductDiscount.Include(b => b.ClientCard).Include(b => b.Product) select b; ;
+
             if (product != "")
             {
                 productDiscounts = productDiscounts.Where(b => b.Product.Name.Contains(product));
@@ -66,6 +116,7 @@ namespace Supermarket.Controllers
                     .Take(paging.PageSize)
                     .ToListAsync(),
                 PagingInfo = paging,
+                ClientsWithBirthday = clientsWithBirthday,
             };
             return View(vm);
         }
@@ -81,7 +132,8 @@ namespace Supermarket.Controllers
             var productDiscount = await _context.ProductDiscount
                 .Include(b => b.ClientCard)
                 .Include(b => b.Product)
-                .FirstOrDefaultAsync(m => m.ProductDiscountId == id);
+                .FirstOrDefaultAsync(b => b.ProductDiscountId == id);
+
             if (productDiscount == null)
             {
                 return NotFound();
@@ -106,19 +158,17 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Create([Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (ModelState.IsValid)
-        {
-            var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
-            bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
+            {
+                var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
+                bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
 
                 foreach (var clientCard in clientCards)
                 {
                     bool discountExistsForClient = await _context.ProductDiscount.AnyAsync(
                         b => b.ProductId == productDiscount.ProductId &&
                         b.ClientCardId == clientCard.ClientCardId &&
-                        b.Value == productDiscount.Value &&
-                        b.StartDate == productDiscount.StartDate &&
-                        b.EndDate == productDiscount.EndDate);
-
+                        b.Value == productDiscount.Value);
+                        
                     if (!discountExistsForClient)
                     {
                         var newProductDiscount = new ProductDiscount
@@ -144,10 +194,10 @@ namespace Supermarket.Controllers
                 else
                 {
                     await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "product successfully created!";
+                    TempData["SuccessMessage"] = "Product successfully created!";
                     return RedirectToAction(nameof(Index));
                 }
-        }
+            }
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
             return View(productDiscount);
@@ -247,14 +297,14 @@ namespace Supermarket.Controllers
 
                 TempData["SuccessMessage"] = "product sucessful deleted";
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductDiscountExists(int id)
         {
-          return (_context.ProductDiscount?.Any(e => e.ProductDiscountId == id)).GetValueOrDefault();
+            return (_context.ProductDiscount?.Any(e => e.ProductDiscountId == id)).GetValueOrDefault();
         }
     }
 }
