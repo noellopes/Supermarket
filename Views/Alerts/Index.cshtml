@@ -31,7 +31,11 @@
 <h1>Alert List</h1>
 </div>
 
-<table class="table table-striped">
+<form asp-action="IndexAll">
+    <input type="submit" value="See Alerts Seen"/>
+</form>
+
+<table class="table">
     <thead>
         <tr>
             <th>
@@ -45,7 +49,6 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-            @if (item.Status == "Not Seen"){
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)
@@ -57,7 +60,6 @@
                         <a asp-action="Details" asp-route-id="@item.AlertId" class="btn btn-secondary">Details</a>
             </td>
         </tr>
-            }
 }
     </tbody>
 </table>
