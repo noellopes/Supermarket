@@ -164,6 +164,26 @@ namespace Supermarket.Controllers
                 //obter os clientCards Ativos
                 var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
                 bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
+                // Verificação para garantir que a data de início não seja anterior à data atual
+                if (productDiscount.StartDate < DateTime.Today)
+                {
+                    ModelState.AddModelError("StartDate", "Start date must be equal to or later than today.");
+                    duplicatedDiscounts = true;
+                }
+
+                // Verificação para garantir que o valor do desconto seja maior que 0
+                if (productDiscount.Value <= 0)
+                {
+                    ModelState.AddModelError("Value", "Discount value must be greater than 0.");
+                    duplicatedDiscounts = true;
+                }
+
+                // Verificação para garantir que o valor do desconto seja menor do que 100
+                if (productDiscount.Value > 100)
+                {
+                    ModelState.AddModelError("Value", "Discount value must be lower than 100.");
+                    duplicatedDiscounts = true;
+                }
                 //Verificação para saber se à descontos duplicados
                 foreach (var clientCard in clientCards)
                 {
@@ -171,6 +191,7 @@ namespace Supermarket.Controllers
                         b => b.ProductId == productDiscount.ProductId &&
                         b.ClientCardId == clientCard.ClientCardId &&
                         b.Value == productDiscount.Value);
+
                     //se não houver adciona um novo desconto    
                     if (!discountExistsForClient)
                     {
@@ -194,6 +215,9 @@ namespace Supermarket.Controllers
                 if (duplicatedDiscounts)
                 {
                     ModelState.AddModelError("", "One or more product Discounts with the same values already exist for the same clients.");
+                    ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
+                    ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
+                    return View(productDiscount);
                 }
                 // salva os decontos na database e redereciona para o view Index
                 else
