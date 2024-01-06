@@ -340,10 +340,13 @@ namespace Supermarket.Controllers
                     // Save changes to the database
                     await _context.SaveChangesAsync();
 
+                    string description = "A new Rotative Inventory was been made for product:  " + selectedProduct.Name + " in" + selectedProduct.LastCountDate;
                     Alert alert = new Alert
                     {
-                        Role = "Test",
-                        Description = "A new Rotative Inventory was been made for product:  " + selectedProduct.Name + " in" + selectedProduct.LastCountDate
+                        Role = "Stock Operator",
+                        Description = description,
+                        Function="ReduceProducts"
+
                     };
                     _context.Add(alert);
                     await _context.SaveChangesAsync();
@@ -396,7 +399,17 @@ namespace Supermarket.Controllers
                     // Update LastCountDate
                     selectedProduct.LastCountDate = DateTime.Now;
 
-                    // Save changes to the database
+                    string description = "A new Rotative Inventory was been made for product:  " + selectedProduct.Name + " in" + selectedProduct.LastCountDate;
+                    Alert alert = new Alert
+                    {
+                        Role = "Stock Administration",
+                        Description = description,
+                        
+
+                    };
+                    _context.Add(alert);
+                    
+
                     await _context.SaveChangesAsync();
                     return RedirectToAction("RotativeProducts", new { SelectedProductId = 0 });
                 }
