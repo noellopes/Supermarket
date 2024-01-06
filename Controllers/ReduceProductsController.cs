@@ -97,7 +97,7 @@ namespace Supermarket.Controllers
                                 var str = new string("A new ReduceProduct has been created: " + product!.Name + ", " + reduceProduct.Quantity) + "chosed to be reduced";
                                 Alert alert = new Alert
                                 {
-                                    Role = "Test",
+                                    Role = "Stock Administrator",
                                     Description = str
                                 };
                                 _context.Add(alert);
