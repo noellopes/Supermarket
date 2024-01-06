@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Supermarket.Controllers
@@ -228,87 +230,149 @@ namespace Supermarket.Controllers
         //    await _context.SaveChangesAsync();
         //    return RedirectToAction(nameof(Index));
         //}
-
-        public async Task<IActionResult> RotativeProducts(int selectedProductId = 0, bool isButtonClicked = false, List<int> shelfIds = null, List<int> newQuantities = null)
+        public async Task<IActionResult> RotativeInventoryCriteria(string criterial, string selectedDate = "", int? SelectedNumber=0,float? SelectedPrice=0)
         {
-           /*
-            var currentDate = DateTime.Now.Date; // Usando apenas a parte da data, sem incluir a hora
-            var products = await _context.Product
-                .Include(p => p.Brand)
-                .Where(p => p.UnitPrice > 25)
-                .ToListAsync();
+            var selectedCritial = criterial;
 
-            // Aplicar a condição de data no lado do cliente
-            var filteredProducts = products
-                .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= 0)
-                .ToList();
+            ViewBag.selectedCritial = selectedCritial;
 
-            ViewData["Products"] = filteredProducts;
-
-            var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
-            ViewData["SelectedProduct"] = selectedProduct;
-           */
-
-           
-            var currentDate = DateTime.Now.Date; // Usando apenas a parte da data, sem incluir a hora
-
-            var expensiveProducts = await _context.Product
-                .Include(p => p.Brand)
-                .Where(p => p.UnitPrice > 25)
-                .ToListAsync();
-
-            var mostCommonProducts = _context.ReduceProduct
-     .Include(rp => rp.Product)
-         .ThenInclude(p => p.Brand)
-     .GroupBy(rp => rp.ProductId)
-     .OrderByDescending(g => g.Count())
-     .Take(2)
-     .Select(g => g.First().Product)  
-     .ToList();
-
-            var filteredProducts = expensiveProducts
-                .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= 0)
-                .ToList();
-
-            filteredProducts.AddRange(mostCommonProducts
-    .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= 0));
-
-            var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
-
-            ViewData["Products"] = filteredProducts;
-            ViewData["SelectedProduct"] = selectedProduct;
-
-
-            if (isButtonClicked)
+            if (selectedDate != "" || SelectedNumber > 0 || SelectedPrice > 0)
             {
-                // Update LastCountDate
-                selectedProduct.LastCountDate = DateTime.Now;
+                TempData["SelectedStringDate"] = selectedDate;
+                TempData["SelectedNumber"] = SelectedNumber.ToString(); 
+                TempData["SelectedPrice"] = SelectedPrice.ToString(); 
 
-                // Update quantities for associated shelves
-                if (shelfIds != null && newQuantities != null && shelfIds.Count == newQuantities.Count)
+                return RedirectToAction("RotativeProducts", new
                 {
-                    // Loop through shelves and update quantities
-                    for (int i = 0; i < shelfIds.Count; i++)
-                    {
-                        // Find the corresponding Shelft_ProductExhibition
-                        var shelftProduct = await _context.Shelft_ProductExhibition
-                            .FirstOrDefaultAsync(wp => wp.ProductId == selectedProductId && wp.ShelfId == shelfIds[i]);
+                    
+                    selectedStringDate = selectedDate,
+                    selectedNumber = SelectedNumber,
+                    selectedPrice = SelectedPrice
+                });
+            }
 
-                        // If found, update the quantity
-                        if (shelftProduct != null)
-                        {
-                            shelftProduct.Quantity = newQuantities[i];
-                        }
-                    }
+            return View();
+        }
+        public async Task<IActionResult> RotativeProducts(string selectedStringDate, int? selectedNumber, float? selectedPrice, int selectedProductId = 0, bool isButtonClicked = false)
+        {
+            
+
+            if (TempData["SelectedPrice"] != null && TempData["SelectedNumber"] != null && TempData["SelectedStringDate"] !=null)
+            {
+                var Date = TempData["SelectedStringDate"].ToString();
+                var Number = int.Parse(TempData["SelectedNumber"].ToString());
+                var Price = float.Parse(TempData["SelectedPrice"].ToString());
+
+                var currentDate = DateTime.Now.Date;
+                int days = 0;
+                switch (Date)
+                {
+                    case "Month":
+                        days = 31;
+                        break;
+
+                    case "2Week":
+                        days = 14;
+                        break;
+
+                    case "week":
+                        days = 7;
+                        break;
+                    case "2day":
+                        days = 2;
+                        break;
+                }
+
+                var expensiveProducts = await _context.Product
+                    .Include(p => p.Brand)
+                    .Where(p => p.UnitPrice > 35)
+                    .ToListAsync();
+
+                var mostCommonProducts = _context.ReduceProduct
+         .Include(rp => rp.Product)
+             .ThenInclude(p => p.Brand)
+         .GroupBy(rp => rp.ProductId)
+         .OrderByDescending(g => g.Count())
+         .Take(Number)
+         .Select(g => g.First().Product)
+         .ToList();
+
+                var filteredProducts = expensiveProducts
+                    .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days)
+                    .ToList();
+
+                filteredProducts.AddRange(mostCommonProducts
+                .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days)
+                .Distinct()
+            );
+
+                var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
+
+                ViewData["Products"] = filteredProducts;
+                ViewData["SelectedProduct"] = selectedProduct;
+
+
+                if (isButtonClicked)
+                {
+                    // Update LastCountDate
+                    selectedProduct.LastCountDate = DateTime.Now;
 
                     // Save changes to the database
                     await _context.SaveChangesAsync();
+
+
+                    return RedirectToAction("RotativeProducts", new
+                    {
+                        SelectedProductId = 0,
+                        selectedStringDate = Date,
+                        selectedNumber = Number,
+                        selectedPrice = Price
+                    });
+
+
+                }
+            }
+            else
+            {
+                var currentDate = DateTime.Now.Date;
+                var expensiveProducts = await _context.Product
+              .Include(p => p.Brand)
+              .Where(p => p.UnitPrice > 25)
+              .ToListAsync();
+
+                var mostCommonProducts = _context.ReduceProduct
+         .Include(rp => rp.Product)
+             .ThenInclude(p => p.Brand)
+         .GroupBy(rp => rp.ProductId)
+         .OrderByDescending(g => g.Count())
+         .Take(2)
+         .Select(g => g.First().Product)
+         .ToList();
+
+                var filteredProducts = expensiveProducts
+             .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= 2)
+             .ToList();
+
+                filteredProducts.AddRange(mostCommonProducts
+        .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= 2));
+
+                var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
+
+                ViewData["Products"] = filteredProducts;
+                ViewData["SelectedProduct"] = selectedProduct;
+
+
+                if (isButtonClicked)
+                {
+                    // Update LastCountDate
+                    selectedProduct.LastCountDate = DateTime.Now;
+
+                    // Save changes to the database
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("RotativeProducts", new { SelectedProductId = 0 });
                 }
 
-                // Redirect to RotativeProducts action with SelectedProductId set to 0
-                return RedirectToAction("RotativeProducts", new { SelectedProductId = 0 });
             }
-
             var warehouseSectionProducts = await _context.WarehouseSection_Product
                 .Where(wp => wp.ProductId == selectedProductId)
                 .Include(wp => wp.WarehouseSection)
