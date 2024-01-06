@@ -52,17 +52,20 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
+            @if (User.IsInRole(item.Role))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
                         <a asp-action="Details" asp-route-id="@item.AlertId" class="btn btn-secondary">Details</a>
-            </td>
-        </tr>
+                    </td>
+                </tr>
+            }
 }
     </tbody>
 </table>
