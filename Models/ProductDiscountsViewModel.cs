@@ -2,7 +2,7 @@
 {
     public class ProductDiscountsViewModel
     {
-        public List<ProductDiscount> ProductDiscounts { get; set; }
+        //public List<ProductDiscount> ProductDiscounts { get; set; }
         public PagingInfo PagingInfo { get; set; }
         public string SearchProduct { get; set; } = string.Empty;
         public float? SearchValue {  get; set; } 

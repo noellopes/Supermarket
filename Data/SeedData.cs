@@ -538,18 +538,18 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
         private static void PopulateProductDiscounts(SupermarketDbContext db) {
-            if (db.ProductDiscount.Any()) return;
-
-            db.ProductDiscount.AddRange(
-                new ProductDiscount {
-                    Product = db.Product.FirstOrDefault(b => b.Name == "Cream")!,
-                    ClientCard = db.ClientCard.FirstOrDefault(b => b.ClientCardNumber == 987654)!,
-                    Value = 10,
-                    StartDate = new DateTime(2023, 12, 17),
-                    EndDate = new DateTime(2023, 12, 21)
-                }
-                );
-            db.SaveChanges();
+            //if (db.ProductDiscount.Any()) return;
+            return;
+            //db.ProductDiscount.AddRange(
+            //    new ProductDiscount {
+            //        Product = db.Product.FirstOrDefault(b => b.Name == "Cream")!,
+            //        ClientCard = db.ClientCard.FirstOrDefault(b => b.ClientCardNumber == 987654)!,
+            //        Value = 10,
+            //        StartDate = new DateTime(2023, 12, 17),
+            //        EndDate = new DateTime(2023, 12, 21)
+            //    }
+            //    );
+            //db.SaveChanges();
         }
 
         internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager) {
