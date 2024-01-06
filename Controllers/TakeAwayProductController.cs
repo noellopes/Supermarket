@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -178,6 +179,59 @@ namespace Supermarket.Controllers
         {
             var basket = _memoryCache.Get<Basket>(CacheProductKey) ?? new Models.Basket();
             return View("Basket",basket);
+        }
+
+
+        
+        public IActionResult Login()
+        {
+            //Response.Redirect("https://localhost:7232/Customer/LoginCustomer");
+            var customerId = _memoryCache.Get<int?>("customerId");
+            if (_memoryCache.TryGetValue(CacheProductKey,out _))
+            {
+
+                if (customerId == null)
+                {
+                    return RedirectToAction(actionName: "LoginCustomer", controllerName: "Customer");
+                }
+
+                return RedirectToAction("PlaceOrder", "TakeAwayProduct", new { id = customerId });
+            }
+            return RedirectToAction("Basket","TakeAwayProduct");
+        }
+
+
+        public IActionResult PlaceOrder(int id)
+        {
+            var basket = _memoryCache.Get<Basket>(CacheProductKey) ?? new Models.Basket();
+            basket.CustomerId = id;
+            return View(basket);
+        }
+
+        
+        public IActionResult ConfirmOrder(int customerId)
+        {
+            var basket = _memoryCache.Get<Basket>(CacheProductKey) ?? new Models.Basket();
+
+            var order = new Order();
+            order.CustomerId = customerId;
+            order.TotalPrice = (float)basket.TotalPrice;
+            order.EstimatedPreparationTimeAsMinutes = basket.EstimatedPreparationTimeAsMinutes;
+            _context.Order.Add(order);
+            _context.SaveChanges();
+
+            foreach (var product in basket.Products)
+            {
+                var userOrder = new User_Order();
+                userOrder.ProductId = product.Id;
+                userOrder.OrderId = order.Id;
+                _context.User_Order.Add(userOrder);
+            }
+            _context.SaveChanges();
+
+
+
+            return RedirectToAction("Index","Order");
         }
 
     }

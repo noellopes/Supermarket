@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Supermarket.Data;
 using Supermarket.Models;
 
@@ -10,10 +11,13 @@ namespace Supermarket.Controllers
     {
         private readonly SupermarketDbContext _context;
         private readonly ILogger<CustomerController> _logger;
-        public CustomerController(SupermarketDbContext context, ILogger<CustomerController> logger)
+        private readonly IMemoryCache _memoryCache;
+
+        public CustomerController(SupermarketDbContext context, ILogger<CustomerController> logger,IMemoryCache cache)
         {
             _context = context;
             _logger = logger;
+            _memoryCache = cache;
         }
 
         public IActionResult Customer()
@@ -51,7 +55,8 @@ namespace Supermarket.Controllers
 
             if (customer != null)
             {
-                return RedirectToAction("CustomerList", "Customer");
+                _memoryCache.Set("customerId", customer.CustomerId);
+                return RedirectToAction("PlaceOrder", "TakeAwayProduct",new { id = customer.CustomerId });
             }
             return Redirect("/Customer/LoginCustomer");
         }

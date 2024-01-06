@@ -13,5 +13,6 @@
         public int? TotalProductQuantityInBasket { get; set; }
         public int PreparingOrders { get; set; }
         public int OrdersCanPrepareSimultaneously { get; set; }
+        public int? CustomerId { get; set; }
     }
 }

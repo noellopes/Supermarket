@@ -24,6 +24,7 @@ namespace Supermarket.Data
             PopulateProductDiscounts(db);
             PopulateTakeAwayCategories(db);
             PopulateTakeAwayProducts(db);
+            PopulateCustomer(db);
             //PopulateEmployees(db);
             //PopulateEmployeeEvaluations(db);
         }
@@ -316,6 +317,44 @@ namespace Supermarket.Data
                 );
 
             db.SaveChanges();
+        }
+
+        private static void PopulateCustomer(SupermarketDbContext db)
+        {
+            if (db.Customers.Any()) return;
+
+            db.Customers.AddRange(
+                    new Customer
+                    {
+                        CustomerBirth = DateTime.Now,
+                        CustomerAddress = "Guarda/Portugal",
+                        CustomerEmail = "omeerabay@gmail.com",
+                        CustomerName = "Omer",
+                        CustomerPhone = "+905537466968",
+                        Password = "omerabay"
+                    },
+                    new Customer
+                    {
+                        CustomerBirth = DateTime.Now,
+                        CustomerAddress = "Guarda/Portugal",
+                        CustomerEmail = "yusuf@gmail.com",
+                        CustomerName = "Yusuf",
+                        CustomerPhone = "+905537466968",
+                        Password = "yusuftasci"
+                    },
+                    new Customer
+                    {
+                        CustomerBirth = DateTime.Now,
+                        CustomerAddress = "Guarda/Portugal",
+                        CustomerEmail = "melike@gmail.com",
+                        CustomerName = "Melike",
+                        CustomerPhone = "+905537466968",
+                        Password = "melikegokdemir"
+                    }
+                );
+
+            db.SaveChanges();
+
         }
 
         private static void PopulateEmployees(SupermarketDbContext db)
