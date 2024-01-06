@@ -405,21 +405,18 @@ namespace Supermarket.Data {
                     new Alert
                     {
                         Role = "Stock Operator",
-                        Status = "Pending",
                         Date = specificDate,
                         Description = "Prepare Order"
                     },
                     new Alert
                     {
                         Role = "Stock Admin",
-                        Status = "Pending",
                         Date = specificDate,
                         Description = "Reduce Product"
                     },
                     new Alert
                     {
                         Role = "Stock Admin",
-                        Status = "Seen",
                         Date = specificDate,
                         Description = "Reduce Product"
                     }

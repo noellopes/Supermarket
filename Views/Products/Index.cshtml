@@ -35,13 +35,6 @@
     }
 
     function filterByStatus(status) {
-        console.log('Filtering by status:', status);
-
-        // Log the current class names of the rows
-        $('tbody tr').each(function () {
-            console.log($(this).attr('class'));
-        });
-
         // Hide all rows
         $('tbody tr').hide();
 
@@ -50,13 +43,6 @@
     }
 
     function resetFilter() {
-        console.log('Resetting filter');
-
-        // Log the current class names of the rows
-        $('tbody tr').each(function () {
-            console.log($(this).attr('class'));
-        });
-
         // Show all rows
         $('tbody tr').show();
     }
