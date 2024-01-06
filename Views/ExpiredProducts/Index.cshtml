@@ -6,6 +6,10 @@
 
 <h1>Expired Products</h1>
 
+<p>
+    <a asp-action="Create">Add New Expired Product</a>
+</p>
+
 
 <div class="card mb-3">
     <div class="card-body">
@@ -30,11 +34,6 @@
         </form>
     </div>
 </div>
-
-
-<p>
-    <a asp-action="Create">Add New Expired Product</a>
-</p>
 
 
 <table class="table">
@@ -81,20 +80,11 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
-                </td>
+                    </td>
                     <td>
-                        @if (User.IsInRole("Edit_Del_Reports"))
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.ExpiredProductId" class="btn btn-warning">Edit  </a>
-                            <a asp-action="Details" asp-route-id="@item.ExpiredProductId" class="btn btn-info">Details  </a>
-                            <a asp-action="Delete" asp-route-id="@item.ExpiredProductId" class="btn btn-danger">Delete</a>
-
-                        }
-                        else
-                        {
-                            <a asp-action="Details" asp-route-id="@item.ExpiredProductId" class="btn btn-info">Details  </a>
-                        }
-
+                        <a asp-action="Edit" asp-route-id="@item.ExpiredProductId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ExpiredProductId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ExpiredProductId">Delete</a>
                     </td>
                 </tr>
         }

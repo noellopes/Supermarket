@@ -21,7 +21,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: IssueTypes
-        [Authorize(Roles = "View_Reports")]
+        [Authorize(Roles = "View_IssueType")]
         public async Task<IActionResult> Index()
         {
             return _context.IssueType != null ?
@@ -30,7 +30,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: IssueTypes/Details/5
-        [Authorize(Roles = "View_Reports")]
+        [Authorize(Roles = "View_IssueType")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.IssueType == null)

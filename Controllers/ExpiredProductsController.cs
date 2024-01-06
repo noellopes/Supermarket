@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +20,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: ExpiredProducts
-        [Authorize(Roles = "View_Reports")]
         public async Task<IActionResult> Index(int page = 1, string product = "", string barcode = "", string supplier = "", string employee = "")
         {
 
@@ -60,7 +58,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: ExpiredProducts/Details/5
-        [Authorize(Roles = "View_Reports")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.ExpiredProducts == null)
@@ -82,7 +79,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: ExpiredProducts/Create
-        [Authorize(Roles = "Create_Reports")]
         public IActionResult Create()
         {
             ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name");
@@ -96,7 +92,6 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Create_Reports")]
         public async Task<IActionResult> Create([Bind("ExpiredProductId,ProductId,FabricationDate,ExpirationDate,BarCode,SupplierId,EmployeeId")] ExpiredProducts expiredProducts)
         {
             if (ModelState.IsValid)
@@ -112,7 +107,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: ExpiredProducts/Edit/5
-        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ExpiredProducts == null)
@@ -136,7 +130,6 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> Edit(int id, [Bind("ExpiredProductId,ProductId,FabricationDate,ExpirationDate,BarCode,SupplierId,EmployeeId")] ExpiredProducts expiredProducts)
         {
             if (id != expiredProducts.ExpiredProductId)
@@ -171,7 +164,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: ExpiredProducts/Delete/5
-        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.ExpiredProducts == null)
@@ -195,7 +187,6 @@ namespace Supermarket.Controllers
         // POST: ExpiredProducts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.ExpiredProducts == null)

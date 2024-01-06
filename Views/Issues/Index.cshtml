@@ -85,7 +85,7 @@
                 @Html.DisplayFor(modelItem => item.Severity)
             </td>
             <td>               
-                    @if (User.IsInRole("Edit_Del_Reports"))
+                    @if (User.IsInRole("Edit_Del_Issue"))
                     {
                         <a asp-action="Edit" asp-route-id="@item.IssueId" class="btn btn-warning">Edit  </a>
                         <a asp-action="Details" asp-route-id="@item.IssueId" class="btn btn-info">Details  </a>
