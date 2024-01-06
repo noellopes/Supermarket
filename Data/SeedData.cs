@@ -20,6 +20,7 @@ namespace Supermarket.Data {
             PopulateSupplier(db);
             PopulateWarehouseSection_Product(db);
             PopulateReduceProduct(db);
+            PopulateAlerts(db);
             //PopulateEmployees(db);
             //PopulateEmployeeEvaluations(db);
         }
@@ -390,6 +391,39 @@ namespace Supermarket.Data {
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section D6")!
                     }
                 );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulateAlerts(SupermarketDbContext db)
+        {
+            DateTime specificDate = new DateTime(2023, 1, 2);
+
+            if (db.Alert.Any()) return;
+
+            db.Alert.AddRange(
+                    new Alert
+                    {
+                        Role = "Stock Operator",
+                        Status = "Pending",
+                        Date = specificDate,
+                        Description = "Prepare Order"
+                    },
+                    new Alert
+                    {
+                        Role = "Stock Admin",
+                        Status = "Pending",
+                        Date = specificDate,
+                        Description = "Reduce Product"
+                    },
+                    new Alert
+                    {
+                        Role = "Stock Admin",
+                        Status = "Seen",
+                        Date = specificDate,
+                        Description = "Reduce Product"
+                    }
+                ) ;
 
             db.SaveChanges();
         }
