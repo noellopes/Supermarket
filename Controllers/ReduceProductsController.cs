@@ -98,7 +98,8 @@ namespace Supermarket.Controllers
                                 Alert alert = new Alert
                                 {
                                     Role = "Stock Administrator",
-                                    Description = str
+                                    Description = str,
+                                    Function = "reduceProducts"
                                 };
                                 _context.Add(alert);
                                 await _context.SaveChangesAsync();

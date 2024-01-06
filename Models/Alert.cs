@@ -18,5 +18,8 @@ namespace Supermarket.Models
         [StringLength(80, MinimumLength = 3, ErrorMessage = "Please enter a valid description, must be minimum 3 leters lengt and max 80")]
         public string Description { get; set; } = string.Empty;
 
+        [Required]
+        public string Function { get; set; } = string.Empty;
+
     }
 }
