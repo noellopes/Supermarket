@@ -22,6 +22,8 @@ namespace Supermarket.Data
             PopulateClients(db);
             PopulateClientCard(db);
             PopulateProductDiscounts(db);
+            PopulateTakeAwayCategories(db);
+            PopulateTakeAwayProducts(db);
             //PopulateEmployees(db);
             //PopulateEmployeeEvaluations(db);
         }
@@ -482,6 +484,51 @@ namespace Supermarket.Data
                     StartDate = new DateTime(2023, 12, 17),
                     EndDate = new DateTime(2023, 12, 21)
                    }
+                );
+            db.SaveChanges();
+        }
+
+        private static void PopulateTakeAwayCategories(SupermarketDbContext db)
+        {
+            if (db.TakeAwayCategory.Any()) return;
+
+            db.TakeAwayCategory.AddRange(
+                    new TakeAwayCategory
+                    {
+                        //Id = 1,
+                        Name = "Soups",
+                    },
+                    new TakeAwayCategory
+                    {
+                        //Id= 2,
+                        Name = "Burgers"
+                    },
+                    new TakeAwayCategory
+                    {
+                        //Id = 3,
+                        Name = "Breakfast"
+                    },
+                    new TakeAwayCategory
+                    {
+                        //Id = 4,
+                        Name = "Beverages"
+                    }
+                );
+            db.SaveChanges();
+        }
+        private static void PopulateTakeAwayProducts(SupermarketDbContext db)
+        {
+            if (db.TakeAwayProduct.Any()) return;
+
+            db.TakeAwayProduct.AddRange(
+                    new TakeAwayProduct
+                    {
+                        ProductName = "Coca Cola",
+                        Category = db.TakeAwayCategory.FirstOrDefault(x=> x.Name == "Beverages")!,
+                        Price = 2,
+                        Quantity = 20,
+                        EstimatedPreparationTimeAsMinutes = 1,
+                    }
                 );
             db.SaveChanges();
         }
