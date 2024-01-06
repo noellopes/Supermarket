@@ -245,6 +245,8 @@ namespace Supermarket.Controllers
         //}
         public async Task<IActionResult> RotativeInventoryCriteria(string criterial, string selectedDate = "", int? SelectedNumber=0,float? SelectedPrice=0)
         {
+         
+
             var selectedCritial = criterial;
 
             ViewBag.selectedCritial = selectedCritial;
@@ -266,15 +268,19 @@ namespace Supermarket.Controllers
 
             return View();
         }
-        public async Task<IActionResult> RotativeProducts(string selectedStringDate, int? selectedNumber, float? selectedPrice, int selectedProductId = 0, bool isButtonClicked = false)
+        public async Task<IActionResult> RotativeProducts(string? selectedStringDate, int? selectedNumber, float? selectedPrice, int selectedProductId = 0, bool isButtonClicked = false)
         {
-            
+         
 
-            if (TempData["SelectedPrice"] != null && TempData["SelectedNumber"] != null && TempData["SelectedStringDate"] !=null)
+            if (selectedStringDate != null && selectedNumber != null && selectedPrice != null)
             {
-                var Date = TempData["SelectedStringDate"].ToString();
-                var Number = int.Parse(TempData["SelectedNumber"].ToString());
-                var Price = float.Parse(TempData["SelectedPrice"].ToString());
+                var Date = selectedStringDate;
+                var Number = selectedNumber;
+                var Price = selectedPrice;
+
+                TempData["SelectedStringDate"] = Date;
+                TempData["SelectedNumber"] = int.Parse(Number.ToString());
+                TempData["SelectedPrice"] = float.Parse(Price.ToString());
 
                 var currentDate = DateTime.Now.Date;
                 int days = 0;
@@ -298,7 +304,7 @@ namespace Supermarket.Controllers
 
                 var expensiveProducts = await _context.Product
                     .Include(p => p.Brand)
-                    .Where(p => p.UnitPrice > 35)
+                    .Where(p => p.UnitPrice > Price)
                     .ToListAsync();
 
                 var mostCommonProducts = _context.ReduceProduct
@@ -306,7 +312,7 @@ namespace Supermarket.Controllers
              .ThenInclude(p => p.Brand)
          .GroupBy(rp => rp.ProductId)
          .OrderByDescending(g => g.Count())
-         .Take(Number)
+         .Take((int)Number)
          .Select(g => g.First().Product)
          .ToList();
 
@@ -323,6 +329,9 @@ namespace Supermarket.Controllers
 
                 ViewData["Products"] = filteredProducts;
                 ViewData["SelectedProduct"] = selectedProduct;
+                TempData["SelectedStringDate"] = Date;
+                TempData["SelectedNumber"] = int.Parse(Number.ToString());
+                TempData["SelectedPrice"] = float.Parse(Price.ToString());
 
 
                 if (isButtonClicked)
@@ -336,10 +345,10 @@ namespace Supermarket.Controllers
 
                     return RedirectToAction("RotativeProducts", new
                     {
-                        SelectedProductId = 0,
-                        selectedStringDate = Date,
-                        selectedNumber = Number,
-                        selectedPrice = Price
+                        selectedProductId = 0,
+                        selectedStringDate = TempData["SelectedStringDate"],
+                        selectedNumber = TempData["SelectedNumber"],
+                        selectedPrice = TempData["SelectedPrice"]
                     });
 
 

@@ -119,11 +119,22 @@
         <span style="color: red;">No Shelf Products available for the selected product.</span>
     }
 }
-    <a asp-action="RotativeProducts" asp-route-selectedProductId="@selectedProduct.ProductId" asp-route-isButtonClicked="true">Clique aqui</a>
 
+    var selectedStringDate = ViewData["SelectedStringDate"];
+    var selectedNumber = ViewData["SelectedNumber"];
+    var selectedPrice = ViewData["SelectedPrice"];
+
+
+
+
+<a asp-action="RotativeProducts"
+       asp-route-selectedStringDate="@selectedStringDate"
+       asp-route-selectedNumber="@selectedNumber"
+       asp-route-selectedPrice="@selectedPrice"
+       asp-route-selectedProductId="@selectedProduct.ProductId"
+   asp-route-isButtonClicked="true">Clique aqui</a>
+   // <a asp-action="RotativeProducts" asp-route-selectedStringDate="@TempData["SelectedStringDate"]" asp-route-selectedNumber="@TempData["SelectedNumber"]" asp-route-selectedPrice="@TempData["SelectedPrice"]" asp-route-selectedProductId="@selectedProduct.ProductId" asp-route-isButtonClicked="true">Clique aqui</a>
 }
-
-
 
 <script>
     // Função para calcular e exibir a soma total da quantidade da prateleira
