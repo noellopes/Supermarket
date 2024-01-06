@@ -9,7 +9,9 @@
 <p>
     @if (User.IsInRole("Create_Edit_Del_IssueType"))
     {
-        <a asp-action="Create">Create New</a>
+        <div class="d-grid gap-2">
+            <a asp-action="Create" class="btn btn-primary">Create New</a>
+        </div>
     }
     
 </p>

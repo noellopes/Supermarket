@@ -30,6 +30,8 @@ namespace Supermarket.Data {
             PopulateType(db);
             PopulateIssueType(db);
             PopulatePurchase(db);
+            PopulateIssue(db);
+            PopulateExpProduct(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db) {
@@ -676,6 +678,31 @@ namespace Supermarket.Data {
                 new Models.Purchase { ProductId = 1, SupplierId = 1, DeliveredQuantity = 30, DeliveryDate = new DateTime(2024, 01, 01, 00, 00, 00, 00) },
                 new Models.Purchase { ProductId = 2, SupplierId = 2, DeliveredQuantity = 50, DeliveryDate = new DateTime(2024, 01, 02, 00, 00, 00, 00) },
                 new Models.Purchase { ProductId = 3, SupplierId = 3, DeliveredQuantity = 70, DeliveryDate = new DateTime(2024, 01, 03, 00, 00, 00, 00) }
+              );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulateIssue(SupermarketDbContext db)
+        {
+            if (db.Issues.Any()) return;
+
+            db.Issues.AddRange(
+                new Models.Issues { ProductId = 1, IssueTypeId= 1, Description= "Issue Description 1", SupplierId= 1, EmployeeId= 1, Severity= Severity.Light},
+                new Models.Issues { ProductId = 2, IssueTypeId = 3, Description = "Issue Description 2", SupplierId = 2, EmployeeId = 1, Severity = Severity.Light },
+                new Models.Issues { ProductId = 1, IssueTypeId = 2, Description = "Issue Description 3", SupplierId = 1, EmployeeId = 4, Severity = Severity.Severe }
+              );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulateExpProduct(SupermarketDbContext db)
+        {
+            if (db.ExpiredProducts.Any()) return;
+
+            db.ExpiredProducts.AddRange(
+                new Models.ExpiredProducts { ProductId = 1, FabricationDate = DateTime.Now, ExpirationDate = DateTime.Now, BarCode = "XR4396", SupplierId = 2, EmployeeId = 1 },
+                new Models.ExpiredProducts { ProductId = 3, FabricationDate = DateTime.Now, ExpirationDate = DateTime.Now, BarCode = "XR4456", SupplierId = 1, EmployeeId = 2 }
               );
 
             db.SaveChanges();
