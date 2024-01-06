@@ -30,6 +30,7 @@ namespace Supermarket.Models
         [Display(Name = "Minimum Quantity")]
         public int MinimumQuantity { get; set; }
 
+        [Range(0, 99999, ErrorMessage = "The Unit Price must be greater than zero")]
         [Display(Name = "Unit Price")]
         public double UnitPrice { get; set; }
 
@@ -46,9 +47,5 @@ namespace Supermarket.Models
         public ICollection<Shelft_ProductExhibition>? Shelf { get; set; }
 
         public ICollection<WarehouseSection_Product>? WarehouseSection { get; set; }
-
-
-
-
     }
 }
