@@ -27,6 +27,7 @@ namespace Supermarket.Controllers
             ViewData["ProductList"] = new SelectList(_context.Product, "ProductId", "Name");
             return View(new ProductDiscount());
         }
+        //Novo create para os desconto de aniversário
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task <IActionResult> CreateBirthdayDiscount(ProductDiscount productDiscount)
@@ -34,12 +35,12 @@ namespace Supermarket.Controllers
             if (ModelState.IsValid)
             {
                 var today = DateTime.Today;
-
+                //Ir buscar a lista do clientes que fazem anos associados ao cartão cliente
                 var clientsWithBirthday = _context.ClientCard
                     .Include(b => b.Client)
                     .Where(b => b.Client.ClientBirth.Month == today.Month && b.Client.ClientBirth.Day == today.Day)
                     .ToList();
-
+                // loop para criar o novo desconto de aniversário
                 foreach (var clientCard in clientsWithBirthday)
                 {
                     var newProductDiscount = new ProductDiscount
@@ -65,17 +66,18 @@ namespace Supermarket.Controllers
         // GET: ProductDiscounts
         public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
+            //variavel para a data do aniversário
             var today = DateTime.Today;
-
+            //obter uma lista de clientes que fazem aniversário
             var clientsWithBirthday = _context.ClientCard
                 .Include(b => b.Client)
                 .Where(b => b.Client.ClientBirth.Month == today.Month && b.Client.ClientBirth.Day == today.Day)
                 .ToList();
-
+            //Obter os ids do clientes que fazem anos
             var clientIdsWithBirthday = clientsWithBirthday.Select(b => b.ClientCardId).ToList();
-
+            //obter os descontos de produtos
             var productDiscounts = from b in _context.ProductDiscount.Include(b => b.ClientCard).Include(b => b.Product) select b; ;
-
+            //pesquisa dos descontos produto
             if (product != "")
             {
                 productDiscounts = productDiscounts.Where(b => b.Product.Name.Contains(product));
@@ -107,7 +109,7 @@ namespace Supermarket.Controllers
             {
                 paging.CurrentPage = paging.TotalPages;
             }
-
+            //Ligação com o ViewModel para obter o produto procurado
             var vm = new ProductDiscountsViewModel
             {
                 ProductDiscounts = await productDiscounts
@@ -159,16 +161,17 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
+                //obter os clientCards Ativos
                 var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
                 bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
-
+                //Verificação para saber se à descontos duplicados
                 foreach (var clientCard in clientCards)
                 {
                     bool discountExistsForClient = await _context.ProductDiscount.AnyAsync(
                         b => b.ProductId == productDiscount.ProductId &&
                         b.ClientCardId == clientCard.ClientCardId &&
                         b.Value == productDiscount.Value);
-                        
+                    //se não houver adciona um novo desconto    
                     if (!discountExistsForClient)
                     {
                         var newProductDiscount = new ProductDiscount
@@ -187,10 +190,12 @@ namespace Supermarket.Controllers
                         duplicatedDiscounts = true;
                     }
                 }
+                //se houver exibe a mesnagem de erro a dizer descontos duplicados
                 if (duplicatedDiscounts)
                 {
                     ModelState.AddModelError("", "One or more product Discounts with the same values already exist for the same clients.");
                 }
+                // salva os decontos na database e redereciona para o view Index
                 else
                 {
                     await _context.SaveChangesAsync();
