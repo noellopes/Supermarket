@@ -11,5 +11,7 @@
         public double TotalPrice { get; set; }
         public int EstimatedPreparationTimeAsMinutes { get; set; }
         public int? TotalProductQuantityInBasket { get; set; }
+        public int PreparingOrders { get; set; }
+        public int OrdersCanPrepareSimultaneously { get; set; }
     }
 }

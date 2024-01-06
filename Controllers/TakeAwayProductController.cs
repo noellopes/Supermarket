@@ -138,6 +138,7 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> AddBasket(int id)
         {
             TakeAwayProduct newProduct = new TakeAwayProduct();
+            int? reservedQuantity = 1;
             var product = _context.TakeAwayProduct.Include("Category").AsNoTracking().FirstOrDefault(x=> x.Id == id);
             if (product == null)
             {
@@ -149,7 +150,6 @@ namespace Supermarket.Controllers
             newProduct.Category = product.Category;
             newProduct.Price = product.Price;
             newProduct.Quantity = product.Quantity - 1;
-            newProduct.QuantityReserved = product.QuantityReserved == null ? 1 : product.QuantityReserved + 1;
             newProduct.EstimatedPreparationTimeAsMinutes = product.EstimatedPreparationTimeAsMinutes;
 
             var basket = _memoryCache.Get<Basket>(CacheProductKey) ?? new Models.Basket();
@@ -157,17 +157,19 @@ namespace Supermarket.Controllers
             if (basket.Products.Any(x=> x.ProductName == newProduct.ProductName))
             {
                 var data = basket.Products.Find(x=> x.ProductName == newProduct.ProductName);
+                reservedQuantity = data!.QuantityReserved + 1;
                 basket.Products.Remove(data!);
             }
 
+            newProduct.QuantityReserved = reservedQuantity;
             basket.Products.Add(newProduct);
             basket.TotalProductQuantityInBasket = basket.Products.Sum(x => x.QuantityReserved);
             basket.EstimatedPreparationTimeAsMinutes = (int)basket.Products.Select(x => x.EstimatedPreparationTimeAsMinutes * x.QuantityReserved).Sum();
             basket.TotalPrice = (double) basket.Products.Select(x => x.Price * x.QuantityReserved).Sum();
+            basket.PreparingOrders = _context.Order.Where(x => x.Status == "Preparing").Count();
+            basket.OrdersCanPrepareSimultaneously = _context.EmployeeSchedule.Where(x => x.CheckInTime.Hours < DateTime.Now.Hour && x.CheckOutTime.Hours > DateTime.Now.Hour).Count();
 
             _memoryCache.Set(CacheProductKey, basket);
-            _context.TakeAwayProduct.Update(newProduct);
-            _context.SaveChanges();
 
             return View("Index", await _context.TakeAwayProduct.Include("Category").ToListAsync());
         }
