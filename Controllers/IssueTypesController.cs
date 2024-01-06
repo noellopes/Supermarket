@@ -140,7 +140,7 @@ namespace Supermarket.Controllers
             {
                 return View("IssueTypeDeleted");
             }
-
+            
             return View(issueType);
         }
 

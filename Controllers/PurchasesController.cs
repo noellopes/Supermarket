@@ -40,7 +40,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.PurchaseId == id);
             if (purchase == null)
             {
-                return NotFound();
+                return View("PurchaseInexistent");
             }
 
             return View(purchase);
@@ -49,7 +49,7 @@ namespace Supermarket.Controllers
         // GET: Purchases/Create
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description");
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name");
             return View();
         }
@@ -67,7 +67,7 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", purchase.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", purchase.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name", purchase.SupplierId);
             return View(purchase);
         }
@@ -83,9 +83,9 @@ namespace Supermarket.Controllers
             var purchase = await _context.Purchase.FindAsync(id);
             if (purchase == null)
             {
-                return NotFound();
+                return View("PurchaseInexistent");
             }
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", purchase.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", purchase.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name", purchase.SupplierId);
             return View(purchase);
         }
@@ -122,7 +122,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", purchase.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", purchase.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name", purchase.SupplierId);
             return View(purchase);
         }
@@ -141,7 +141,7 @@ namespace Supermarket.Controllers
                 .FirstOrDefaultAsync(m => m.PurchaseId == id);
             if (purchase == null)
             {
-                return NotFound();
+                return View("PurchaseInexistent");
             }
 
             return View(purchase);
@@ -156,14 +156,19 @@ namespace Supermarket.Controllers
             {
                 return Problem("Entity set 'SupermarketDbContext.Purchase'  is null.");
             }
-            var purchase = await _context.Purchase.FindAsync(id);
+
+            var purchase = await _context.Purchase
+                .Include(p => p.Product)
+                .Include(p => p.Supplier)
+                .FirstOrDefaultAsync(m => m.PurchaseId == id);
+
             if (purchase != null)
             {
                 _context.Purchase.Remove(purchase);
             }
-            
+
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View("PurchaseDeleted", purchase);
         }
 
         private bool PurchaseExists(int id)
