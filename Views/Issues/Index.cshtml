@@ -6,10 +6,6 @@
 
 <h1>Issues Page</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
 <div class="card mb-3">
     <div class="card-body">
         <form asp-action="Index" method="get">
@@ -34,6 +30,9 @@
     </div>
 </div>
 
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Issue</a>
+</p>
 
 <table class="table">
     <thead>
@@ -82,10 +81,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Severity)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IssueId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IssueId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IssueId">Delete</a>
+            <td>               
+                    @if (User.IsInRole("Edit_Del_Reports"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.IssueId" class="btn btn-warning">Edit  </a>
+                        <a asp-action="Details" asp-route-id="@item.IssueId" class="btn btn-info">Details  </a>
+                        <a asp-action="Delete" asp-route-id="@item.IssueId" class="btn btn-danger">Delete</a>
+                                               
+                    }else
+                    {
+                        <a asp-action="Details" asp-route-id="@item.IssueId" class="btn btn-info">Details  </a>
+                    }
+                    
             </td>
         </tr>
 }
