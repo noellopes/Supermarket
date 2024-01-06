@@ -445,6 +445,7 @@ namespace Supermarket.Controllers
                 .Include(wp => wp.WarehouseSection)
                 .Where(wp => wp.Product == null)
                 .ToListAsync();
+
             foreach (var item in productsToRestore)
             {
                 productsToGet = await _context.WarehouseSection_Product

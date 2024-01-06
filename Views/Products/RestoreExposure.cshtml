@@ -15,6 +15,11 @@
         margin-top: 20px;
     }
 
+    h5 {
+        color: blue;
+        margin-top: 40px;
+    }
+
     .tbconfig {
         background-color: whitesmoke;
         border: 1px solid rgba(10, 10, 10, 0.15);
@@ -28,11 +33,15 @@
     <h1>Index</h1>
 </div>
 
-<p>
+@* <p>
     <a asp-action="Create" class="btn btn-success">Create New</a>
-</p>
+</p> *@
 
-<table class="table">
+<div>
+    <h5>Products to Restore</h5>
+</div>
+
+<table class="table tbconfig">
     <thead>
         <tr>
             <th>
@@ -49,9 +58,6 @@
     <tbody>
         @if (ViewData["ProductsToRestore"] is IEnumerable<Supermarket.Models.Shelft_ProductExhibition> productsToRestore && productsToRestore != null)
         {
-            @if (ViewData["ProductsToGet"] is IEnumerable<Supermarket.Models.Shelft_ProductExhibition> productsToGet && productsToGet != null)
-            {
-            
             foreach (var product in productsToRestore)
             {
                 <tr>
@@ -64,15 +70,65 @@
                     <td>
                         @Html.DisplayFor(modelItem => product.Shelf.Name)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => productsToGet.Where(a => a.ProductId == product.ProductId).FirstOrDefault())
-                    </td>
+                    @* <td>
+                        @Html.DisplayFor(modelItem => productsToRestore.Where(a => a.ProductId == product.ProductId).FirstOrDefault())
+                    </td> *@
                     <td>
                         <a asp-action="Details" asp-route-id="@product.ProductId">Details</a>
                     </td>
                 </tr>
             }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">No products to restore</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
+<div>
+    <h5>Get the Products to Restore</h5>
+</div>
+
+<table class="table tbconfig">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Shelf
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewData["ProductsToGet"] is IEnumerable<Supermarket.Models.WarehouseSection_Product> productsToGet && productsToGet != null)
+        {
+
+            foreach (var product in productsToGet)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Product.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Product.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.WarehouseSection.Description)
+                    </td>
+                    @* <td>
+                        @Html.DisplayFor(modelItem => productsToGet.Where(a => a.ProductId == product.ProductId).FirstOrDefault())
+                    </td> *@
+                    <td>
+                        <a asp-action="Details" asp-route-id="@product.ProductId">Details</a>
+                    </td>
+                </tr>
             }
         }
         else
