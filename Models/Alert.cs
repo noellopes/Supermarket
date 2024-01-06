@@ -10,7 +10,7 @@ namespace Supermarket.Models
         public string Role { get; set; } = string.Empty;
 
         [Required]
-        public string Status { get; set; } = string.Empty;
+        public string Status { get; set; } = "Not Seen";
 
         public DateTime Date { get; set; } = DateTime.Now;
 
