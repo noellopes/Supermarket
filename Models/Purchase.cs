@@ -21,6 +21,21 @@ namespace Supermarket.Models
         [Display(Name = "Delivered Quantity")]
         public int DeliveredQuantity { get; set; }
 
+        //Relation with foreign key for Employee
+        [Display(Name = "Employee")]
+        public int EmployeeId { get; set; }
+        public Employee? Employee { get; set; }
+
+        [Required]
+        [StringLength(10, MinimumLength = 3)]
+        public required string BatchNumber { get; set; }
+
+        //Data de validade
+        [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "Expiration Date")]
+        public DateTime ExpirationDate { get; set; }
+
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Delivery Date")]
