@@ -1,33 +1,45 @@
 ﻿@model Supermarket.Models.SubsidySetup
 
+
+
+
 @{
     ViewData["Title"] = "Edit";
 }
+
+
+
 <style>
-       .teste{
-        margin-left:15%;
+
+    .teste {
+        margin-left: 15%;
         border: 1px solid;
         padding: 10px;
         box-shadow: 5px 10px;
         font-family: 'Times New Roman', Times, serif;
-        font-size:20px;
+        font-size: 20px;
         border-radius: 50px 20px;
-        
-    }
-    h2{
-        text-align:center;
     }
 
+    h2 {
+        text-align: center;
+    }
 
     .form-group {
         padding: 5%;
     }
-</style>
-<h2>Edit SubsidySetup</h2>
+    .testo{
+        text-align:center;
+        padding-top:20px;
+    }
 
+</style>
+
+<h1>Edit</h1>
+
+<h4>SubsidySetup</h4>
 <div class="teste">
 <hr />
-
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -54,11 +66,9 @@
         </form>
     </div>
 </div>
+</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="testo">
+    <a asp-action="Index" class="btn btn-danger btn-sm">Back to List</a>
 </div>
-</div>
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+
