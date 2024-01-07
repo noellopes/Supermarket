@@ -57,20 +57,19 @@
     <div class="col mt-3">
     <div class="card" style="width: 18rem;">
                 <div class="card-body">
-                <h5 class="card-title mt-3">Número da Senha: #@item.NumeroDaSenha)</h5>
-                <h5 class="card-title mt-3">Nome do Departamento: @item.Departments.NameDepartments</h5>
-                <h6 class="card-subtitle mb-2 mt-3 text-muted">Emitida: @item.DataEmissao</h6>
+                <h5 class="card-title mt-3">Número da Senha:  #@item.NumeroDaSenha)</h5>
+                <h6 class="card-subtitle mb-2 mt-3 text-muted">Emitida:  @item.DataEmissao</h6>
+          
                    <h6 class="mt-3">Tempo previsto:  Por desenvolver</h6>
-                <h6 class="card-subtitle mb-2 mt-3 text-muted">Atendida: @item.DataAtendimento</h6>
-                
+                <h6 class="card-subtitle mb-2 mt-3 text-muted">Atendida:  @item.DataAtendimento</h6>
                 @* <h6 class="mt-3">Departamento:  @Html.DisplayFor(modelItem => item.Departments.NameDepartments)</h6> *@
-                    @if (item.IDDepartments == 0)
+                    @if (item.Departments == null)
                     {
                         <h6>Sem departamento</h6>
                     }
-                    else if (item.Departments != null)
+                    else 
                     {
-                //        <h6>@item.Departments.NameDepartments</h6>
+                        <h6>@item.Departments.NameDepartments</h6>
                     }
                     <h6 class="card-subtitle mt-3 text-muted"> Prioritário:   @(item.Prioritario ? "Sim" : "Não")</h6>
                 <h6 class="card-subtitle mb-2 mt-3 text-muted">

@@ -21,6 +21,10 @@ namespace Supermarket.Data
                 .HasOne(s => s.Departments)
                 .WithMany()
                 .HasForeignKey(s => s.IDDepartments);
+            modelBuilder.Entity<Ticket>()
+                .HasOne(s => s.Departments)
+                .WithMany()
+                .HasForeignKey(s => s.IDDepartments);
         }
  
         public DbSet<Folga> Folga { get; set; } = default!;
