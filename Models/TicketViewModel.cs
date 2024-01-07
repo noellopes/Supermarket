@@ -4,6 +4,7 @@
     {
         public List<Ticket> Tickets { get; set; }
         public PagingInfo PagingInfo { get; set; }
+        public string SearchDepartment { get; set; } = string.Empty;
 
     }
 }
