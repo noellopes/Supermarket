@@ -24,7 +24,7 @@ namespace Supermarket.Controllers
 
 
         // GET: Tickets
-        public async Task<IActionResult> Index (int page = 1,string departmentName = "")
+        public async Task<IActionResult> Index (int page = 1,int departmentName = 0)
         {
         //    //var ticketList = _context.Tickets.Join(_context.Departments,
         //    //    ticket => ticket.IDDepartments,
@@ -43,9 +43,9 @@ namespace Supermarket.Controllers
             //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
 
     
-        if (!string.IsNullOrEmpty(departmentName))
+        if (departmentName != 0)
            {
-                tickets = tickets.Where(x => x.Departments!.NameDepartments.Contains(departmentName));
+                tickets = tickets.Where(x => x.IDDepartments == departmentName);
             }
 
         var Departments = await _context.Departments.ToListAsync();
@@ -75,7 +75,6 @@ var vm = new TicketViewModel
     Tickets = await tickets
     .OrderBy(b => b.TicketId)
     .Skip((paging.CurrentPage - 1) * paging.PageSize)
-    .Where(b => b.Departments.NameDepartments == departmentName)
        .Take(paging.PageSize)
        .ToListAsync(),
     Departments = Departments,
