@@ -25,7 +25,8 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index(int page = 1, string product = "", string supplier = "")
         {
             var purchase = from i in _context.Purchase.Include(p => p.Product)                                      
-                                                      .Include(s => s.Supplier)                                                      
+                                                      .Include(s => s.Supplier)  
+                                                      .Include(e => e.Employee)
                          select i;
             if (product != "")
             {
@@ -59,7 +60,7 @@ namespace Supermarket.Controllers
                                                  .Take(pagination.PageSize),
                     Pagination = pagination,
                     SearchProduct = product,
-                    SearchSupplier = supplier                  
+                    SearchSupplier = supplier
                 }
             );
         }
@@ -76,6 +77,7 @@ namespace Supermarket.Controllers
             var purchase = await _context.Purchase
                 .Include(p => p.Product)
                 .Include(p => p.Supplier)
+                .Include(p => p.Employee)
                 .FirstOrDefaultAsync(m => m.PurchaseId == id);
             if (purchase == null)
             {
@@ -91,6 +93,7 @@ namespace Supermarket.Controllers
         {
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name");
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
             return View();
         }
 
@@ -100,7 +103,7 @@ namespace Supermarket.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Create_Reports")]
-        public async Task<IActionResult> Create([Bind("PurchaseId,ProductId,SupplierId,DeliveredQuantity,DeliveryDate")] Purchase purchase)
+        public async Task<IActionResult> Create([Bind("PurchaseId,ProductId,SupplierId,EmployeeId,DeliveredQuantity,DeliveryDate,BatchNumber,ExpirationDate")] Purchase purchase)
         {
             if (ModelState.IsValid)
             {
@@ -110,6 +113,7 @@ namespace Supermarket.Controllers
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", purchase.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name", purchase.SupplierId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
             return View(purchase);
         }
 
@@ -129,6 +133,7 @@ namespace Supermarket.Controllers
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", purchase.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name", purchase.SupplierId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
             return View(purchase);
         }
 
@@ -138,7 +143,7 @@ namespace Supermarket.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Edit_Del_Reports")]
-        public async Task<IActionResult> Edit(int id, [Bind("PurchaseId,ProductId,SupplierId,DeliveredQuantity,DeliveryDate")] Purchase purchase)
+        public async Task<IActionResult> Edit(int id, [Bind("PurchaseId,ProductId,SupplierId,EmployeeId,DeliveredQuantity,DeliveryDate,BatchNumber,ExpirationDate")] Purchase purchase)
         {
             if (id != purchase.PurchaseId)
             {
@@ -167,6 +172,7 @@ namespace Supermarket.Controllers
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", purchase.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name", purchase.SupplierId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
             return View(purchase);
         }
 
@@ -182,6 +188,7 @@ namespace Supermarket.Controllers
             var purchase = await _context.Purchase
                 .Include(p => p.Product)
                 .Include(p => p.Supplier)
+                .Include(p => p.Employee)
                 .FirstOrDefaultAsync(m => m.PurchaseId == id);
             if (purchase == null)
             {
@@ -205,6 +212,7 @@ namespace Supermarket.Controllers
             var purchase = await _context.Purchase
                 .Include(p => p.Product)
                 .Include(p => p.Supplier)
+                .Include(p => p.Employee)
                 .FirstOrDefaultAsync(m => m.PurchaseId == id);
 
             if (purchase != null)
