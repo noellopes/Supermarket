@@ -94,7 +94,7 @@ namespace Supermarket.Controllers
                             {
                                 _context.Add(reduceProduct);
                                 await _context.SaveChangesAsync();
-                                var str = new string("A new ReduceProduct has been created: " + product!.Name + ", " + reduceProduct.Quantity) + "chosed to be reduced";
+                                var str = new string("A new ReduceProduct has been created: " + product!.Name + ", " + reduceProduct.Quantity + " chosed to be reduced");
                                 Alert alert = new Alert
                                 {
                                     Role = "Stock Administrator",
