@@ -228,5 +228,60 @@ namespace Supermarket.Controllers
         {
           return (_context.Purchase?.Any(e => e.PurchaseId == id)).GetValueOrDefault();
         }
+
+
+        public bool IsProductExpired(DateTime ExpirationDate)
+        {
+            return DateTime.Now > ExpirationDate;
+        }
+
+        // Verifica se os produtos estão expirados
+        internal void UpdateExpirationStatusForAllPurchases()
+        {
+            var allPurchases = _context.Purchase;
+
+            foreach (var purchase in allPurchases)
+            {
+                if (IsProductExpired(purchase.ExpirationDate))
+                {
+                    // Update the expiration status for the product in the purchase
+                    purchase.ProductExpired = true;
+
+
+                    //Escrever na tabela de produtos expirados
+                    var expiredProduct = new ExpiredProducts
+                    {
+                        ProductId = purchase.ProductId,
+                        ExpirationDate = purchase.ExpirationDate,
+                        SupplierId = purchase.SupplierId,
+                        EmployeeId = purchase.EmployeeId,
+                        // Set other properties as needed
+                        FabricationDate = DateTime.Now,
+                        BarCode = "123456"
+                    };
+
+                    _context.ExpiredProducts.Add(expiredProduct);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    purchase.ProductExpired = false;
+                }
+            }
+
+            _context.SaveChanges();
+        }
+
+        // É chamado quando a aplicação inicia
+        public IActionResult OnApplicationStart()
+        {
+            // Chama o método para atualizar o status de expiração para todas as compras
+            UpdateExpirationStatusForAllPurchases();
+
+            // You can add additional logic here if needed.
+
+            // Redireciona para a ação "Index" do controlador atual
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
