@@ -21,6 +21,8 @@ namespace Supermarket.Controllers
             _context = context;
         }
 
+
+
         // GET: Tickets
         public async Task<IActionResult> Index (int page = 1,string departmentName = "")
         {
@@ -38,14 +40,15 @@ namespace Supermarket.Controllers
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
         var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
-        //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
+            //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
 
-        int departmentId = GetDepartmentId(departmentName);
-
-            if (departmentName != "")
-            {
+    
+        if (!string.IsNullOrEmpty(departmentName))
+           {
                 tickets = tickets.Where(x => x.Departments!.NameDepartments.Contains(departmentName));
             }
+
+        var Departments = await _context.Departments.ToListAsync();
 
     //if (departmentButtonName != 0)
     //{
@@ -72,10 +75,12 @@ var vm = new TicketViewModel
     Tickets = await tickets
     .OrderBy(b => b.TicketId)
     .Skip((paging.CurrentPage - 1) * paging.PageSize)
+    .Where(b => b.Departments.NameDepartments == departmentName)
        .Take(paging.PageSize)
        .ToListAsync(),
+    Departments = Departments,
     PagingInfo = paging,
-   //SearchDepartment = departmentName,
+    SearchDepartment = departmentName,
     //SearchButtonDepartment = departmentButtonName,
 };
 
