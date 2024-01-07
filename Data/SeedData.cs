@@ -62,7 +62,7 @@ namespace Supermarket.Data
             // Instantiate random number generator using system-supplied value as seed.
             var rand = new Random();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 200; i++)
             {
                 var randomBool = rand.Next(2) == 1;
                 db.Add(
