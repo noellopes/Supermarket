@@ -34,23 +34,34 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Purchase.First().DeliveryDate)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Purchase.First().Product)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Purchase.First().Supplier)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Purchase.First().Employee)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model =>model.Purchase.First().DeliveredQuantity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Purchase.First().DeliveryDate)
+                @Html.DisplayNameFor(model => model.Purchase.First().BatchNumber)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Purchase.First().ExpirationDate)
+            </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.Purchase) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DeliveryDate)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Product.Name)
             </td>
@@ -58,10 +69,16 @@
                 @Html.DisplayFor(modelItem => item.Supplier.Name)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.DeliveredQuantity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DeliveryDate)
+                @Html.DisplayFor(modelItem => item.BatchNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpirationDate)
             </td>
             <td>
                     @if (User.IsInRole("Edit_Del_Reports"))
