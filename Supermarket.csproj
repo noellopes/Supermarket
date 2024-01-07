@@ -19,6 +19,9 @@
     <Compile Remove="Data\Migrations\Supermarket\20231207001206_CategoryDiscount.Designer.cs" />
     <Compile Remove="Data\Migrations\Supermarket\20231213155818_ProductDiscount1.cs" />
     <Compile Remove="Data\Migrations\Supermarket\20231213155818_ProductDiscount1.Designer.cs" />
+    <Compile Remove="Models\Class.cs" />
+    <Compile Remove="Models\Schedule - Cópia.cs" />
+    <Compile Remove="Models\SchedulesViewModel - Cópia.cs" />
   </ItemGroup>
 
   <ItemGroup>
