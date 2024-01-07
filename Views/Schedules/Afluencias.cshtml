@@ -49,7 +49,6 @@
                     <div class="accordion-body">
                         #@ticket.NumeroDaSenha | 
                             
-                            Estado:  @(ticket.Estado ? "Atendido" : "Não atendido") |
                             @if (ticket.IDDepartments == 0)
                             {
                                 <strong> Sem departamento </strong>
@@ -60,9 +59,11 @@
 
                                 
                             }
+
+                        Emitido em: @ticket.DataEmissao  | Estado:  @(ticket.Estado ? "Atendido" : "Não atendido") | Atendido em: @ticket.DataAtendimento
+
                         
-                        Emitido em: @ticket.DataEmissao 
-                        
+
                     </div>
                    
                 }

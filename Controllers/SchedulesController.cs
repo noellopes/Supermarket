@@ -20,17 +20,17 @@ namespace Supermarket.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(int page = 1, string departmentName = "" /*int departmentButtonName = 0*/)
+        public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0 /*int departmentButtonName = 0*/)
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
             var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
             //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
 
-            int departmentId = GetDepartmentId(departmentName);
-            if (!string.IsNullOrEmpty(departmentName))
+
+            if (departmentDrop!=0)
             {
-                schedules = schedules.Where(x => x.Departments!.NameDepartments.Contains(departmentName));
+                schedules = schedules.Where(x => x.IDDepartments==departmentDrop);
             }
 
             //if (departmentButtonName != 0)
@@ -65,7 +65,7 @@ namespace Supermarket.Controllers
                    .ToListAsync(),
                 Departments = Departments,
                 PagingInfo = paging,
-                SearchDepartment = departmentName,
+                SearchDepartment = departmentDrop,
                 //SearchButtonDepartment = departmentButtonName,
             };
 
@@ -237,13 +237,15 @@ namespace Supermarket.Controllers
             }
 
             var departmentsWithTicketCount = _context.Departments
-                .Select(d => new
-                {
-                    Department = d,
-                    TicketsCount = _context.Tickets.Count(t => t.IDDepartments == d.IDDepartments)
-                })
-                .Where(joinResult => joinResult.TicketsCount >= procuraLimiteAfluencia)
-                .ToList();
+        .Select(d => new
+        {
+            Department = d,
+            TicketsCount = _context.Tickets.Count(t => t.IDDepartments == d.IDDepartments &&
+                                                      (!procuraDataInicial.HasValue || t.DataEmissao >= procuraDataInicial) &&
+                                                      (!procuraDataFinal.HasValue || t.DataEmissao <= procuraDataFinal))
+        })
+        .Where(joinResult => joinResult.TicketsCount >= procuraLimiteAfluencia)
+        .ToList();
 
             var model = new List<AfluenciasViewModel>();
 
