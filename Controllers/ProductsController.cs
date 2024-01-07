@@ -440,10 +440,14 @@ namespace Supermarket.Controllers
                     .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days)
                     .ToList();
 
+                var addedProductIds = new HashSet<int>(filteredProducts.Select(p => p.ProductId));
+
                 filteredProducts.AddRange(mostCommonProducts
-                .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days)
-                .Distinct()
-            );
+                    .Where(p => p.LastCountDate != null &&
+                                (currentDate - p.LastCountDate.Date).TotalDays >= days &&
+                                !addedProductIds.Contains(p.ProductId))
+                    .Distinct());
+            
 
                 var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
 
@@ -459,6 +463,15 @@ namespace Supermarket.Controllers
                     // Save changes to the database
                     await _context.SaveChangesAsync();
 
+                    var descripition = new string("A new Rotative Inventory was been: " + selectedProduct.Name + " in " + selectedProduct.LastCountDate);
+                    Alert alert = new Alert
+                    {
+                        Role = "Stock Administrator",
+                        Description = descripition,
+                        Function = "Products"
+                    };
+                    _context.Add(alert);
+                    await _context.SaveChangesAsync();
 
                     return RedirectToAction("RotativeProducts", new
                     {
@@ -471,7 +484,173 @@ namespace Supermarket.Controllers
 
                 }
             }
-            if (selectedStringDate != "" && selectedNumber ==0 && selectedPrice > 0)
+           else if (selectedStringDate != "" && selectedNumber > 0 && selectedPrice==0)
+            {
+
+                var Date = selectedStringDate;
+                var Number = selectedNumber;
+                var Price = selectedPrice;
+
+
+                var currentDate = DateTime.Now.Date;
+                int days = 0;
+                switch (Date)
+                {
+                    case "Month":
+                        days = 31;
+                        break;
+
+                    case "2Week":
+                        days = 14;
+                        break;
+
+                    case "week":
+                        days = 7;
+                        break;
+                    case "2day":
+                        days = 2;
+                        break;
+                }
+
+             
+
+                    var mostCommonProducts = _context.ReduceProduct
+             .Include(rp => rp.Product)
+                 .ThenInclude(p => p.Brand)
+             .GroupBy(rp => rp.ProductId)
+             .OrderByDescending(g => g.Count())
+            .Take((int)Number)
+             .Select(g => g.First().Product)
+             .ToList();
+
+                    var filteredProducts = mostCommonProducts
+                        .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days)
+                        .ToList();
+
+                var addedProductIds = new HashSet<int>(filteredProducts.Select(p => p.ProductId));
+
+         
+
+
+                var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
+
+                ViewData["Products"] = filteredProducts;
+                ViewData["SelectedProduct"] = selectedProduct;
+
+
+                if (isButtonClicked)
+                { 
+                    // Update LastCountDate
+                    selectedProduct.LastCountDate = DateTime.Now;
+                    await _context.SaveChangesAsync();
+
+                    var descripition = new string("A new Rotative Inventory was been: " + selectedProduct.Name + " in " + selectedProduct.LastCountDate );
+                    Alert alert = new Alert
+                    {
+                        Role = "Stock Administrator",
+                        Description = descripition,
+                        Function = "Products"
+                    };
+                    _context.Add(alert);
+                    await _context.SaveChangesAsync();
+                    
+
+                    
+
+
+                    return RedirectToAction("RotativeProducts", new
+                    {
+                        SelectedProductId = 0,
+                        selectedStringDate = Date,
+                        selectedNumber = Number,
+                        selectedPrice = Price
+                    });
+
+
+                }
+            }
+            else if (selectedStringDate != "" && selectedNumber == 0 && selectedPrice == 0)
+            {
+
+                var Date = selectedStringDate;
+                var Number = selectedNumber;
+                var Price = selectedPrice;
+
+
+                var currentDate = DateTime.Now.Date;
+                int days = 0;
+                switch (Date)
+                {
+                    case "Month":
+                        days = 31;
+                        break;
+
+                    case "2Week":
+                        days = 14;
+                        break;
+
+                    case "week":
+                        days = 7;
+                        break;
+                    case "2day":
+                        days = 2;
+                        break;
+                }
+
+                var expensiveProducts = await _context.Product
+                 .Include(p => p.Brand)
+                 .ToListAsync();
+
+                var filteredProducts = expensiveProducts
+                    .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days)
+                    .ToList();
+
+
+
+
+
+
+                var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
+
+                ViewData["Products"] = filteredProducts;
+                ViewData["SelectedProduct"] = selectedProduct;
+
+
+                if (isButtonClicked)
+                {
+                    
+                    selectedProduct.LastCountDate = DateTime.Now;
+
+                   
+                    await _context.SaveChangesAsync();
+
+                    // Update LastCountDate
+                    selectedProduct.LastCountDate = DateTime.Now;
+                    await _context.SaveChangesAsync();
+
+                    var descripition = new string("A new Rotative Inventory was been: " + selectedProduct.Name + " in " + selectedProduct.LastCountDate);
+                    Alert alert = new Alert
+                    {
+                        Role = "Stock Administrator",
+                        Description = descripition,
+                        Function = "Products"
+                    };
+                    _context.Add(alert);
+                    await _context.SaveChangesAsync();
+
+
+                    return RedirectToAction("RotativeProducts", new
+                    {
+                        SelectedProductId = 0,
+                        selectedStringDate = Date,
+                        selectedNumber = Number,
+                        selectedPrice = Price
+                    });
+
+
+                }
+            }
+            else if (selectedStringDate != "" && selectedNumber ==0 && selectedPrice > 0)
             {
 
                 var Date = selectedStringDate;
@@ -526,6 +705,16 @@ namespace Supermarket.Controllers
                     // Save changes to the database
                     await _context.SaveChangesAsync();
 
+                    var descripition = new string("A new Rotative Inventory was been: " + selectedProduct.Name + " in " + selectedProduct.LastCountDate);
+                    Alert alert = new Alert
+                    {
+                        Role = "Stock Administrator",
+                        Description = descripition,
+                        Function = "Products"
+                    };
+                    _context.Add(alert);
+                    await _context.SaveChangesAsync();
+
 
                     return RedirectToAction("RotativeProducts", new
                     {
@@ -537,32 +726,41 @@ namespace Supermarket.Controllers
 
                 }
             }
-            var warehouseSectionProducts = await _context.WarehouseSection_Product
+            else
+            {
+
+                ViewData["Products"] = new List<Product>();
+                ViewData["SelectedProduct"] = null;
+                ViewData["NoCriterial"] = true;
+            }
+
+           
+                var warehouseSectionProducts = await _context.WarehouseSection_Product
                 .Where(wp => wp.ProductId == selectedProductId)
                 .Include(wp => wp.WarehouseSection)
                 .ThenInclude(ws => ws.Warehouse)
                 .ToListAsync();
 
-            var selftProducts = await _context.Shelft_ProductExhibition
-                .Where(wp => wp.ProductId == selectedProductId)
-                .Include(wp => wp.Shelf)
-                .ThenInclude(ws => ws.Hallway)
-                .ThenInclude(ws => ws.Store)
-                .ToListAsync();
+                var selftProducts = await _context.Shelft_ProductExhibition
+                    .Where(wp => wp.ProductId == selectedProductId)
+                    .Include(wp => wp.Shelf)
+                    .ThenInclude(ws => ws.Hallway)
+                    .ThenInclude(ws => ws.Store)
+                    .ToListAsync();
 
-            var selftProductsList = selftProducts.ToList();
-            var warehouseSectionProductsList = warehouseSectionProducts.ToList();
+                var selftProductsList = selftProducts.ToList();
+                var warehouseSectionProductsList = warehouseSectionProducts.ToList();
 
-            var totalWarehouseQuantity = warehouseSectionProductsList.Sum(wp => wp.Quantity);
-            var totalShelfQuantity = selftProductsList.Sum(sp => sp.Quantity);
-            var grandTotalQuantity = totalWarehouseQuantity + totalShelfQuantity;
+                var totalWarehouseQuantity = warehouseSectionProductsList.Sum(wp => wp.Quantity);
+                var totalShelfQuantity = selftProductsList.Sum(sp => sp.Quantity);
+                var grandTotalQuantity = totalWarehouseQuantity + totalShelfQuantity;
 
-            ViewData["TotalWarehouseQuantity"] = totalWarehouseQuantity;
-            ViewData["TotalShelfQuantity"] = totalShelfQuantity;
-            ViewData["GrandTotalQuantity"] = grandTotalQuantity;
-            ViewData["WarehouseSectionProductsList"] = warehouseSectionProductsList;
-            ViewData["SelftProductsList"] = selftProductsList;
-
+                ViewData["TotalWarehouseQuantity"] = totalWarehouseQuantity;
+                ViewData["TotalShelfQuantity"] = totalShelfQuantity;
+                ViewData["GrandTotalQuantity"] = grandTotalQuantity;
+                ViewData["WarehouseSectionProductsList"] = warehouseSectionProductsList;
+                ViewData["SelftProductsList"] = selftProductsList;
+            
             return View("RotativeInventory");
 
         }
