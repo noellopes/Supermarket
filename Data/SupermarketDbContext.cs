@@ -21,6 +21,7 @@ namespace Supermarket.Data
         }
 
         public DbSet<Folga> Folga { get; set; } = default!;
+        public DbSet<Customer> Customers { get; set; } = default!;
         public DbSet<Supermarket.Models.SubsidyCalculation> SubsidyCalculation { get; set; } = default!;
 
         public DbSet<Employee> Funcionarios { get; set; } = default!;
@@ -91,5 +92,10 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Purchase> Purchase { get; set; } = default!;
 
         public object Pontos { get; internal set; }
+        public DbSet<TakeAwayCategory> TakeAwayCategory { get; set; } = default!;
+        public DbSet<TakeAwayProduct> TakeAwayProduct { get; set; } = default!;
+        public DbSet<User_Order> User_Order { get; set; } = default!;
+        public DbSet<Order> Order { get; set; } = default!;
+
     }
 }

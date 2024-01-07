@@ -1,0 +1,25 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <form asp-action="GetTopCustomersForProductInTime">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label"></label>
+                <input name="productName" placeholder="Enter Product name" class="form-control" />
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label type="date" class="control-label"></label>
+                <input name="startTime" type="date" class="form-control" />
+                <span type="date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label type="date" class="control-label"></label>
+                <input name="endTime" type="date" class="form-control" />
+                <span type="date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Find" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
