@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: ExpiredProducts
+        [Authorize(Roles = "View_Reports")]
         public async Task<IActionResult> Index(int page = 1, string product = "", string barcode = "", string supplier = "", string employee = "")
         {
 
@@ -58,27 +60,26 @@ namespace Supermarket.Controllers
         }
 
         // GET: ExpiredProducts/Details/5
+        [Authorize(Roles = "View_Reports")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.ExpiredProducts == null)
-            {
                 return NotFound();
-            }
 
             var expiredProducts = await _context.ExpiredProducts
                 .Include(e => e.Employee)
                 .Include(e => e.Product)
                 .Include(e => e.Supplier)
                 .FirstOrDefaultAsync(m => m.ExpiredProductId == id);
+
             if (expiredProducts == null)
-            {
-                return NotFound();
-            }
+                return View("ExpiredProductDeleted");
 
             return View(expiredProducts);
         }
 
         // GET: ExpiredProducts/Create
+        [Authorize(Roles = "Create_Reports")]
         public IActionResult Create()
         {
             ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name");
@@ -92,6 +93,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Create_Reports")]
         public async Task<IActionResult> Create([Bind("ExpiredProductId,ProductId,FabricationDate,ExpirationDate,BarCode,SupplierId,EmployeeId")] ExpiredProducts expiredProducts)
         {
             if (ModelState.IsValid)
@@ -107,21 +109,21 @@ namespace Supermarket.Controllers
         }
 
         // GET: ExpiredProducts/Edit/5
+        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ExpiredProducts == null)
-            {
                 return NotFound();
-            }
 
             var expiredProducts = await _context.ExpiredProducts.FindAsync(id);
+
             if (expiredProducts == null)
-            {
-                return NotFound();
-            }
+                return View("ExpiredProductDeleted");
+
             ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Name", expiredProducts.EmployeeId);
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", expiredProducts.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "Name", expiredProducts.SupplierId);
+
             return View(expiredProducts);
         }
 
@@ -130,6 +132,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> Edit(int id, [Bind("ExpiredProductId,ProductId,FabricationDate,ExpirationDate,BarCode,SupplierId,EmployeeId")] ExpiredProducts expiredProducts)
         {
             if (id != expiredProducts.ExpiredProductId)
@@ -164,22 +167,20 @@ namespace Supermarket.Controllers
         }
 
         // GET: ExpiredProducts/Delete/5
+        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.ExpiredProducts == null)
-            {
                 return NotFound();
-            }
 
             var expiredProducts = await _context.ExpiredProducts
                 .Include(e => e.Employee)
                 .Include(e => e.Product)
                 .Include(e => e.Supplier)
                 .FirstOrDefaultAsync(m => m.ExpiredProductId == id);
+
             if (expiredProducts == null)
-            {
-                return NotFound();
-            }
+                return View("ExpiredProductDeleted");
 
             return View(expiredProducts);
         }
@@ -187,20 +188,24 @@ namespace Supermarket.Controllers
         // POST: ExpiredProducts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Edit_Del_Reports")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.ExpiredProducts == null)
-            {
                 return Problem("Entity set 'SupermarketDbContext.ExpiredProducts'  is null.");
-            }
-            var expiredProducts = await _context.ExpiredProducts.FindAsync(id);
+            
+            var expiredProducts = await _context.ExpiredProducts
+                .Include(p => p.Product)
+                .Include(s => s.Supplier)
+                .Include(e => e.Employee)
+                .FirstOrDefaultAsync(m => m.ExpiredProductId == id);
+
             if (expiredProducts != null)
-            {
                 _context.ExpiredProducts.Remove(expiredProducts);
-            }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return View("DeleteCompleted", expiredProducts);
         }
 
         private bool ExpiredProductsExists(int id)

@@ -87,6 +87,9 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.MealCard> MealCards { get; set; } = default!;
         
         public DbSet<Supermarket.Models.ExpiredProducts> ExpiredProducts { get; set; } = default!;
+        
+        public DbSet<Supermarket.Models.Purchase> Purchase { get; set; } = default!;
 
+        public object Pontos { get; internal set; }
     }
 }

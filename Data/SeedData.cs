@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+ 
+using Microsoft.AspNetCore.Identity;
 using Supermarket.Models;
 
 namespace Supermarket.Data {
     public class SeedData {
         private const string ROLE_ADMIN = "Administrator";
+        private const string ROLE_ADMIN1 = "Funcionário";
+        private const string ROLE_ADMIN2 = "Gestor";
 
         internal static void Populate(SupermarketDbContext db) {
             PopulateBrand(db);
@@ -29,6 +32,9 @@ namespace Supermarket.Data {
             PopulateSupplier(db);
             PopulateType(db);
             PopulateIssueType(db);
+            PopulatePurchase(db);
+            PopulateIssue(db);
+            PopulateExpProduct(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db) {
@@ -310,6 +316,62 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
+        private static void PopulateEmployees(SupermarketDbContext db) {
+            if (db.Employee.Any()) return;
+
+           // db.Employee.AddRange(
+            // new Employee
+            //        Employee_Address= "Rua das Oliveiras",
+            //        Employee_Admission_Date= DateTime.Now,
+            //        Employee_Birth_Date= DateTime.Now,
+            //        Employee_Email="zeD@manga.com",
+            //        Employee_Name="Jose",
+            //        Employee_NIF = "123",
+            //        Employee_Password = "123",
+            //        Employee_Phone = "123",
+            //        Employee_Time_Bank= DateTime.Now,
+            //        Standard_Lunch_Hour = "123",
+            //        Standard_Check_In_Time = "123",
+            //        Standard_Check_Out_Time = "123",
+            //        Standard_Lunch_Time = "123"
+            //    },
+            //    new Employee
+            //    {
+            //        Employee_Address = "Rua do azeite",
+            //        Employee_Admission_Date = DateTime.Now,
+            //        Employee_Birth_Date = DateTime.Now,
+            //        Employee_Email = "zeD@manga.com",
+            //        Employee_Name = "Maria",
+            //        Employee_NIF = "123",
+            //        Employee_Password = "123",
+            //        Employee_Phone = "123",
+            //        Employee_Time_Bank = DateTime.Now,
+            //        Standard_Lunch_Hour = "123",
+            //        Standard_Check_In_Time = "123",
+            //        Standard_Check_Out_Time = "123",
+            //        Standard_Lunch_Time = "123"
+            //    },
+            //    new Employee
+            //    {
+            //        Employee_Address = "Avenida Afonso Pena",
+            //        Employee_Admission_Date = DateTime.Now,
+            //        Employee_Birth_Date = DateTime.Now,
+            //        Employee_Email = "zeD@manga.com",
+            //        Employee_Name = "Lucas",
+            //        Employee_NIF = "123",
+            //        Employee_Password = "123",
+            //        Employee_Phone = "123",
+            //        Employee_Time_Bank = DateTime.Now,
+            //        Standard_Lunch_Hour = "123",
+            //        Standard_Check_In_Time = "123",
+            //        Standard_Check_Out_Time = "123",
+            //        Standard_Lunch_Time = "123"
+            //    }
+            //    );
+
+            //db.SaveChanges();
+        }
+
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db) {
             if (db.EmployeeEvaluation.Any()) return;
 
@@ -457,7 +519,8 @@ namespace Supermarket.Data {
             if (db.Employee.Any()) return;
 
             db.Employee.AddRange(
-                new Employee { Employee_Name = "Afonso Almeida", Employee_Email = "Afonso@gmail.com", Employee_Password = "afonso123", Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+
+                new Employee { Employee_Name = "Afonso Almeida", Employee_Email = "anasilva_pinhel@hotmail.com", Employee_Password = "Informatica_1706869", Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
                 new Employee { Employee_Name = "Jessica Azevedo", Employee_Email = "Jessica@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837462856", Employee_NIF = "875436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Hugo Braga", Employee_Email = "Hugo@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620559", Employee_NIF = "938475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Alberto Barros", Employee_Email = "Alberto1@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843257712", Employee_NIF = "098764084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
@@ -521,11 +584,100 @@ namespace Supermarket.Data {
         }
         
 
-        internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager) {
-            var user = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
+        internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager)
+        {
+            var user1 = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
+            var user2 = await EnsureUserIsCreatedAsync(userManager!, "anasilva_pinhel@hotmail.com", "Informatica_123");
+            var user3 = await EnsureUserIsCreatedAsync(userManager!, "Afonso@gmail.com", "Afonso#123");
+            var user4 = await EnsureUserIsCreatedAsync(userManager!, "Hugo@gmail.com", "Hugo#123");
+            var user5 = await EnsureUserIsCreatedAsync(userManager!, "Alberto1@gmail.com", "Alberto#123");
+            var user6 = await EnsureUserIsCreatedAsync(userManager!, "Afonso1@gmail.com", "AfonsoI#123");
+            var user7 = await EnsureUserIsCreatedAsync(userManager!, "Jessica1@gmail.com", "JessicaI#123");
+            var user8 = await EnsureUserIsCreatedAsync(userManager!, "Hugo1@gmail.com", "HugoI#123");
+            var user9 = await EnsureUserIsCreatedAsync(userManager!, "Alberto2@gmail.com", "AlbertoI#123");
+            var user10 = await EnsureUserIsCreatedAsync(userManager!, "Afonso2@gmail.com", "AfonsoII#123");
+            var user11 = await EnsureUserIsCreatedAsync(userManager!, "Jessica2@gmail.com", "JessicaII#123");
+            var user12 = await EnsureUserIsCreatedAsync(userManager!, "Hugo2@gmail.com", "HugoII#123");
+            var user13 = await EnsureUserIsCreatedAsync(userManager!, "Afonso3@gmail.com", "AfonsoIII#123");
+            var user14 = await EnsureUserIsCreatedAsync(userManager!, "Jessica3@gmail.com", "JessicaIII#123");
+            var user15 = await EnsureUserIsCreatedAsync(userManager!, "Hugo3@gmail.com", "HugoIII#123");
+            var user17 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
+            var user18 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
 
-            if (!await userManager!.IsInRoleAsync(user, ROLE_ADMIN)) {
-                await userManager!.AddToRoleAsync(user, ROLE_ADMIN);
+
+
+
+
+            if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
+            {
+                await userManager!.AddToRoleAsync(user1, "Gestor");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user2, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user2, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user3, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user3, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user4, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user4, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user5, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user5, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user6, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user6, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user5, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user5, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user7, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user7, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user8, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user8, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user9, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user9, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user10, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user10, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user11, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user11, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user12, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user12, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user13, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user13, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user14, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user14, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user15, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user15, "Funcionário");
             }
 
             var costumer = await EnsureUserIsCreatedAsync(userManager!, "costumer@ipg.pt", "Secret#123");
@@ -543,11 +695,35 @@ namespace Supermarket.Data {
             {
                 await userManager!.AddToRoleAsync(employee, "Role_Funcionario");
             }
+            if (!await userManager!.IsInRoleAsync(employee, "View_Reports"))
+            {
+                await userManager!.AddToRoleAsync(employee, "View_Reports");
+            }
+            if (!await userManager!.IsInRoleAsync(employee, "Create_Reports"))
+            {
+                await userManager!.AddToRoleAsync(employee, "Create_Reports");
+            }
 
             var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
             if (!await userManager!.IsInRoleAsync(manager, "Avaliar_Funcionarios"))
             {
                 await userManager!.AddToRoleAsync(manager, "Avaliar_Funcionarios");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "View_Reports"))
+            {
+                await userManager!.AddToRoleAsync(manager, "View_Reports");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "Create_Reports"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Create_Reports");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "Create_Edit_Del_IssueType"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Create_Edit_Del_IssueType");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "Edit_Del_Reports"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Edit_Del_Reports");
             }
         }
 
@@ -566,7 +742,16 @@ namespace Supermarket.Data {
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
             await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
+            await EnsureRoleIsCreatedAsync(roleManager!, "Funcionário");
+            await EnsureRoleIsCreatedAsync(roleManager!, "Gestor");
+            await EnsureRoleIsCreatedAsync(roleManager!, "View_Reports");
+            await EnsureRoleIsCreatedAsync(roleManager!, "Create_Edit_Del_IssueType");
+            await EnsureRoleIsCreatedAsync(roleManager!, "View_Reports");            
+            await EnsureRoleIsCreatedAsync(roleManager!, "Create_Reports");
+            await EnsureRoleIsCreatedAsync(roleManager!, "Edit_Del_Reports");
         }
+
+        
 
         private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name) {
             var role = await roleManager.FindByNameAsync(name);
@@ -623,6 +808,44 @@ namespace Supermarket.Data {
                 new Models.IssueType { Name = "Mislabeling", IssueDescription = "Incorrect or misleading product labeling, including inaccurate nutritional information or allergen details" },
                 new Models.IssueType { Name = "Out-of-Stock", IssueDescription = "Products unavailable for purchase despite being listed as in-stock" },
                 new Models.IssueType { Name = "Sanitation and Cleanliness", IssueDescription = "Concerns related to the cleanliness and hygiene of the supermarket premises" }
+              );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulatePurchase(SupermarketDbContext db)
+        {
+            if (db.Purchase.Any()) return;
+
+            db.Purchase.AddRange(
+                new Models.Purchase { ProductId = 1, SupplierId = 1, DeliveredQuantity = 30, DeliveryDate = new DateTime(2024, 01, 01, 00, 00, 00, 00), BatchNumber = "LOTE123", ExpirationDate = new DateTime(2024, 01, 05, 00, 00, 00, 00), EmployeeId = 1},
+                new Models.Purchase { ProductId = 2, SupplierId = 2, DeliveredQuantity = 50, DeliveryDate = new DateTime(2024, 01, 02, 00, 00, 00, 00), BatchNumber = "LOTE456", ExpirationDate = new DateTime(2024, 01, 06, 00, 00, 00, 00), EmployeeId = 2},
+                new Models.Purchase { ProductId = 3, SupplierId = 3, DeliveredQuantity = 70, DeliveryDate = new DateTime(2024, 01, 03, 00, 00, 00, 00), BatchNumber = "LOTE789", ExpirationDate = new DateTime(2024, 01, 07, 00, 00, 00, 00), EmployeeId = 3}
+              );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulateIssue(SupermarketDbContext db)
+        {
+            if (db.Issues.Any()) return;
+
+            db.Issues.AddRange(
+                new Models.Issues { ProductId = 1, IssueTypeId= 1, Description= "Issue Description 1", SupplierId= 1, EmployeeId= 1, Severity= Severity.Light},
+                new Models.Issues { ProductId = 2, IssueTypeId = 3, Description = "Issue Description 2", SupplierId = 2, EmployeeId = 1, Severity = Severity.Light },
+                new Models.Issues { ProductId = 1, IssueTypeId = 2, Description = "Issue Description 3", SupplierId = 1, EmployeeId = 4, Severity = Severity.Severe }
+              );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulateExpProduct(SupermarketDbContext db)
+        {
+            if (db.ExpiredProducts.Any()) return;
+
+            db.ExpiredProducts.AddRange(
+                new Models.ExpiredProducts { ProductId = 1, FabricationDate = DateTime.Now, ExpirationDate = DateTime.Now, BarCode = "XR4396", SupplierId = 2, EmployeeId = 1 },
+                new Models.ExpiredProducts { ProductId = 3, FabricationDate = DateTime.Now, ExpirationDate = DateTime.Now, BarCode = "XR4456", SupplierId = 1, EmployeeId = 2 }
               );
 
             db.SaveChanges();
