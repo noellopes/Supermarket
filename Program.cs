@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Microsoft.Extensions.DependencyInjection;
 using static System.Formats.Asn1.AsnWriter;
+using Supermarket.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<GroupsDbContext>(options =>
@@ -52,6 +53,21 @@ var app = builder.Build();
 var reqServScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
 var roleManager = reqServScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 SeedData.PopulateRolesAsync(roleManager).Wait();
+
+// Chama função para atualizar o status de expiração
+UpdateExpirationStatusForAllPurchases();
+
+void UpdateExpirationStatusForAllPurchases()
+{
+    // Cria um novo escopo para injeção de dependência
+    using var serviceScope = app.Services.CreateScope();
+
+    // Obtém uma instância de SupermarketDbContext do provedor de serviços no escopo criado
+    var purchasesController = new PurchasesController(serviceScope.ServiceProvider.GetRequiredService<SupermarketDbContext>());
+
+    // Chama o método UpdateExpirationStatusForAllPurchases() no controller
+    purchasesController.UpdateExpirationStatusForAllPurchases();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
