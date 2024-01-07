@@ -34,6 +34,30 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Verificar se um desconto com o mesmo nome e valor existe 
+                bool discountExists = _context.ProductDiscount
+                    .Any(pd => pd.ProductId == productDiscount.ProductId 
+                    && pd.Value == productDiscount.Value);
+
+                if (discountExists)
+                {
+                    TempData["ErrorMessage"] = "A discount with the same name and value already exists.";
+                    return RedirectToAction(nameof(Index));
+                }
+                // Verificação para garantir que o valor do desconto seja maior que 0
+                if (productDiscount.Value <= 0)
+                {
+                    ModelState.AddModelError("Value", "Discount value must be greater than 0.");
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // Verificação para garantir que o valor do desconto seja menor do que 100
+                if (productDiscount.Value > 100)
+                {
+                    ModelState.AddModelError("Value", "Discount value must be lower than 100.");
+                    return RedirectToAction(nameof(Index));
+                }
+
                 var today = DateTime.Today;
                 //Ir buscar a lista do clientes que fazem anos associados ao cartão cliente
                 var clientsWithBirthday = _context.ClientCard
