@@ -23,15 +23,11 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index()
         {
             var id = _memoryCache.Get<int>("customerId");
-            var data = _context.Order.Include(x => x.UserOrders)
-                                            .Include("UserOrders.Product")
-                                            .Include("UserOrders.Product.Category")
-                                            .Include("Customer");
             var supermarketDbContext = _context.Order.Include(x => x.UserOrders)
                                             .Include("UserOrders.Product")
                                             .Include("UserOrders.Product.Category")
-                                            .Include("Customer");
-                                            //.Where(x => x.Order.CustomerId == id);
+                                            .Include("Customer")
+                                            .Where(x => x.CustomerId == id);
             var orders = await supermarketDbContext.ToListAsync();
             return View(orders);
         }

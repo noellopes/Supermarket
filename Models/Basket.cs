@@ -14,5 +14,6 @@
         public int PreparingOrders { get; set; }
         public int OrdersCanPrepareSimultaneously { get; set; }
         public int? CustomerId { get; set; }
+        public float? GuessProducts { get; set; }
     }
 }

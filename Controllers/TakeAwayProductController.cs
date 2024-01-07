@@ -138,6 +138,16 @@ namespace Supermarket.Controllers
         
         public async Task<IActionResult> AddBasket(int id)
         {
+            float data1 = _context.Order.Include(x => x.UserOrders)
+                                            .Include("UserOrders.Product")
+                                            .Include("UserOrders.Product.Category")
+                                            .Include("Customer")
+                                            .Where(x => x.DeliveryDate != null && x.DeliveryDate.Day == DateTime.Now.Day)
+                                            .GroupBy(x => x.DeliveryDate)
+                                            .Count();
+
+            float guessProducts = data1 / 7.0F;
+
             TakeAwayProduct newProduct = new TakeAwayProduct();
             int? reservedQuantity = 1;
             var product = _context.TakeAwayProduct.Include("Category").AsNoTracking().FirstOrDefault(x=> x.Id == id);
@@ -169,7 +179,7 @@ namespace Supermarket.Controllers
             basket.TotalPrice = (double) basket.Products.Select(x => x.Price * x.QuantityReserved).Sum();
             basket.PreparingOrders = _context.Order.Where(x => x.Status == "Preparing").Count();
             basket.OrdersCanPrepareSimultaneously = _context.EmployeeSchedule.Where(x => x.CheckInTime.Hours < DateTime.Now.Hour && x.CheckOutTime.Hours > DateTime.Now.Hour).Count();
-
+            basket.GuessProducts = guessProducts;
             _memoryCache.Set(CacheProductKey, basket);
 
             return View("Index", await _context.TakeAwayProduct.Include("Category").ToListAsync());

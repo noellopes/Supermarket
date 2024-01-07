@@ -71,6 +71,12 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PreparingOrders) / @Html.DisplayFor(model => model.OrdersCanPrepareSimultaneously)
         </dd>
+        <dt class="col-sm-2">
+            Guess Products
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GuessProducts)
+        </dd>
     </dl>
     <form asp-action="Login">
         <input type="submit" value="Place Order" class="btn btn-danger" />
