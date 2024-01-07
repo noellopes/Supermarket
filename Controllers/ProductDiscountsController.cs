@@ -41,20 +41,7 @@ namespace Supermarket.Controllers
 
                 if (discountExists)
                 {
-                    TempData["ErrorMessage"] = "A discount with the same name and value already exists.";
-                    return RedirectToAction(nameof(Index));
-                }
-                // Verificação para garantir que o valor do desconto seja maior que 0
-                if (productDiscount.Value <= 0)
-                {
-                    ModelState.AddModelError("Value", "Discount value must be greater than 0.");
-                    return RedirectToAction(nameof(Index));
-                }
-
-                // Verificação para garantir que o valor do desconto seja menor do que 100
-                if (productDiscount.Value > 100)
-                {
-                    ModelState.AddModelError("Value", "Discount value must be lower than 100.");
+                    ModelState.AddModelError("", "One or more product Discounts with the same values already exist for the same clients.");
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -172,7 +159,7 @@ namespace Supermarket.Controllers
         public IActionResult Create()
         {
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber");
-            ViewData["ProductList"] = _context.Product.Select(p => new SelectListItem { Value = p.ProductId.ToString(), Text = p.Name }).ToList();
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
             return View();
         }
 
