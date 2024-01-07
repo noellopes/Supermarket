@@ -261,127 +261,7 @@ namespace Supermarket.Controllers
 
             return View();
         }
-        /*   public async Task<IActionResult> RotativeProducts(string? selectedStringDate, int? selectedNumber, float? selectedPrice, int selectedProductId = 0, bool isButtonClicked = false)
-           {
-
-
-               if (selectedStringDate != null && selectedNumber != null && selectedPrice != null)
-               {
-                   var Date = selectedStringDate;
-                   var Number = selectedNumber;
-                   var Price = selectedPrice;
-
-
-
-                   var currentDate = DateTime.Now.Date;
-                   int days = 0;
-                   switch (Date)
-                   {
-                       case "Month":
-                           days = 31;
-                           break;
-
-                       case "2Week":
-                           days = 14;
-                           break;
-
-                       case "week":
-                           days = 7;
-                           break;
-                       case "2day":
-                           days = 2;
-                           break;
-                   }
-
-                   var expensiveProducts = await _context.Product
-                       .Include(p => p.Brand)
-                       .Where(p => p.UnitPrice > Price)
-                       .ToListAsync();
-
-                   var mostCommonProducts = _context.ReduceProduct
-            .Include(rp => rp.Product)
-                .ThenInclude(p => p.Brand)
-            .GroupBy(rp => rp.ProductId)
-            .OrderByDescending(g => g.Count())
-            .Take((int)Number)
-            .Select(g => g.First().Product)
-            .ToList();
-
-                   var filteredProducts = expensiveProducts
-                       .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days)
-                       .ToList();
-
-                   filteredProducts.AddRange(mostCommonProducts
-                   .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days)
-                   .Distinct()
-               );
-
-                   var selectedProduct = filteredProducts.FirstOrDefault(p => p.ProductId == selectedProductId);
-
-                   ViewData["Products"] = filteredProducts;
-                   ViewData["SelectedProduct"] = selectedProduct;
-
-
-
-                   if (isButtonClicked)
-                   {
-                       selectedProduct = _context.Product.FirstOrDefault(p => p.ProductId == selectedProductId);
-                       // Update LastCountDate
-                       selectedProduct.LastCountDate = DateTime.Now;
-
-                       // Save changes to the database
-                       await _context.SaveChangesAsync();
-
-                       /* string description = "A new Rotative Inventory was been made for product:  " + selectedProduct.Name + " in" + selectedProduct.LastCountDate;
-                        Alert alert = new Alert
-                        {
-                            Role = "Stock Operator",
-                            Description = description,
-                            Function="ReduceProducts"
-
-                        };
-                        _context.Add(alert);
-                        await _context.SaveChangesAsync();
-
-
-                       return RedirectToAction("RotativeProducts", new
-                       {
-                           selectedProductId = 0
-                       });
-
-
-                   }
-               }
-
-               var warehouseSectionProducts = await _context.WarehouseSection_Product
-                   .Where(wp => wp.ProductId == selectedProductId)
-                   .Include(wp => wp.WarehouseSection)
-                   .ThenInclude(ws => ws.Warehouse)
-                   .ToListAsync();
-
-               var selftProducts = await _context.Shelft_ProductExhibition
-                   .Where(wp => wp.ProductId == selectedProductId)
-                   .Include(wp => wp.Shelf)
-                   .ThenInclude(ws => ws.Hallway)
-                   .ThenInclude(ws => ws.Store)
-                   .ToListAsync();
-
-               var selftProductsList = selftProducts.ToList();
-               var warehouseSectionProductsList = warehouseSectionProducts.ToList();
-
-               var totalWarehouseQuantity = warehouseSectionProductsList.Sum(wp => wp.Quantity);
-               var totalShelfQuantity = selftProductsList.Sum(sp => sp.Quantity);
-               var grandTotalQuantity = totalWarehouseQuantity + totalShelfQuantity;
-
-               ViewData["TotalWarehouseQuantity"] = totalWarehouseQuantity;
-               ViewData["TotalShelfQuantity"] = totalShelfQuantity;
-               ViewData["GrandTotalQuantity"] = grandTotalQuantity;
-               ViewData["WarehouseSectionProductsList"] = warehouseSectionProductsList;
-               ViewData["SelftProductsList"] = selftProductsList;
-
-               return View("RotativeInventory");
-
-           }*/
+    
 
         public async Task<IActionResult> RotativeProducts(string selectedStringDate="", int? selectedNumber=0, float? selectedPrice=0, int selectedProductId = 0, bool isButtonClicked = false)
         {
@@ -460,6 +340,8 @@ namespace Supermarket.Controllers
                     // Update LastCountDate
                     selectedProduct.LastCountDate = DateTime.Now;
 
+                    var name = selectedProduct.Name;
+
                     // Save changes to the database
                     await _context.SaveChangesAsync();
 
@@ -468,7 +350,9 @@ namespace Supermarket.Controllers
                     {
                         Role = "Stock Administrator",
                         Description = descripition,
-                        Function = "Products"
+                        Function = "Products",
+                        Page = "Index",
+                        Search = name
                     };
                     _context.Add(alert);
                     await _context.SaveChangesAsync();
@@ -539,17 +423,23 @@ namespace Supermarket.Controllers
 
 
                 if (isButtonClicked)
-                { 
+                {
                     // Update LastCountDate
                     selectedProduct.LastCountDate = DateTime.Now;
+
+                    var name = selectedProduct.Name;
+
+                    // Save changes to the database
                     await _context.SaveChangesAsync();
 
-                    var descripition = new string("A new Rotative Inventory was been: " + selectedProduct.Name + " in " + selectedProduct.LastCountDate );
+                    var descripition = new string("A new Rotative Inventory was been: " + selectedProduct.Name + " in " + selectedProduct.LastCountDate);
                     Alert alert = new Alert
                     {
                         Role = "Stock Administrator",
                         Description = descripition,
-                        Function = "Products"
+                        Function = "Products",
+                        Page = "Index",
+                        Search = name
                     };
                     _context.Add(alert);
                     await _context.SaveChangesAsync();
@@ -618,14 +508,13 @@ namespace Supermarket.Controllers
 
                 if (isButtonClicked)
                 {
-                    
-                    selectedProduct.LastCountDate = DateTime.Now;
-
-                   
-                    await _context.SaveChangesAsync();
 
                     // Update LastCountDate
                     selectedProduct.LastCountDate = DateTime.Now;
+
+                    var name = selectedProduct.Name;
+
+                    // Save changes to the database
                     await _context.SaveChangesAsync();
 
                     var descripition = new string("A new Rotative Inventory was been: " + selectedProduct.Name + " in " + selectedProduct.LastCountDate);
@@ -633,7 +522,9 @@ namespace Supermarket.Controllers
                     {
                         Role = "Stock Administrator",
                         Description = descripition,
-                        Function = "Products"
+                        Function = "Products",
+                        Page = "Index",
+                        Search = name
                     };
                     _context.Add(alert);
                     await _context.SaveChangesAsync();
@@ -702,6 +593,8 @@ namespace Supermarket.Controllers
                     // Update LastCountDate
                     selectedProduct.LastCountDate = DateTime.Now;
 
+                    var name = selectedProduct.Name;
+
                     // Save changes to the database
                     await _context.SaveChangesAsync();
 
@@ -710,7 +603,9 @@ namespace Supermarket.Controllers
                     {
                         Role = "Stock Administrator",
                         Description = descripition,
-                        Function = "Products"
+                        Function = "Products",
+                        Page="Index",
+                        Search= name
                     };
                     _context.Add(alert);
                     await _context.SaveChangesAsync();

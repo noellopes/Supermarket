@@ -21,5 +21,9 @@ namespace Supermarket.Models
         [Required]
         public string Function { get; set; } = string.Empty;
 
+        public string Page { get; set; } = string.Empty;
+
+        public string Search { get; set; } = string.Empty;
+
     }
 }

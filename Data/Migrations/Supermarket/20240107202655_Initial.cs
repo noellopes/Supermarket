@@ -20,7 +20,10 @@ namespace Supermarket.Data.Migrations.Supermarket
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
+                    Function = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Page = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Search = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240106175242_Initial")]
+    [Migration("20240107202655_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -41,7 +41,19 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 
+                    b.Property<string>("Function")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Page")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Search")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
