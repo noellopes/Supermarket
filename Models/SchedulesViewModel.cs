@@ -8,7 +8,7 @@
 
         public PagingInfo PagingInfo { get; set; }
 
-        public string SearchDepartment { get; set; } = string.Empty;
+        public int SearchDepartment { get; set; } = 0;
 
         //public int SearchButtonDepartment { get; set; } = 0;
     }

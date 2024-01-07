@@ -30,10 +30,10 @@
             <div class="form-group">
                
 
-                <select id="selectedDepartment" name="selectedDepartment"
+                <select id="selectedDepartment" name="departmentDrop"
                         asp-items="@(new SelectList(Model.Departments, "IDDepartments", "NameDepartments"))"
                         class="form-control">
-                    <option value="">-- All Departments --</option>
+                    <option value="0">-- All Departments --</option>
                 </select>
             </div>
 
