@@ -133,10 +133,28 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
+                //StringComparison = Não é necessário escrever igual ao nome, pode ser tudo em letra minuscula ou maiuscula
+                if (string.Equals(ponto.Status, "workOvertime", StringComparison.OrdinalIgnoreCase))
+                {
+                   
+                    ponto.Justificative = "Don't need justification";
+                }
+                else if (string.Equals(ponto.Status, "notworkOvertime", StringComparison.OrdinalIgnoreCase))
+                {
+                    
+                    if (string.IsNullOrEmpty(ponto.Justificative))
+                    {
+                        ModelState.AddModelError("Justificative", "Justificative is required.");
+                        ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
+                        return View(ponto);
+                    }
+                }
+
                 _context.Add(ponto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
             return View(ponto);
         }
