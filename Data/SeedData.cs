@@ -1,4 +1,5 @@
 ﻿using Supermarket.Models;
+using System;
 
 namespace Supermarket.Data
 {
@@ -58,13 +59,26 @@ namespace Supermarket.Data
         private static void PopulateTickets(SupermarketDbContext db)
         {
             if (db.Tickets.Any()) return;
+            // Instantiate random number generator using system-supplied value as seed.
+            var rand = new Random();
 
-            db.Tickets.AddRange(
-               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = DateTime.Now.AddMinutes(15), NumeroDaSenha = 1, Estado = true, Prioritario = false, IDDepartments = db.Departments.Where(a => a.NameDepartments == "Talho").Select(a => a.IDDepartments).FirstOrDefault() },
-               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = DateTime.Now.AddMinutes(5), NumeroDaSenha = 2, Estado = true, Prioritario = false, IDDepartments = db.Departments.Where(a => a.NameDepartments == "Take-Way").Select(a => a.IDDepartments).FirstOrDefault() },
-               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = DateTime.Now.AddMinutes(11), NumeroDaSenha = 3, Estado = true, Prioritario = false, IDDepartments = db.Departments.Where(a => a.NameDepartments == "Congelados").Select(a => a.IDDepartments).FirstOrDefault() } ,
-               new Ticket { DataEmissao = DateTime.Now, DataAtendimento = DateTime.Now.AddMinutes(20), NumeroDaSenha = 4, Estado = true, Prioritario = false, IDDepartments = db.Departments.Where(a => a.NameDepartments == "Talho").Select(a => a.IDDepartments).FirstOrDefault() }
-            );
+            for (int i = 0; i < 1000; i++)
+            {
+                var randomBool = rand.Next(2) == 1;
+                db.Add(
+                    new Ticket
+                    {
+                        DataEmissao = DateTime.Now,
+                        DataAtendimento = DateTime.Now.AddMinutes(rand.Next(50, 101)),
+                        NumeroDaSenha = i,
+                        Estado = true,
+                        Prioritario = randomBool,
+                        IDDepartments = rand.Next(1, db.Departments.Count())
+                    }
+                    );
+            }
+
+       
             db.SaveChanges();
         }
     }

@@ -28,8 +28,7 @@ namespace Supermarket.Controllers
             //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
 
             int departmentId = GetDepartmentId(departmentName);
-
-            if (departmentName != "")
+            if (!string.IsNullOrEmpty(departmentName))
             {
                 schedules = schedules.Where(x => x.Departments!.NameDepartments.Contains(departmentName));
             }
@@ -54,6 +53,9 @@ namespace Supermarket.Controllers
                 paging.CurrentPage = paging.TotalPages;
             }
 
+            // Retrieve all departments from the database
+            var Departments = await _context.Departments.ToListAsync() ;
+
             var vm = new SchedulesViewModel
             {
                 Schedules = await schedules
@@ -61,6 +63,7 @@ namespace Supermarket.Controllers
                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
                    .Take(paging.PageSize)
                    .ToListAsync(),
+                Departments = Departments,
                 PagingInfo = paging,
                 SearchDepartment = departmentName,
                 //SearchButtonDepartment = departmentButtonName,
@@ -239,7 +242,7 @@ namespace Supermarket.Controllers
                     Department = d,
                     TicketsCount = _context.Tickets.Count(t => t.IDDepartments == d.IDDepartments)
                 })
-                .Where(joinResult => joinResult.TicketsCount > procuraLimiteAfluencia)
+                .Where(joinResult => joinResult.TicketsCount >= procuraLimiteAfluencia)
                 .ToList();
 
             var model = new List<AfluenciasViewModel>();
