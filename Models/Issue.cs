@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Supermarket.Models
 {
     public enum Severity
@@ -13,41 +15,38 @@ namespace Supermarket.Models
         public int IssueId { get; set; } // Issue Identifier
 
         //Relation with foreign key for Product
-        //[Display(Name = "Product")]
-        //public int ProductId { get; set; }
-        //public Product? Product { get; set; }
+        [Display(Name = "Product")]
+        public int ProductId { get; set; }
+        public Product? Product { get; set; }
 
         //Relation with foreign key for Issue Category
-        [Display(Name = "Issue Category")]
+        [Display(Name = "Issue category")]
         public int IssueTypeId { get; set; }
         public IssueType? IssueType { get; set; }
 
         [Required]
         [MinLength(10)]
+        [Display(Name = "Details")]
         public string Description { get; set; } = string.Empty; // Issue Description
 
         //Relation with foreign key for Supplier
-        //[Display(Name = "Supplier")]
-        //public int SupplierID { get; set; }
-        //public Supplier? Supplier { get; set; }
-
-        //Relation with foreign key for Client
-        //[Display(Name = "Client")]
-        //public int IssueTypeId { get; set; }
-        //public IssueType? IssueType { get; set; }
+        [Display(Name = "Supplier")]
+        public int SupplierId { get; set; }
+        public Supplier? Supplier { get; set; }
 
         //Relation with foreign key for Employee
-        //[Display(Name = "Employee")]
-        //public int EmployeeId { get; set; }
-        //public Employee? Employee { get; set; }
+        [Display(Name = "Employee responsible for registration")]
+        public int EmployeeId { get; set; }
+        public Employee? Employee { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
-        [Display(Name = "Issue Registration Date")]
-        public DateTime IssueRegisterDate { get; set; }  //Registration date for the issue
+        [Display(Name = "Registration date")]
+        public DateTime IssueRegisterDate { get; set; } = DateTime.Now;
 
         [Required]
         [EnumDataType(typeof(Severity))]
+        [Display(Name = "Severity")]
         public Severity Severity { get; set; }
     }
 }

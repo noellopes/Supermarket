@@ -18,5 +18,8 @@ namespace Supermarket.Models
         public int EmployeeId { get; set;}
 
         public Employee? Employee { get; set;}
+
+        [System.ComponentModel.DisplayName("Evaluation date")]
+        public DateTime? EvaluationDate { get; set; } = DateTime.Now;
     }
 }

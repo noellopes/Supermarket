@@ -20,8 +20,23 @@ namespace Supermarket.Controllers
         }
 
         // GET: Funcao
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
+                TotalItems = _context.Funcao.Count()
+            };
+
+            return View(
+                new FuncaoListViewModel {
+                    funcao = _context.Funcao.OrderBy( f => f.NomeFuncao)
+                        .Skip((page-1)*pagination.PageSize).Take(pagination.PageSize),
+                    Pagination = pagination 
+                }
+            );
+
               return _context.Funcao != null ? 
                           View(await _context.Funcao.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
@@ -103,8 +118,7 @@ namespace Supermarket.Controllers
             var Funcao = await _context.Funcao.FindAsync(id);
             if (Funcao == null)
             {
-                TempData["mensagem"] = "A funcao nao existe";
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
             return View(Funcao);
         }
@@ -121,7 +135,7 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid) //valida no lado do cliente e o do servidosr [neste caso no cliente]
+            if (ModelState.IsValid)
             {
                 try
                 {

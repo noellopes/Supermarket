@@ -7,13 +7,14 @@
 <h1>Folgas Pendentes de Aprovação</h1>
 
 
+
 @foreach (var folga in Model)
 {
     <div><h4> Funcionário:@folga.Employee.Employee_Name</h4>
         <p> Pedida em: @folga.DataPedido.ToString()</p>
         <p> Data de Início:@folga.DataInicio.ToShortDateString()</p>
         <p> Data de Fim:@folga.DataFim.ToShortDateString()</p>
-        <p> Motivo da folga: @folga.motivo</p>
+        <p> Motivo da folga: @Html.DisplayFor(modelItem=>folga.motivo)</p>
         
 
         <form asp-controller="Folgas" asp-action="AprovarFolga" asp-route-id="@folga.FolgaId" method="post">
@@ -30,5 +31,6 @@
         <br>
         <br>
         </div>
-        
+    
 }
+<a asp-action="Index">Voltar ao Index</a>
