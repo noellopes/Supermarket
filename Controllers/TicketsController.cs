@@ -26,22 +26,12 @@ namespace Supermarket.Controllers
         // GET: Tickets
         public async Task<IActionResult> Index (int page = 1,int departmentName = 0)
         {
-        //    //var ticketList = _context.Tickets.Join(_context.Departments,
-        //    //    ticket => ticket.IDDepartments,
-        //    //    department => department.IDDepartments,
-        //    //    (ticket, department) => new { TicketId = ticket.IDDepartments,
-        //    //        DepartmentName = department.NameDepartments }).ToList();
+   
 
-        //    //return View(ticketList);
-        //    return _context.Tickets != null ?
-        //                  View(await _context.Tickets.ToListAsync()) :
-        //                  Problem("Entity set 'SupermarketDbContext.Tickets'  is null.");
-
-            ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
+        ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
         var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
-            //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
-
+      
     
         if (departmentName != 0)
            {
@@ -50,40 +40,36 @@ namespace Supermarket.Controllers
 
         var Departments = await _context.Departments.ToListAsync();
 
-    //if (departmentButtonName != 0)
-    //{
-    //    schedules = schedules.Where(x => x.IDDepartments.Equals(departmentButtonName));
-    //}
 
-    PagingInfo paging = new PagingInfo
-    {
-        CurrentPage = page,
-        TotalItems = await tickets.CountAsync(),
-    };
+        PagingInfo paging = new PagingInfo
+        {
+            CurrentPage = page,
+            TotalItems = await tickets.CountAsync(),
+        };
 
             if (paging.CurrentPage <= 1)
             {
                 paging.CurrentPage = 1;
             }
             else if (paging.CurrentPage > paging.TotalPages)
-{
-    paging.CurrentPage = paging.TotalPages;
-}
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
 
-var vm = new TicketViewModel
-{
-    Tickets = await tickets
-    .OrderBy(b => b.TicketId)
-    .Skip((paging.CurrentPage - 1) * paging.PageSize)
-       .Take(paging.PageSize)
-       .ToListAsync(),
-    Departments = Departments,
-    PagingInfo = paging,
-    SearchDepartment = departmentName,
-    //SearchButtonDepartment = departmentButtonName,
-};
-
-return View(vm);
+            var tm = new TicketViewModel
+            {
+                Tickets = await tickets
+                .OrderBy(b => b.TicketId)
+                .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                   .Take(paging.PageSize)
+                   .ToListAsync(),
+                Departments = Departments,
+                PagingInfo = paging,
+                SearchDepartment = departmentName,
+                //SearchButtonDepartment = departmentButtonName,
+            };
+                
+            return View(tm);
         }
 
         private int GetDepartmentId(string departmentName)

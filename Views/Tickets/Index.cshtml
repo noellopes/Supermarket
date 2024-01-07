@@ -14,7 +14,7 @@
             <p><strong>Search Tickets</strong></p>
 
             <div class="form-group">
-                <select id="selectedDepartment" name="searchdepartment"
+                <select id="selectedDepartment" name="departmentName"
                         asp-items="@(new SelectList(Model.Departments, "IDDepartments", "NameDepartments"))"
                         class="form-control">
                     <option value="0">-- All Departments --</option>

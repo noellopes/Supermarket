@@ -20,23 +20,19 @@ namespace Supermarket.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0 /*int departmentButtonName = 0*/)
+        public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0 )
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
             var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
-            //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
-
+           
 
             if (departmentDrop!=0)
             {
                 schedules = schedules.Where(x => x.IDDepartments==departmentDrop);
             }
 
-            //if (departmentButtonName != 0)
-            //{
-            //    schedules = schedules.Where(x => x.IDDepartments.Equals(departmentButtonName));
-            //}
+       
 
             PagingInfo paging = new PagingInfo
             {
