@@ -154,8 +154,36 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(purchase);
+                    
+                    var originalPurchase = await _context.Purchase.FindAsync(id);
+
+                    // Atualiza a propriedade ExpirationDate
+                    originalPurchase.ExpirationDate = purchase.ExpirationDate;
+
+                    // Calcula se o produto está expirado ou não
+                    originalPurchase.ProductExpired = IsProductExpired(originalPurchase.ExpirationDate);
+
+                    //Se estiver expirado escreve na tabela
+                    if (originalPurchase.ProductExpired)
+                    {
+                        //Escrever na tabela de produtos expirados
+                        var expiredProduct = new ExpiredProducts
+                        {
+                            ProductId = purchase.ProductId,
+                            ExpirationDate = purchase.ExpirationDate,
+                            SupplierId = purchase.SupplierId,
+                            EmployeeId = purchase.EmployeeId,
+                            // Set other properties as needed
+                            FabricationDate = DateTime.Now,
+                            BarCode = purchase.BatchNumber
+                        };
+
+                        _context.ExpiredProducts.Add(expiredProduct);
+                    }
+
+                    _context.Update(originalPurchase);
                     await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -257,11 +285,11 @@ namespace Supermarket.Controllers
                         EmployeeId = purchase.EmployeeId,
                         // Set other properties as needed
                         FabricationDate = DateTime.Now,
-                        BarCode = "123456"
+                        BarCode = purchase.BatchNumber
                     };
 
                     _context.ExpiredProducts.Add(expiredProduct);
-                    _context.SaveChanges();
+                    //_context.SaveChanges();
                 }
                 else
                 {
@@ -277,8 +305,6 @@ namespace Supermarket.Controllers
         {
             // Chama o método para atualizar o status de expiração para todas as compras
             UpdateExpirationStatusForAllPurchases();
-
-            // You can add additional logic here if needed.
 
             // Redireciona para a ação "Index" do controlador atual
             return RedirectToAction(nameof(Index));
