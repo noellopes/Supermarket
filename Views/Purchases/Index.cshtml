@@ -77,9 +77,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.BatchNumber)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpirationDate)
-            </td>
+            @if (item.ProductExpired)
+            {
+                <th class="bg-danger">
+                    @Html.DisplayFor(modelItem => item.ExpirationDate)
+                </th>
+            }
+            else
+            {
+                <th>
+                    @Html.DisplayFor(modelItem => item.ExpirationDate)
+                </th>
+            }
             <td>
                     @if (User.IsInRole("Edit_Del_Reports"))
                     {
