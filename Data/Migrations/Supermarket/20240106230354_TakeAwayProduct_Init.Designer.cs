@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -11,9 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240106230354_TakeAwayProduct_Init")]
+    partial class TakeAwayProduct_Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("OrderTakeAwayProduct", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("OrderTakeAwayProduct");
-                });
 
             modelBuilder.Entity("Supermarket.Models.Brand", b =>
                 {
@@ -891,6 +879,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<int>("EstimatedPreparationTimeAsMinutes")
                         .HasColumnType("int");
 
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
@@ -908,6 +899,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("TakeAwayProduct");
                 });
@@ -1000,21 +993,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasIndex("WarehouseSectionId");
 
                     b.ToTable("WarehouseSection_Product");
-                });
-
-            modelBuilder.Entity("OrderTakeAwayProduct", b =>
-                {
-                    b.HasOne("Supermarket.Models.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Supermarket.Models.TakeAwayProduct", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Supermarket.Models.CardMovement", b =>
@@ -1229,7 +1207,15 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Supermarket.Models.Order", "Order")
+                        .WithMany("Products")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Supermarket.Models.User_Order", b =>
@@ -1304,6 +1290,11 @@ namespace Supermarket.Data.Migrations.Supermarket
             modelBuilder.Entity("Supermarket.Models.MealCard", b =>
                 {
                     b.Navigation("CardMovements");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Order", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Product", b =>
