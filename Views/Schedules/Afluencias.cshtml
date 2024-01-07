@@ -11,16 +11,20 @@
  <form asp-action="Afluencias" method="get">
     <p><strong>Search dates</strong></p>
     <div class="row">
-        <div class="col-6">
+        <div class="col-4">
     <label for="dataEmissao" class="control-label ">Data Inicial</label>
     <input type="datetime-local" class="form-control" value="@ViewBag.SearchDataIntervaloInicial" />
         </div>
-        <div class="col-6">
+        <div class="col-4">
     <label for="dataEmissao" class="control-label">Data Final</label>
     <input type="datetime-local" class="form-control" value="@ViewBag.SearchDataIntervaloFinal" />
         </div>
     </div>
- 
+    <div class="col-4">
+        <label  class="control-label">Limite Afluencia</label>
+        <input type="number" class="form-control" value="@ViewBag.SearchLimiteAfluencia" />
+    </div>
+    
 
     <div class="mt-3">
         <input class="btn btn-primary" type="submit" value="Search" />
@@ -57,7 +61,7 @@
                                 
                             }
                         
-                        Emitido em: @ticket.DataEmissao |
+                        Emitido em: @ticket.DataEmissao 
                         
                     </div>
                    

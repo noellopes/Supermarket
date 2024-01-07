@@ -219,57 +219,50 @@ namespace Supermarket.Controllers
         }
 
 
-        public async Task<IActionResult> Afluencias(DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null)
+        public async Task<IActionResult> Afluencias(int procuraLimiteAfluencia = 1,DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null )
         {
-            //ViewData["IDDepartments"] = new SelectList(_context.Set<Departments>(), "IDDepartments", "NameDepartments");
-            //procuraDataInicial = DateTime.Now;
-            //procuraDataFinal = new DateTime(2030, 04, 30, 12, 30, 0);
-
-            var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
-            //var schedules = _context.Schedule.Include(s => s.Departments).ToList();
-            var departments = from b in _context.Departments.Include(b => b.Tickets) select b;
+            var tickets = _context.Tickets.AsEnumerable();
 
             if (procuraDataInicial != null)
             {
-                tickets = tickets.Where(x => x.DataEmissao! >= procuraDataInicial);
+                tickets = tickets.Where(x => x.DataEmissao >= procuraDataInicial);
             }
 
             if (procuraDataFinal != null)
             {
-                tickets = tickets.Where(x => x.DataEmissao! <= procuraDataFinal);
+                tickets = tickets.Where(x => x.DataEmissao <= procuraDataFinal);
             }
 
-            // Create a model that combines departments and their corresponding tickets
+            var departmentsWithTicketCount = _context.Departments
+                .Select(d => new
+                {
+                    Department = d,
+                    TicketsCount = _context.Tickets.Count(t => t.IDDepartments == d.IDDepartments)
+                })
+                .Where(joinResult => joinResult.TicketsCount > procuraLimiteAfluencia)
+                .ToList();
+
             var model = new List<AfluenciasViewModel>();
 
-            foreach (var department in departments)
+            foreach (var result in departmentsWithTicketCount)
             {
                 var am = new AfluenciasViewModel
                 {
-                    Department = department,
-                    Tickets = tickets.Where(t => t.IDDepartments == department.IDDepartments).OrderBy(t => t.DataEmissao).ToList(),
-                     SearchDataIntervaloInicial = procuraDataInicial,
+                    Department = result.Department,
+                    Tickets = tickets
+                        .Where(t => t.IDDepartments == result.Department.IDDepartments &&
+                                    (!procuraDataInicial.HasValue || t.DataEmissao >= procuraDataInicial) &&
+                                    (!procuraDataFinal.HasValue || t.DataEmissao <= procuraDataFinal))
+                        .OrderBy(t => t.DataEmissao)
+                        .ToList(),
+                    SearchDataIntervaloInicial = procuraDataInicial,
                     SearchDataIntervaloFinal = procuraDataFinal
                 };
 
                 model.Add(am);
             }
 
-            //var am = new AfluenciasViewModel
-            //{
-            //    Tickets = await tickets
-            //    .OrderBy(b => b.DataEmissao)
-            //    .Where(b=>b.IDDepartments)
-            //      .ToListAsync(),
-            //    DepartmentsList = await departments.OrderBy(b => b.NameDepartments).ToListAsync(),
-            //    SearchDataIntervaloInicial = procuraDataInicial,
-            //    SearchDataIntervaloFinal = procuraDataFinal
-            //    //SearchButtonDepartment = departmentButtonName,
-            //};
-
             return View(model);
-
-
 
         }
     }

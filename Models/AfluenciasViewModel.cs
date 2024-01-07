@@ -9,6 +9,8 @@
         public DateTime? SearchDataIntervaloInicial { get; set; } = null;
         public DateTime? SearchDataIntervaloFinal { get; set; } = null;
 
+        public int SearchLimiteAfluencia { get; set; } = 0;
+
         //public int SearchButtonDepartment { get; set; } = 0;
     }
 }
