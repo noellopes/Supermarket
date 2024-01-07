@@ -24,11 +24,12 @@ namespace Supermarket.Controllers
 
 
         // GET: Tickets
-        public async Task<IActionResult> Index (int page = 1,int departmentName = 0)
+        public async Task<IActionResult> Index (string searchButton, int page = 1,int departmentName = 0)
         {
-   
 
-        ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
+            ViewBag.SearchButtonClicked = !string.IsNullOrEmpty(searchButton);
+
+            ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
         var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
       
