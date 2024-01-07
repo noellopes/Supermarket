@@ -326,7 +326,6 @@ namespace Supermarket.Data
             db.Customers.AddRange(
                     new Customer
                     {
-                        CustomerBirth = DateTime.Now,
                         CustomerAddress = "Guarda/Portugal",
                         CustomerEmail = "omeerabay@gmail.com",
                         CustomerName = "Omer",
@@ -335,7 +334,6 @@ namespace Supermarket.Data
                     },
                     new Customer
                     {
-                        CustomerBirth = DateTime.Now,
                         CustomerAddress = "Guarda/Portugal",
                         CustomerEmail = "yusuf@gmail.com",
                         CustomerName = "Yusuf",
@@ -344,7 +342,6 @@ namespace Supermarket.Data
                     },
                     new Customer
                     {
-                        CustomerBirth = DateTime.Now,
                         CustomerAddress = "Guarda/Portugal",
                         CustomerEmail = "melike@gmail.com",
                         CustomerName = "Melike",

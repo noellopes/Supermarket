@@ -23,16 +23,16 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CustomerName)
+                    @item.CustomerName
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CustomerEmail)
+                    @item.CustomerEmail
                 </td>
                 <td>
                    @item.CustomerPhone
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CustomerAddress)
+                    @item.CustomerAddress
                 </td>
                 <td>
 
@@ -44,3 +44,6 @@
         }
     </tbody>
 </table>
+
+
+<a asp-controller="Customer" asp-action="TopCustomers" class="btn btn-secondary">Top Customer for a Given Time</a>

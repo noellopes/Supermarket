@@ -56,7 +56,7 @@ namespace Supermarket.Controllers
             if (customer != null)
             {
                 _memoryCache.Set("customerId", customer.CustomerId);
-                return RedirectToAction("PlaceOrder", "TakeAwayProduct",new { id = customer.CustomerId });
+                return Redirect("/Customer/CustomerList");
             }
             return Redirect("/Customer/LoginCustomer");
         }
@@ -140,6 +140,34 @@ namespace Supermarket.Controllers
             return Redirect("/Customer/CustomerList");
         }
 
+        public IActionResult TopCustomers()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult GetTopCustomersForProductInTime(string productName, DateTime startTime, DateTime endTime)
+        {
+            try
+            {
+                var topCustomers = _context.Order
+                .Where(o => _context.TakeAwayProduct.Any(p => p.ProductName == productName)
+                && o.OrderDate >= startTime && o.OrderDate <= endTime)
+                .GroupBy(o => o.CustomerId)
+                .OrderByDescending(group => group.Count())
+                .Take(5)
+                .Select(group => group.First().Customer)
+                .ToList();
+
+                return View(topCustomers);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Customer Error: " + ex);
+                return RedirectToAction("Error");
+            }
+            
+        }
 
 
     }
