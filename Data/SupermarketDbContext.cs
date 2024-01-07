@@ -79,11 +79,19 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.EmployeeSchedule> EmployeeSchedule { get; set; } = default!;
 
-
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
 
         public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Supplier> Suppliers { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.MealCard> MealCards { get; set; } = default!;
+        
+        public DbSet<Supermarket.Models.ExpiredProducts> ExpiredProducts { get; set; } = default!;
+        
+        public DbSet<Supermarket.Models.Purchase> Purchase { get; set; } = default!;
+
+        public object Pontos { get; internal set; }
         public DbSet<TakeAwayCategory> TakeAwayCategory { get; set; } = default!;
         public DbSet<TakeAwayProduct> TakeAwayProduct { get; set; } = default!;
         public DbSet<User_Order> User_Order { get; set; } = default!;

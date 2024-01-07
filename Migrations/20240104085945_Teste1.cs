@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Supermarket
+namespace Supermarket.Migrations
 {
     /// <inheritdoc />
-    public partial class Merge_EmployeeEvaluations : Migration
+    public partial class Teste1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -81,24 +81,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
-                name: "Folga",
-                columns: table => new
-                {
-                    FolgaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Gestor = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataPedido = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Motivo = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Folga", x => x.FolgaId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Funcao",
                 columns: table => new
                 {
@@ -110,19 +92,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Funcao", x => x.FuncaoId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Hierarquias",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Hierarquias", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -299,8 +268,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GradeNumber = table.Column<int>(type: "int", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    EvaluationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    EmployeeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -331,6 +299,32 @@ namespace Supermarket.Data.Migrations.Supermarket
                     table.PrimaryKey("PK_EmployeeSchedule", x => x.EmployeeScheduleId);
                     table.ForeignKey(
                         name: "FK_EmployeeSchedule_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Folga",
+                columns: table => new
+                {
+                    FolgaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    GestorId = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true),
+                    DataPedido = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataResultado = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    motivo = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Folga", x => x.FolgaId);
+                    table.ForeignKey(
+                        name: "FK_Folga_Employee_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employee",
                         principalColumn: "EmployeeId",
@@ -651,6 +645,11 @@ namespace Supermarket.Data.Migrations.Supermarket
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Folga_EmployeeId",
+                table: "Folga",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Hallway_StoreId",
                 table: "Hallway",
                 column: "StoreId");
@@ -757,9 +756,6 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             migrationBuilder.DropTable(
                 name: "Funcao");
-
-            migrationBuilder.DropTable(
-                name: "Hierarquias");
 
             migrationBuilder.DropTable(
                 name: "Issues");
