@@ -40,5 +40,7 @@ namespace Supermarket.Models
         [DataType(DataType.Date)]
         [Display(Name = "Delivery Date")]
         public DateTime DeliveryDate { get; set; }
+
+        public bool ProductExpired { get; set; } = false;
     }
 }
