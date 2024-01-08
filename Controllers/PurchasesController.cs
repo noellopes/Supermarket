@@ -22,7 +22,7 @@ namespace Supermarket.Controllers
 
         // GET: Purchases
         [Authorize(Roles = "View_Reports")]
-        public async Task<IActionResult> Index(int page = 1, string product = "", string supplier = "")
+        public async Task<IActionResult> Index(int page = 1, string product = "", string supplier = "", DateTime? deliverydate = null)
         {
             // Call the method to update expiration status
             UpdateExpirationStatusForAllPurchases();
@@ -41,12 +41,17 @@ namespace Supermarket.Controllers
                 purchase = purchase.Where(x => x.Supplier!.Name.Contains(supplier));
             }
 
-            
+            if (deliverydate.HasValue)
+            {
+                purchase = purchase.Where(x => x.DeliveryDate == deliverydate.Value.Date);
+            }
+
+
             //if (deliverydate != "")
             //{
             //    purchase = purchase.Where(x => x.DeliveryDate!.Contains(deliverydate));
             //}
-            
+
 
             var pagination = new PagingInfo
             {
@@ -63,7 +68,8 @@ namespace Supermarket.Controllers
                                                  .Take(pagination.PageSize),
                     Pagination = pagination,
                     SearchProduct = product,
-                    SearchSupplier = supplier
+                    SearchSupplier = supplier,
+                    SearchDeliveryDate = deliverydate
                 }
             );
         }
@@ -180,8 +186,7 @@ namespace Supermarket.Controllers
                             expiredProduct.ExpirationDate = purchase.ExpirationDate;
                             expiredProduct.SupplierId = purchase.SupplierId;
                             expiredProduct.EmployeeId = purchase.EmployeeId;
-                            expiredProduct.FabricationDate = DateTime.Now;
-                            expiredProduct.BarCode = purchase.BatchNumber;
+                            expiredProduct.BatchNumber = purchase.BatchNumber;
 
                             _context.Update(expiredProduct);
                         }
@@ -298,8 +303,7 @@ namespace Supermarket.Controllers
                             SupplierId = purchase.SupplierId,
                             EmployeeId = purchase.EmployeeId,
                             // Set other properties as needed
-                            FabricationDate = DateTime.Now,
-                            BarCode = purchase.BatchNumber
+                            BatchNumber = purchase.BatchNumber
                         };
 
                         _context.ExpiredProducts.Add(expiredProduct);
@@ -315,16 +319,17 @@ namespace Supermarket.Controllers
         }
 
         [Authorize(Roles = "View_Reports")]
-        public IActionResult CloseToExpire(int page = 1, string product = "", string supplier = "")
+        public IActionResult CloseToExpire(int page = 1, string product = "", string supplier = "", DateTime? expirationdate = null)
         {
             var currentDate = DateTime.Now;
-            var expirationDate = currentDate.AddDays(7); // 1 week from now
+            var NextExpirationDate = currentDate.AddDays(7); // 1 week from now
 
-            var purchase = _context.Purchase
+            var purchase = from i in _context.Purchase
                             .Include(p => p.Product)
                             .Include(s => s.Supplier)
                             .Include(e => e.Employee)
-                            .Where(x => x.ExpirationDate > currentDate && x.ExpirationDate <= expirationDate);
+                            .Where(x => x.ExpirationDate > currentDate && x.ExpirationDate <= NextExpirationDate)
+                            select i;
 
             if (product != "")
             {
@@ -336,11 +341,7 @@ namespace Supermarket.Controllers
                 purchase = purchase.Where(x => x.Supplier!.Name.Contains(supplier));
             }
 
-
-            //if (deliverydate != "")
-            //{
-            //    purchase = purchase.Where(x => x.DeliveryDate!.Contains(deliverydate));
-            //}
+            if (expirationdate.HasValue) purchase = purchase.Where(x => x.ExpirationDate == expirationdate);
 
 
             var pagination = new PagingInfo
@@ -353,12 +354,13 @@ namespace Supermarket.Controllers
             return View(
                 new PurchaseListViewModel
                 {
-                    Purchase = purchase.OrderByDescending(i => i.DeliveryDate)
+                    Purchase = purchase.OrderByDescending(i => i.ExpirationDate)
                                        .Skip((page - 1) * pagination.PageSize)
                                                  .Take(pagination.PageSize),
                     Pagination = pagination,
                     SearchProduct = product,
-                    SearchSupplier = supplier
+                    SearchSupplier = supplier,
+                    SearchExpirationDate = expirationdate
                 }
             );
         }

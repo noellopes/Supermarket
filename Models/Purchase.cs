@@ -29,6 +29,7 @@ namespace Supermarket.Models
 
         [Required]
         [StringLength(10, MinimumLength = 3)]
+        [Display(Name = "Batch Number")]
         public required string BatchNumber { get; set; }
 
         //Data de validade
@@ -42,6 +43,7 @@ namespace Supermarket.Models
         [Display(Name = "Delivery Date")]
         public DateTime DeliveryDate { get; set; }
 
+        [Display(Name = "Product Expired?")]
         public bool ProductExpired { get; set; }
     }
 }
