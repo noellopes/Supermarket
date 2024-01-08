@@ -127,7 +127,7 @@ namespace Supermarket.Controllers
         // GET: ReduceProducts/Create
         public IActionResult Create()
         {
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description");
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name");
             ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description");
             return View();
@@ -214,7 +214,7 @@ namespace Supermarket.Controllers
                 }
                
             }
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", reduceProduct.ProductId);
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", reduceProduct.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
             ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description", reduceProduct.WarehouseSectionId);
             return View(reduceProduct);
