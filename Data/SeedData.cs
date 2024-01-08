@@ -619,19 +619,24 @@ namespace Supermarket.Data {
 
         internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager) {
             var user = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
-            var userStockAdmin = await EnsureUserIsCreatedAsync(userManager!, "stockadmin@ipg.pt", "Secret#123");
-            var userStockOp = await EnsureUserIsCreatedAsync(userManager!, "stockop@ipg.pt", "Secret#123");
+            var userJoaoStockAdmin = await EnsureUserIsCreatedAsync(userManager!, "joaostockadmin@ipg.pt", "Secret#123");
+            var userAndreStockOp = await EnsureUserIsCreatedAsync(userManager!, "andrestockop@ipg.pt", "Secret#123");
+            var userIvoStockOp = await EnsureUserIsCreatedAsync(userManager!, "ivostockop@ipg.pt", "Secret#123");
 
             if (!await userManager!.IsInRoleAsync(user, ROLE_ADMIN)) {
                 await userManager!.AddToRoleAsync(user, ROLE_ADMIN);
             }
-            if (!await userManager!.IsInRoleAsync(userStockAdmin, ROLE_STOCK_ADMIN))
+            if (!await userManager!.IsInRoleAsync(userJoaoStockAdmin, ROLE_STOCK_ADMIN))
             {
-                await userManager!.AddToRoleAsync(userStockAdmin, ROLE_STOCK_ADMIN);
+                await userManager!.AddToRoleAsync(userJoaoStockAdmin, ROLE_STOCK_ADMIN);
             }
-            if (!await userManager!.IsInRoleAsync(userStockOp, ROLE_STOCK_OP))
+            if (!await userManager!.IsInRoleAsync(userAndreStockOp, ROLE_STOCK_OP))
             {
-                await userManager!.AddToRoleAsync(userStockOp, ROLE_STOCK_OP);
+                await userManager!.AddToRoleAsync(userAndreStockOp, ROLE_STOCK_OP);
+            }
+            if (!await userManager!.IsInRoleAsync(userIvoStockOp, ROLE_STOCK_OP))
+            {
+                await userManager!.AddToRoleAsync(userIvoStockOp, ROLE_STOCK_OP);
             }
         }
 
