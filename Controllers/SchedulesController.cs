@@ -220,26 +220,8 @@ namespace Supermarket.Controllers
 
         public async Task<IActionResult> Afluencias(int procuraLimiteAfluencia = 1,DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null )
         {
-            var tickets = _context.Tickets.AsEnumerable();
-
-            if (procuraDataInicial != null)
-            {
-                tickets = tickets.Where(x => x.DataEmissao >= procuraDataInicial);
-            }
-
-            if (procuraDataFinal != null)
-            {
-                tickets = tickets.Where(x => x.DataEmissao <= procuraDataFinal);
-            }
-
             var departmentsWithTicketCount = _context.Departments
-        .Select(d => new
-        {
-            Department = d,
-            TicketsCount = _context.Tickets.Count(t => t.IDDepartments == d.IDDepartments &&
-                                                      (!procuraDataInicial.HasValue || t.DataEmissao >= procuraDataInicial) &&
-                                                      (!procuraDataFinal.HasValue || t.DataEmissao <= procuraDataFinal))
-        })
+        .Select(d => new { Department = d, TicketsCount = _context.Tickets.Count(t => t.IDDepartments == d.IDDepartments) })
         .Where(joinResult => joinResult.TicketsCount >= procuraLimiteAfluencia)
         .ToList();
 
@@ -247,22 +229,32 @@ namespace Supermarket.Controllers
 
             foreach (var result in departmentsWithTicketCount)
             {
+                var tickets = _context.Tickets
+                    .Where(t => t.IDDepartments == result.Department.IDDepartments);
+
+                if (procuraDataInicial != null)
+                {
+                    tickets = tickets.Where(t => t.DataAtendimento >= procuraDataInicial);
+                }
+
+                if (procuraDataFinal != null)
+                {
+                    tickets = tickets.Where(t => t.DataAtendimento <= procuraDataFinal);
+                }
+
                 var am = new AfluenciasViewModel
                 {
                     Department = result.Department,
-                    Tickets = tickets
-                        .Where(t => t.IDDepartments == result.Department.IDDepartments &&
-                                    (!procuraDataInicial.HasValue || t.DataEmissao >= procuraDataInicial) &&
-                                    (!procuraDataFinal.HasValue || t.DataEmissao <= procuraDataFinal))
+                    Tickets = await tickets
                         .OrderBy(t => t.DataEmissao)
-                        .ToList(),
+                        .ToListAsync(),
                     SearchDataIntervaloInicial = procuraDataInicial,
                     SearchDataIntervaloFinal = procuraDataFinal
                 };
 
                 model.Add(am);
             }
-
+            Console.WriteLine($"procuraDataInicial: {procuraDataInicial}, procuraDataFinal: {procuraDataFinal}");
             return View(model);
 
         }
