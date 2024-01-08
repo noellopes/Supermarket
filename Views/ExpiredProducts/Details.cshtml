@@ -11,16 +11,16 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Purchase)
+        </dt>
+        <dd class="col-sm-10">
+            <a href="/Purchases/Details/@Model.PurchaseId"> Purchase @Model.ProductId</a>
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Product)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Product.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FabricationDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FabricationDate)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ExpirationDate)
@@ -29,10 +29,10 @@
             @Html.DisplayFor(model => model.ExpirationDate)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.BarCode)
+            @Html.DisplayNameFor(model => model.BatchNumber)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.BarCode)
+            @Html.DisplayFor(model => model.BatchNumber)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Supplier)
@@ -49,6 +49,5 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ExpiredProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
