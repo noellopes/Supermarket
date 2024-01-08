@@ -109,24 +109,87 @@ namespace Supermarket.Controllers
         }
 
         // POST: Tickets/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
         {
-           
-          
 
             if (ModelState.IsValid)
             {
+                // Set default or automated values for the new ticket
+                tickets.DataEmissao = DateTime.Now;
+                tickets.Estado = false; // Set default value
+                tickets.Prioritario = false; // Set default value
+
+                // Add the new ticket to the context
                 _context.Add(tickets);
+
+                // Save changes to the database
                 await _context.SaveChangesAsync();
-                ViewBag.Message = "Ticket created sucessfully.";
-                return View("Details",tickets);
+
+                ViewBag.Message = "Ticket created successfully.";
+                return View("Details", tickets);
             }
+
             return View(tickets);
         }
+
+        //if (ModelState.IsValid)
+        //{
+        //    _context.Add(tickets);
+        //    await _context.SaveChangesAsync();
+        //    ViewBag.Message = "Ticket created sucessfully.";
+        //    return View("Details",tickets);
+        //}
+        //return View(tickets);
+
+
+        // GET: TicketsPriority/Create
+        public IActionResult CreatePriority()
+        {
+
+            ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
+
+            return View();
+        }
+
+        // POST: TicketsPriority/Create
+  
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePriority([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
+        {
+
+            if (ModelState.IsValid)
+            {
+                // Set default or automated values for the new ticket
+                tickets.DataEmissao = DateTime.Now;
+                tickets.Estado = false; // Set default value
+                tickets.Prioritario = true; // Set default value
+
+                // Add the new ticket to the context
+                _context.Add(tickets);
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+
+                ViewBag.Message = "Priority Ticket created successfully.";
+                return View("Details", tickets);
+            }
+
+            return View(tickets);
+
+        }
+        //if (ModelState.IsValid)
+        //{
+        //    _context.Add(tickets);
+        //    await _context.SaveChangesAsync();
+        //    ViewBag.Message = "Ticket created sucessfully.";
+        //    return View("Details",tickets);
+        //}
+        //return View(tickets);
+
 
         // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -147,8 +210,7 @@ namespace Supermarket.Controllers
         }
 
         // POST: Tickets/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
