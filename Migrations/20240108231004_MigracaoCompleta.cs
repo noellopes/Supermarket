@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Supermarket
+namespace Supermarket.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class MigracaoCompleta : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -69,6 +69,23 @@ namespace Supermarket.Data.Migrations.Supermarket
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.CustomerId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    IDDepartments = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NameDepartments = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    DescriptionDepartments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    StateDepartments = table.Column<bool>(type: "bit", nullable: false),
+                    SkillsDepartments = table.Column<string>(type: "nvarchar(155)", maxLength: 155, nullable: false),
+                    QuatDepMed = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.IDDepartments);
                 });
 
             migrationBuilder.CreateTable(
@@ -326,6 +343,59 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
+                name: "Schedule",
+                columns: table => new
+                {
+                    ScheduleId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DailyStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DailyFinishTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IDDepartments = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Schedule", x => x.ScheduleId);
+                    table.ForeignKey(
+                        name: "FK_Schedule_Departments_IDDepartments",
+                        column: x => x.IDDepartments,
+                        principalTable: "Departments",
+                        principalColumn: "IDDepartments",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tickets",
+                columns: table => new
+                {
+                    TicketId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DataEmissao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataAtendimento = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NumeroDaSenha = table.Column<int>(type: "int", nullable: false),
+                    Estado = table.Column<bool>(type: "bit", nullable: false),
+                    Prioritario = table.Column<bool>(type: "bit", nullable: false),
+                    IDDepartments = table.Column<int>(type: "int", nullable: false),
+                    DepartmentIDDepartments = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tickets", x => x.TicketId);
+                    table.ForeignKey(
+                        name: "FK_Tickets_Departments_DepartmentIDDepartments",
+                        column: x => x.DepartmentIDDepartments,
+                        principalTable: "Departments",
+                        principalColumn: "IDDepartments");
+                    table.ForeignKey(
+                        name: "FK_Tickets_Departments_IDDepartments",
+                        column: x => x.IDDepartments,
+                        principalTable: "Departments",
+                        principalColumn: "IDDepartments",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmployeeEvaluation",
                 columns: table => new
                 {
@@ -510,42 +580,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExpiredProducts",
-                columns: table => new
-                {
-                    ExpiredProductId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    FabricationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BarCode = table.Column<string>(type: "nvarchar(43)", maxLength: 43, nullable: false),
-                    SupplierId = table.Column<int>(type: "int", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExpiredProducts", x => x.ExpiredProductId);
-                    table.ForeignKey(
-                        name: "FK_ExpiredProducts_Employee_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employee",
-                        principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ExpiredProducts_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ExpiredProducts_Suppliers_SupplierId",
-                        column: x => x.SupplierId,
-                        principalTable: "Suppliers",
-                        principalColumn: "SupplierId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Issues",
                 columns: table => new
                 {
@@ -622,7 +656,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     BatchNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ProductExpired = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -815,6 +850,47 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExpiredProducts",
+                columns: table => new
+                {
+                    ExpiredProductId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BatchNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SupplierId = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    PurchaseId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExpiredProducts", x => x.ExpiredProductId);
+                    table.ForeignKey(
+                        name: "FK_ExpiredProducts_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExpiredProducts_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExpiredProducts_Purchase_PurchaseId",
+                        column: x => x.PurchaseId,
+                        principalTable: "Purchase",
+                        principalColumn: "PurchaseId");
+                    table.ForeignKey(
+                        name: "FK_ExpiredProducts_Suppliers_SupplierId",
+                        column: x => x.SupplierId,
+                        principalTable: "Suppliers",
+                        principalColumn: "SupplierId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ReduceProduct",
                 columns: table => new
                 {
@@ -909,6 +985,11 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "IX_ExpiredProducts_ProductId",
                 table: "ExpiredProducts",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExpiredProducts_PurchaseId",
+                table: "ExpiredProducts",
+                column: "PurchaseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExpiredProducts_SupplierId",
@@ -1027,6 +1108,11 @@ namespace Supermarket.Data.Migrations.Supermarket
                 column: "WarehouseSectionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Schedule_IDDepartments",
+                table: "Schedule",
+                column: "IDDepartments");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Shelf_HallwayId",
                 table: "Shelf",
                 column: "HallwayId");
@@ -1045,6 +1131,16 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "IX_TakeAwayProduct_CategoryId",
                 table: "TakeAwayProduct",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_DepartmentIDDepartments",
+                table: "Tickets",
+                column: "DepartmentIDDepartments");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tickets_IDDepartments",
+                table: "Tickets",
+                column: "IDDepartments");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_Order_OrderId",
@@ -1107,13 +1203,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "ProductExpiration");
 
             migrationBuilder.DropTable(
-                name: "Purchase");
-
-            migrationBuilder.DropTable(
                 name: "ReduceProduct");
 
             migrationBuilder.DropTable(
                 name: "Reserve");
+
+            migrationBuilder.DropTable(
+                name: "Schedule");
 
             migrationBuilder.DropTable(
                 name: "Shelft_ProductExhibition");
@@ -1125,6 +1221,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "SubsidySetup");
 
             migrationBuilder.DropTable(
+                name: "Tickets");
+
+            migrationBuilder.DropTable(
                 name: "User_Order");
 
             migrationBuilder.DropTable(
@@ -1134,13 +1233,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "MealCard");
 
             migrationBuilder.DropTable(
+                name: "Purchase");
+
+            migrationBuilder.DropTable(
                 name: "IssueType");
 
             migrationBuilder.DropTable(
                 name: "ClientCard");
-
-            migrationBuilder.DropTable(
-                name: "Suppliers");
 
             migrationBuilder.DropTable(
                 name: "Shelf");
@@ -1149,16 +1248,22 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "Ponto");
 
             migrationBuilder.DropTable(
+                name: "Departments");
+
+            migrationBuilder.DropTable(
                 name: "Order");
 
             migrationBuilder.DropTable(
                 name: "TakeAwayProduct");
 
             migrationBuilder.DropTable(
+                name: "WarehouseSection");
+
+            migrationBuilder.DropTable(
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "WarehouseSection");
+                name: "Suppliers");
 
             migrationBuilder.DropTable(
                 name: "Client");
@@ -1176,13 +1281,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "TakeAwayCategory");
 
             migrationBuilder.DropTable(
+                name: "Warehouse");
+
+            migrationBuilder.DropTable(
                 name: "Brand");
 
             migrationBuilder.DropTable(
                 name: "Category");
-
-            migrationBuilder.DropTable(
-                name: "Warehouse");
 
             migrationBuilder.DropTable(
                 name: "Store");

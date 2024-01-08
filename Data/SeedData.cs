@@ -8,6 +8,8 @@ namespace Supermarket.Data {
         private const string ROLE_ADMIN = "Administrator";
         private const string ROLE_ADMIN1 = "Funcionário";
         private const string ROLE_ADMIN2 = "Gestor";
+        private const string ROLE_ADMIN3 = "Cliente";
+
 
         internal static void Populate(SupermarketDbContext db) {
             PopulateBrand(db);
@@ -946,14 +948,7 @@ namespace Supermarket.Data {
             }
         }
 
-        private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password)
-        {
-            var user = await userManager.FindByNameAsync(username);
-
-            if (user == null)
-            {
-
-        }
+      
 
         private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password) {
             var user = await userManager.FindByNameAsync(username);
@@ -970,7 +965,7 @@ namespace Supermarket.Data {
 
         internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager) {
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
-            await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
+           /* await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
             await EnsureRoleIsCreatedAsync(roleManager!, "Cliente");
 
@@ -978,10 +973,9 @@ namespace Supermarket.Data {
             await EnsureRoleIsCreatedAsync(roleManager!, "Gestor");
             await EnsureRoleIsCreatedAsync(roleManager!, "View_Reports");
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Edit_Del_IssueType");
-
-            await EnsureRoleIsCreatedAsync(roleManager!, "View_Reports");            
+   
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Reports");
-            await EnsureRoleIsCreatedAsync(roleManager!, "Edit_Del_Reports");
+            await EnsureRoleIsCreatedAsync(roleManager!, "Edit_Del_Reports");*/
         }
 
 
