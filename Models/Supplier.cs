@@ -4,10 +4,14 @@ namespace Supermarket.Models
 {
     public class Supplier
     {
+        [Key]
         public int SupplierId { get; set; }
 
         [Required]
-        required public string Name { get; set; }
-       
+        [StringLength(40, MinimumLength = 3)]
+        public string Name { get; set; } = String.Empty;
+
+        public ICollection<Issues>? Issue { get; set; }
     }
 }
+
