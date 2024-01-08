@@ -815,7 +815,7 @@ namespace Supermarket.Data {
 
 
 
-
+            
 
             if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
             {
@@ -936,15 +936,15 @@ namespace Supermarket.Data {
             }
 
             var clienteAlberto = await EnsureUserIsCreatedAsync(userManager!, "zealberto@gmail.com", "Alberto#123");
-            if (!await userManager!.IsInRoleAsync(clienteAlberto, "Cliente"))
+            if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN3))
             {
-                await userManager!.AddToRoleAsync(manager, "Cliente");
+                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN3);
             }
 
             var funcAndre = await EnsureUserIsCreatedAsync(userManager!, "andre@gmail.com", "Andre#123");
-            if (!await userManager!.IsInRoleAsync(clienteAlberto, "Funcionário"))
+            if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN1))
             {
-                await userManager!.AddToRoleAsync(manager, "Funcionário");
+                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN1);
             }
         }
 
@@ -967,7 +967,7 @@ namespace Supermarket.Data {
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
             await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
-            await EnsureRoleIsCreatedAsync(roleManager!, "Cliente");
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN3);
 
             await EnsureRoleIsCreatedAsync(roleManager!, "Funcionário");
             await EnsureRoleIsCreatedAsync(roleManager!, "Gestor");

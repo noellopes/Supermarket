@@ -9,10 +9,10 @@ using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Migrations
+namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240108231004_MigracaoCompleta")]
+    [Migration("20240108234553_MigracaoCompleta")]
     partial class MigracaoCompleta
     {
         /// <inheritdoc />
