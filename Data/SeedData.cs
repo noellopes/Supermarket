@@ -21,10 +21,10 @@ namespace Supermarket.Data
                 new Department { NameDepartments = "Talho", DescriptionDepartments = "Servir carne fresca", StateDepartments = true, SkillsDepartments = "A1", QuatDepMed = 10 },
                 new Department { NameDepartments = "Peixaria", DescriptionDepartments = "Servir peixe Fresco", StateDepartments = true, SkillsDepartments = "B1", QuatDepMed = 5 },
                 new Department { NameDepartments = "Take-Way", DescriptionDepartments = "Servir comida Pronta", StateDepartments = false, SkillsDepartments = "Q1", QuatDepMed = 15 },
-                new Department { NameDepartments = "Armazem", DescriptionDepartments = "Só porque o pinela quer ", StateDepartments = true, SkillsDepartments = "R1", QuatDepMed = 0 },
-                new Department { NameDepartments = "Garrafeira", DescriptionDepartments = "Bebidas acoolicas", StateDepartments = false, SkillsDepartments = "R1", QuatDepMed = 0 },
-                new Department { NameDepartments = "Congelados", DescriptionDepartments = "Produtos congelados", StateDepartments = false, SkillsDepartments = "R1", QuatDepMed = 0 },
-                new Department { NameDepartments = "Legume e frutas", DescriptionDepartments = "Produtos Frescos", StateDepartments = true, SkillsDepartments = "R1", QuatDepMed = 0 },
+                new Department { NameDepartments = "Armazem", DescriptionDepartments = "Repor parteleiras,", StateDepartments = true, SkillsDepartments = "R1", QuatDepMed = 1 },
+                new Department { NameDepartments = "Garrafeira", DescriptionDepartments = "Bebidas acoolicas", StateDepartments = false, SkillsDepartments = "R1", QuatDepMed = 1 },
+                new Department { NameDepartments = "Congelados", DescriptionDepartments = "Produtos congelados", StateDepartments = false, SkillsDepartments = "R1", QuatDepMed = 1 },
+                new Department { NameDepartments = "Legume e frutas", DescriptionDepartments = "Produtos Frescos", StateDepartments = true, SkillsDepartments = "R1", QuatDepMed = 1 },
                 new Department { NameDepartments = "Padaria e Pastelaria", DescriptionDepartments = "Servir Pão", StateDepartments = false, SkillsDepartments = "S1", QuatDepMed = 15 }
                 );
             db.SaveChanges();

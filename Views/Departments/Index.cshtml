@@ -51,7 +51,7 @@
              Numero de senhas para a calculo media 
             </th>
             <th>
-             Diferença entre as senhas (minutos)
+                Tempo de Atendimento 
             </th>
             <th></th>
         </tr>
@@ -91,7 +91,7 @@
                                 var timeDifference = Model.TimeDifferences[currentIndex];
 
                                 // Adiciona classes do Bootstrap com base na diferença de tempo
-                                string textClass = timeDifference.TotalMinutes > 20 ? "text-danger" : (timeDifference.TotalMinutes > 15 ? "text-warning" : "");
+                                string textClass = timeDifference.TotalMinutes >= 17 ? "text-danger" : (timeDifference.TotalMinutes >= 12 ? "text-warning" : (timeDifference.TotalMinutes >= 0 ? "text-success" : ""));
 
                                 // Exibe a diferença de tempo correspondente ao item com classes do Bootstrap
                                 <span class="@textClass">@timeDifference.ToString(@"hh\:mm")</span>
