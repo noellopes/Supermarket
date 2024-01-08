@@ -11,6 +11,23 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\Groups\**" />
+    <Content Remove="Data\Migrations\Groups\**" />
+    <EmbeddedResource Remove="Data\Migrations\Groups\**" />
+    <None Remove="Data\Migrations\Groups\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\Supermarket\20231207001206_CategoryDiscount.cs" />
+    <Compile Remove="Data\Migrations\Supermarket\20231207001206_CategoryDiscount.Designer.cs" />
+    <Compile Remove="Data\Migrations\Supermarket\20231213155818_ProductDiscount1.cs" />
+    <Compile Remove="Data\Migrations\Supermarket\20231213155818_ProductDiscount1.Designer.cs" />
+    <Compile Remove="Models\Class.cs" />
+    <Compile Remove="Models\Schedule - Cópia.cs" />
+    <Compile Remove="Models\SchedulesViewModel - Cópia.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.14" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.14" />
@@ -23,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+
     <Folder Include="Data\Migrations\Application\" />
     <Folder Include="Data\Migrations\Supermarket\" />
   </ItemGroup>

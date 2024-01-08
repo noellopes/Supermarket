@@ -15,11 +15,24 @@ namespace Supermarket.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
+
+            modelBuilder.Entity<MealCard>().HasKey(MC => MC.MealCardId);
+            //Relação entre Schedule e Departments
+            modelBuilder.Entity<Schedule>()
+                .HasOne(s => s.Departments)
+                .WithMany()
+                .HasForeignKey(s => s.IDDepartments);
+            modelBuilder.Entity<Ticket>()
+                .HasOne(s => s.Departments)
+                .WithMany()
+                .HasForeignKey(s => s.IDDepartments);
+
             modelBuilder.Entity<Employee>().HasKey(e => e.EmployeeId);
             modelBuilder.Entity<Employee>().Property(e => e.EmployeeId).UseIdentityColumn();
 
-        }
 
+        }
+ 
         public DbSet<Folga> Folga { get; set; } = default!;
         public DbSet<Customer> Customers { get; set; } = default!;
         public DbSet<Supermarket.Models.SubsidyCalculation> SubsidyCalculation { get; set; } = default!;
@@ -37,6 +50,7 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Funcao> Funcao { get; set; } = default!;
 
         public DbSet<EmployeeEvaluation> EmployeeEvaluation { get; set; } = default!;
+
 
         public DbSet<Supermarket.Models.ProductDiscount> ProductDiscount { get; set; } = default!;
 
@@ -61,6 +75,14 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.WarehouseSection_Product> WarehouseSection_Product { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
+
+        public DbSet<Schedule> Schedule { get; set; }      
+
+        public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }
+
+        public DbSet<Department> Departments { get; set; }
+
+        public DbSet<Ticket> Tickets { get; set; }
 
         public DbSet<Supermarket.Models.ClientCard> ClientCard { get; set; } = default!;
 
