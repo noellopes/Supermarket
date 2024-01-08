@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
@@ -37,6 +38,7 @@ namespace Supermarket.Controllers
             PagingInfo paging = new PagingInfo
             {
                 CurrentPage = page,
+                PageSize = 4,
                 TotalItems = await schedules.CountAsync(),
             };
 
@@ -86,10 +88,21 @@ namespace Supermarket.Controllers
 
             var schedule = await _context.Schedule
                 .FirstOrDefaultAsync(m => m.ScheduleId == id);
+           
             if (schedule == null)
             {
                 return NotFound();
             }
+            // Fetch the department name based on IDDepartments
+            var departmentName = _context.Departments
+                .Where(d => d.IDDepartments == schedule.IDDepartments)
+                .Select(d => d.NameDepartments)
+                .FirstOrDefault();
+
+            // Pass the departmentName to the view
+            ViewData["DepartmentName"] = departmentName;
+
+
 
             return View(schedule);
         }
@@ -218,7 +231,7 @@ namespace Supermarket.Controllers
         }
 
 
-        public async Task<IActionResult> Afluencias(int procuraLimiteAfluencia = 1,DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null )
+        public async Task<IActionResult> Afluencias(int procuraLimiteAfluencia = 0,DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null )
         {
             var departmentsWithTicketCount = _context.Departments
         .Select(d => new { Department = d, TicketsCount = _context.Tickets.Count(t => t.IDDepartments == d.IDDepartments) })
@@ -255,9 +268,19 @@ namespace Supermarket.Controllers
                 model.Add(am);
             }
             Console.WriteLine($"procuraDataInicial: {procuraDataInicial}, procuraDataFinal: {procuraDataFinal}");
-            return View(model);
+            // Check if any filters are present
+            if (procuraDataInicial != null || procuraDataFinal != null || procuraLimiteAfluencia > 0)
+            {
+                return View("Afluencias",model);
+            }
+            else
+            {
+                ViewData["NoDataMessage"] = "No data displayed. Please provide the filters to detect the spikes.";
+                return View();
+            }
 
         }
+
     }
     }
 

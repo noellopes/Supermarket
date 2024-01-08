@@ -1,0 +1,46 @@
+﻿@model Supermarket.Models.CardMovement
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Employee
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MealCard.Employee.Employee_Name)
+        </dd>
+        <dt class = "col-sm-2">
+            Movement Date
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Movement_Date)
+        </dd>
+        <dt class = "col-sm-2">
+            Value
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Value)
+        </dd>
+        <dt class = "col-sm-2">
+            Description
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            Type
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Back" asp-controller="CardMovements" asp-route-mc="@Model.MealCard.MealCardId" class="btn btn-outline-dark button-text btn-sm">Back to MealCard</a>
+</div>

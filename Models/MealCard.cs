@@ -7,11 +7,11 @@ namespace Supermarket.Models
 {
     public class MealCard
     {
-
+        [Key]
         public int MealCardId { get; set; }
 
         [Required]
-        public int Balance { get; set; }
+        public int Balance { get; set; } = 0;
 
         // Chave estrangeira para o funcionario
         [DisplayName("Employee")]
