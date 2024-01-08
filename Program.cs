@@ -54,21 +54,6 @@ var reqServScope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
 var roleManager = reqServScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 SeedData.PopulateRolesAsync(roleManager).Wait();
 
-// Chama função para atualizar o status de expiração
-UpdateExpirationStatusForAllPurchases();
-
-void UpdateExpirationStatusForAllPurchases()
-{
-    // Cria um novo escopo para injeção de dependência
-    using var serviceScope = app.Services.CreateScope();
-
-    // Obtém uma instância de SupermarketDbContext do provedor de serviços no escopo criado
-    var purchasesController = new PurchasesController(serviceScope.ServiceProvider.GetRequiredService<SupermarketDbContext>());
-
-    // Chama o método UpdateExpirationStatusForAllPurchases() no controller
-    purchasesController.UpdateExpirationStatusForAllPurchases();
-}
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
     app.UseMigrationsEndPoint();
@@ -96,5 +81,20 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+// Chama função para atualizar o status de expiração
+UpdateExpirationStatusForAllPurchases();
+
+void UpdateExpirationStatusForAllPurchases()
+{
+    // Cria um novo escopo para injeção de dependência
+    using var serviceScope = app.Services.CreateScope();
+
+    // Obtém uma instância de SupermarketDbContext do provedor de serviços no escopo criado
+    var purchasesController = new PurchasesController(serviceScope.ServiceProvider.GetRequiredService<SupermarketDbContext>());
+
+    // Chama o método UpdateExpirationStatusForAllPurchases() no controller
+    purchasesController.UpdateExpirationStatusForAllPurchases();
+}
 
 app.Run();
