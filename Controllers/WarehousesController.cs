@@ -24,7 +24,7 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index(int page = 1, string name = "", string adress = "")
         {
             var warehouses = from b in _context.Warehouse select b;
-
+            
             if (name != "")
             {
                 warehouses = warehouses.Where(x => x.Name.Contains(name));

@@ -44,7 +44,7 @@ namespace Supermarket.Controllers
 
             return View(store);
         }
-
+        /*
         // GET: Stores/Create
         public IActionResult Create()
         {
@@ -76,7 +76,7 @@ namespace Supermarket.Controllers
                 }
             }
             return View(store);
-        }
+        }*/
 
         // GET: Stores/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -142,6 +142,7 @@ namespace Supermarket.Controllers
             return View(store);
         }
 
+        /*
         // GET: Stores/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -192,7 +193,7 @@ namespace Supermarket.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        */
         public IActionResult StoreProducts(int storeId)
         {   
              var storeInfo = _context.Store
