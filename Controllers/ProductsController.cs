@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -59,7 +60,7 @@ namespace Supermarket.Controllers
             var vm = new ProductViewModel
             {
                 Product = await products
-                    .OrderBy(b => b.Name)
+                    //.OrderBy(b => b.Name)
                     .Skip((paging.CurrentPage - 1) * paging.PageSize)
                     .Take(paging.PageSize)
                     .ToListAsync(),
@@ -67,6 +68,55 @@ namespace Supermarket.Controllers
                 SearchName = name,
             };
 
+            //TotalQuantity
+            //var totalProductsShelf = _context.Shelft_ProductExhibition
+            //    .Where(p => p.Product.ProductId == p.ProductId)
+            //    .GroupBy(p => p.ProductId) // Agrupar por ProductId
+            //    .Select(group => new
+            //    {
+            //        Quantity = group.Sum(p => p.Quantity)
+            //    });
+
+            //var totalProductsWarehouse = _context.WarehouseSection_Product
+            //    .Where(p => p.Product.ProductId == p.ProductId)
+            //    .GroupBy(p => p.ProductId) // Agrupar por ProductId
+            //    .Select(group => new
+            //    {
+            //        Quantity = group.Sum(p => p.Quantity)
+            //    });
+
+            //var Products = totalProductsShelf
+            //    .Concat(totalProductsWarehouse)
+            //    .GroupBy(p => p.Quantity)
+            //    .Select(group => group.Key)
+            //    .Sum();
+
+            var totalProducts = _context.WarehouseSection_Product
+                .Where(p => p.ProductId == null)
+                .ToList();
+
+            List<int> quantities = new List<int>();
+
+            foreach (var item in products)
+            {
+                totalProducts = _context.WarehouseSection_Product
+                .Where(p => p.ProductId == item.ProductId)
+                //.OrderBy(p => p.Product.Name) 
+                .ToList();
+
+                int sum = 0;
+
+                foreach (var item2 in totalProducts)
+                {
+                    sum += item2.Quantity;
+                }
+                
+                quantities.Add(sum);
+            }
+
+         
+
+            ViewBag.totalQuantity = quantities;
             ViewBag.totalProduct = vm.PagingInfoProduct.TotalItems;
 
             return View(vm);
@@ -88,6 +138,22 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+
+            var totalProducts = _context.WarehouseSection_Product
+            .Where(p => p.ProductId == id)
+            //.OrderBy(p => p.Product.Name) 
+            .ToList();
+
+            int sum = 0;
+
+            foreach (var item in totalProducts)
+            {
+                sum += item.Quantity;
+            }
+
+
+
+            ViewBag.totalQuantity = sum;
 
             return View(product);
         }
@@ -910,8 +976,6 @@ namespace Supermarket.Controllers
             //    .ThenInclude(wp => wp.Warehouse)
             //    .ToListAsync();
 
-            // Add this line for debugging
-            Console.WriteLine($"Number of products to restore: {productsToRestore.Count}");
 
             ViewData["ProductsToRestore"] = productsToRestore.ToList();
             ViewData["ProductsToGet"] = productsToGet.ToList();
