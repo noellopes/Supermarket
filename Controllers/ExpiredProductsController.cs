@@ -29,6 +29,7 @@ namespace Supermarket.Controllers
                     .Include(p => p.Product)
                     .Include(s => s.Supplier)
                     .Include(e => e.Employee)
+                    .Include(pr => pr.Purchase)
             select i;
 
             if (product != "") expiredproducts = expiredproducts.Where(x => x.Product!.Name.Contains(product));
