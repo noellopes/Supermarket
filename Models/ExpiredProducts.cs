@@ -18,24 +18,23 @@ namespace Supermarket.Models
         public Product? Product { get; set; }
 
 
-        // Data de fabricação do produto expirado
-        [DataType(DataType.DateTime)]
-        [Display(Name = "Fabrication Date")]
-        public DateTime FabricationDate { get; set; }
+        //// Data de fabricação do produto expirado
+        //[DataType(DataType.DateTime)]
+        //[Display(Name = "Fabrication Date")]
+        //public DateTime FabricationDate { get; set; }
 
 
         // Data de validade do produto expirado
         [Required]
-        [DataType(DataType.DateTime)]
+        [DataType(DataType.Date)]
         [Display(Name = "Expiration Date")]
         public DateTime ExpirationDate { get; set; }
 
 
         // Código de barras do produto expirado
         [Required]
-        [StringLength(43, MinimumLength = 6)]
-        [Display(Name = "Bar Code")]
-        public string BarCode { get; set; } = string.Empty;
+        [Display(Name = "Batch Number")]
+        public string BatchNumber { get; set; } = string.Empty;
 
 
         // Identificador do fornecedor associado (relacionamento com a classe Supplier)
