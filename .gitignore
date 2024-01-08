@@ -4,8 +4,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # Ignore Migrations Files
-/Data/Migrations/Application/*
-/Data/Migrations/Supermarket/*
+# /Data/Migrations/Application/*
+# /Data/Migrations/Supermarket/*
 
 # User-specific files
 *.rsuser

@@ -24,6 +24,10 @@ namespace Supermarket.Data {
             PopulateClients(db);
             PopulateClientCard(db);
             PopulateProductDiscounts(db);
+            PopulateTakeAwayCategories(db);
+            PopulateTakeAwayProducts(db);
+            PopulateCustomer(db);
+            //PopulateEmployees(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
             PopulateMealCards(db);
@@ -316,6 +320,41 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
+        private static void PopulateCustomer(SupermarketDbContext db)
+        {
+            if (db.Customers.Any()) return;
+
+            db.Customers.AddRange(
+                    new Customer
+                    {
+                        CustomerAddress = "Guarda/Portugal",
+                        CustomerEmail = "omeerabay@gmail.com",
+                        CustomerName = "Omer",
+                        CustomerPhone = "+905537466968",
+                        Password = "omerabay"
+                    },
+                    new Customer
+                    {
+                        CustomerAddress = "Guarda/Portugal",
+                        CustomerEmail = "yusuf@gmail.com",
+                        CustomerName = "Yusuf",
+                        CustomerPhone = "+905537466968",
+                        Password = "yusuftasci"
+                    },
+                    new Customer
+                    {
+                        CustomerAddress = "Guarda/Portugal",
+                        CustomerEmail = "melike@gmail.com",
+                        CustomerName = "Melike",
+                        CustomerPhone = "+905537466968",
+                        Password = "melikegokdemir"
+                    }
+                );
+
+            db.SaveChanges();
+
+        }
+
         private static void PopulateEmployees(SupermarketDbContext db) {
             if (db.Employee.Any()) return;
 
@@ -580,6 +619,51 @@ namespace Supermarket.Data {
                 new CardMovement { MealCardId = 1, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -200, Type = "Debit" }
             );
 
+            db.SaveChanges();
+        }
+
+        private static void PopulateTakeAwayCategories(SupermarketDbContext db)
+        {
+            if (db.TakeAwayCategory.Any()) return;
+
+            db.TakeAwayCategory.AddRange(
+                    new TakeAwayCategory
+                    {
+                        //Id = 1,
+                        Name = "Soups",
+                    },
+                    new TakeAwayCategory
+                    {
+                        //Id= 2,
+                        Name = "Burgers"
+                    },
+                    new TakeAwayCategory
+                    {
+                        //Id = 3,
+                        Name = "Breakfast"
+                    },
+                    new TakeAwayCategory
+                    {
+                        //Id = 4,
+                        Name = "Beverages"
+                    }
+                );
+            db.SaveChanges();
+        }
+        private static void PopulateTakeAwayProducts(SupermarketDbContext db)
+        {
+            if (db.TakeAwayProduct.Any()) return;
+
+            db.TakeAwayProduct.AddRange(
+                    new TakeAwayProduct
+                    {
+                        ProductName = "Coca Cola",
+                        Category = db.TakeAwayCategory.FirstOrDefault(x=> x.Name == "Beverages")!,
+                        Price = 2,
+                        Quantity = 20,
+                        EstimatedPreparationTimeAsMinutes = 1,
+                    }
+                );
             db.SaveChanges();
         }
         
