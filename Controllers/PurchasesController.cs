@@ -259,6 +259,13 @@ namespace Supermarket.Controllers
 
             if (purchase != null)
             {
+                // Faz uma query para pegar o associado na tabela ExpiredProducts
+                var expiredProducts = _context.ExpiredProducts
+                    .Where(ep => ep.PurchaseId == purchase.PurchaseId);
+
+                // Remove de ExpiredProducts antes de remover de Purchase
+                _context.ExpiredProducts.RemoveRange(expiredProducts);
+
                 _context.Purchase.Remove(purchase);
             }
 
