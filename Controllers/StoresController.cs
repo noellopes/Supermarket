@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+    [Authorize(Roles = "Stock Administrator, Stock Operator")]
     public class StoresController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -44,7 +46,7 @@ namespace Supermarket.Controllers
 
             return View(store);
         }
-
+        /*
         // GET: Stores/Create
         public IActionResult Create()
         {
@@ -76,9 +78,10 @@ namespace Supermarket.Controllers
                 }
             }
             return View(store);
-        }
+        }*/
 
         // GET: Stores/Edit/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Store == null)
@@ -98,6 +101,8 @@ namespace Supermarket.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Stock Administrator")]
+
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("StoreId,Name,Adress")] Store store)
         {
@@ -142,6 +147,7 @@ namespace Supermarket.Controllers
             return View(store);
         }
 
+        /*
         // GET: Stores/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -192,6 +198,9 @@ namespace Supermarket.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        */
+
+        [Authorize(Roles = "Stock Administrator, Stock Operator")]
 
         public IActionResult StoreProducts(int storeId)
         {   

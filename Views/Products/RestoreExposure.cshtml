@@ -1,0 +1,157 @@
+﻿@model IEnumerable<Supermarket.Models.Product>
+
+@{
+    ViewData["Title"] = "Restore Exposure";
+
+    var sumOfQuantitiesToRestore = (ViewData["ProductsToRestore"] as IEnumerable<Supermarket.Models.Shelft_ProductExhibition>)
+        ?.Sum(product => (2 * product.MinimumQuantity) - product.Quantity) ?? 0;
+
+    var sumOfQuantitiesToGet = (ViewData["ProductsToGet"] as IEnumerable<Supermarket.Models.WarehouseSection_Product>)
+        ?.Sum(product => product.Quantity) ?? 0;
+}
+
+<style>
+    body {
+        padding: 20px;
+        background-color: white;
+    }
+
+    h1 {
+        color: blue;
+        margin-top: 20px;
+    }
+
+    h5 {
+        color: blue;
+        margin-top: 40px;
+    }
+
+    .tbconfig {
+        background-color: whitesmoke;
+        border: 1px solid rgba(10, 10, 10, 0.15);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="tbconfig">
+    <h1>Index</h1>
+</div>
+
+@* <p>
+    <a asp-action="Create" class="btn btn-success">Create New</a>
+</p> *@
+
+<div>
+    <h5>Products to Restore</h5>
+</div>
+
+<table class="table tbconfig">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Shelf
+            </th>
+            <th>
+                Quantity to Restore
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewData["ProductsToRestore"] is IEnumerable<Supermarket.Models.Shelft_ProductExhibition> productsToRestore && productsToRestore != null)
+        {
+            foreach (var product in productsToRestore)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Product.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Product.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Shelf.Name)
+                    </td>
+                    <td>
+                        @((2 * product.MinimumQuantity) - product.Quantity)
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">No products to restore</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <h5>Get the Products to Restore</h5>
+</div>
+
+<table class="table tbconfig">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Warehouse Section
+            </th>
+            <th>
+                Quantity to Remove
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (ViewData["ProductsToGet"] is IEnumerable<Supermarket.Models.WarehouseSection_Product> productsToGet && productsToGet != null)
+        {
+
+            foreach (var product in productsToGet)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Product.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.Product.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => product.WarehouseSection.Description)
+                    </td>
+                    <td>
+                        @if (productsToGet.Any(p => p.ProductId == product.ProductId && p.Quantity <= productsToGet.Where(wp => wp.ProductId == product.ProductId).Sum(wp => wp.Quantity)))
+                        {
+                            //@product.Quantity
+                            @sumOfQuantitiesToRestore;
+                        }
+                        else
+                        {
+                            <span style="color: red;">Not enough quantity</span>
+                        }
+
+                        @* @Html.DisplayFor(modelItem => product.ReservedQuantity) *@
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">No products to restore</td>
+            </tr>
+        }
+    </tbody>
+</table>

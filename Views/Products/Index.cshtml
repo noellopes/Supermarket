@@ -6,6 +6,8 @@
 
 @{
     ViewData["Title"] = "Index";
+
+    int i = (((Model.PagingInfoProduct.CurrentPage - 1) * 3));
 }
 
 <style>
@@ -35,13 +37,6 @@
     }
 
     function filterByStatus(status) {
-        console.log('Filtering by status:', status);
-
-        // Log the current class names of the rows
-        $('tbody tr').each(function () {
-            console.log($(this).attr('class'));
-        });
-
         // Hide all rows
         $('tbody tr').hide();
 
@@ -50,13 +45,6 @@
     }
 
     function resetFilter() {
-        console.log('Resetting filter');
-
-        // Log the current class names of the rows
-        $('tbody tr').each(function () {
-            console.log($(this).attr('class'));
-        });
-
         // Show all rows
         $('tbody tr').show();
     }
@@ -96,11 +84,14 @@
     <a asp-action="Create" class="btn btn-success">Create New</a>
 </p>
 
-<div class="btn-group" role="group" aria-label="Filter by Status">
-    <a asp-action="Index" asp-route-status="Available" class="btn btn-secondary">Available</a>
-    <a asp-action="Index" asp-route-status="Unavailable" class="btn btn-secondary">Unavailable</a>
-    <a asp-action="Index" asp-route-status="Discontinued" class="btn btn-secondary">Discontinued</a>
-    <a asp-action="Index" class="btn btn-secondary">Reset</a>
+<div class="tbconfig">
+    <p><strong>Filter By Status</strong></p>
+    <div class="btn-group" role="group" aria-label="Filter by Status">
+        <a asp-action="Index" asp-route-status="Available" class="btn btn-primary">Available</a>
+        <a asp-action="Index" asp-route-status="Unavailable" class="btn btn-primary">Unavailable</a>
+        <a asp-action="Index" asp-route-status="Discontinued" class="btn btn-primary">Discontinued</a>
+        <a asp-action="Index" class="btn btn-secondary">Reset</a>
+    </div>
 </div>
 
 @if (Model.Product.Count() == 0)
@@ -122,14 +113,13 @@ else
                     <th>
                         @Html.DisplayNameFor(model => model.Product[0].UnitPrice)
                     </th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model.Product)
                 {
                     string rowColor;
-                    switch (item.Status)
+                    @* switch (item.Status)
                     {
                         case "Available":
                             rowColor = "table-success";
@@ -143,6 +133,19 @@ else
                         default:
                             rowColor = "";
                             break;
+                    } *@
+                    @if (ViewBag.totalQuantity[i] < item.MinimumQuantity)
+                    {
+                        rowColor = "table-warning";
+                    } 
+                    else
+                    {
+                        rowColor = "table-success";
+                    }
+
+                    @if (item.Status == "Discontinued")
+                    {
+                        rowColor = "table-danger";
                     }
 
                     <tr class="@rowColor">
@@ -162,6 +165,7 @@ else
                             </div>
                         </td>
                     </tr>
+                    i++;
                 }
             </tbody>
         </table>

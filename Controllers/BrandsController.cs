@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+    [Authorize(Roles = "Stock Administrator, Stock Operator")]
     public class BrandsController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -79,6 +81,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Brands/Create
+        [Authorize(Roles = "Stock Administrator")]
         public IActionResult Create()
         {
             return View();
@@ -89,6 +92,8 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Authorize]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Create([Bind("BrandId,Name")] Brand brand)
         {
             if (ModelState.IsValid)
@@ -101,6 +106,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Brands/Edit/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Brand == null)
@@ -121,6 +127,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("BrandId,Name")] Brand brand)
         {
             if (id != brand.BrandId)
@@ -152,6 +159,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Brands/Delete/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Brand == null)
@@ -172,6 +180,7 @@ namespace Supermarket.Controllers
         // POST: Brands/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Brand == null)
