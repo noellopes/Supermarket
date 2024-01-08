@@ -11,6 +11,7 @@
     <div class="card-body">
         <form asp-action="Index" method="get">
             <p><strong>Search</strong></p>
+
             <label for="product" class="control-label">Product</label>
             <input name="product" type="search" class="form-control" value="@Model.SearchProduct" />
             
@@ -38,6 +39,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.ExpiredProducts.First().Purchase)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ExpiredProducts.First().Product)
             </th>
             <th>
@@ -61,6 +65,9 @@
     <tbody>
         @foreach (var item in Model.ExpiredProducts) {
                 <tr>
+                    <td>
+                        <a href="/Purchases/Details/@item.PurchaseId"> @item.PurchaseId </a>
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Product.Name)
                     </td>
