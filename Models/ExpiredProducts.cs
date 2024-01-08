@@ -48,5 +48,9 @@ namespace Supermarket.Models
         [Display(Name = "Employee responsible for registration")]
         public int EmployeeId { get; set; }
         public Employee? Employee { get; set; }
+
+        [Display(Name = "Purchase")]
+        public int? PurchaseId { get; set; }
+        public Purchase? Purchase { get; set; }
     }
 }
