@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
+    [Authorize(Roles = "Stock Administrator, Stock Operator")]
+
     public class WarehouseSection_ProductController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -101,6 +104,8 @@ namespace Supermarket.Controllers
         }
 
         // GET: WarehouseSection_Product/Create
+        [Authorize(Roles = "Stock Administrator")]
+
         public IActionResult Create(int? warehouseSectionId)
         {
 
@@ -124,6 +129,8 @@ namespace Supermarket.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Stock Administrator")]
+
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("WarehouseSection_ProductId,ProductId,Quantity,ReservedQuantity,BatchNumber,ExpirationDate,SupplierID")] WarehouseSection_Product warehouseSection_Product)
         {
@@ -168,6 +175,8 @@ namespace Supermarket.Controllers
             }
 
         // GET: WarehouseSection_Product/Edit/5
+        [Authorize(Roles = "Stock Administrator")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.WarehouseSection_Product == null)
@@ -191,6 +200,8 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
+
         public async Task<IActionResult> Edit(int id, [Bind("WarehouseSection_ProductId,ProductId,WarehouseSectionId,Quantity,ReservedQuantity,BatchNumber,ExpirationDate,SupplierID")] WarehouseSection_Product warehouseSection_Product)
         {
             if (id != warehouseSection_Product.WarehouseSection_ProductId)
@@ -252,6 +263,8 @@ namespace Supermarket.Controllers
         }
 
         // GET: WarehouseSection_Product/Delete/5
+        [Authorize(Roles = "Stock Administrator")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.WarehouseSection_Product == null)
@@ -281,6 +294,8 @@ namespace Supermarket.Controllers
         // POST: WarehouseSection_Product/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.WarehouseSection_Product == null)

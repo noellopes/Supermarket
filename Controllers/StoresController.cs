@@ -81,6 +81,7 @@ namespace Supermarket.Controllers
         }*/
 
         // GET: Stores/Edit/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Store == null)
@@ -100,6 +101,8 @@ namespace Supermarket.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [Authorize(Roles = "Stock Administrator")]
+
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("StoreId,Name,Adress")] Store store)
         {
@@ -196,6 +199,9 @@ namespace Supermarket.Controllers
             return RedirectToAction(nameof(Index));
         }
         */
+
+        [Authorize(Roles = "Stock Administrator, Stock Operator")]
+
         public IActionResult StoreProducts(int storeId)
         {   
              var storeInfo = _context.Store
