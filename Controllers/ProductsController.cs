@@ -311,7 +311,7 @@ namespace Supermarket.Controllers
                 int warehouseSectionProductId = kvp.Key;
                 int quantity = kvp.Value;
 
-                // Supondo que você tenha um DbContext chamado "dbContext" e um serviço para interagir com os dados chamado "productService"
+                
                 var warehouseSectionProduct = await _context.WarehouseSection_Product.FindAsync(warehouseSectionProductId);
 
                 if (warehouseSectionProduct != null)
@@ -462,7 +462,7 @@ namespace Supermarket.Controllers
                         int warehouseSectionProductId = kvp.Key;
                         int quantity = kvp.Value;
 
-                        // Supondo que você tenha um DbContext chamado "dbContext" e um serviço para interagir com os dados chamado "productService"
+                        
                         var warehouseSectionProduct = await _context.WarehouseSection_Product.FindAsync(warehouseSectionProductId);
 
                         if (warehouseSectionProduct != null)
