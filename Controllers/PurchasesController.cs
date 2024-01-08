@@ -314,6 +314,55 @@ namespace Supermarket.Controllers
             _context.SaveChanges();
         }
 
+        [Authorize(Roles = "View_Reports")]
+        public IActionResult CloseToExpire(int page = 1, string product = "", string supplier = "")
+        {
+            var currentDate = DateTime.Now;
+            var expirationDate = currentDate.AddDays(7); // 1 week from now
+
+            var purchase = _context.Purchase
+                            .Include(p => p.Product)
+                            .Include(s => s.Supplier)
+                            .Include(e => e.Employee)
+                            .Where(x => x.ExpirationDate > currentDate && x.ExpirationDate <= expirationDate);
+
+            if (product != "")
+            {
+                purchase = purchase.Where(x => x.Product!.Name.Contains(product));
+            }
+
+            if (supplier != "")
+            {
+                purchase = purchase.Where(x => x.Supplier!.Name.Contains(supplier));
+            }
+
+
+            //if (deliverydate != "")
+            //{
+            //    purchase = purchase.Where(x => x.DeliveryDate!.Contains(deliverydate));
+            //}
+
+
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
+                TotalItems = purchase.Count()
+            };
+
+            return View(
+                new PurchaseListViewModel
+                {
+                    Purchase = purchase.OrderByDescending(i => i.DeliveryDate)
+                                       .Skip((page - 1) * pagination.PageSize)
+                                                 .Take(pagination.PageSize),
+                    Pagination = pagination,
+                    SearchProduct = product,
+                    SearchSupplier = supplier
+                }
+            );
+        }
+
         // É chamado quando a aplicação inicia
         public IActionResult OnApplicationStart()
         {
