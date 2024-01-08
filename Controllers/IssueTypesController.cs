@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: IssueTypes
+        [Authorize(Roles = "View_Reports")]
         public async Task<IActionResult> Index()
         {
             return _context.IssueType != null ?
@@ -28,6 +30,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: IssueTypes/Details/5
+        [Authorize(Roles = "View_Reports")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.IssueType == null)
@@ -46,6 +49,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: IssueTypes/Create
+        [Authorize(Roles = "Create_Edit_Del_IssueType")]        
         public IActionResult Create()
         {
             return View();
@@ -56,6 +60,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Create_Edit_Del_IssueType")]
         public async Task<IActionResult> Create([Bind("IssueTypeId,Name,IssueDescription")] IssueType issueType)
         {
             if (ModelState.IsValid)
@@ -68,6 +73,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: IssueTypes/Edit/5
+        [Authorize(Roles = "Create_Edit_Del_IssueType")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.IssueType == null)
@@ -88,6 +94,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Create_Edit_Del_IssueType")]
         public async Task<IActionResult> Edit(int id, [Bind("IssueTypeId,Name,IssueDescription")] IssueType issueType)
         {
             if (id != issueType.IssueTypeId)
@@ -119,6 +126,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: IssueTypes/Delete/5
+        [Authorize(Roles = "Create_Edit_Del_IssueType")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.IssueType == null)
@@ -132,13 +140,14 @@ namespace Supermarket.Controllers
             {
                 return View("IssueTypeDeleted");
             }
-
+            
             return View(issueType);
         }
 
         // POST: IssueTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Create_Edit_Del_IssueType")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.IssueType == null)

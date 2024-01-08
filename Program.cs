@@ -65,9 +65,11 @@ if (app.Environment.IsDevelopment())
 
     var userManager = reqServScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     SeedData.PopulateDevUsers(userManager);
+
 }
 else
 {
+
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
@@ -86,18 +88,18 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-// Chama função para atualizar o status de expiração
+// Chama funÃ§Ã£o para atualizar o status de expiraÃ§Ã£o
 UpdateExpirationStatusForAllPurchases();
 
 void UpdateExpirationStatusForAllPurchases()
 {
-    // Cria um novo escopo para injeção de dependência
+    // Cria um novo escopo para injeÃ§Ã£o de dependÃªncia
     using var serviceScope = app.Services.CreateScope();
 
-    // Obtém uma instância de SupermarketDbContext do provedor de serviços no escopo criado
+    // ObtÃ©m uma instÃ¢ncia de SupermarketDbContext do provedor de serviÃ§os no escopo criado
     var purchasesController = new PurchasesController(serviceScope.ServiceProvider.GetRequiredService<SupermarketDbContext>());
 
-    // Chama o método UpdateExpirationStatusForAllPurchases() no controller
+    // Chama o mÃ©todo UpdateExpirationStatusForAllPurchases() no controller
     purchasesController.UpdateExpirationStatusForAllPurchases();
 }
 

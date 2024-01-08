@@ -1,10 +1,19 @@
-﻿namespace Supermarket.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace Supermarket.Models
 {
     public class CategoryDiscount
     {
+        [Key]
         public int CategoryDiscountId { get; set; }
-        public int Value { get; set; }
-        public DateTime startDate { get; set; }
-        public DateTime endDate { get; set; }
+        public int CategoryId { get; set; }
+        [ForeignKey(nameof(CategoryId))]
+        public Category? Category { get; set; }
+        public float Value { get; set; }
+        [Required]
+        public DateTime StartDate { get; set; }
+        [Required]
+        public DateTime EndDate { get; set; }
     }
 }

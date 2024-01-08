@@ -1,0 +1,50 @@
+﻿@model Supermarket.Models.MealCardTopViewModel
+
+<h2>Top 10 Funcionários com Maior Gasto</h2>
+@using (Html.BeginForm("IndexTop", "MealCards", FormMethod.Get))
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <div>
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>Open this select menu</option>
+                    <option value="1">TO</option>
+                    <option value="2">DO</option>
+                </select>
+            </div>
+            <div>
+                <label for="startDate">Data Inicial:</label>
+                <input type="date" id="startDate" name="startDate" value="@Model.Start_Filter.ToString("yyyy-MM-dd")" class="form-control" />
+            </div>
+            <div>
+                <label for="endDate">Data Final:</label>
+                <input type="date" id="endDate" name="endDate" value="@Model.End_Filter.ToString("yyyy-MM-dd")" class="form-control" />
+            </div>
+        </div>
+    </div>
+    
+
+    
+
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+}
+
+<p>Período: @Model.Start_Filter.ToString("dd/MM/yyyy") - @Model.End_Filter.ToString("dd/MM/yyyy")</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Funcionário</th>
+            <th>Total Gasto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.TopEmployees)
+        {
+            <tr>
+                <td>@item.Employee.Employee_Name</td>
+                <td>@Math.Abs(item.TotalSpent)</td>
+            </tr>
+        }
+    </tbody>
+</table>
