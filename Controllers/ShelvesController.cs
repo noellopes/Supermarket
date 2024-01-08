@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,6 +12,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+    [Authorize(Roles = "Stock Administrator, Stock Operator")]
     public class ShelvesController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -72,6 +74,7 @@ namespace Supermarket.Controllers
             return View(shelf);
         }
 
+        [Authorize(Roles = "Stock Administrator")]
         public IActionResult Create(int? hallwaysId)
         {
             
@@ -88,6 +91,7 @@ namespace Supermarket.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Create([Bind("ShelfId,Name")] Shelf shelf)
         {
             
@@ -137,6 +141,7 @@ namespace Supermarket.Controllers
 
 
         // GET: Shelves/Edit/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Shelf == null)
@@ -158,6 +163,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("ShelfId,Name,HallwayId")] Shelf shelf)
         {
             if (id != shelf.ShelfId)
@@ -203,6 +209,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Shelves/Delete/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Shelf == null)
@@ -238,6 +245,7 @@ namespace Supermarket.Controllers
         // POST: Shelves/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Shelf == null)
@@ -256,6 +264,7 @@ namespace Supermarket.Controllers
 
         }
 
+        [Authorize(Roles = "Stock Administrator, Stock Operator")]
         public IActionResult ShelfProducts(int shelfId)
         {
             var shelfInfo = _context.Shelf

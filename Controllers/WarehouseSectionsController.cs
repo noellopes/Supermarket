@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+    [Authorize(Roles = "Stock Administrator, Stock Operator")]
     public class WarehouseSectionsController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -95,6 +97,7 @@ namespace Supermarket.Controllers
             return View(warehouseSection);
         }
 
+        [Authorize(Roles = "Stock Administrator")]
         // GET: WarehouseSections/Create
         public IActionResult Create(int? warehouseId)
         {
@@ -116,6 +119,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Create([Bind("WarehouseSectionId,Description")] WarehouseSection warehouseSection)
         {
             warehouseSection.WarehouseId = (int)TempData["WarehouseId2"];
@@ -149,6 +153,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: WarehouseSections/Edit/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.WarehouseSection == null)
@@ -170,6 +175,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("WarehouseSectionId,Description,WarehouseId")] WarehouseSection warehouseSection)
         {
             if (id != warehouseSection.WarehouseSectionId)
@@ -214,8 +220,9 @@ namespace Supermarket.Controllers
             ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Name", warehouseSection.WarehouseId);
             return View(warehouseSection);
         }
-        
+
         // GET: WarehouseSections/Delete/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.WarehouseSection == null)
@@ -250,6 +257,7 @@ namespace Supermarket.Controllers
         // POST: WarehouseSections/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.WarehouseSection == null)
@@ -266,6 +274,7 @@ namespace Supermarket.Controllers
             return RedirectToAction("Index", "WarehouseSections", new { warehouseId =warehouseSection?.WarehouseId });
         }
 
+        [Authorize(Roles = "Stock Administrator, Stock Operator")]
         public IActionResult WarehouseSectionProducts(int warehouseSectionId)
         {
             var sectionInfo = _context.WarehouseSection

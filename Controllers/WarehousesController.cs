@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
+    [Authorize(Roles = "Stock Administrator, Stock Operator")]
+
     public class WarehousesController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -84,6 +87,8 @@ namespace Supermarket.Controllers
         }
 
         // GET: Warehouses/Create
+        [Authorize(Roles = "Stock Administrator")]
+
         public IActionResult Create()
         {
             return View();
@@ -94,6 +99,8 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
+
         public async Task<IActionResult> Create([Bind("WarehouseId,Name,Adress")] Warehouse warehouse)
         {
             if (ModelState.IsValid)
@@ -117,6 +124,8 @@ namespace Supermarket.Controllers
         }
 
         // GET: Warehouses/Edit/5
+        [Authorize(Roles = "Stock Administrator")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Warehouse == null)
@@ -137,6 +146,8 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
+
         public async Task<IActionResult> Edit(int id, [Bind("WarehouseId,Name,Adress")] Warehouse warehouse)
         {
             if (id != warehouse.WarehouseId)
@@ -179,6 +190,8 @@ namespace Supermarket.Controllers
         }
 
         // GET: Warehouses/Delete/5
+        [Authorize(Roles = "Stock Administrator")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Warehouse == null)
@@ -209,6 +222,8 @@ namespace Supermarket.Controllers
         // POST: Warehouses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Warehouse == null)
