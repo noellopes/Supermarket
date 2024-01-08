@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
@@ -37,6 +38,7 @@ namespace Supermarket.Controllers
             PagingInfo paging = new PagingInfo
             {
                 CurrentPage = page,
+                PageSize = 4,
                 TotalItems = await schedules.CountAsync(),
             };
 

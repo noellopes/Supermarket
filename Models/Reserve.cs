@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models
 {
-    public class Reserva 
+    public class Reserve 
     {
         //PRIMARY KEY
         [Required]
