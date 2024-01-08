@@ -355,8 +355,6 @@ namespace Supermarket.Data {
 
         }
 
-        private static void PopulateEmployees(SupermarketDbContext db)
-        {
         private static void PopulateEmployees(SupermarketDbContext db) {
             if (db.Employee.Any()) return;
 
