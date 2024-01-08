@@ -32,7 +32,9 @@ namespace Supermarket.Data {
                     new Brand { Name = "Nivea" },
                     new Brand { Name = "Frankfurt" },
                     new Brand { Name = "Lays" },
-                    new Brand { Name= "Monopoly" }
+                    new Brand { Name= "Monopoly" },
+                    new Brand { Name = "Becken" }
+                    
                 );
 
             db.SaveChanges();
@@ -45,7 +47,8 @@ namespace Supermarket.Data {
                     new Category { Name = "Hygiene" },
                     new Category { Name = "Canned" },
                     new Category { Name = "Drinks" },
-                     new Category { Name = "Games" }
+                    new Category { Name = "Games" },
+                    new Category { Name = "House" }
                 );
 
             db.SaveChanges();
@@ -53,7 +56,9 @@ namespace Supermarket.Data {
 
         private static void PopulateProduct(SupermarketDbContext db)
         {
-            DateTime specificLastCountDate = new DateTime(2023, 1, 2);
+            DateTime specificLastCountDate = new DateTime(2023, 12, 2);
+            DateTime specificLastCountDate2 = new DateTime(2024, 1, 5);
+            DateTime specificLastCountDate3 = new DateTime(2023, 12, 1);
 
             if (db.Product.Any()) return;
 
@@ -70,6 +75,18 @@ namespace Supermarket.Data {
                         LastCountDate= specificLastCountDate
                     },
 
+                    new Product
+                    {
+                        Category = db.Category.FirstOrDefault(a => a.Name == "House")!,
+                        Brand = db.Brand.FirstOrDefault(a => a.Name == "Becken")!,
+                        Name = "Deep fryer",
+                        Description = "3.5L",
+                        TotalQuantity = 31,
+                        MinimumQuantity = 10,
+                        UnitPrice = 88.99,
+                        Status = "Available",
+                        LastCountDate = specificLastCountDate2
+                    },
                     new Product
                     {
                         Category = db.Category.FirstOrDefault(a => a.Name == "Games")!,
@@ -91,7 +108,7 @@ namespace Supermarket.Data {
                         MinimumQuantity = 50,
                         UnitPrice = 1.49,
                         Status = "Available",
-                        LastCountDate = specificLastCountDate
+                        LastCountDate = specificLastCountDate3
                     },
                     new Product {
                         Category = db.Category.FirstOrDefault(a => a.Name == "Canned")!,
@@ -116,14 +133,6 @@ namespace Supermarket.Data {
                     new Store {
                         Name = "Store Guarda",
                         Adress = "Street Number 1"
-                    },
-                    new Store {
-                        Name = "Store Algarve",
-                        Adress = "Street Number 2"
-                    },
-                    new Store {
-                        Name = "Store Paris",
-                        Adress = "Street Number 3"
                     }
                 );
 
@@ -140,11 +149,11 @@ namespace Supermarket.Data {
                     },
                     new Hallway {
                         Description = "Hallway B1",
-                        Store = db.Store.FirstOrDefault(a => a.Name == "Store Algarve")!,
+                        Store = db.Store.FirstOrDefault(a => a.Name == "Store Guarda")!,
                     },
                     new Hallway {
                         Description = "Hallway C3",
-                        Store = db.Store.FirstOrDefault(a => a.Name == "Store Paris")!,
+                        Store = db.Store.FirstOrDefault(a => a.Name == "Store Guarda")!,
                     }
                 );
 
@@ -159,6 +168,12 @@ namespace Supermarket.Data {
                         Name = "Shelft 11",
                         Hallway = db.Hallway.FirstOrDefault(a => a.Description == "Hallway A1")!,
                     },
+
+                     new Shelf
+                     {
+                         Name = "Shelft 21",
+                         Hallway = db.Hallway.FirstOrDefault(a => a.Description == "Hallway A1")!,
+                     },
                     new Shelf {
                         Name = "Shelft 12",
                         Hallway = db.Hallway.FirstOrDefault(a => a.Description == "Hallway B1")!,
@@ -186,6 +201,14 @@ namespace Supermarket.Data {
                         MinimumQuantity = 20
                     },
 
+                     new Shelft_ProductExhibition
+                     {
+                         Product = db.Product.FirstOrDefault(a => a.Name == "Deep fryer" && a.Description == "3.5L")!,
+
+                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
+                         Quantity = 0,
+                         MinimumQuantity = 20
+                     },
 
                     new Shelft_ProductExhibition
                     {
@@ -288,6 +311,17 @@ namespace Supermarket.Data {
                          Supplier = db.Supplier.FirstOrDefault(a => a.Name == "Supplier Guarda")
                      },
 
+                      new WarehouseSection_Product
+                      {
+                          Product = db.Product.FirstOrDefault(a => a.Name == "Deep fryer" && a.Description == "3.5L")!,
+                          WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
+                          BatchNumber = "R75",
+                          ExpirationDate = DateTime.Now,
+                          Quantity = 10,
+                          ReservedQuantity = 3,
+                          Supplier = db.Supplier.FirstOrDefault(a => a.Name == "Supplier Guarda")
+                      },
+                     
                      new WarehouseSection_Product
                      {
                          Product = db.Product.FirstOrDefault(a => a.Name == "Monopoly Chance" && a.Description == "Family Game")!,
