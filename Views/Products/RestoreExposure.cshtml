@@ -129,14 +129,16 @@
                         @Html.DisplayFor(modelItem => product.WarehouseSection.Description)
                     </td>
                     <td>
-                        @if (productsToGet.Any(p => p.ProductId == product.ProductId && p.Quantity <= productsToGet.Where(wp => wp.ProductId == product.ProductId).Sum(wp => wp.Quantity)))
+                        @* @if (productsToGet.Any(p => p.ProductId == product.ProductId && p.Quantity <= productsToGet.Where(wp => wp.ProductId == product.ProductId).Sum(wp => wp.Quantity)))
                         {
                             @product.Quantity
                         }
                         else
                         {
                             <span style="color: red;">Not enough quantity</span>
-                        }
+                        } *@
+
+                        @Html.DisplayFor(modelItem => product.ReservedQuantity)
                     </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@product.ProductId">Details</a>
