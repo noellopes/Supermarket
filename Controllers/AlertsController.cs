@@ -52,6 +52,8 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
             ViewBag.Func = alert.Function;
+            ViewBag.Search = alert.Search;
+            ViewBag.Page = alert.Page;
             return View(alert);
         }
 

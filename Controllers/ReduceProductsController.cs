@@ -24,12 +24,80 @@ namespace Supermarket.Controllers
         }
 
         // GET: ReduceProducts
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    var supermarketDbContext = _context.ReduceProduct.Include(r => r.Product).Include(r => r.Shelf).Include(r => r.WarehouseSection);
+        //    return View(await supermarketDbContext.ToListAsync());
+        //}
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var supermarketDbContext = _context.ReduceProduct.Include(r => r.Product).Include(r => r.Shelf).Include(r => r.WarehouseSection);
-            return View(await supermarketDbContext.ToListAsync());
+            var reduceProduct = from b in _context.ReduceProduct select b;
+
+            PagingInfoProduct paging = new PagingInfoProduct
+            {
+                CurrentPage = page,
+                TotalItems = await reduceProduct.Where(b => b.Status == "Pending").CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new ReduceProductViewModel
+            {
+                ReduceProduct = await reduceProduct
+                    .Where(b => b.Status == "Pending")
+                    .OrderBy(b => b.Date)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfoProduct = paging
+            };
+
+            ViewBag.totalBrands = vm.PagingInfoProduct.TotalItems;
+
+            return View(vm);
         }
 
+        public async Task<IActionResult> IndexA(int page = 1)
+        {
+            var reduceProduct = from b in _context.ReduceProduct select b;
+
+            PagingInfoProduct paging = new PagingInfoProduct
+            {
+                CurrentPage = page,
+                TotalItems = await reduceProduct.Where(b => b.Status == "Confirmed" || b.Status == "Refused").CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new ReduceProductViewModel
+            {
+                ReduceProduct = await reduceProduct
+                    .Where(b => b.Status == "Confirmed" || b.Status == "Refused")
+                    .OrderBy(b => b.Date)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfoProduct = paging
+            };
+
+            ViewBag.totalBrands = vm.PagingInfoProduct.TotalItems;
+
+            return View(vm);
+        }
         // GET: ReduceProducts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -55,7 +123,7 @@ namespace Supermarket.Controllers
             return View(reduceProduct);
         }
 
-        [Authorize(Roles = "Stock Operator")]
+        //[Authorize(Roles = "Stock Operator")]
         // GET: ReduceProducts/Create
         public IActionResult Create()
         {
