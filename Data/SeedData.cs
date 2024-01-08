@@ -56,9 +56,9 @@ namespace Supermarket.Data {
 
         private static void PopulateProduct(SupermarketDbContext db)
         {
-            DateTime specificLastCountDate = new DateTime(2023, 12, 2);
+            DateTime specificLastCountDate = new DateTime(2023, 1, 2);
             DateTime specificLastCountDate2 = new DateTime(2024, 1, 5);
-            DateTime specificLastCountDate3 = new DateTime(2023, 12, 1);
+            DateTime specificLastCountDate3 = new DateTime(2023, 3, 1);
 
             if (db.Product.Any()) return;
 
