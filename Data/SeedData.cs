@@ -34,7 +34,7 @@ namespace Supermarket.Data {
             PopulateIssueType(db);
             PopulatePurchase(db);
             PopulateIssue(db);
-            PopulateExpProduct(db);
+            //PopulateExpProduct(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db) {
@@ -839,16 +839,16 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        private static void PopulateExpProduct(SupermarketDbContext db)
-        {
-            if (db.ExpiredProducts.Any()) return;
+        //private static void PopulateExpProduct(SupermarketDbContext db)
+        //{
+        //    if (db.ExpiredProducts.Any()) return;
 
-            db.ExpiredProducts.AddRange(
-                new Models.ExpiredProducts { ProductId = 1, FabricationDate = DateTime.Now, ExpirationDate = DateTime.Now, BarCode = "XR4396", SupplierId = 2, EmployeeId = 1 },
-                new Models.ExpiredProducts { ProductId = 3, FabricationDate = DateTime.Now, ExpirationDate = DateTime.Now, BarCode = "XR4456", SupplierId = 1, EmployeeId = 2 }
-              );
+        //    db.ExpiredProducts.AddRange(
+        //        new Models.ExpiredProducts { ProductId = 1, FabricationDate = DateTime.Now, ExpirationDate = DateTime.Now, BarCode = "XR4396", SupplierId = 2, EmployeeId = 1 },
+        //        new Models.ExpiredProducts { ProductId = 3, FabricationDate = DateTime.Now, ExpirationDate = DateTime.Now, BarCode = "XR4456", SupplierId = 1, EmployeeId = 2 }
+        //      );
 
-            db.SaveChanges();
-        }
+        //    db.SaveChanges();
+        //}
     }
 }
