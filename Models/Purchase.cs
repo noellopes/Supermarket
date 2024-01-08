@@ -17,8 +17,9 @@ namespace Supermarket.Models
         public int SupplierId { get; set; }
         public Supplier? Supplier { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter the delivered quantity.")]
         [Display(Name = "Delivered Quantity")]
+        [Range(1, int.MaxValue, ErrorMessage = "The delivered quantity must be greater than 0.")]
         public int DeliveredQuantity { get; set; }
 
         //Relation with foreign key for Employee
@@ -41,6 +42,6 @@ namespace Supermarket.Models
         [Display(Name = "Delivery Date")]
         public DateTime DeliveryDate { get; set; }
 
-        public bool ProductExpired { get; set; } = false;
+        public bool ProductExpired { get; set; }
     }
 }
