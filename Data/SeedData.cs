@@ -56,7 +56,8 @@ namespace Supermarket.Data {
 
         private static void PopulateProduct(SupermarketDbContext db)
         {
-            DateTime specificLastCountDate = new DateTime(2023, 1, 2);
+            DateTime specificLastCountDate = new DateTime(2024, 1, 2);
+            DateTime specificLastCountDate1 = new DateTime(2023, 12, 29);
             DateTime specificLastCountDate2 = new DateTime(2024, 1, 5);
             DateTime specificLastCountDate3 = new DateTime(2023, 3, 1);
 
@@ -72,7 +73,7 @@ namespace Supermarket.Data {
                         MinimumQuantity = 200,
                         UnitPrice = 5.99,
                         Status = "Unavailable",
-                        LastCountDate= specificLastCountDate
+                        LastCountDate= specificLastCountDate1
                     },
 
                     new Product
@@ -119,7 +120,7 @@ namespace Supermarket.Data {
                         MinimumQuantity = 50,
                         UnitPrice = 2.29,
                         Status = "Available",
-                        LastCountDate = specificLastCountDate
+                        LastCountDate = specificLastCountDate2
                     }
                 );
 
