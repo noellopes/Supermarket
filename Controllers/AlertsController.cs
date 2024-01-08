@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+    [Authorize(Roles = "Stock Administrator, Stock Operator")]
     public class AlertsController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -58,10 +60,10 @@ namespace Supermarket.Controllers
         }
 
         // GET: Alerts/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
 
         // POST: Alerts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.

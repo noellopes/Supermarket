@@ -10,6 +10,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Supermarket.Controllers
 {
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -172,6 +173,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Create([Bind("ProductId,CategoryId,BrandId,Name,Description,TotalQuantity,MinimumQuantity,UnitPrice,Status,LastCountDate")] Product product)
         {
             if (ModelState.IsValid)
@@ -197,6 +199,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Products/Edit/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Product == null)
@@ -220,6 +223,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,CategoryId,BrandId,Name,Description,TotalQuantity,MinimumQuantity,UnitPrice,Status,LastCountDate")] Product product)
         {
             if (id != product.ProductId)
@@ -336,6 +340,7 @@ namespace Supermarket.Controllers
         private int iniciate;
         private int iniciate2;
 
+        [Authorize(Roles = "Stock Operator")]
         public async Task<IActionResult> RotativeProducts(string selectedStringDate = "", int? selectedNumber = 0, float? selectedPrice = 0, int selectedProductId = 0, bool isButtonClicked = false, int? quantityWarehouse = -1, int? IdWarehouseSectionProduct = 0, int? quantityShelves= -1, int? IdShelves = 0)
         {
 
@@ -938,8 +943,8 @@ namespace Supermarket.Controllers
             return View("RotativeInventory");
 
         }
-  
 
+        [Authorize(Roles = "Stock Operator")]
         public async Task<IActionResult> RestoreExposure()
         {
             var productsToRestore = await _context.Shelft_ProductExhibition

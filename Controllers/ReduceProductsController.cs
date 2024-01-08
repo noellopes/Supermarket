@@ -14,6 +14,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Supermarket.Controllers
 {
+    [Authorize(Roles = "Stock Administrator, Stock Operator")]
     public class ReduceProductsController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -123,7 +124,7 @@ namespace Supermarket.Controllers
             return View(reduceProduct);
         }
 
-        //[Authorize(Roles = "Stock Operator")]
+        [Authorize(Roles = "Stock Operator")]
         // GET: ReduceProducts/Create
         public IActionResult Create()
         {
@@ -138,6 +139,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Operator")]
         public async Task<IActionResult> Create([Bind("ReduceProductId,Reason,Status,Date,Quantity,ProductId,WarehouseSectionId,ShelfId")] ReduceProduct reduceProduct)
         {
             var SectionProduct = await _context.WarehouseSection_Product
@@ -222,6 +224,7 @@ namespace Supermarket.Controllers
 
 
         // GET: ReduceProducts/Edit/5 SelectProduct
+        [Authorize(Roles = "Stock Operator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ReduceProduct == null)
@@ -263,6 +266,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Operator")]
         public async Task<IActionResult> Edit(int id, [Bind("ReduceProductId,Reason,Status,Date,Quantity,ProductId,WarehouseSectionId,ShelfId")] ReduceProduct reduceProduct)
         {
             if (id != reduceProduct.ReduceProductId)
@@ -313,6 +317,7 @@ namespace Supermarket.Controllers
             return View(reduceProduct);
         }
 
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> ConfirmStatus(int? id)
         {
             if (id == null || _context.ReduceProduct == null)
@@ -352,6 +357,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> ConfirmStatus(int id, [Bind("ReduceProductId,Reason,Status,Date,Quantity,ProductId,WarehouseSectionId,ShelfId")] ReduceProduct reduceProduct)
         {
             var productW = await _context.WarehouseSection_Product.Where(a => a.ProductId == reduceProduct.ProductId && a.WarehouseSectionId == reduceProduct.WarehouseSectionId && a.Quantity >= reduceProduct.Quantity).FirstOrDefaultAsync();

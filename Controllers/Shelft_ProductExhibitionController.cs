@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
@@ -11,6 +12,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+    [Authorize(Roles = "Stock Administrator, Stock Operator")]
     public class Shelft_ProductExhibitionController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -48,6 +50,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Shelft_ProductExhibition/Create
+        [Authorize(Roles = "Stock Administrator")]
         public IActionResult Create(int? shelfId)
         {
             ViewBag.ErrorMessage = TempData["ErrorMessage"] as string;
@@ -63,6 +66,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Create([Bind("ProductId,ShelfId,Quantity,MinimumQuantity")] Shelft_ProductExhibition shelft_ProductExhibition)
         {
             if (ModelState.IsValid)
@@ -114,6 +118,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Shelft_ProductExhibition/Edit/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int? productId, int? shelfId)
         {
             if (productId == null || shelfId == null || _context.Shelft_ProductExhibition == null)
@@ -140,6 +145,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int productId, int shelfId, [Bind("ProductId,ShelfId,Quantity,MinimumQuantity")] Shelft_ProductExhibition shelft_ProductExhibition)
         {
             if (productId == null || shelfId == null || shelft_ProductExhibition == null)
@@ -204,6 +210,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Shelft_ProductExhibition/Delete/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Delete(int? productId, int? shelfId)
         {
             if (productId == null || shelfId == null || _context.Shelft_ProductExhibition == null)
@@ -232,6 +239,7 @@ namespace Supermarket.Controllers
         // POST: Shelft_ProductExhibition/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int productId, int shelfId)
         {
             if (_context.Shelft_ProductExhibition == null)
