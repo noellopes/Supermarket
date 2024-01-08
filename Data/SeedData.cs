@@ -965,7 +965,7 @@ namespace Supermarket.Data {
 
         internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager) {
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
-           /* await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
+            await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
             await EnsureRoleIsCreatedAsync(roleManager!, "Cliente");
 
@@ -975,7 +975,7 @@ namespace Supermarket.Data {
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Edit_Del_IssueType");
    
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Reports");
-            await EnsureRoleIsCreatedAsync(roleManager!, "Edit_Del_Reports");*/
+            await EnsureRoleIsCreatedAsync(roleManager!, "Edit_Del_Reports");
         }
 
 
