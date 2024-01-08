@@ -69,7 +69,7 @@ namespace Supermarket.Data
                     new Ticket
                     {
                         DataEmissao = DateTime.Now,
-                        DataAtendimento = DateTime.Now.AddMinutes(rand.Next(50, 101)),
+                        DataAtendimento = DateTime.Now.AddMinutes(rand.Next(5,20)),
                         NumeroDaSenha = i,
                         Estado = true,
                         Prioritario = randomBool,
