@@ -48,28 +48,7 @@
 
 <a class="btn btn-primary" asp-action="Create">Create New Schedule</a>
 
-@*<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DailyStartTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DailyFinishTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IDDepartments)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>*@
+
 <div class="row">
 
     @foreach (var item in Model.Schedules)
@@ -137,7 +116,7 @@
         else
         {
             <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
+                <a class="page-link" asp-action="Index" asp-route-page="1" asp-route-departmentDrop="@Model.SearchDepartment">First</a>
             </li>
         }
 
@@ -160,7 +139,7 @@
             else
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
+                    <a class="page-link" asp-action="Index" asp-route-page="@p" asp-route-departmentDrop="@Model.SearchDepartment">@p</a>
                 </li>
             }
         }
@@ -173,7 +152,7 @@
         else
         {
             <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages">Last</a>
+                <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages" asp-route-departmentDrop="@Model.SearchDepartment">Last</a>
             </li>
         }
     </ul>
