@@ -893,9 +893,14 @@ namespace Supermarket.Controllers
                 productsToGet = await _context.WarehouseSection_Product
                     .Include(wp => wp.Product)
                     .Where(wp => wp.ProductId == item.ProductId && wp.Quantity > 0)
+                    //.Where(wp => wp.ProductId == item.ProductId && wp.Quantity > 0 && wp.ExpirationDate > DateTime.Now)
                     .OrderBy(wp => wp.ExpirationDate)
                     .Include(wp => wp.WarehouseSection)
                     .ToListAsync();
+
+                //var num = productsToRestore.Where(wp => wp.ProductId == item.ProductId && wp.Quantity > 0).FirstOrDefault().Quantity;
+
+                //productsToGet.Where(wp => wp.ProductId == item.ProductId && wp.Quantity > 0).FirstOrDefault()!.ReservedQuantity = item.MinimumQuantity * 2 - num;
             }
             //var productsToGet = await _context.WarehouseSection_Product
             //    .Include(wp => wp.Product)

@@ -53,6 +53,9 @@
             <th>
                 Shelf
             </th>
+            <th>
+                Quantity to Restore
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -70,9 +73,9 @@
                     <td>
                         @Html.DisplayFor(modelItem => product.Shelf.Name)
                     </td>
-                    @* <td>
-                        @Html.DisplayFor(modelItem => productsToRestore.Where(a => a.ProductId == product.ProductId).FirstOrDefault())
-                    </td> *@
+                    <td>
+                        @((2 * product.MinimumQuantity) - product.Quantity)
+                    </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@product.ProductId">Details</a>
                     </td>
@@ -104,6 +107,9 @@
             <th>
                 Shelf
             </th>
+            <th>
+                Quantity to Remove
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -122,9 +128,18 @@
                     <td>
                         @Html.DisplayFor(modelItem => product.WarehouseSection.Description)
                     </td>
-                    @* <td>
-                        @Html.DisplayFor(modelItem => productsToGet.Where(a => a.ProductId == product.ProductId).FirstOrDefault())
-                    </td> *@
+                    <td>
+                        @* @if (productsToGet.Any(p => p.ProductId == product.ProductId && p.Quantity <= productsToGet.Where(wp => wp.ProductId == product.ProductId).Sum(wp => wp.Quantity)))
+                        {
+                            @product.Quantity
+                        }
+                        else
+                        {
+                            <span style="color: red;">Not enough quantity</span>
+                        } *@
+
+                        @Html.DisplayFor(modelItem => product.ReservedQuantity)
+                    </td>
                     <td>
                         <a asp-action="Details" asp-route-id="@product.ProductId">Details</a>
                     </td>
