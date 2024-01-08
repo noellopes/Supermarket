@@ -30,9 +30,14 @@
         background-color: #f8f8f8;
         color: #000;
     }
+   /*  .highlighted-row {
+    background-color: lightyellow;  */
+}
 </style>
 
 <script>
+  
+
     // Função para calcular e exibir a soma total da quantidade da prateleira
     function calculateTotalQuantity() {
         var totalWarehouseQuantity = 0;
@@ -152,13 +157,30 @@
                 <tbody>
                     @foreach (var warehouseSectionProduct in warehouseSectionProductsList)
                     {
+                   //   var warehouseSectionProductsDictionary = ViewData["WarehouseSectionProductsDictionary"] as Dictionary<int, int> ?? new Dictionary<int, int>();
+
                         <tr>
                             <td>@warehouseSectionProduct.WarehouseSection?.Warehouse.Name</td>
                             <td>@warehouseSectionProduct.WarehouseSection?.Description</td>
                             <td>@warehouseSectionProduct.BatchNumber</td>
                             <td>@warehouseSectionProduct.Quantity</td>
-                            <td>
-                                <input type="number" class="warehouse-quantity" value="@warehouseSectionProduct.Quantity" min="0" max="99999" />
+                               @* <td class="@((warehouseSectionProductsDictionary.ContainsKey(warehouseSectionProduct.WarehouseSection_ProductId)) ? "highlighted-row" : "")"> *@
+                             <td>
+                                <form asp-controller="Products" asp-action="RotativeProducts" method="get">
+                                    <div id="numberForm">
+                                        <div class="form-group">
+                                         
+                                              <input type="number" name="quantityWarehouse"class="warehouse-quantity" value="@warehouseSectionProduct.Quantity" min="0" max="99999" />
+                                               <input type="hidden" name="IdWarehouseSectionProduct" value="@warehouseSectionProduct.WarehouseSection_ProductId" />
+                                                <input type="hidden" name="selectedProductId" value="@selectedProduct.ProductId"/>
+                                               <input type="hidden" name="SelectedStringDate" value="@ViewData["SelectedStringDate"]" />
+                                               <input type="hidden" name="SelectedNumber" value="@ViewData["SelectedNumber"]" />
+                                               <input type="hidden" name="SelectedPrice" value="@ViewData["SelectedPrice"]" />
+                                             <button type="submit" class="btn btn-success">Save</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                
                             </td>
                         </tr>
                     }
@@ -171,7 +193,13 @@
         }
         else
         {
-            <span style="color: red;margin-top: 10px;">No Warehouse Section Products available for the selected product.</span>
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">Error</h4>
+                    <p>
+                        <span>No Warehouse Section Products available for the selected product.</span>
+                    </p>
+             </div>
+            
         }
 
     }
@@ -203,7 +231,19 @@
                             <td>@shelftProduct.Shelf?.Hallway?.Store?.Name</td>
                             <td>@shelftProduct.Quantity</td>
                             <td>
-                                <input type="number" class="shelf-quantity" value="@shelftProduct.Quantity" min="0" max="99999" />
+                                <form asp-controller="Products" asp-action="RotativeProducts" method="get">
+                                    <div id="numberForm">
+                                        <div class="form-group">
+                                              <input type="number" name="quantityShelves"class="shelf-quantity" value="@shelftProduct.Quantity" min="0" max="99999" />
+                                               <input type="hidden" name="IdShelves" value="@shelftProduct.ShelfId" />
+                                                <input type="hidden" name="selectedProductId" value="@selectedProduct.ProductId"/>
+                                               <input type="hidden" name="SelectedStringDate" value="@ViewData["SelectedStringDate"]" />
+                                               <input type="hidden" name="SelectedNumber" value="@ViewData["SelectedNumber"]" />
+                                               <input type="hidden" name="SelectedPrice" value="@ViewData["SelectedPrice"]" />
+                                             <button type="submit" class="btn btn-success">Save</button>
+                                       </div>
+                                </form>
+
                             </td>
                         </tr>
                     }
@@ -221,7 +261,13 @@
         }
         else
         {
-            <span style="color: red;margin-top: 10px;">No Shelf Products available for the selected product.</span>
+                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">Error</h4>
+                    <p>
+                         <span>No Shelf Products available for the selected product.</span>
+                    </p>
+             </div>
+           
         }
 
     }

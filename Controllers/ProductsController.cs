@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
+using System.Diagnostics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Supermarket.Controllers
@@ -261,16 +262,114 @@ namespace Supermarket.Controllers
 
             return View();
         }
-    
 
-        public async Task<IActionResult> RotativeProducts(string selectedStringDate="", int? selectedNumber=0, float? selectedPrice=0, int selectedProductId = 0, bool isButtonClicked = false)
+
+        private Dictionary<int, int> warehouseSectionProductsDictionary = new Dictionary<int, int>();
+        private Dictionary<int, int> selftProductsDictionary = new Dictionary<int, int>();
+        private int Selectproduct;
+        private int iniciate;
+        private int iniciate2;
+
+        public async Task<IActionResult> RotativeProducts(string selectedStringDate = "", int? selectedNumber = 0, float? selectedPrice = 0, int selectedProductId = 0, bool isButtonClicked = false, int? quantityWarehouse = -1, int? IdWarehouseSectionProduct = 0, int? quantityShelves= -1, int? IdShelves = 0)
         {
 
             ViewData["SelectedStringDate"] = selectedStringDate;
             ViewData["SelectedNumber"] = selectedNumber;         
             ViewData["SelectedPrice"] = selectedPrice;
+            if (selectedProductId > 0)
+            {
+                if (Selectproduct != selectedProductId)
+                {
+                    Selectproduct = selectedProductId;
+                    iniciate = 0;
+                    warehouseSectionProductsDictionary.Clear();
+                }
+
+                if (iniciate == 0)
+                {
 
 
+                    if (IdWarehouseSectionProduct > 0 && quantityWarehouse > -1)
+                    {
+                        iniciate = 1;
+
+                        if (warehouseSectionProductsDictionary.ContainsKey(IdWarehouseSectionProduct.Value))
+                        {
+                            warehouseSectionProductsDictionary[IdWarehouseSectionProduct.Value] = quantityWarehouse.Value;
+                        }
+                        else
+                        {
+                            warehouseSectionProductsDictionary[IdWarehouseSectionProduct.Value] = quantityWarehouse.Value;
+                        }
+                    }
+                }
+
+            }
+
+            foreach (var kvp in warehouseSectionProductsDictionary)
+            {
+                int warehouseSectionProductId = kvp.Key;
+                int quantity = kvp.Value;
+
+                // Supondo que você tenha um DbContext chamado "dbContext" e um serviço para interagir com os dados chamado "productService"
+                var warehouseSectionProduct = await _context.WarehouseSection_Product.FindAsync(warehouseSectionProductId);
+
+                if (warehouseSectionProduct != null)
+                {
+                    warehouseSectionProduct.Quantity = quantity;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+
+            
+            if (selectedProductId > 0)
+            {
+                if (Selectproduct != selectedProductId)
+                {
+                    Selectproduct = selectedProductId;
+                    iniciate2 = 0;
+                    warehouseSectionProductsDictionary.Clear();
+                }
+
+                if (iniciate2 == 0)
+                {
+
+
+                    if (IdShelves > 0 && quantityShelves > -1)
+                    {
+                        iniciate2 = 1;
+
+                        if (selftProductsDictionary.ContainsKey(IdShelves.Value))
+                        {
+                            selftProductsDictionary[IdShelves.Value] = quantityShelves.Value;
+                        }
+                        else
+                        {
+                            selftProductsDictionary[IdShelves.Value] = quantityShelves.Value;
+                        }
+                    }
+                }
+
+            }
+
+            foreach (var kvp in selftProductsDictionary)
+            {
+                int idShelves = kvp.Key;
+                int quantity = kvp.Value;
+
+                var selves = await _context.Shelft_ProductExhibition
+                .Where(sp => sp.ShelfId == idShelves && sp.ProductId == selectedProductId)
+                .FirstOrDefaultAsync();
+
+                if (selves != null)
+                {
+                    selves.Quantity = quantity;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            // ViewData["WarehouseSectionProductsDictionary"] = warehouseSectionProductsDictionary;
 
 
 
@@ -317,7 +416,7 @@ namespace Supermarket.Controllers
          .ToList();
 
                 var filteredProducts = expensiveProducts
-                    .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days)
+                    .Where(p => p.LastCountDate != null && (currentDate - p.LastCountDate.Date).TotalDays >= days&& p.UnitPrice > Price)
                     .ToList();
 
                 var addedProductIds = new HashSet<int>(filteredProducts.Select(p => p.ProductId));
@@ -345,6 +444,7 @@ namespace Supermarket.Controllers
                     // Save changes to the database
                     await _context.SaveChangesAsync();
 
+
                     var descripition = new string("A new Rotative Inventory was been: " + selectedProduct.Name + " in " + selectedProduct.LastCountDate);
                     Alert alert = new Alert
                     {
@@ -356,6 +456,36 @@ namespace Supermarket.Controllers
                     };
                     _context.Add(alert);
                     await _context.SaveChangesAsync();
+
+                    foreach (var kvp in warehouseSectionProductsDictionary)
+                    {
+                        int warehouseSectionProductId = kvp.Key;
+                        int quantity = kvp.Value;
+
+                        // Supondo que você tenha um DbContext chamado "dbContext" e um serviço para interagir com os dados chamado "productService"
+                        var warehouseSectionProduct = await _context.WarehouseSection_Product.FindAsync(warehouseSectionProductId);
+
+                        if (warehouseSectionProduct != null)
+                        {
+                            warehouseSectionProduct.Quantity = quantity;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
+                    foreach (var kvp in selftProductsDictionary)
+                    {
+                        int idShelves = kvp.Key;
+                        int quantity = kvp.Value;
+
+
+                        var selves = await _context.Shelft_ProductExhibition.FindAsync(idShelves, selectedProductId);
+
+                        if (selves != null)
+                        {
+                            selves.Quantity = quantity;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
 
                     return RedirectToAction("RotativeProducts", new
                     {
@@ -443,9 +573,36 @@ namespace Supermarket.Controllers
                     };
                     _context.Add(alert);
                     await _context.SaveChangesAsync();
-                    
 
-                    
+                    foreach (var kvp in warehouseSectionProductsDictionary)
+                    {
+                        int warehouseSectionProductId = kvp.Key;
+                        int quantity = kvp.Value;
+
+
+                        var warehouseSectionProduct = await _context.WarehouseSection_Product.FindAsync(warehouseSectionProductId);
+
+                        if (warehouseSectionProduct != null)
+                        {
+                            warehouseSectionProduct.Quantity = quantity;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
+                    foreach (var kvp in selftProductsDictionary)
+                    {
+                        int idShelves = kvp.Key;
+                        int quantity = kvp.Value;
+
+
+                        var selves = await _context.Shelft_ProductExhibition.FindAsync(idShelves, selectedProductId);
+
+                        if (selves != null)
+                        {
+                            selves.Quantity = quantity;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
 
 
                     return RedirectToAction("RotativeProducts", new
@@ -529,6 +686,35 @@ namespace Supermarket.Controllers
                     _context.Add(alert);
                     await _context.SaveChangesAsync();
 
+                    foreach (var kvp in warehouseSectionProductsDictionary)
+                    {
+                        int warehouseSectionProductId = kvp.Key;
+                        int quantity = kvp.Value;
+
+
+                        var warehouseSectionProduct = await _context.WarehouseSection_Product.FindAsync(warehouseSectionProductId);
+
+                        if (warehouseSectionProduct != null)
+                        {
+                            warehouseSectionProduct.Quantity = quantity;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
+                    foreach (var kvp in selftProductsDictionary)
+                    {
+                        int idShelves = kvp.Key;
+                        int quantity = kvp.Value;
+
+
+                        var selves = await _context.Shelft_ProductExhibition.FindAsync(idShelves, selectedProductId);
+
+                        if (selves != null)
+                        {
+                            selves.Quantity = quantity;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
 
                     return RedirectToAction("RotativeProducts", new
                     {
@@ -610,7 +796,34 @@ namespace Supermarket.Controllers
                     _context.Add(alert);
                     await _context.SaveChangesAsync();
 
+                    foreach (var kvp in warehouseSectionProductsDictionary)
+                    {
+                        int warehouseSectionProductId = kvp.Key;
+                        int quantity = kvp.Value;
 
+
+                        var warehouseSectionProduct = await _context.WarehouseSection_Product.FindAsync(warehouseSectionProductId);
+
+                        if (warehouseSectionProduct != null)
+                        {
+                            warehouseSectionProduct.Quantity = quantity;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    foreach (var kvp in selftProductsDictionary)
+                    {
+                        int idShelves = kvp.Key;
+                        int quantity = kvp.Value;
+
+
+                        var selves = await _context.Shelft_ProductExhibition.FindAsync(idShelves, selectedProductId);
+
+                        if (selves != null)
+                        {
+                            selves.Quantity = quantity;
+                            await _context.SaveChangesAsync();
+                        }
+                    }
                     return RedirectToAction("RotativeProducts", new
                     {
                         SelectedProductId = 0,
@@ -659,6 +872,7 @@ namespace Supermarket.Controllers
             return View("RotativeInventory");
 
         }
+  
 
         public async Task<IActionResult> RestoreExposure()
         {
