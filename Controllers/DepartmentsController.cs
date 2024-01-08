@@ -27,6 +27,9 @@ namespace Supermarket.Controllers
             IQueryable<Department> departmentsQuery = _context.Departments;
             
             var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
+            // Filtra apenas os departamentos ativos
+            departmentsQuery = departmentsQuery
+                .Where(d => d.StateDepartments.Equals(true));
 
             if (!string.IsNullOrEmpty(searchTerm))
             {

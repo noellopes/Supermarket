@@ -21,10 +21,10 @@ namespace Supermarket.Data
                 new Department { NameDepartments = "Talho", DescriptionDepartments = "Servir carne fresca", StateDepartments = true, SkillsDepartments = "A1", QuatDepMed = 10 },
                 new Department { NameDepartments = "Peixaria", DescriptionDepartments = "Servir peixe Fresco", StateDepartments = true, SkillsDepartments = "B1", QuatDepMed = 5 },
                 new Department { NameDepartments = "Take-Way", DescriptionDepartments = "Servir comida Pronta", StateDepartments = false, SkillsDepartments = "Q1", QuatDepMed = 15 },
-                new Department { NameDepartments = "Armazem", DescriptionDepartments = "Só porque o pinela quer ", StateDepartments = true, SkillsDepartments = "R1", QuatDepMed = 0 },
-                new Department { NameDepartments = "Garrafeira", DescriptionDepartments = "Bebidas acoolicas", StateDepartments = false, SkillsDepartments = "R1", QuatDepMed = 0 },
-                new Department { NameDepartments = "Congelados", DescriptionDepartments = "Produtos congelados", StateDepartments = false, SkillsDepartments = "R1", QuatDepMed = 0 },
-                new Department { NameDepartments = "Legume e frutas", DescriptionDepartments = "Produtos Frescos", StateDepartments = true, SkillsDepartments = "R1", QuatDepMed = 0 },
+                new Department { NameDepartments = "Armazem", DescriptionDepartments = "Repor parteleiras,", StateDepartments = true, SkillsDepartments = "R1", QuatDepMed = 1 },
+                new Department { NameDepartments = "Garrafeira", DescriptionDepartments = "Bebidas acoolicas", StateDepartments = false, SkillsDepartments = "R1", QuatDepMed = 1 },
+                new Department { NameDepartments = "Congelados", DescriptionDepartments = "Produtos congelados", StateDepartments = false, SkillsDepartments = "R1", QuatDepMed = 1 },
+                new Department { NameDepartments = "Legume e frutas", DescriptionDepartments = "Produtos Frescos", StateDepartments = true, SkillsDepartments = "R1", QuatDepMed = 1 },
                 new Department { NameDepartments = "Padaria e Pastelaria", DescriptionDepartments = "Servir Pão", StateDepartments = false, SkillsDepartments = "S1", QuatDepMed = 15 }
                 );
             db.SaveChanges();
@@ -41,19 +41,6 @@ namespace Supermarket.Data
                     new Schedule { StartDate = DateTime.Now, EndDate = null, DailyStartTime = DateTime.Now, DailyFinishTime = DateTime.Now, IDDepartments = db.Departments.Where(a => a.NameDepartments == "Armazem").Select(a => a.IDDepartments).FirstOrDefault() }
                 );
 
-            //for (int i = 0; i < 1000; i++)
-            //{
-            //    db.Add(
-            //        new Schedule
-            //        {
-            //            StartDate = DateTime.Now,
-            //            EndDate = new DateTime(2029, 04, 30, 12, 30, 0),
-            //            DailyStartTime = DateTime.Now,
-            //            DailyFinishTime = DateTime.Now,
-            //            IDDepartments = db.Departments.Where(a => a.NameDepartments == "Armazem").Select(a => a.IDDepartments).FirstOrDefault()
-            //        }
-            //    );
-            //}
             db.SaveChanges();
         }
         private static void PopulateTickets(SupermarketDbContext db)
@@ -69,7 +56,7 @@ namespace Supermarket.Data
                     new Ticket
                     {
                         DataEmissao = DateTime.Now,
-                        DataAtendimento = DateTime.Now.AddMinutes(rand.Next(50, 101)),
+                        DataAtendimento = DateTime.Now.AddMinutes(rand.Next(5,20)),
                         NumeroDaSenha = i,
                         Estado = true,
                         Prioritario = randomBool,
