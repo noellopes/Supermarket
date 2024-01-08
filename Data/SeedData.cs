@@ -295,7 +295,7 @@ namespace Supermarket.Data {
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
                         BatchNumber = "D45",
                         ExpirationDate = DateTime.Now,
-                        Quantity = 40,
+                        Quantity = 120,
                         ReservedQuantity = 0,
                         Supplier = db.Supplier.FirstOrDefault(a => a.Name == "Supplier Guarda")
                     },
