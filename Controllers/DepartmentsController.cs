@@ -4,6 +4,7 @@ using System.Drawing.Printing;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,41 +21,15 @@ namespace Supermarket.Controllers
         {
             _context = context;
         }
-    //pesquisa por nome do departamento 
-            public IActionResult pesqNomeTrue(string searchTerm)
-    {
-        var results = _context.Departments
-        .Where(d => (d.StateDepartments.Equals(true)) && d.NameDepartments.Contains(searchTerm))
-        .ToList();
-
-            if (results.Count == 0)
-        {
-          ViewBag.Message = "Nenhum resultado encontrado para a pesquisa.";
-        }
-
-        return View("Index", results);
-    }
-        //pesquisa por nome do departamentoInop 
-        public IActionResult pesqNomeFalse(string searchTerm)
-        {
-            var results = _context.Departments
-                .Where(d => (d.StateDepartments.Equals(false)) && d.NameDepartments.Contains(searchTerm))
-                .ToList();
-            if (results.Count == 0)
-            {
-                ViewBag.Message = "Nenhum resultado encontrado para a pesquisa.";
-            }
-
-            return View("DepInop", results);
-        }
 
         // GET: Departments
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Index(string searchTerm, int page = 1, int pageSize = 2)
         {
-            IQueryable<Departments> departmentsQuery = _context.Departments;
+            IQueryable<Department> departmentsQuery = _context.Departments;
 
             var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
-
+            // Filtra apenas os departamentos ativos
             departmentsQuery = departmentsQuery
                 .Where(d => d.StateDepartments.Equals(true));
 
@@ -87,7 +62,30 @@ namespace Supermarket.Controllers
                 Departments = departments,
                 Pagination = pagination,
                 SelectedPageSize = pageSize,
+                TimeDifferences = new List<TimeSpan>()
             };
+            // Aqui você pode percorrer os departamentos e calcular a diferença de tempo para cada ticket
+            foreach (var department in departments)
+            {
+                // Procura o primeiro ticket associado ao departamento
+                var firstTicket = _context.Tickets.FirstOrDefault(t => t.IDDepartments == department.IDDepartments);
+                // Verifica se existe um ticket associado e se a data de atendimento tem valor
+                if (firstTicket != null && firstTicket.DataAtendimento.HasValue)
+                {
+                    // Obtém as datas de início (DataAtendimento) e fim (DataEmissao)
+                    DateTime dataInicio = firstTicket.DataAtendimento.Value;
+                    DateTime dataFim = firstTicket.DataEmissao;
+                    // Calcula a diferença de tempo entre as duas datas
+                    TimeSpan diferenca = dataInicio - dataFim;
+                    // Adiciona a diferença de tempo à lista de diferenças de tempo no viewModel
+                    viewModel.TimeDifferences.Add(diferenca);
+                }
+                else
+                {
+                    // Se não existir ticket ou se a data de atendimento não tiver valor, adiciona TimeSpan.Zero à lista
+                    viewModel.TimeDifferences.Add(TimeSpan.Zero);
+                }
+            }
 
             ViewData["SearchTerm"] = searchTerm;
             ViewData["PageSizes"] = new SelectList(pageSizes);
@@ -95,12 +93,12 @@ namespace Supermarket.Controllers
 
             return View(viewModel);
         }
-
+        [Authorize(Roles = "Gestor")]
         // GET: DepartmentsInop
         public IActionResult IndexInop(string searchTerm, int page = 1, int pageSize = 2)
         {
 
-            IQueryable<Departments> departmentsQuery = _context.Departments;
+            IQueryable<Department> departmentsQuery = _context.Departments;
             //numero de paginas que da para seelecionar
             var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
 
@@ -149,6 +147,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments/Details/
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Departments == null)
@@ -177,7 +176,8 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Departments departments)
+        [Authorize(Roles = "Gestor")]
+        public async Task<IActionResult> Create([Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department departments)
         {
             if (ModelState.IsValid)
             {
@@ -222,7 +222,8 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Departments departments)
+        [Authorize(Roles = "Gestor")]
+        public async Task<IActionResult> Edit(int id, [Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department departments)
         {
             if (id != departments.IDDepartments)
             {
@@ -265,6 +266,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments/Delete/5
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Departments == null)
@@ -285,6 +287,7 @@ namespace Supermarket.Controllers
         // POST: Departments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Departments == null)

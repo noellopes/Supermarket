@@ -1,4 +1,4 @@
-﻿@model Supermarket.Models.Departments
+﻿@model Supermarket.Models.Department
 
 @{
     ViewData["Title"] = "Editar Departamentos";
@@ -6,8 +6,6 @@
 
 <h1> Editar o departamento </h1>
 
-
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -34,7 +32,7 @@
             </div>
                 <div class="form-group">
                     <label for="stateDropdown">Formação</label>
-                    <select class="form-control" id="stateDropdown" asp-for="StateDepartments">
+                <select class="form-control" id="stateDropdown" asp-for="SkillsDepartments">
                         <option value="">----clique para selecionar uma opção-----</option>
                         <option value="A1">A1</option>
                         <option value="B2">B2</option>
