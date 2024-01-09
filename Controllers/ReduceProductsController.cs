@@ -52,6 +52,7 @@ namespace Supermarket.Controllers
             var vm = new ReduceProductViewModel
             {
                 ReduceProduct = await reduceProduct
+                    .Include(b => b.Product)
                     .Where(b => b.Status == "Pending")
                     .OrderBy(b => b.Date)
                     .Skip((paging.CurrentPage - 1) * paging.PageSize)
@@ -87,6 +88,7 @@ namespace Supermarket.Controllers
             var vm = new ReduceProductViewModel
             {
                 ReduceProduct = await reduceProduct
+                    .Include(b => b.Product)
                     .Where(b => b.Status == "Confirmed" || b.Status == "Refused")
                     .OrderBy(b => b.Date)
                     .Skip((paging.CurrentPage - 1) * paging.PageSize)

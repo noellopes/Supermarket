@@ -58,6 +58,7 @@ namespace Supermarket.Controllers
                 SearchName = name,
             };
 
+            ViewBag.totalCategories = vm.PagingInfoProduct.TotalItems;
 
             return View(vm);
             //var categories = from b in _context.Category select b;
