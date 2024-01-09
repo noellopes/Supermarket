@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -100,40 +101,40 @@ namespace Supermarket.Controllers
         }
 
         // GET: Tickets/Create
-        public IActionResult Create()
-        {
+        //public IActionResult Create()
+        //{
 
-            ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
+        //    ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
-            return View();
-        }
+        //    return View("Index");
+        //}
 
-        // POST: Tickets/Create
+        //// POST: Tickets/Create
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
-        {
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
+        //{
 
-            if (ModelState.IsValid)
-            {
-                // Set default or automated values for the new ticket
-                tickets.DataEmissao = DateTime.Now;
-                tickets.Estado = false; // Set default value
-                tickets.Prioritario = false; // Set default value
+        //    if (ModelState.IsValid)
+        //    {
+        //        // Set default or automated values for the new ticket
+        //        tickets.DataEmissao = DateTime.Now;
+        //        tickets.Estado = false; // Set default value
+        //        tickets.Prioritario = false; // Set default value
 
-                // Add the new ticket to the context
-                _context.Add(tickets);
+        //        // Add the new ticket to the context
+        //        _context.Add(tickets);
 
-                // Save changes to the database
-                await _context.SaveChangesAsync();
+        //        // Save changes to the database
+        //        await _context.SaveChangesAsync();
 
-                ViewBag.Message = "Ticket created successfully.";
-                return View("Details", tickets);
-            }
+        //        ViewBag.Message = "Ticket created successfully.";
+        //        return View("Details", tickets);
+        //    }
 
-            return View(tickets);
-        }
+        //    return View(tickets);
+        //}
 
         //if (ModelState.IsValid)
         //{
@@ -144,12 +145,58 @@ namespace Supermarket.Controllers
         //}
         //return View(tickets);
 
+        public IActionResult Create()
+        {
+            //// Set default values for the ticket
+            //var newTicket = new Ticket
+            //{
+            //    DataEmissao = DateTime.Now,
+            //    DataAtendimento = null,
+            //    NumeroDaSenha = 0,
+            //    Estado = false,
+            //    Prioritario = false,
+            //    IDDepartments = 1
+            //    // Set other properties with default values
+            //};
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket)
+        {
+           
+            var ticketlista = await _context.Tickets.ToListAsync();
+
+            // Perform validation and save the new ticket to the database
+            if (ModelState.IsValid)
+            {
+
+                ticket.DataEmissao = DateTime.Now;
+                ticket.DataAtendimento = null;
+                ticket.NumeroDaSenha = ticketlista.Last().NumeroDaSenha + 1;
+                ticket.Estado = false;
+                ticket.Prioritario = false;
+                ticket.IDDepartments = 1;
+
+                // Save the new ticket to the database
+                _context.Tickets.Add(ticket);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index"); // Redirect to the ticket list or another action
+            }
+
+            return View(ticket);
+        }
+
+
+
+
 
         // GET: TicketsPriority/Create
         public IActionResult CreatePriority()
         {
-
-            ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
             return View();
         }
@@ -158,27 +205,31 @@ namespace Supermarket.Controllers
   
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePriority([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
+        public async Task<IActionResult> CreatePriority([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket)
         {
 
+            var ticketlista = await _context.Tickets.ToListAsync();
+
+
+            // Perform validation and save the new ticket to the database
             if (ModelState.IsValid)
             {
-                // Set default or automated values for the new ticket
-                tickets.DataEmissao = DateTime.Now;
-                tickets.Estado = false; // Set default value
-                tickets.Prioritario = true; // Set default value
 
-                // Add the new ticket to the context
-                _context.Add(tickets);
+                ticket.DataEmissao = DateTime.Now;
+                ticket.DataAtendimento = null;
+                ticket.NumeroDaSenha = ticketlista.Last().NumeroDaSenha + 1;
+                ticket.Estado = false;
+                ticket.Prioritario = true;
+                ticket.IDDepartments = 1;
 
-                // Save changes to the database
-                await _context.SaveChangesAsync();
+                // Save the new ticket to the database
+                _context.Tickets.Add(ticket);
+                _context.SaveChanges();
 
-                ViewBag.Message = "Priority Ticket created successfully.";
-                return View("Details", tickets);
+                return RedirectToAction("Index"); // Redirect to the ticket list or another action
             }
 
-            return View(tickets);
+            return View(ticket);
 
         }
         //if (ModelState.IsValid)
@@ -190,8 +241,6 @@ namespace Supermarket.Controllers
         //}
         //return View(tickets);
 
-
-        // GET: Tickets/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
@@ -210,7 +259,7 @@ namespace Supermarket.Controllers
         }
 
         // POST: Tickets/Edit/5
-      
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
@@ -239,6 +288,62 @@ namespace Supermarket.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }
+            return View(tickets);
+        }
+
+
+        // GET: Tickets/Edit/5
+        public async Task<IActionResult> Atender(int? id)
+        {
+            ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
+
+            if (id == null || _context.Tickets == null)
+            {
+                return NotFound();
+            }
+
+            var tickets = await _context.Tickets.FindAsync(id);
+            if (tickets == null)
+            {
+                return NotFound();
+            }
+            return View(tickets);
+        }
+
+        // POST: Tickets/Edit/5
+      
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Atender(int id, [Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
+        {
+            if (id != tickets.TicketId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    tickets.Estado = true;
+                    tickets.DataAtendimento = DateTime.Now;
+                    _context.Update(tickets);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TicketsExists(tickets.TicketId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                
             }
             return View(tickets);
         }

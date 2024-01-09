@@ -33,29 +33,37 @@
 <hr class="mt-4">
 
 
+<form asp-action="Create" method="post">     <!-- Your form fields for creating a new ticket go here -->      <div class="form-group">         <input type="submit" value="Create" class="btn btn-primary" />     </div> </form>
+
+
 @if (Model.Tickets.Any() && Model.SearchDepartment != 0)
 {
-
+   
     <div class="row">
+        <form asp-action="Create" method="post">
         <div class="col card border-dark mt-5 center" style="width: 18rem;">
 
             <div class="card-body">
-
-                <a asp-action="Create"><img width="128" class="mx-auto d-block" height="128" src="https://pngimg.com/uploads/plus/plus_PNG106.png" alt="Card image cap"></a>
+                    <input type="image" src="https://pngimg.com/uploads/plus/plus_PNG106.png" alt="Submit" width="128" height="128">
+               @*  <a asp-action="Create"><img width="128" class="mx-auto d-block" height="128" src="https://pngimg.com/uploads/plus/plus_PNG106.png" alt="Card image cap"></a> *@
 
             </div>
 
         </div>
+        </form>
+        <form asp-action="CreatePriority" method="post">
         <div class="col card border-primary mt-5 pr-5 center" style="width: 18rem;">
 
             <div class="card-body">
-
-                <a asp-action="CreatePriority"><img width="128" class="mx-auto d-block" height="128" src="~/images/P+.png" alt="Card image cap"></a>
+                    <input type="image" src="~/images/P+.png" alt="Submit" width="128" height="128">
+                @* <a asp-action="CreatePriority"><img width="128" class="mx-auto d-block" height="128" src="~/images/P+.png" alt="Card image cap"></a> *@
 
             </div>
 
         </div>
+        </form>
     </div>
+    
 
     <div class="row">
 
@@ -82,7 +90,8 @@
                         <h6 class="card-subtitle mt-3 text-muted"> Prioritário:   @(item.Prioritario ? "Sim" : "Não")</h6>
                         <h6 class="card-subtitle mb-2 mt-3 text-muted">Estado:  @(item.Estado ? "Atendido" : "Não atendido")</h6>
 
-                        <a asp-action="Edit" class="card-link  mt-3" asp-route-id="@item.TicketId">Edit</a> |
+                        <a href="@Url.Action("Atender")" class="btn btn-primary">Atender</a>
+                        @* <form asp-action="Atender"><input type="hidden" asp-for="@item.TicketId" /><div class="form-group">     <input type="submit" value="Save" class="btn btn-primary" /> </div> </form> *@
                         <a asp-action="Details" class="card-link  mt-3" asp-route-id="@item.TicketId">Details</a> |
                         <a asp-action="Delete" class="card-link  mt-3" asp-route-id="@item.TicketId">Delete</a>
                     </div>
