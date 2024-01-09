@@ -11,7 +11,7 @@
         <div class="col-12 col-md-4">
             <form asp-controller="Departments" asp-action="Index" method="get">
                 <div class="input-group">
-                    <input type="search" name="searchTerm" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" value="@ViewData["SearchTerm"]" />
+                    <input type="search" name="searchTerm" class="form-control rounded" placeholder="Pesquisa por Nome" aria-label="Search" aria-describedby="search-addon" value="@ViewData["SearchTerm"]" />
                     <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init>Pesquisa</button>
                     <a asp-controller="Departments" asp-action="Index" class="btn btn-outline-danger">Limpar</a>
                     @if (ViewBag.Message != null)
