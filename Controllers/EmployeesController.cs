@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+    //[Authorize]
     public class EmployeesController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -28,6 +30,8 @@ namespace Supermarket.Controllers
                           Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
         }
         */
+
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index(int page = 1, string employee_name = "")
         {
             var employees = from b in _context.Employee select b;
@@ -107,22 +111,7 @@ namespace Supermarket.Controllers
             }
         }
 
-
-
-        private async Task<bool> IsEmailUnique(string email)
-        {
-            return await _context.Employee.AllAsync(e => e.Employee_Email != email);
-        }
-        private async Task<bool> IsPhoneUnique(string phone)
-        {
-            return await _context.Employee.AllAsync(e => e.Employee_Phone != phone);
-        }
-
-        private async Task<bool> IsNIFUnique(string nif)
-        {
-            return await _context.Employee.AllAsync(e => e.Employee_NIF != nif);
-        }
-
+        
 
         // GET: Employees/Create
         public IActionResult Create()
@@ -135,32 +124,40 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time")] Employee employee)
         {
             if (ModelState.IsValid)
             {
-                if (!await IsEmailUnique(employee.Employee_Email))
+                bool emailExists = await _context.Employee.AnyAsync(b => b.Employee_Email == employee.Employee_Email);
+                bool phoneExists = await _context.Employee.AnyAsync(b => b.Employee_Phone == employee.Employee_Phone);
+                bool nifExists = await _context.Employee.AnyAsync(b => b.Employee_NIF == employee.Employee_NIF);
+                if (emailExists)
                 {
                     ModelState.AddModelError("Employee_Email", "Email is already in use.");
-                    return View(employee);
                 }
 
-                if (!await IsPhoneUnique(employee.Employee_Phone))
+                if (phoneExists)
                 {
                     ModelState.AddModelError("Employee_Phone", "Phone number is already in use.");
-                    return View(employee);
                 }
 
-                if (!await IsNIFUnique(employee.Employee_NIF))
+                if (nifExists)
                 {
                     ModelState.AddModelError("Employee_NIF", "NIF is already in use.");
+                }
+
+                if (emailExists || phoneExists || nifExists)
+                {
                     return View(employee);
                 }
 
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                return View("Details", employee);
             }
+        
             return View(employee);
         }
 
@@ -185,7 +182,8 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,Employee_Time_Bank")] Employee employee)
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Edit(int id, Employee employee)
         {
             if (id != employee.EmployeeId)
             {
@@ -196,8 +194,53 @@ namespace Supermarket.Controllers
             {
                 try
                 {
+                    bool emailExists = await _context.Employee.AnyAsync(b => b.Employee_Email == employee.Employee_Email && b.EmployeeId != employee.EmployeeId);
+                    bool phoneExists = await _context.Employee.AnyAsync(b => b.Employee_Phone == employee.Employee_Phone && b.EmployeeId != employee.EmployeeId);
+                    bool nifExists = await _context.Employee.AnyAsync(b => b.Employee_NIF == employee.Employee_NIF && b.EmployeeId != employee.EmployeeId);
+
+                    if (emailExists)
+                    {
+                        ModelState.AddModelError("Employee_Email", "Email is already in use.");
+                    }
+
+                    if (phoneExists)
+                    {
+                        ModelState.AddModelError("Employee_Phone", "Phone number is already in use.");
+                    }
+
+                    if (nifExists)
+                    {
+                        ModelState.AddModelError("Employee_NIF", "NIF is already in use.");
+                    }
+
+                    // Verifique se é uma ação de edição antes de validar campos obrigatórios
+                    if (employee.EmployeeId > 0)
+                    {
+                        // Se for uma edição, valide os campos obrigatórios
+                        if (employee.Employee_Birth_Date == null)
+                        {
+                            ModelState.AddModelError("Employee_Birth_Date", "Birth date is required.");
+                        }
+
+                        if (employee.Employee_Admission_Date == null)
+                        {
+                            ModelState.AddModelError("Employee_Admission_Date", "Admission date is required.");
+                        }
+
+                        if (string.IsNullOrEmpty(employee.Employee_NIF))
+                        {
+                            ModelState.AddModelError("Employee_NIF", "NIF number is required.");
+                        }
+                    }
+
+                    if (ModelState.ErrorCount > 0)
+                    {
+                        return View(employee);
+                    }
+
                     _context.Update(employee);
                     await _context.SaveChangesAsync();
+                    return View("Details", employee);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -210,7 +253,6 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(employee);
         }
@@ -236,6 +278,7 @@ namespace Supermarket.Controllers
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Employee == null)
