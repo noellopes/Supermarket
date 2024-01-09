@@ -43,7 +43,7 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
-            return View(product);
+             return View(product);
         }
 
         // GET: Products/Create
