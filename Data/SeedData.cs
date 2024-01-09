@@ -14,7 +14,7 @@ namespace Supermarket.Data
         private const string ROLE_ADMIN3 = "Cliente";
         private const string ROLE_STOCK_ADMIN = "Stock Administrator";
         private const string ROLE_STOCK_OP = "Stock Operator";
-
+        private const string ROLE_MANAGER = "Manager";
 
         internal static void Populate(SupermarketDbContext db)
         {
@@ -869,15 +869,15 @@ namespace Supermarket.Data
 
             db.SubsidySetup.AddRange(
 
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) }
+                new SubsidySetup { HorasMinTrabalhadas = 4f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2023, 01, 01, 00, 00, 00, 500) },
+                new SubsidySetup { HorasMinTrabalhadas = 4f, ValorSubsidioDiario = 6, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) }
 
                );
 
             db.SaveChanges();
         }
+
+
 
         private static void PopulateEmployee(SupermarketDbContext db)
         {
@@ -996,8 +996,6 @@ namespace Supermarket.Data
         }
 
 
-
-
         internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager)
         {
             var user1 = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
@@ -1022,7 +1020,11 @@ namespace Supermarket.Data
             var userJoaoStockAdmin = await EnsureUserIsCreatedAsync(userManager!, "joaostockadmin@ipg.pt", "Secret#123");
             var userAndreStockOp = await EnsureUserIsCreatedAsync(userManager!, "andrestockop@ipg.pt", "Secret#123");
             var userIvoStockOp = await EnsureUserIsCreatedAsync(userManager!, "ivostockop@ipg.pt", "Secret#123");
-
+  
+            //Group7----------------------------------------------------------------
+            var user = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
+            var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
+  
             if (!await userManager!.IsInRoleAsync(user1, ROLE_ADMIN))
             {
                 await userManager!.AddToRoleAsync(user1, ROLE_ADMIN);
@@ -1183,6 +1185,11 @@ namespace Supermarket.Data
             {
                 await userManager!.AddToRoleAsync(manager, ROLE_ADMIN1);
             }
+
+            if (!await userManager!.IsInRoleAsync(manager, ROLE_MANAGER))
+            {
+                await userManager!.AddToRoleAsync(manager, ROLE_MANAGER);
+            }
         }
 
 
@@ -1199,6 +1206,7 @@ namespace Supermarket.Data
             }
 
             return user;
+            
         }
 
 
@@ -1209,6 +1217,7 @@ namespace Supermarket.Data
             await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN3);
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_MANAGER);
 
             await EnsureRoleIsCreatedAsync(roleManager!, "Funcionário");
             await EnsureRoleIsCreatedAsync(roleManager!, "Gestor");

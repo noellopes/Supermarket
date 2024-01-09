@@ -12,8 +12,12 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
             <input type="hidden" asp-for="EmployeeId" />
+            <input type="hidden" asp-for="Employee_NIF" />
+            <input type="hidden" asp-for="Employee_Birth_Date" />
+            <input type="hidden" asp-for="Employee_Admission_Date" />
             <div class="form-group">
                 <label asp-for="Employee_Name" class="control-label">Name</label>
                 <input asp-for="Employee_Name" class="form-control" />
