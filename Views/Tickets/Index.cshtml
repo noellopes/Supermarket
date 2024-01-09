@@ -32,36 +32,34 @@
 </div>
 <hr class="mt-4">
 
-
-<form asp-action="Create" method="post">     <!-- Your form fields for creating a new ticket go here -->      <div class="form-group">         <input type="submit" value="Create" class="btn btn-primary" />     </div> </form>
-
-
 @if (Model.Tickets.Any() && Model.SearchDepartment != 0)
 {
    
     <div class="row">
-        <form asp-action="Create" method="post">
+        
         <div class="col card border-dark mt-5 center" style="width: 18rem;">
+            <form asp-action="Create" asp-route-departmentId="@Model.SearchDepartment" method="post">
 
             <div class="card-body">
-                    <input type="image" src="https://pngimg.com/uploads/plus/plus_PNG106.png" alt="Submit" width="128" height="128">
+                    <input type="image" class="mx-auto d-block"  src="https://pngimg.com/uploads/plus/plus_PNG106.png" alt="Submit" width="128" height="128">
                @*  <a asp-action="Create"><img width="128" class="mx-auto d-block" height="128" src="https://pngimg.com/uploads/plus/plus_PNG106.png" alt="Card image cap"></a> *@
 
             </div>
-
+            </form>
         </div>
-        </form>
-        <form asp-action="CreatePriority" method="post">
+        
+        
         <div class="col card border-primary mt-5 pr-5 center" style="width: 18rem;">
+            <form asp-action="CreatePriority" asp-route-departmentId="@Model.SearchDepartment" method="post">
 
             <div class="card-body">
-                    <input type="image" src="~/images/P+.png" alt="Submit" width="128" height="128">
+                    <input type="image" class="mx-auto d-block" src="~/images/P+.png" alt="Submit" width="128" height="128">
                 @* <a asp-action="CreatePriority"><img width="128" class="mx-auto d-block" height="128" src="~/images/P+.png" alt="Card image cap"></a> *@
 
             </div>
-
+            </form>
         </div>
-        </form>
+        
     </div>
     
 

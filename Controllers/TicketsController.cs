@@ -164,7 +164,7 @@ namespace Supermarket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket, int departmentId =0)
         {
            
             var ticketlista = await _context.Tickets.ToListAsync();
@@ -178,7 +178,7 @@ namespace Supermarket.Controllers
                 ticket.NumeroDaSenha = ticketlista.Last().NumeroDaSenha + 1;
                 ticket.Estado = false;
                 ticket.Prioritario = false;
-                ticket.IDDepartments = 1;
+                ticket.IDDepartments = departmentId;
 
                 // Save the new ticket to the database
                 _context.Tickets.Add(ticket);
@@ -189,10 +189,6 @@ namespace Supermarket.Controllers
 
             return View(ticket);
         }
-
-
-
-
 
         // GET: TicketsPriority/Create
         public IActionResult CreatePriority()
@@ -205,7 +201,7 @@ namespace Supermarket.Controllers
   
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePriority([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket)
+        public async Task<IActionResult> CreatePriority([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket, int departmentId = 0)
         {
 
             var ticketlista = await _context.Tickets.ToListAsync();
@@ -220,7 +216,7 @@ namespace Supermarket.Controllers
                 ticket.NumeroDaSenha = ticketlista.Last().NumeroDaSenha + 1;
                 ticket.Estado = false;
                 ticket.Prioritario = true;
-                ticket.IDDepartments = 1;
+                ticket.IDDepartments = departmentId;
 
                 // Save the new ticket to the database
                 _context.Tickets.Add(ticket);
