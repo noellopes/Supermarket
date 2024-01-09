@@ -5,13 +5,20 @@
     ViewData["Title"] = "Departamentos";
     var pageSizes = new List<int> { 2, 8, 10,12,int.MaxValue };
 }
+@{
+    
+    var isAdmin = User.IsInRole("Gestor");
+}
+
+@if (isAdmin)
+{
 <h1>Departamentos</h1>
 <div class="containerPesquisa">
     <div class="row">
         <div class="col-12 col-md-4">
             <form asp-controller="Departments" asp-action="Index" method="get">
                 <div class="input-group">
-                    <input type="search" name="searchTerm" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" value="@ViewData["SearchTerm"]" />
+                    <input type="search" name="searchTerm" class="form-control rounded" placeholder="Pesquisa por Nome" aria-label="Search" aria-describedby="search-addon" value="@ViewData["SearchTerm"]" />
                     <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init>Pesquisa</button>
                     <a asp-controller="Departments" asp-action="Index" class="btn btn-outline-danger">Limpar</a>
                     @if (ViewBag.Message != null)
@@ -58,6 +65,8 @@
     </thead>
 
     <tbody>
+        @if (Model.Departments.Any())
+        {
         @foreach (var item in Model.Departments)
         {
         <tr>
@@ -118,7 +127,16 @@
                 </div>
             </td>
         </tr>
-}
+        }        
+        }
+        else
+        {
+        <tr>
+            <td colspan="7">
+                <p class="text-center">Nenhum departamento encontrado.</p>
+            </td>
+        </tr>
+        }
     </tbody>
 </table>
 <nav aria-label="Page navigation">
@@ -158,3 +176,8 @@
       </div>
     </div>
 </nav>
+}
+else
+{
+    <p>Não tem permissão para visualizar esta página.</p>
+}

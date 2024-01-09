@@ -4,6 +4,7 @@ using System.Drawing.Printing;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace Supermarket.Controllers
         {
             _context = context;
         }
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0 )
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
@@ -79,6 +81,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Schedules/Details/5
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Schedule == null)
@@ -108,6 +111,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Schedules/Create
+        [Authorize(Roles = "Gestor")]
         public IActionResult Create()
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
@@ -119,6 +123,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Create([Bind("ScheduleId,StartDate,EndDate,DailyStartTime,DailyFinishTime,IDDepartments")] Schedule schedule)
         {
 
@@ -135,6 +140,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Schedules/Edit/5
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(int? id)
         {
 
@@ -158,6 +164,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,StartDate,EndDate,DailyStartTime,DailyFinishTime,IDDepartments")] Schedule schedule)
         {
             if (id != schedule.ScheduleId)
@@ -189,6 +196,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Schedules/Delete/5
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Schedule == null)
@@ -209,6 +217,7 @@ namespace Supermarket.Controllers
         // POST: Schedules/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Schedule == null)
@@ -230,6 +239,7 @@ namespace Supermarket.Controllers
             return (_context.Schedule?.Any(e => e.ScheduleId == id)).GetValueOrDefault();
         }
 
+        [Authorize(Roles = "Gestor")]
 
         public async Task<IActionResult> Afluencias(int procuraLimiteAfluencia = 0,DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null )
         {
