@@ -60,6 +60,17 @@
                                 </div>
                             </div>
                         </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Grupo 5
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" asp-controller="Departments" asp-action="Index">Departments</a></li>
+                                <li><a class="dropdown-item" asp-controller="Schedules" asp-action="Index">Schedules</a></li>
+                                <li><a class="dropdown-item" asp-controller="Tickets" asp-action="Index">Tickets</a></li>
+                            </ul>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

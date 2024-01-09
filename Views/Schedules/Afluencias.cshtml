@@ -1,0 +1,87 @@
+﻿@using Supermarket.Models
+@model List<AfluenciasViewModel>
+@{
+    ViewData["Title"] = "Afluencias";
+}
+
+<h1>Afluencias</h1>
+
+
+
+<form asp-action="Afluencias" method="get">
+    <p><strong>Search dates</strong></p>
+    <div class="row">
+        <div class="col-4">
+            <label for="dataEmissao" class="control-label">Starting date</label>
+            <input type="datetime-local" class="form-control" name="procuraDataInicial"  />
+        </div>
+        <div class="col-4">
+            <label for="dataEmissao" class="control-label">Final date</label>
+            <input type="datetime-local" class="form-control" name="procuraDataFinal"  />
+        </div>
+    </div>
+    <div class="col-4">
+        <label class="control-label">Minimum ticket quantity to consider as spike limit</label>
+        <input type="number" class="form-control" name="procuraLimiteAfluencia"  />
+    </div>
+
+    <div class="mt-3">
+        <input class="btn btn-primary" type="submit" value="Search" />
+        <a class="btn btn-secondary" asp-action="Afluencias">Cancel</a>
+    </div>
+</form>
+
+@if (ViewData["NoDataMessage"] != null)
+{
+    <h3 class="mt-5">@ViewData["NoDataMessage"]</h3>
+}
+else {
+<div class="accordion   mt-5" id="accordionExample">
+    @for (int i = 0; i < Model.Count; i++)
+{
+        
+        var item = Model[i];
+        var accordionId = $"accordion{i}";
+
+       
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="h@accordionId">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#@accordionId" aria-expanded="true" aria-controls="@accordionId">
+                    <h1>  @item.Department.NameDepartments
+                </button>
+            </h2>
+            <div id="@accordionId" class="accordion-collapse collapse show" aria-labelledby="h@accordionId" >
+                @foreach (var ticket in item.Tickets)
+                {
+                    <div class="accordion-body">
+                        #@ticket.NumeroDaSenha | 
+                            
+                            @if (ticket.IDDepartments == 0)
+                            {
+                                <strong> Sem departamento </strong>
+                            }
+                            else
+                            {
+                                <strong> @ticket.Departments.NameDepartments </strong>
+
+                            }
+
+                        Emitido em: @ticket.DataEmissao  | Estado:  @(ticket.Estado ? "Atendido" : "Não atendido") | Atendido em: @ticket.DataAtendimento
+
+                        
+
+                    </div>
+                   
+                }
+                
+            </div>
+        </div>
+}
+
+    
+</div>
+}
+
+
+<a class="btn btn-secondary mt-5" asp-area="Schedules" asp-action="Index">Return</a>

@@ -9,14 +9,15 @@
     <div class="card-body">
         <form asp-action="Index" method="get">
             <p><strong>Search</strong></p>
+
+            <label for="deliverydate" class="control-label">Delivery Date</label>
+            <input name="deliverydate" type="date" class="form-control" value="@Model.SearchDeliveryDate?.ToString("yyyy-MM-dd")" />
+
             <label for="product" class="control-label">Product</label>
             <input name="product" type="search" class="form-control" value="@Model.SearchProduct" />
 
             <label for="supplier" class="control-label">Supplier</label>
             <input name="supplier" type="search" class="form-control" value="@Model.SearchSupplier" />
-
-            @* <label for="deliverydate" class="control-label">Delivery Date</label>
-            <input name="deliverydate" type="search" class="form-control" value="@Model.SearchDate" /> *@
 
             <div class="mt-3">
                 <input class="btn btn-primary" type="submit" value="Search" />
@@ -28,7 +29,8 @@
 
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Add New Issue</a>
+    <a asp-action="Create" class="btn btn-primary">Insert New Purchase</a>
+    <a href="Purchases/CloseToExpire" class="btn btn-secondary">See items next to expiration</a>
 </p>
 <table class="table">
     <thead>
@@ -77,9 +79,18 @@
             <td>
                 @Html.DisplayFor(modelItem => item.BatchNumber)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpirationDate)
-            </td>
+            @if (item.ProductExpired)
+            {
+                <th class="bg-danger">
+                    @Html.DisplayFor(modelItem => item.ExpirationDate)
+                </th>
+            }
+            else
+            {
+                <th>
+                    @Html.DisplayFor(modelItem => item.ExpirationDate)
+                </th>
+            }
             <td>
                     @if (User.IsInRole("Edit_Del_Reports"))
                     {

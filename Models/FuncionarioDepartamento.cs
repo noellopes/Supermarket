@@ -14,7 +14,7 @@ namespace Supermarket.Models
         public string NivelAcesso { get; set; } = "";
 
         //Chave estrangeiras
-        public Departments Departamento { get; set; }
+        public Department Departamento { get; set; }
 
         public ICollection<Employee> Funcionario { get; set; } 
 

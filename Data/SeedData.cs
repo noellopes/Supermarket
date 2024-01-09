@@ -1,15 +1,24 @@
- 
+
 using Microsoft.AspNetCore.Identity;
 using Supermarket.Models;
+using System;
 
-namespace Supermarket.Data {
-    public class SeedData {
+namespace Supermarket.Data
+{
+    public class SeedData
+    {
         private const string ROLE_ADMIN = "Administrator";
         private const string ROLE_CLIENT = "Client";
         private const string ROLE_ADMIN1 = "Funcionário";
         private const string ROLE_ADMIN2 = "Gestor";
+        private const string ROLE_ADMIN3 = "Cliente";
+        private const string ROLE_STOCK_ADMIN = "Stock Administrator";
+        private const string ROLE_STOCK_OP = "Stock Operator";
 
-        internal static void Populate(SupermarketDbContext db) {
+
+        internal static void Populate(SupermarketDbContext db)
+        {
+            PopulateSupplier(db);
             PopulateBrand(db);
             PopulateCategory(db);
             PopulateProduct(db);
@@ -25,26 +34,88 @@ namespace Supermarket.Data {
             PopulateClients(db);
             PopulateClientCard(db);
             PopulateProductDiscounts(db);
+            PopulateTakeAwayCategories(db);
+            PopulateTakeAwayProducts(db);
+            PopulateCustomer(db);
+            //PopulateEmployees(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
             PopulateMealCards(db);
             PopulateCardMovements(db);
             PopulateEmployeeEvaluations(db);
-            PopulateSupplier(db);
             PopulateType(db);
             PopulateIssueType(db);
             PopulatePurchase(db);
             PopulateIssue(db);
-            PopulateExpProduct(db);
+            PopulateAlerts(db);
+            PopulateDepartment(db);
+            PopulateSchedules(db);
+            PopulateTickets(db);
+
+        }
+        private static void PopulateDepartment(SupermarketDbContext db)
+        {
+            if (db.Departments.Any()) return;
+
+            db.Departments.AddRange(
+                new Department { NameDepartments = "Talho", DescriptionDepartments = "Servir carne fresca", StateDepartments = true, SkillsDepartments = "A1", QuatDepMed = 10 },
+                new Department { NameDepartments = "Peixaria", DescriptionDepartments = "Servir peixe Fresco", StateDepartments = true, SkillsDepartments = "B1", QuatDepMed = 5 },
+                new Department { NameDepartments = "Take-Way", DescriptionDepartments = "Servir comida Pronta", StateDepartments = false, SkillsDepartments = "Q1", QuatDepMed = 15 },
+                new Department { NameDepartments = "Armazem", DescriptionDepartments = "Repor parteleiras,", StateDepartments = true, SkillsDepartments = "R1", QuatDepMed = 1 },
+                new Department { NameDepartments = "Garrafeira", DescriptionDepartments = "Bebidas acoolicas", StateDepartments = false, SkillsDepartments = "R1", QuatDepMed = 1 },
+                new Department { NameDepartments = "Congelados", DescriptionDepartments = "Produtos congelados", StateDepartments = false, SkillsDepartments = "R1", QuatDepMed = 1 },
+                new Department { NameDepartments = "Legume e frutas", DescriptionDepartments = "Produtos Frescos", StateDepartments = true, SkillsDepartments = "R1", QuatDepMed = 1 },
+                new Department { NameDepartments = "Padaria e Pastelaria", DescriptionDepartments = "Servir Pão", StateDepartments = false, SkillsDepartments = "S1", QuatDepMed = 15 }
+                );
+            db.SaveChanges();
+        }
+        private static void PopulateSchedules(SupermarketDbContext db)
+        {
+            if (db.Schedule.Any()) return;
+
+            db.Schedule.AddRange(
+                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2028, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 18, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Peixaria").Select(a => a.IDDepartments).FirstOrDefault() },
+                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2025, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 15, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Talho").Select(a => a.IDDepartments).FirstOrDefault() },
+                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2028, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 10, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Take-Way").Select(a => a.IDDepartments).FirstOrDefault() },
+                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2029, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 23, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Congelados").Select(a => a.IDDepartments).FirstOrDefault() },
+                    new Schedule { StartDate = DateTime.Now, EndDate = null, DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 22, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Armazem").Select(a => a.IDDepartments).FirstOrDefault() }
+                );
+
+            db.SaveChanges();
+        }
+        private static void PopulateTickets(SupermarketDbContext db)
+        {
+            if (db.Tickets.Any()) return;
+            // Instantiate random number generator using system-supplied value as seed.
+            var rand = new Random();
+
+            for (int i = 0; i < 200; i++)
+            {
+                var randomBool = rand.Next(2) == 1;
+                db.Add(
+                    new Ticket
+                    {
+                        DataEmissao = DateTime.Now,
+                        DataAtendimento = DateTime.Now.AddMinutes(rand.Next(5, 20)),
+                        NumeroDaSenha = i,
+                        Estado = true,
+                        Prioritario = randomBool,
+                        IDDepartments = rand.Next(1, db.Departments.Count())
+                    }
+                    );
+            }
+
+
+            db.SaveChanges();
         }
 
-        private static void PopulateBrand(SupermarketDbContext db) {
+        private static void PopulateBrand(SupermarketDbContext db)
+        {
+
             if (db.Brand.Any()) return;
 
             db.Brand.AddRange(
-                    new Brand { Name = "Nivea" },
-                    new Brand { Name = "Frankfurt" },
-                    new Brand { Name = "Lays" },
+                    
                     new Brand { Name = "Coca-Cola" },
                     new Brand { Name = "Colgate" },
                     new Brand { Name = "Dove" },
@@ -57,13 +128,20 @@ namespace Supermarket.Data {
                     new Brand { Name = "Pampers" },
                     new Brand { Name = "Procter & Gamble" },
                     new Brand { Name = "Quaker" },
-                    new Brand { Name = "Tide" }
+                    new Brand { Name = "Tide" },
+                    new Brand { Name = "Nivea" },
+                    new Brand { Name = "Frankfurt" },
+                    new Brand { Name = "Lays" },
+                    new Brand { Name = "Monopoly" },
+                    new Brand { Name = "Becken" }
                 );
 
             db.SaveChanges();
         }
 
-        private static void PopulateCategory(SupermarketDbContext db) {
+        private static void PopulateCategory(SupermarketDbContext db)
+        {
+
             if (db.Category.Any()) return;
 
             db.Category.AddRange(
@@ -83,106 +161,155 @@ namespace Supermarket.Data {
                     new Category { Name = "Office and School Supplies" },
                     new Category { Name = "Personal Care" },
                     new Category { Name = "Pet Supplies" },
-                    new Category { Name = "Snacks" }
+                    new Category { Name = "Snacks" },
+                    new Category { Name = "Games" },
+                    new Category { Name = "House" }
+
                 );
 
             db.SaveChanges();
         }
 
-        private static void PopulateProduct(SupermarketDbContext db) {
+
+        private static void PopulateProduct(SupermarketDbContext db)
+        {
+            DateTime specificLastCountDate = new DateTime(2024, 1, 2);
+            DateTime specificLastCountDate1 = new DateTime(2023, 12, 29);
+            DateTime specificLastCountDate2 = new DateTime(2024, 1, 5);
+            DateTime specificLastCountDate3 = new DateTime(2023, 3, 1);
+
             if (db.Product.Any()) return;
 
             db.Product.AddRange(
-                    new Product {
+                    new Product
+                    {
                         Category = db.Category.FirstOrDefault(a => a.Name == "Hygiene")!,
                         Brand = db.Brand.FirstOrDefault(a => a.Name == "Nivea")!,
                         Name = "Cream",
-                        Description = "Skin cream.",
+                        Description = "Skin cream",
                         TotalQuantity = 0,
                         MinimumQuantity = 200,
                         UnitPrice = 5.99,
-                        Status = "Unavailable"
+                        Status = "Unavailable",
+                        LastCountDate = specificLastCountDate1
                     },
-                    new Product {
+
+                    new Product
+                    {
+                        Category = db.Category.FirstOrDefault(a => a.Name == "House")!,
+                        Brand = db.Brand.FirstOrDefault(a => a.Name == "Becken")!,
+                        Name = "Deep fryer",
+                        Description = "3.5L",
+                        TotalQuantity = 31,
+                        MinimumQuantity = 10,
+                        UnitPrice = 88.99,
+                        Status = "Available",
+                        LastCountDate = specificLastCountDate2
+                    },
+                    new Product
+                    {
+                        Category = db.Category.FirstOrDefault(a => a.Name == "Games")!,
+                        Brand = db.Brand.FirstOrDefault(a => a.Name == "Monopoly")!,
+                        Name = "Monopoly Chance",
+                        Description = "Family Game",
+                        TotalQuantity = 26,
+                        MinimumQuantity = 10,
+                        UnitPrice = 25.99,
+                        Status = "Available",
+                        LastCountDate = specificLastCountDate
+                    },
+                    new Product
+                    {
                         Category = db.Category.FirstOrDefault(a => a.Name == "Canned")!,
                         Brand = db.Brand.FirstOrDefault(a => a.Name == "Frankfurt")!,
                         Name = "Sausages",
-                        Description = "German Sausages.",
+                        Description = "German Sausages",
                         TotalQuantity = 150,
                         MinimumQuantity = 50,
                         UnitPrice = 1.49,
-                        Status = "Available"
+                        Status = "Available",
+                        LastCountDate = specificLastCountDate3
                     },
-                    new Product {
+                    new Product
+                    {
                         Category = db.Category.FirstOrDefault(a => a.Name == "Canned")!,
                         Brand = db.Brand.FirstOrDefault(a => a.Name == "Lays")!,
                         Name = "Chips",
-                        Description = "Ham-flavored chips.",
+                        Description = "Ham-flavored chips",
                         TotalQuantity = 75,
                         MinimumQuantity = 50,
                         UnitPrice = 2.29,
-                        Status = "Available"
+                        Status = "Available",
+                        LastCountDate = specificLastCountDate2
                     }
                 );
 
             db.SaveChanges();
         }
 
-        private static void PopulateStore(SupermarketDbContext db) {
+        private static void PopulateStore(SupermarketDbContext db)
+        {
             if (db.Store.Any()) return;
 
             db.Store.AddRange(
-                    new Store {
+                    new Store
+                    {
                         Name = "Store Guarda",
                         Adress = "Street Number 1"
-                    },
-                    new Store {
-                        Name = "Store Algarve",
-                        Adress = "Street Number 2"
-                    },
-                    new Store {
-                        Name = "Store Paris",
-                        Adress = "Street Number 3"
                     }
                 );
 
             db.SaveChanges();
         }
 
-        private static void PopulateHallway(SupermarketDbContext db) {
+        private static void PopulateHallway(SupermarketDbContext db)
+        {
             if (db.Hallway.Any()) return;
 
             db.Hallway.AddRange(
-                    new Hallway {
+                    new Hallway
+                    {
                         Description = "Hallway A1",
                         Store = db.Store.FirstOrDefault(a => a.Name == "Store Guarda")!,
                     },
-                    new Hallway {
+                    new Hallway
+                    {
                         Description = "Hallway B1",
-                        Store = db.Store.FirstOrDefault(a => a.Name == "Store Algarve")!,
+                        Store = db.Store.FirstOrDefault(a => a.Name == "Store Guarda")!,
                     },
-                    new Hallway {
+                    new Hallway
+                    {
                         Description = "Hallway C3",
-                        Store = db.Store.FirstOrDefault(a => a.Name == "Store Paris")!,
+                        Store = db.Store.FirstOrDefault(a => a.Name == "Store Guarda")!,
                     }
                 );
 
             db.SaveChanges();
         }
 
-        private static void PopulateShelf(SupermarketDbContext db) {
+        private static void PopulateShelf(SupermarketDbContext db)
+        {
             if (db.Shelf.Any()) return;
 
             db.Shelf.AddRange(
-                    new Shelf {
+                    new Shelf
+                    {
                         Name = "Shelft 11",
                         Hallway = db.Hallway.FirstOrDefault(a => a.Description == "Hallway A1")!,
                     },
-                    new Shelf {
+
+                     new Shelf
+                     {
+                         Name = "Shelft 21",
+                         Hallway = db.Hallway.FirstOrDefault(a => a.Description == "Hallway A1")!,
+                     },
+                    new Shelf
+                    {
                         Name = "Shelft 12",
                         Hallway = db.Hallway.FirstOrDefault(a => a.Description == "Hallway B1")!,
                     },
-                    new Shelf {
+                    new Shelf
+                    {
                         Name = "Shelft 25",
                         Hallway = db.Hallway.FirstOrDefault(a => a.Description == "Hallway C3")!,
                     }
@@ -191,24 +318,74 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        private static void PopulateShelft_ProductExhibition(SupermarketDbContext db) {
+        private static void PopulateSupplier(SupermarketDbContext db)
+        {
+            if (db.Suppliers.Any()) return;
+
+            db.Suppliers.AddRange(
+                new Models.Supplier { Name = "Global Foods Ltd" },
+                new Models.Supplier { Name = "Fresh Harvest Farms" },
+                new Models.Supplier { Name = "Pacific Seafood Co" },
+                new Models.Supplier { Name = "Quality Meats Inc" },
+                new Models.Supplier { Name = "Green Valley Grocers" },
+                new Models.Supplier { Name = "Sunrise Bakeries" },
+                new Models.Supplier { Name = "Golden Beverages LLC" },
+                new Models.Supplier { Name = "Nature's Best Produce" },
+                new Models.Supplier { Name = "Sweet Treats Confections" },
+                new Models.Supplier { Name = "Sunny Farms Dairy" },
+                new Models.Supplier { Name = "Premium Pet Supplies" },
+                new Models.Supplier { Name = "Tech Gadgets Distributors" },
+                new Models.Supplier { Name = "Office Essentials Co" },
+                new Models.Supplier { Name = "Home Goods Wholesale" }
+            );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulateShelft_ProductExhibition(SupermarketDbContext db)
+        {
             if (db.Shelft_ProductExhibition.Any()) return;
 
             db.Shelft_ProductExhibition.AddRange(
-                    new Shelft_ProductExhibition {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream.")!,
+
+                    new Shelft_ProductExhibition
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream")!,
+
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
                         Quantity = 0,
                         MinimumQuantity = 20
                     },
-                    new Shelft_ProductExhibition {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
+
+                     new Shelft_ProductExhibition
+                     {
+                         Product = db.Product.FirstOrDefault(a => a.Name == "Deep fryer" && a.Description == "3.5L")!,
+
+                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
+                         Quantity = 0,
+                         MinimumQuantity = 20
+                     },
+
+                    new Shelft_ProductExhibition
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream")!,
+                        Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 12")!,
+                        Quantity = 0,
+                        MinimumQuantity = 20
+                    },
+                    new Shelft_ProductExhibition
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Monopoly Chance" && a.Description == "Family Game")!,
+
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
-                        Quantity = 30,
+                        Quantity = 11,
                         MinimumQuantity = 10
                     },
-                    new Shelft_ProductExhibition {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
+
+                    new Shelft_ProductExhibition
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips")!,
+
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
                         Quantity = 15,
                         MinimumQuantity = 10
@@ -218,19 +395,23 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        private static void PopulateWarehouse(SupermarketDbContext db) {
+        private static void PopulateWarehouse(SupermarketDbContext db)
+        {
             if (db.Warehouse.Any()) return;
 
             db.Warehouse.AddRange(
-                    new Warehouse {
+                    new Warehouse
+                    {
                         Name = "Warehouse Guarda",
                         Adress = "Street Number 10"
                     },
-                    new Warehouse {
+                    new Warehouse
+                    {
                         Name = "Warehouse Lisboa",
                         Adress = "Street Number 20"
                     },
-                    new Warehouse {
+                    new Warehouse
+                    {
                         Name = "Warehouse Madrid",
                         Adress = "Street Number 30"
                     }
@@ -239,19 +420,24 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        private static void PopulateWarehouseSection(SupermarketDbContext db) {
+        private static void PopulateWarehouseSection(SupermarketDbContext db)
+        {
+
             if (db.WarehouseSection.Any()) return;
 
             db.WarehouseSection.AddRange(
-                    new WarehouseSection {
+                    new WarehouseSection
+                    {
                         Description = "Warehouse Section A1",
                         Warehouse = db.Warehouse.FirstOrDefault(a => a.Name == "Warehouse Guarda")!,
                     },
-                    new WarehouseSection {
+                    new WarehouseSection
+                    {
                         Description = "Warehouse Section B4",
                         Warehouse = db.Warehouse.FirstOrDefault(a => a.Name == "Warehouse Lisboa")!,
                     },
-                    new WarehouseSection {
+                    new WarehouseSection
+                    {
                         Description = "Warehouse Section D6",
                         Warehouse = db.Warehouse.FirstOrDefault(a => a.Name == "Warehouse Madrid")!,
                     }
@@ -260,56 +446,125 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        private static void PopulateWarehouseSection_Product(SupermarketDbContext db) {
+        private static void PopulateWarehouseSection_Product(SupermarketDbContext db)
+        {
             if (db.WarehouseSection_Product.Any()) return;
-
+            
             db.WarehouseSection_Product.AddRange(
-                    new WarehouseSection_Product {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream.")!,
+                    new WarehouseSection_Product
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream")!,
+
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
-                        Quantity = 0,
-                        ReservedQuantity = 0
+                        BatchNumber = "D45",
+                        ExpirationDate = DateTime.Now,
+                        Quantity = 120,
+                        ReservedQuantity = 0,
+                        Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
                     },
-                    new WarehouseSection_Product {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
+
+                     new WarehouseSection_Product
+                     {
+                         Product = db.Product.FirstOrDefault(a => a.Name == "Monopoly Chance" && a.Description == "Family Game")!,
+                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
+                         BatchNumber = "R45",
+                         ExpirationDate = DateTime.Now,
+                         Quantity = 10,
+                         ReservedQuantity = 3,
+                         Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
+                     },
+
+                      new WarehouseSection_Product
+                      {
+                          Product = db.Product.FirstOrDefault(a => a.Name == "Deep fryer" && a.Description == "3.5L")!,
+                          WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
+                          BatchNumber = "R75",
+                          ExpirationDate = DateTime.Now,
+                          Quantity = 10,
+                          ReservedQuantity = 3,
+                          Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
+                      },
+
+                     new WarehouseSection_Product
+                     {
+                         Product = db.Product.FirstOrDefault(a => a.Name == "Monopoly Chance" && a.Description == "Family Game")!,
+                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
+                         BatchNumber = "Q45",
+                         ExpirationDate = DateTime.Now,
+                         Quantity = 5,
+                         ReservedQuantity = 1,
+                         Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
+                     },
+
+                     new WarehouseSection_Product
+                     {
+                         Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips")!,
+                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
+                         BatchNumber = "C65",
+                         ExpirationDate = DateTime.Now,
+                         Quantity = 88,
+                         ReservedQuantity = 0,
+                         Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
+                     },
+
+
+                    new WarehouseSection_Product
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages")!,
+
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section B4")!,
+                        BatchNumber = "B65",
+                        ExpirationDate = DateTime.Now,
                         Quantity = 30,
-                        ReservedQuantity = 10
+                        ReservedQuantity = 10,
+                        Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
                     },
-                    new WarehouseSection_Product {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
+                    new WarehouseSection_Product
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips")!,
+
+
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section D6")!,
+                        BatchNumber = "A45",
+                        ExpirationDate = DateTime.Now,
                         Quantity = 15,
-                        ReservedQuantity = 15
+                        ReservedQuantity = 15,
+
+                        Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
                     }
                 );
 
             db.SaveChanges();
         }
 
-        private static void PopulateReduceProduct(SupermarketDbContext db) {
+
+        private static void PopulateReduceProduct(SupermarketDbContext db)
+        {
             if (db.ReduceProduct.Any()) return;
 
             db.ReduceProduct.AddRange(
-                    new ReduceProduct {
+                    new ReduceProduct
+                    {
                         Reason = "Product past its expiration date",
                         Status = "Pending",
                         Quantity = 10,
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages")!,
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section B4")!
                     },
-                    new ReduceProduct {
+                    new ReduceProduct
+                    {
                         Reason = "Product past its expiration date",
                         Status = "Pending",
                         Quantity = 10,
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages")!,
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
                     },
-                    new ReduceProduct {
+                    new ReduceProduct
+                    {
                         Reason = "Product past its expiration date",
                         Status = "Pending",
                         Quantity = 10,
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips")!,
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section D6")!
                     }
                 );
@@ -317,10 +572,78 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        private static void PopulateEmployees(SupermarketDbContext db) {
+        private static void PopulateAlerts(SupermarketDbContext db)
+        {
+            DateTime specificDate = new DateTime(2023, 1, 2);
+
+            if (db.Alert.Any()) return;
+
+            db.Alert.AddRange(
+                    new Alert
+                    {
+                        Role = "Stock Operator",
+                        Date = specificDate,
+                        Description = "Prepare Order"
+                    },
+                    new Alert
+                    {
+                        Role = "Stock Admin",
+                        Date = specificDate,
+                        Description = "Reduce Product"
+                    },
+                    new Alert
+                    {
+                        Role = "Stock Admin",
+                        Date = specificDate,
+                        Description = "Reduce Product"
+                    }
+                );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulateCustomer(SupermarketDbContext db)
+        {
+            if (db.Customers.Any()) return;
+
+            db.Customers.AddRange(
+                    new Customer
+                    {
+                        CustomerAddress = "Guarda/Portugal",
+                        CustomerEmail = "omeerabay@gmail.com",
+                        CustomerName = "Omer",
+                        CustomerPhone = "+905537466968",
+                        Password = "omerabay"
+                    },
+                    new Customer
+                    {
+                        CustomerAddress = "Guarda/Portugal",
+                        CustomerEmail = "yusuf@gmail.com",
+                        CustomerName = "Yusuf",
+                        CustomerPhone = "+905537466968",
+                        Password = "yusuftasci"
+                    },
+                    new Customer
+                    {
+                        CustomerAddress = "Guarda/Portugal",
+                        CustomerEmail = "melike@gmail.com",
+                        CustomerName = "Melike",
+                        CustomerPhone = "+905537466968",
+                        Password = "melikegokdemir"
+                    }
+                );
+
+            db.SaveChanges();
+
+        }
+
+
+        private static void PopulateEmployees(SupermarketDbContext db)
+        {
             if (db.Employee.Any()) return;
 
-           // db.Employee.AddRange(
+            // db.Employee.AddRange(
+
             // new Employee
             //        Employee_Address= "Rua das Oliveiras",
             //        Employee_Admission_Date= DateTime.Now,
@@ -373,34 +696,46 @@ namespace Supermarket.Data {
             //db.SaveChanges();
         }
 
-        private static void PopulateEmployeeEvaluations(SupermarketDbContext db) {
+
+        private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
+        {
             if (db.EmployeeEvaluation.Any()) return;
 
             db.EmployeeEvaluation.AddRange(
-                new EmployeeEvaluation {
+                new EmployeeEvaluation
+                {
+
                     Description = "Atendimento excelente!",
                     EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 8,
                 },
-                new EmployeeEvaluation {
+
+                new EmployeeEvaluation
+                {
+
                     Description = "Muito rude...",
                     EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 3,
                 },
-                new EmployeeEvaluation {
+
+                new EmployeeEvaluation
+                {
+
                     Description = "Adorei. Muito prestativo!",
                     EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 10,
                 }
             );
 
-            for (int i = 1; i<101; i++)
+
+            for (int i = 1; i < 101; i++)
             {
                 db.EmployeeEvaluation.Add(new EmployeeEvaluation
                 {
-                    Description = "avaliacao "+ i,
+                    Description = "avaliacao " + i,
                     EmployeeId = db.Employee.First().EmployeeId,
-                    GradeNumber = (i%10) +1,
+                    GradeNumber = (i % 10) + 1,
+
                 });
             }
 
@@ -410,43 +745,58 @@ namespace Supermarket.Data {
         private static void PopulateFuncao(SupermarketDbContext db)
         {
             if (db.Funcao.Any()) return;
-            
+
+
             for (int i = 0; i < 240; i++)
             {
-                db.Funcao.Add(new Funcao { 
-                    NomeFuncao = "Funcao " + i, DescricaoFuncao  = "Descricao " + i
+                db.Funcao.Add(new Funcao
+                {
+                    NomeFuncao = "Funcao " + i,
+                    DescricaoFuncao = "Descricao " + i
                 });
             }
             db.SaveChanges();
-            
+
         }
 
-        private static void PopulateClients(SupermarketDbContext db) {
+        private static void PopulateClients(SupermarketDbContext db)
+        {
             if (db.Client.Any()) return;
 
             db.Client.AddRange(
-                new Client {
+                new Client
+                {
+
                     ClientName = "João",
                     ClientAdress = "Largo do Poço",
                     ClientEmail = "joão@gmail.com",
                     ClientBirth = new DateTime(1980, 10, 20),
                     Estado = true
                 },
-                new Client {
+
+                new Client
+                {
+
                     ClientName = "Rui",
                     ClientAdress = "Rua do Penedo",
                     ClientEmail = "rui@sapo.com",
                     ClientBirth = new DateTime(1970, 2, 12),
                     Estado = true
                 },
-                new Client {
+
+                new Client
+                {
+
                     ClientName = "Jacinta",
                     ClientAdress = "Fundo da Vila",
                     ClientEmail = "jacintona@iol.com",
                     ClientBirth = new DateTime(2002, 7, 22),
                     Estado = true
                 },
-                new Client {
+
+                new Client
+                {
+
                     ClientName = "Hugo",
                     ClientAdress = "Casal do Rei",
                     ClientEmail = "hugo@outlook.com",
@@ -457,23 +807,33 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        private static void PopulateClientCard(SupermarketDbContext db) {
+
+        private static void PopulateClientCard(SupermarketDbContext db)
+        {
             if (db.ClientCard.Any()) return;
 
             db.ClientCard.AddRange(
-                new ClientCard {
+                new ClientCard
+                {
+
                     Client = db.Client.FirstOrDefault(b => b.ClientName == "Hugo")!,
                     ClientCardNumber = 123456,
                     Balance = 0,
                     Estado = true
                 },
-                new ClientCard {
+
+                new ClientCard
+                {
+
                     Client = db.Client.FirstOrDefault(b => b.ClientName == "Jacinta")!,
                     ClientCardNumber = 987654,
                     Balance = 0,
                     Estado = true
                 },
-                new ClientCard {
+
+                new ClientCard
+                {
+
                     Client = db.Client.FirstOrDefault(b => b.ClientName == "Rui")!,
                     ClientCardNumber = 111223,
                     Balance = 0,
@@ -484,11 +844,15 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        private static void PopulateProductDiscounts(SupermarketDbContext db) {
+
+        private static void PopulateProductDiscounts(SupermarketDbContext db)
+        {
             if (db.ProductDiscount.Any()) return;
 
             db.ProductDiscount.AddRange(
-                new ProductDiscount {
+                new ProductDiscount
+                {
+
                     Product = db.Product.FirstOrDefault(b => b.Name == "Cream")!,
                     ClientCard = db.ClientCard.FirstOrDefault(b => b.ClientCardNumber == 123456)!,
                     Value = 10,
@@ -554,7 +918,7 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        
+
         private static void PopulateCardMovements(SupermarketDbContext db)
         {
             if (db.CardMovement.Any()) return;
@@ -583,7 +947,56 @@ namespace Supermarket.Data {
 
             db.SaveChanges();
         }
-        
+
+        private static void PopulateTakeAwayCategories(SupermarketDbContext db)
+        {
+            if (db.TakeAwayCategory.Any()) return;
+
+            db.TakeAwayCategory.AddRange(
+                    new TakeAwayCategory
+                    {
+                        //Id = 1,
+                        Name = "Soups",
+                    },
+                    new TakeAwayCategory
+                    {
+                        //Id= 2,
+                        Name = "Burgers"
+                    },
+                    new TakeAwayCategory
+                    {
+                        //Id = 3,
+                        Name = "Breakfast"
+                    },
+                    new TakeAwayCategory
+                    {
+                        //Id = 4,
+                        Name = "Beverages"
+                    }
+                );
+            db.SaveChanges();
+        }
+        private static void PopulateTakeAwayProducts(SupermarketDbContext db)
+        {
+            if (db.TakeAwayProduct.Any()) return;
+
+            db.TakeAwayProduct.AddRange(
+                    new TakeAwayProduct
+                    {
+                        ProductName = "Coca Cola",
+
+                        Category = db.TakeAwayCategory.FirstOrDefault(x => x.Name == "Beverages")!,
+
+                        Price = 2,
+                        Quantity = 20,
+                        EstimatedPreparationTimeAsMinutes = 1,
+                    }
+                );
+            db.SaveChanges();
+        }
+
+
+
 
         internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager)
         {
@@ -605,10 +1018,29 @@ namespace Supermarket.Data {
             var user17 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
             var user18 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
 
+            //Group4----------------------------------------------------------------
+            var userJoaoStockAdmin = await EnsureUserIsCreatedAsync(userManager!, "joaostockadmin@ipg.pt", "Secret#123");
+            var userAndreStockOp = await EnsureUserIsCreatedAsync(userManager!, "andrestockop@ipg.pt", "Secret#123");
+            var userIvoStockOp = await EnsureUserIsCreatedAsync(userManager!, "ivostockop@ipg.pt", "Secret#123");
 
+            if (!await userManager!.IsInRoleAsync(user1, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(user1, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(userJoaoStockAdmin, ROLE_STOCK_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(userJoaoStockAdmin, ROLE_STOCK_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(userAndreStockOp, ROLE_STOCK_OP))
+            {
+                await userManager!.AddToRoleAsync(userAndreStockOp, ROLE_STOCK_OP);
+            }
+            if (!await userManager!.IsInRoleAsync(userIvoStockOp, ROLE_STOCK_OP))
+            {
+                await userManager!.AddToRoleAsync(userIvoStockOp, ROLE_STOCK_OP);
+            }
 
-
-
+            //--------------------------------------------------------------------
             if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
             {
                 await userManager!.AddToRoleAsync(user1, "Gestor");
@@ -739,12 +1171,29 @@ namespace Supermarket.Data {
             {
                 await userManager!.AddToRoleAsync(manager, "Edit_Del_Reports");
             }
+
+            var clienteAlberto = await EnsureUserIsCreatedAsync(userManager!, "zealberto@gmail.com", "Alberto#123");
+            if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN3))
+            {
+                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN3);
+            }
+
+            var funcAndre = await EnsureUserIsCreatedAsync(userManager!, "andre@gmail.com", "Andre#123");
+            if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN1))
+            {
+                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN1);
+            }
         }
 
-        private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password) {
+
+
+        private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password)
+        {
             var user = await userManager.FindByNameAsync(username);
 
-            if (user == null) {
+            if (user == null)
+            {
+
                 user = new IdentityUser(username);
                 await userManager.CreateAsync(user, password);
             }
@@ -752,54 +1201,42 @@ namespace Supermarket.Data {
             return user;
         }
 
-        internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager) {
+
+        internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager)
+        {
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_CLIENT);
             await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN3);
+
             await EnsureRoleIsCreatedAsync(roleManager!, "Funcionário");
             await EnsureRoleIsCreatedAsync(roleManager!, "Gestor");
             await EnsureRoleIsCreatedAsync(roleManager!, "View_Reports");
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Edit_Del_IssueType");
-            await EnsureRoleIsCreatedAsync(roleManager!, "View_Reports");            
+
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Reports");
             await EnsureRoleIsCreatedAsync(roleManager!, "Edit_Del_Reports");
+
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_STOCK_ADMIN);
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_STOCK_OP);
         }
 
-        
 
-        private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name) {
+
+
+        private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name)
+        {
             var role = await roleManager.FindByNameAsync(name);
 
-            if (role == null) {
+            if (role == null)
+            {
                 role = new IdentityRole(name);
                 await roleManager.CreateAsync(role);
             }
         }
 
-        private static void PopulateSupplier(SupermarketDbContext db)
-        {
-            if (db.Suppliers.Any()) return;
-
-            db.Suppliers.AddRange(
-                new Models.Supplier { Name = "Global Foods Ltd" },
-                new Models.Supplier { Name = "Fresh Harvest Farms" },
-                new Models.Supplier { Name = "Pacific Seafood Co" },
-                new Models.Supplier { Name = "Quality Meats Inc" },
-                new Models.Supplier { Name = "Green Valley Grocers" },
-                new Models.Supplier { Name = "Sunrise Bakeries" },
-                new Models.Supplier { Name = "Golden Beverages LLC" },
-                new Models.Supplier { Name = "Nature's Best Produce" },
-                new Models.Supplier { Name = "Sweet Treats Confections" },
-                new Models.Supplier { Name = "Sunny Farms Dairy" },
-                new Models.Supplier { Name = "Premium Pet Supplies" },
-                new Models.Supplier { Name = "Tech Gadgets Distributors" },
-                new Models.Supplier { Name = "Office Essentials Co" },
-                new Models.Supplier { Name = "Home Goods Wholesale" }
-            );
-
-            db.SaveChanges();
-        }
+      
 
         private static void PopulateType(SupermarketDbContext db)
         {
@@ -833,9 +1270,11 @@ namespace Supermarket.Data {
             if (db.Purchase.Any()) return;
 
             db.Purchase.AddRange(
-                new Models.Purchase { ProductId = 1, SupplierId = 1, DeliveredQuantity = 30, DeliveryDate = new DateTime(2024, 01, 01, 00, 00, 00, 00), BatchNumber = "LOTE123", ExpirationDate = new DateTime(2024, 01, 05, 00, 00, 00, 00), EmployeeId = 1},
-                new Models.Purchase { ProductId = 2, SupplierId = 2, DeliveredQuantity = 50, DeliveryDate = new DateTime(2024, 01, 02, 00, 00, 00, 00), BatchNumber = "LOTE456", ExpirationDate = new DateTime(2024, 01, 06, 00, 00, 00, 00), EmployeeId = 2},
-                new Models.Purchase { ProductId = 3, SupplierId = 3, DeliveredQuantity = 70, DeliveryDate = new DateTime(2024, 01, 03, 00, 00, 00, 00), BatchNumber = "LOTE789", ExpirationDate = new DateTime(2024, 01, 07, 00, 00, 00, 00), EmployeeId = 3}
+
+                new Models.Purchase { ProductId = 1, SupplierId = 1, DeliveredQuantity = 30, DeliveryDate = new DateTime(2024, 01, 01, 00, 00, 00, 00), BatchNumber = "LOTE123", ExpirationDate = new DateTime(2024, 01, 05, 00, 00, 00, 00), EmployeeId = 1 },
+                new Models.Purchase { ProductId = 2, SupplierId = 2, DeliveredQuantity = 50, DeliveryDate = new DateTime(2024, 01, 02, 00, 00, 00, 00), BatchNumber = "LOTE456", ExpirationDate = new DateTime(2024, 01, 06, 00, 00, 00, 00), EmployeeId = 2 },
+                new Models.Purchase { ProductId = 3, SupplierId = 3, DeliveredQuantity = 70, DeliveryDate = new DateTime(2024, 01, 03, 00, 00, 00, 00), BatchNumber = "LOTE789", ExpirationDate = new DateTime(2024, 01, 07, 00, 00, 00, 00), EmployeeId = 3 }
+
               );
 
             db.SaveChanges();
@@ -846,7 +1285,9 @@ namespace Supermarket.Data {
             if (db.Issues.Any()) return;
 
             db.Issues.AddRange(
-                new Models.Issues { ProductId = 1, IssueTypeId= 1, Description= "Issue Description 1", SupplierId= 1, EmployeeId= 1, Severity= Severity.Light},
+
+                new Models.Issues { ProductId = 1, IssueTypeId = 1, Description = "Issue Description 1", SupplierId = 1, EmployeeId = 1, Severity = Severity.Light },
+
                 new Models.Issues { ProductId = 2, IssueTypeId = 3, Description = "Issue Description 2", SupplierId = 2, EmployeeId = 1, Severity = Severity.Light },
                 new Models.Issues { ProductId = 1, IssueTypeId = 2, Description = "Issue Description 3", SupplierId = 1, EmployeeId = 4, Severity = Severity.Severe }
               );
@@ -854,16 +1295,6 @@ namespace Supermarket.Data {
             db.SaveChanges();
         }
 
-        private static void PopulateExpProduct(SupermarketDbContext db)
-        {
-            if (db.ExpiredProducts.Any()) return;
 
-            db.ExpiredProducts.AddRange(
-                new Models.ExpiredProducts { ProductId = 1, FabricationDate = DateTime.Now, ExpirationDate = DateTime.Now, BarCode = "XR4396", SupplierId = 2, EmployeeId = 1 },
-                new Models.ExpiredProducts { ProductId = 3, FabricationDate = DateTime.Now, ExpirationDate = DateTime.Now, BarCode = "XR4456", SupplierId = 1, EmployeeId = 2 }
-              );
-
-            db.SaveChanges();
-        }
     }
 }
