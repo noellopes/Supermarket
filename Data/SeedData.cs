@@ -1041,6 +1041,22 @@ namespace Supermarket.Data
             }
 
             //--------------------------------------------------------------------
+            //Group6----------------------------------------------------------------
+            var adminGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "adminGrupo6@ipg.pt", "Secret#123");
+            var clientGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "clientGrupo6@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_CLIENT);
+            }
+            if (!await userManager!.IsInRoleAsync(clientGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(clientGrupo6, ROLE_CLIENT);
+            }
+            //--------------------------------------------------------------------
             if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
             {
                 await userManager!.AddToRoleAsync(user1, "Gestor");
@@ -1114,10 +1130,6 @@ namespace Supermarket.Data
             }
 
             var costumer = await EnsureUserIsCreatedAsync(userManager!, "costumer@ipg.pt", "Secret#123");
-            if (!await userManager!.IsInRoleAsync(costumer, ROLE_CLIENT))
-            {
-                await userManager!.AddToRoleAsync(costumer, ROLE_CLIENT);
-            }
             if (!await userManager!.IsInRoleAsync(costumer, "Avaliar_Funcionarios"))
             {
                 await userManager!.AddToRoleAsync(costumer, "Avaliar_Funcionarios");
@@ -1143,14 +1155,6 @@ namespace Supermarket.Data
 
 
             var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
-            if (!await userManager!.IsInRoleAsync(manager, ROLE_CLIENT))
-            {
-                await userManager!.AddToRoleAsync(manager, ROLE_CLIENT);
-            }
-            if (!await userManager!.IsInRoleAsync(manager, ROLE_ADMIN))
-            {
-                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN);
-            }
             if (!await userManager!.IsInRoleAsync(manager, "Avaliar_Funcionarios"))
             {
                 await userManager!.AddToRoleAsync(manager, "Avaliar_Funcionarios");
