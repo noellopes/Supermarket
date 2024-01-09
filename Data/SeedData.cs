@@ -8,6 +8,8 @@ namespace Supermarket.Data {
         private const string ROLE_ADMIN = "Administrator";
         private const string ROLE_ADMIN1 = "Funcionário";
         private const string ROLE_ADMIN2 = "Gestor";
+        private const string ROLE_ADMIN3 = "Cliente";
+
 
         internal static void Populate(SupermarketDbContext db) {
             PopulateBrand(db);
@@ -813,7 +815,7 @@ namespace Supermarket.Data {
 
 
 
-
+            
 
             if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
             {
@@ -934,26 +936,19 @@ namespace Supermarket.Data {
             }
 
             var clienteAlberto = await EnsureUserIsCreatedAsync(userManager!, "zealberto@gmail.com", "Alberto#123");
-            if (!await userManager!.IsInRoleAsync(clienteAlberto, "Cliente"))
+            if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN3))
             {
-                await userManager!.AddToRoleAsync(manager, "Cliente");
+                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN3);
             }
 
             var funcAndre = await EnsureUserIsCreatedAsync(userManager!, "andre@gmail.com", "Andre#123");
-            if (!await userManager!.IsInRoleAsync(clienteAlberto, "Funcionário"))
+            if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN1))
             {
-                await userManager!.AddToRoleAsync(manager, "Funcionário");
+                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN1);
             }
         }
 
-        private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password)
-        {
-            var user = await userManager.FindByNameAsync(username);
-
-            if (user == null)
-            {
-
-        }
+      
 
         private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password) {
             var user = await userManager.FindByNameAsync(username);
@@ -972,14 +967,13 @@ namespace Supermarket.Data {
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
             await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
-            await EnsureRoleIsCreatedAsync(roleManager!, "Cliente");
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN3);
 
             await EnsureRoleIsCreatedAsync(roleManager!, "Funcionário");
             await EnsureRoleIsCreatedAsync(roleManager!, "Gestor");
             await EnsureRoleIsCreatedAsync(roleManager!, "View_Reports");
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Edit_Del_IssueType");
-
-            await EnsureRoleIsCreatedAsync(roleManager!, "View_Reports");            
+   
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Reports");
             await EnsureRoleIsCreatedAsync(roleManager!, "Edit_Del_Reports");
         }

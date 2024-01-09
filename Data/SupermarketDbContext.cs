@@ -88,7 +88,6 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Client> Client { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.CategoryDiscount> CategoryDiscounts { get; set; } = default!;
 
         //public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
 
