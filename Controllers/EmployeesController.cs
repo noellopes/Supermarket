@@ -15,7 +15,6 @@ namespace Supermarket.Controllers
     public class EmployeesController : Controller
     {
         private readonly SupermarketDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
 
         public EmployeesController(SupermarketDbContext context)
         {

@@ -1023,7 +1023,6 @@ namespace Supermarket.Data
   
             //Group7----------------------------------------------------------------
             var user = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
-            var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
   
             if (!await userManager!.IsInRoleAsync(user1, ROLE_ADMIN))
             {
