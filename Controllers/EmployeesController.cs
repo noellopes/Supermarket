@@ -89,7 +89,9 @@ namespace Supermarket.Controllers
             }
 
             var employee = await _context.Employee
+                .Include(e => e.Departments)
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
+
 
             if (employee == null)
             {
@@ -126,6 +128,7 @@ namespace Supermarket.Controllers
 
         public IActionResult Create()
         {
+            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments");
             return View();
         }
 
@@ -135,7 +138,7 @@ namespace Supermarket.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,IDDepartments")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -167,7 +170,7 @@ namespace Supermarket.Controllers
 
                 return View("Details", employee);
             }
-        
+            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", employee.IDDepartments);
             return View(employee);
         }
 
@@ -184,6 +187,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", employee.IDDepartments);
             return View(employee);
         }
 
@@ -239,6 +243,7 @@ namespace Supermarket.Controllers
                     }
                 }
             }
+            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", employee.IDDepartments);
             return View(employee);
         }
 
