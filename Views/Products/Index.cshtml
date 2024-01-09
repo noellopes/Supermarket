@@ -78,7 +78,7 @@
 
 
     </div>
-</div>
+ </div>
 
 <p>
     <a asp-action="Create" class="btn btn-success">Create New</a>
@@ -120,24 +120,24 @@ else
                 {
                     string rowColor;
                     @* switch (item.Status)
-            {
-            case "Available":
-            rowColor = "table-success";
-            break;
-            case "Unavailable":
-            rowColor = "table-warning";
-            break;
-            case "Discontinued":
-            rowColor = "table-danger";
-            break;
-            default:
-            rowColor = "";
-            break;
-            } *@
+                    {
+                        case "Available":
+                            rowColor = "table-success";
+                            break;
+                        case "Unavailable":
+                            rowColor = "table-warning";
+                            break;
+                        case "Discontinued":
+                            rowColor = "table-danger";
+                            break;
+                        default:
+                            rowColor = "";
+                            break;
+                    } *@
                     @if (ViewBag.totalQuantity[i] < item.MinimumQuantity)
                     {
                         rowColor = "table-warning";
-                    }
+                    } 
                     else
                     {
                         rowColor = "table-success";

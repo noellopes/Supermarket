@@ -49,4 +49,3 @@ namespace Supermarket.Models
         public ICollection<WarehouseSection_Product>? WarehouseSection { get; set; }
     }
 }
-

@@ -349,7 +349,7 @@ namespace Supermarket.Data {
 
         private static void PopulateWarehouseSection_Product(SupermarketDbContext db) {
             if (db.WarehouseSection_Product.Any()) return;
-
+            /*
             db.WarehouseSection_Product.AddRange(
                     new WarehouseSection_Product {
 
@@ -376,7 +376,7 @@ namespace Supermarket.Data {
                     }
                 );
 
-            db.SaveChanges();
+            db.SaveChanges();*/
         }
 
 

@@ -9,11 +9,11 @@ using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Migrations
+namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240108231004_MigracaoCompleta")]
-    partial class MigracaoCompleta
+    [Migration("20240109014133_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -733,6 +733,9 @@ namespace Supermarket.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<DateTime>("LastCountDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("MinimumQuantity")
                         .HasColumnType("int");
 
@@ -1239,10 +1242,21 @@ namespace Supermarket.Migrations
 
             modelBuilder.Entity("Supermarket.Models.WarehouseSection_Product", b =>
                 {
-                    b.Property<int>("ProductId")
+                    b.Property<int>("WarehouseSection_ProductId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("WarehouseSectionId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WarehouseSection_ProductId"));
+
+                    b.Property<string>("BatchNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -1251,7 +1265,17 @@ namespace Supermarket.Migrations
                     b.Property<int>("ReservedQuantity")
                         .HasColumnType("int");
 
-                    b.HasKey("ProductId", "WarehouseSectionId");
+                    b.Property<int>("SupplierID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WarehouseSectionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WarehouseSection_ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SupplierID");
 
                     b.HasIndex("WarehouseSectionId");
 
@@ -1673,6 +1697,12 @@ namespace Supermarket.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Supermarket.Models.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Supermarket.Models.WarehouseSection", "WarehouseSection")
                         .WithMany("Products")
                         .HasForeignKey("WarehouseSectionId")
@@ -1680,6 +1710,8 @@ namespace Supermarket.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("Supplier");
 
                     b.Navigation("WarehouseSection");
                 });

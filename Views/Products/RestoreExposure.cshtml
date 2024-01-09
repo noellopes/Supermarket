@@ -135,8 +135,7 @@
                         @if (productsToGet.Any(p => p.ProductId == product.ProductId && p.Quantity <= productsToGet.Where(wp => wp.ProductId == product.ProductId).Sum(wp => wp.Quantity)))
                         {
                             //@product.Quantity
-                            @sumOfQuantitiesToRestore
-                            ;
+                            @sumOfQuantitiesToRestore;
                         }
                         else
                         {

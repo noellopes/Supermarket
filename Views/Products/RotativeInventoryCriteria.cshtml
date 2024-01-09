@@ -42,24 +42,24 @@
 </div>
 
 
-<div class="card mb-3">
+    <div class="card mb-3"> 
 
 
-    <form asp-controller="Products" asp-action="RotativeInventoryCriteria" method="get">
-        <div class="form-group">
-            <label for="criterial">Select Criterial:</label>
-            <select name="criterial" class="form-control">
-                <option value="">-- Select Criteria --</option>
-                <option value="Date">Date</option>
-                <option value="ReduceProductDate">Reduce Product and Date</option>
-                <option value="PriceDate">Price and Date</option>
-                @*      <option value="ReduceProductPriceDate">ReduceProduct and Price and Date</option> *@
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        <form asp-controller="Products" asp-action="RotativeInventoryCriteria" method="get">
+            <div class="form-group">
+                <label for="criterial">Select Criterial:</label>
+                <select name="criterial" class="form-control">
+                    <option value="">-- Select Criteria --</option>
+                    <option value="Date">Date</option>
+                    <option value="ReduceProductDate">Reduce Product and Date</option>
+                    <option value="PriceDate">Price and Date</option>
+               @*      <option value="ReduceProductPriceDate">ReduceProduct and Price and Date</option> *@
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
         <a asp-controller="Home" asp-action="Index" class="btn btn-secondary mt-3">Back to Home</a>
-    </form>
-</div>
+        </form>
+    </div>
 
 @if (ViewBag.selectedCritial != null)
 {
@@ -138,7 +138,7 @@
                 <div id="numberForm">
                     <div class="form-group">
                         <label for="SelectedNumber">Enter how many of the most common elements for reduce Product:</label>
-                        <input type="number" id="SelectedNumber" name="SelectedNumber" class="form-control" min="1" max="99999" />
+                        <input type="number" id="SelectedNumber" name="SelectedNumber" class="form-control" min="1" max="99999"  />
                     </div>
                     <div class="form-group">
                         <label for="selectedDate">Select :</label>
@@ -160,5 +160,5 @@
             </form>
         }
     </div>
-
+    
 }
