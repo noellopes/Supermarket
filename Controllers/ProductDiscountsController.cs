@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +20,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts/CreateBirthdayDiscount
+        [Authorize(Roles = "Administrator")]
         public IActionResult CreateBirthdayDiscount()
         {
             ViewData["ProductList"] = new SelectList(_context.Product, "ProductId", "Name");
@@ -26,6 +29,7 @@ namespace Supermarket.Controllers
         //Novo create para os desconto de aniversário
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task <IActionResult> CreateBirthdayDiscount(ProductDiscount productDiscount)
         {
             if (ModelState.IsValid)
@@ -71,6 +75,7 @@ namespace Supermarket.Controllers
             return View(productDiscount);
         }
         // GET: ProductDiscounts
+        [Authorize(Roles = "Client")]
         public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
             //variavel para a data do aniversário
@@ -131,6 +136,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts/Details/5
+        [Authorize(Roles = "Client")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.ProductDiscount == null)
@@ -152,6 +158,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber");
@@ -164,6 +171,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (ModelState.IsValid)
@@ -240,6 +248,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ProductDiscount == null)
@@ -262,6 +271,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (id != productDiscount.ProductDiscountId)
@@ -297,6 +307,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.ProductDiscount == null)
@@ -319,6 +330,7 @@ namespace Supermarket.Controllers
         // POST: ProductDiscounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.ProductDiscount == null)
