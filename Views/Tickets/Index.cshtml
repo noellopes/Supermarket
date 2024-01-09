@@ -17,11 +17,9 @@
 
 @if (isAdmin || isAdmin2 || isAdmin3)
 {
-    @if (ViewBag.ErrorMessage != null)
+    @if (TempData["NoDataMessage"] != null)
     {
-                 <div style="color: red;">             
-                     @ViewBag.ErrorMessage         
-                 </div>
+        <h3 class="mt-5">@TempData["NoDataMessage"]</h3>
     }
 
     <div class="card mt-5">
