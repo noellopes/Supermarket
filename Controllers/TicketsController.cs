@@ -179,8 +179,11 @@ namespace Supermarket.Controllers
             //  if (ModelState.IsValid && (DateTime.Now.Date<= schedules.EndDate.Value.Date&& DateTime.Now.Date >= schedules.StartDate.Date) && (DateTime.Now.Hour <= schedules.DailyFinishTime.Hour && DateTime.Now.Hour >= schedules.DailyStartTime.Hour && DateTime.Now.Minute <= schedules.DailyFinishTime.Minute && DateTime.Now.Minute >= schedules.DailyStartTime.Minute))
             if (ModelState.IsValid && DateTime.Now >= schedules.StartDate.Date && DateTime.Now <= schedules.EndDate.Value.Date)
             {
+                // Check if the current time is within the daily time range
+                TimeSpan currentTimeOfDay = DateTime.Now.TimeOfDay;
 
-                ticket.DataEmissao = DateTime.Now;
+                if (currentTimeOfDay >= schedules.DailyStartTime.TimeOfDay && currentTimeOfDay <= schedules.DailyFinishTime.TimeOfDay) { 
+                    ticket.DataEmissao = DateTime.Now;
                 ticket.DataAtendimento = null;
                 ticket.NumeroDaSenha = ticketlista.Last().NumeroDaSenha + 1;
                 ticket.Estado = false;
@@ -192,6 +195,7 @@ namespace Supermarket.Controllers
                 _context.SaveChanges();
 
                 return RedirectToAction("Index"); // Redirect to the ticket list or another action
+                }
             }
 
             return View(ticket);
