@@ -1,0 +1,164 @@
+﻿@{
+    ViewData["Title"] = "Rotative Inventory Criteria";
+}
+
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .mb-3 {
+        margin-bottom: 1.5rem;
+    }
+
+    .mt-3 {
+        margin-top: 1.5rem;
+    }
+
+    #numberForm,
+    #stringForm {
+        margin-bottom: 1.5rem;
+    }
+</style>
+
+
+<div class="card">
+    <h1>Choose a Rotative Inventory Criteria</h1>
+</div>
+
+
+<div class="card mb-3">
+
+
+    <form asp-controller="Products" asp-action="RotativeInventoryCriteria" method="get">
+        <div class="form-group">
+            <label for="criterial">Select Criterial:</label>
+            <select name="criterial" class="form-control">
+                <option value="">-- Select Criteria --</option>
+                <option value="Date">Date</option>
+                <option value="ReduceProductDate">Reduce Product and Date</option>
+                <option value="PriceDate">Price and Date</option>
+                @*      <option value="ReduceProductPriceDate">ReduceProduct and Price and Date</option> *@
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary mt-3">Back to Home</a>
+    </form>
+</div>
+
+@if (ViewBag.selectedCritial != null)
+{
+    <div class="card mb-3">
+        @if (ViewBag.selectedCritial == "Date")
+        {
+            <form asp-controller="Products" asp-action="RotativeInventoryCriteria" method="get">
+                <div id="stringForm">
+                    <div class="form-group">
+                        <label for="selectedDate">Select :</label>
+                        <select name="selectedDate" class="form-control">
+                            <option value="">-- Select date --</option>
+                            <option value="Month">Last month</option>
+                            <option value="2Week">Last 2 weeks</option>
+                            <option value="week">Last week</option>
+                            <option value="2day">Last 2 days</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary  mt-3">Submit Date</button>
+                </div>
+            </form>
+        }
+
+        @if (ViewBag.selectedCritial == "PriceDate")
+        {
+            <form asp-controller="Products" asp-action="RotativeInventoryCriteria" method="get">
+                <div id="numberForm">
+                    <div class="form-group">
+                        <label for="SelectedPrice">Put a Price:</label>
+                        <input type="number" id="SelectedPrice" name="SelectedPrice" class="form-control" step="0.01" min="0.01" max="99999.99" />
+                    </div>
+                    <div class="form-group">
+                        <label for="selectedDate">Select :</label>
+                        <select name="selectedDate" class="form-control">
+                            <option value="">-- Select date --</option>
+                            <option value="Month">Last month</option>
+                            <option value="2Week">Last 2 weeks</option>
+                            <option value="week">Last week</option>
+                            <option value="2day">Last 2 days</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary  mt-3">Submit </button>
+                </div>
+
+            </form>
+        }
+
+        @if (ViewBag.selectedCritial == "ReduceProductDate")
+        {
+            <form asp-controller="Products" asp-action="RotativeInventoryCriteria" method="get">
+                <div id="numberForm">
+                    <div class="form-group">
+                        <label for="SelectedNumber">Enter how many of the most common elements for reduce Product:</label>
+                        <input type="number" id="SelectedNumber" name="SelectedNumber" class="form-control" max="99999" />
+                    </div>
+                    <div class="form-group">
+                        <label for="SelectedStringDate">Select :</label>
+                        <select name="selectedDate" class="form-control">
+                            <option value="">-- Select date --</option>
+                            <option value="Month">Last month</option>
+                            <option value="2Week">Last 2 weeks</option>
+                            <option value="week">Last week</option>
+                            <option value="2day">Last 2 days</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary  mt-3">Submit </button>
+                </div>
+
+            </form>
+        }
+
+
+        @if (ViewBag.selectedCritial == "ReduceProductPriceDate")
+        {
+            <form asp-controller="Products" asp-action="RotativeInventoryCriteria" method="get">
+                <div id="numberForm">
+                    <div class="form-group">
+                        <label for="SelectedNumber">Enter how many of the most common elements for reduce Product:</label>
+                        <input type="number" id="SelectedNumber" name="SelectedNumber" class="form-control" min="1" max="99999" />
+                    </div>
+                    <div class="form-group">
+                        <label for="selectedDate">Select :</label>
+                        <select name="selectedDate" class="form-control">
+                            <option value="">-- Select date --</option>
+                            <option value="Month">Last month</option>
+                            <option value="2Week">Last 2 weeks</option>
+                            <option value="week">Last week</option>
+                            <option value="2day">Last 2 days</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="SelectedPrice">Put a Price:</label>
+                        <input type="number" id="SelectedPrice" name="SelectedPrice" class="form-control" step="0.01" min="0.01" max="99999.99" />
+                    </div>
+                    <button type="submit" class="btn btn-primary  mt-3">Submit</button>
+                </div>
+
+            </form>
+        }
+    </div>
+
+}

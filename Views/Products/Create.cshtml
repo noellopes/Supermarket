@@ -4,21 +4,66 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<style>
+    body {
+        padding: 20px;
+        background-color: white;
+    }
+
+    h1 {
+        color: blue;
+        margin-top: 20px;
+    }
+
+    h2 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .tbconfig {
+        background-color: whitesmoke;
+        border: 1px solid rgba(10, 10, 10, 0.15);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .table tr {
+        border: 1px solid rgba(10, 10, 10, 0.15);
+    }
+
+    .table th, .table td {
+        background-color: white;
+        color: black;
+        border: none;
+    }
+
+    .form-group {
+        margin-top: 20px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+        }
+</style>
+
+<div class="tbconfig">
+    <h1>Create</h1>
+</div>
 
 <h4>Product</h4>
 <hr />
-<div class="row">
+<div class="row tbconfig">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+                <label asp-for="CategoryId" class="control-label">Category</label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="BrandId" class="control-label"></label>
-                <select asp-for="BrandId" class ="form-control" asp-items="ViewBag.BrandId"></select>
+                <label asp-for="BrandId" class="control-label">Brand</label>
+                <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -30,32 +75,31 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TotalQuantity" class="control-label"></label>
-                <input asp-for="TotalQuantity" class="form-control" />
-                <span asp-validation-for="TotalQuantity" class="text-danger"></span>
-            </div>
+            @*  <div class="form-group">
+            <label asp-for="TotalQuantity" class="control-label"></label>
+            <input asp-for="TotalQuantity" class="form-control" />
+            <span asp-validation-for="TotalQuantity" class="text-danger"></span>
+            </div> *@
             <div class="form-group">
                 <label asp-for="MinimumQuantity" class="control-label"></label>
                 <input asp-for="MinimumQuantity" class="form-control" />
                 <span asp-validation-for="MinimumQuantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UnitPrice" class="control-label"></label>
+                <label asp-for="UnitPrice" class="control-label">Unit Price (€)</label>
                 <input asp-for="UnitPrice" class="form-control" />
                 <span asp-validation-for="UnitPrice" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
