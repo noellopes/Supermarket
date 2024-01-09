@@ -4,6 +4,7 @@ using System.Drawing.Printing;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index(string searchTerm, int page = 1, int pageSize = 2)
         {
             IQueryable<Department> departmentsQuery = _context.Departments;
@@ -42,50 +44,56 @@ namespace Supermarket.Controllers
             }
             var totalItems = departmentsQuery.Count();
 
-            if (totalItems == 0)
+            var pagination = new PagingInfo
             {
-                
-                ViewData["WarningMessage"] = "Nada encontrado na pesquisa.";
-                
-            }
-            else
+                CurrentPage = page,
+                PageSize = pageSize,
+                TotalItems = totalItems
+            };
+
+            var departments = departmentsQuery
+                .OrderBy(p => p.NameDepartments)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var viewModel = new DepListViewModel
             {
-                var pagination = new PagingInfo
+                Departments = departments,
+                Pagination = pagination,
+                SelectedPageSize = pageSize,
+                TimeDifferences = new List<TimeSpan>()
+            };
+            // Aqui você pode percorrer os departamentos e calcular a diferença de tempo para cada ticket
+            foreach (var department in departments)
+            {
+                // Procura o primeiro ticket associado ao departamento
+                var firstTicket = _context.Tickets.FirstOrDefault(t => t.IDDepartments == department.IDDepartments);
+                // Verifica se existe um ticket associado e se a data de atendimento tem valor
+                if (firstTicket != null && firstTicket.DataAtendimento.HasValue)
                 {
-                    CurrentPage = page,
-                    PageSize = pageSize,
-                    TotalItems = totalItems
-                };
-
-                var departments = departmentsQuery
-                    .OrderBy(p => p.NameDepartments)
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToList();
-
-                var viewModel = new DepListViewModel
-                {
-                    Departments = departments,
-                    Pagination = pagination,
-                    SelectedPageSize = pageSize,
-                    TimeDifferences = new List<TimeSpan>()
-                };
-                // Aqui você pode percorrer os departamentos e calcular a diferença de tempo para cada ticket
-                foreach (var department in departments)
-                {
-                    // ... (o restante do seu código permanece o mesmo)
+                    // Obtém as datas de início (DataAtendimento) e fim (DataEmissao)
+                    DateTime dataInicio = firstTicket.DataAtendimento.Value;
+                    DateTime dataFim = firstTicket.DataEmissao;
+                    // Calcula a diferença de tempo entre as duas datas
+                    TimeSpan diferenca = dataInicio - dataFim;
+                    // Adiciona a diferença de tempo à lista de diferenças de tempo no viewModel
+                    viewModel.TimeDifferences.Add(diferenca);
                 }
-
-                ViewData["SearchTerm"] = searchTerm;
-                ViewData["PageSizes"] = new SelectList(pageSizes);
-                ViewData["SelectedPageSize"] = pageSize;
-
-                return View(viewModel);
+                else
+                {
+                    // Se não existir ticket ou se a data de atendimento não tiver valor, adiciona TimeSpan.Zero à lista
+                    viewModel.TimeDifferences.Add(TimeSpan.Zero);
+                }
             }
 
-            return View();
-        }
+            ViewData["SearchTerm"] = searchTerm;
+            ViewData["PageSizes"] = new SelectList(pageSizes);
+            ViewData["SelectedPageSize"] = pageSize;
 
+            return View(viewModel);
+        }
+        [Authorize(Roles = "Administrator")]
         // GET: DepartmentsInop
         public IActionResult IndexInop(string searchTerm, int page = 1, int pageSize = 2)
         {
@@ -139,6 +147,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments/Details/
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Departments == null)
@@ -167,6 +176,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department departments)
         {
             if (ModelState.IsValid)
@@ -212,6 +222,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department departments)
         {
             if (id != departments.IDDepartments)
@@ -275,6 +286,7 @@ namespace Supermarket.Controllers
         // POST: Departments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Departments == null)
