@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models
 {
 
     public class CardMovement
     {
+        [Key]
         public int CardMovementId { get; set; }
 
         public DateTime Movement_Date { get; set; }
@@ -18,7 +20,6 @@ namespace Supermarket.Models
         public string? Type { get; set; }
 
         public int MealCardId { get; set; }
-
         public MealCard? MealCard { get; set; }
 
     }
