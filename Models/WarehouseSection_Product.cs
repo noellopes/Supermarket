@@ -36,6 +36,6 @@ namespace Supermarket.Models
         //Relation with foreign key for Supplier
         [Display(Name = "Supplier")]
         public int SupplierID { get; set; }
-        public Supplier? Supplier { get; set; }
+        public Supplier? Suppliers { get; set; }
     }
 }

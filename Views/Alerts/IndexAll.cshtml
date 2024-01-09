@@ -15,6 +15,8 @@
         margin-top: 20px; /* Margem superior maior */
     }
 
+
+
     .card {
         background-color: #fff; /* Cor de fundo do cartão */
         border: 1px solid rgba(0, 0, 0, 0.125); /* Borda do cartão */
@@ -23,19 +25,19 @@
         margin-bottom: 20px; /* Margem inferior do cartão */
     }
 
-
- 
-
 </style>
 <div class="card">
-<h1>Alert List</h1>
+    <h1> Seen Alerts List</h1>
 </div>
 
-<form asp-action="IndexAll">
-    <input type="submit" value="See Alerts Seen" class="btn btn-success" />
+
+
+<form asp-action="Index">
+    <input type="submit" value="See Alerts Not Seen"/>
 </form>
 
-<table class="table">
+
+    <table class="table table-striped">
     <thead>
         <tr>
             <th>
@@ -48,21 +50,19 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-            @if (User.IsInRole(item.Role))
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.AlertId" class="btn btn-secondary">Details</a>
-                    </td>
-                </tr>
-            }
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.AlertId" class="btn btn-secondary">Details</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

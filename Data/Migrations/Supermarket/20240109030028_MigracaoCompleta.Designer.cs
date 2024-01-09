@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240109015729_MigracaoCompleta")]
+    [Migration("20240109030028_MigracaoCompleta")]
     partial class MigracaoCompleta
     {
         /// <inheritdoc />
@@ -1476,7 +1476,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsRequired();
 
                     b.HasOne("Supermarket.Models.Supplier", "Supplier")
-                        .WithMany("Issue")
+                        .WithMany()
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1797,11 +1797,6 @@ namespace Supermarket.Data.Migrations.Supermarket
             modelBuilder.Entity("Supermarket.Models.Shelf", b =>
                 {
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.Supplier", b =>
-                {
-                    b.Navigation("Issue");
                 });
 
             modelBuilder.Entity("Supermarket.Models.WarehouseSection", b =>

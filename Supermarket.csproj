@@ -42,5 +42,13 @@
     <Folder Include="Data\Migrations\Supermarket\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Views\Alerts\Create.cshtml" />
+    <None Include="Views\Alerts\Delete.cshtml" />
+    <None Include="Views\Alerts\Details.cshtml" />
+    <None Include="Views\Alerts\Edit.cshtml" />
+    <None Include="Views\Alerts\Index.cshtml" />
+  </ItemGroup>
+
 
 </Project>

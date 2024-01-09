@@ -17,7 +17,7 @@ namespace Supermarket.Data
 
         internal static void Populate(SupermarketDbContext db)
         {
-            
+            PopulateSupplier(db);
             PopulateBrand(db);
             PopulateCategory(db);
             PopulateProduct(db);
@@ -42,7 +42,6 @@ namespace Supermarket.Data
             PopulateMealCards(db);
             PopulateCardMovements(db);
             PopulateEmployeeEvaluations(db);
-            PopulateSupplier(db);
             PopulateType(db);
             PopulateIssueType(db);
             PopulatePurchase(db);
@@ -161,7 +160,9 @@ namespace Supermarket.Data
                     new Category { Name = "Office and School Supplies" },
                     new Category { Name = "Personal Care" },
                     new Category { Name = "Pet Supplies" },
-                    new Category { Name = "Snacks" }
+                    new Category { Name = "Snacks" },
+                    new Category { Name = "Games" },
+                    new Category { Name = "House" }
 
                 );
 
@@ -315,7 +316,30 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-      
+
+        private static void PopulateSupplier(SupermarketDbContext db)
+        {
+            if (db.Suppliers.Any()) return;
+
+            db.Suppliers.AddRange(
+                new Models.Supplier { Name = "Global Foods Ltd" },
+                new Models.Supplier { Name = "Fresh Harvest Farms" },
+                new Models.Supplier { Name = "Pacific Seafood Co" },
+                new Models.Supplier { Name = "Quality Meats Inc" },
+                new Models.Supplier { Name = "Green Valley Grocers" },
+                new Models.Supplier { Name = "Sunrise Bakeries" },
+                new Models.Supplier { Name = "Golden Beverages LLC" },
+                new Models.Supplier { Name = "Nature's Best Produce" },
+                new Models.Supplier { Name = "Sweet Treats Confections" },
+                new Models.Supplier { Name = "Sunny Farms Dairy" },
+                new Models.Supplier { Name = "Premium Pet Supplies" },
+                new Models.Supplier { Name = "Tech Gadgets Distributors" },
+                new Models.Supplier { Name = "Office Essentials Co" },
+                new Models.Supplier { Name = "Home Goods Wholesale" }
+            );
+
+            db.SaveChanges();
+        }
 
         private static void PopulateShelft_ProductExhibition(SupermarketDbContext db)
         {
@@ -424,7 +448,7 @@ namespace Supermarket.Data
         private static void PopulateWarehouseSection_Product(SupermarketDbContext db)
         {
             if (db.WarehouseSection_Product.Any()) return;
-
+            
             db.WarehouseSection_Product.AddRange(
                     new WarehouseSection_Product
                     {
@@ -435,7 +459,7 @@ namespace Supermarket.Data
                         ExpirationDate = DateTime.Now,
                         Quantity = 120,
                         ReservedQuantity = 0,
-                        Supplier = db.Suppliers.FirstOrDefault(a => a.Name == "Supplier Guarda")
+                        Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
                     },
 
                      new WarehouseSection_Product
@@ -446,7 +470,7 @@ namespace Supermarket.Data
                          ExpirationDate = DateTime.Now,
                          Quantity = 10,
                          ReservedQuantity = 3,
-                         Supplier = db.Suppliers.FirstOrDefault(a => a.Name == "Home Goods Wholesale")
+                         Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
                      },
 
                       new WarehouseSection_Product
@@ -457,7 +481,7 @@ namespace Supermarket.Data
                           ExpirationDate = DateTime.Now,
                           Quantity = 10,
                           ReservedQuantity = 3,
-                          Supplier = db.Suppliers.FirstOrDefault(a => a.Name == "Home Goods Wholesale")
+                          Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
                       },
 
                      new WarehouseSection_Product
@@ -468,7 +492,7 @@ namespace Supermarket.Data
                          ExpirationDate = DateTime.Now,
                          Quantity = 5,
                          ReservedQuantity = 1,
-                         Supplier = db.Suppliers.FirstOrDefault(a => a.Name == "Home Goods Wholesale")
+                         Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
                      },
 
                      new WarehouseSection_Product
@@ -479,7 +503,7 @@ namespace Supermarket.Data
                          ExpirationDate = DateTime.Now,
                          Quantity = 88,
                          ReservedQuantity = 0,
-                         Supplier = db.Suppliers.FirstOrDefault(a => a.Name == "Home Goods Wholesale")
+                         Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
                      },
 
 
@@ -492,7 +516,7 @@ namespace Supermarket.Data
                         ExpirationDate = DateTime.Now,
                         Quantity = 30,
                         ReservedQuantity = 10,
-                        Supplier = db.Suppliers.FirstOrDefault(a => a.Name == "Home Goods Wholesale")
+                        Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
                     },
                     new WarehouseSection_Product
                     {
@@ -504,7 +528,8 @@ namespace Supermarket.Data
                         ExpirationDate = DateTime.Now,
                         Quantity = 15,
                         ReservedQuantity = 15,
-                        Supplier = db.Suppliers.FirstOrDefault(a => a.Name == "Home Goods Wholesale")
+
+                        Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
                     }
                 );
 
@@ -1196,29 +1221,7 @@ namespace Supermarket.Data
             }
         }
 
-       private static void PopulateSupplier(SupermarketDbContext db)
-        {
-            if (db.Suppliers.Any()) return;
-
-            db.Suppliers.AddRange(
-                new Models.Supplier { Name = "Global Foods Ltd" },
-                new Models.Supplier { Name = "Fresh Harvest Farms" },
-                new Models.Supplier { Name = "Pacific Seafood Co" },
-                new Models.Supplier { Name = "Quality Meats Inc" },
-                new Models.Supplier { Name = "Green Valley Grocers" },
-                new Models.Supplier { Name = "Sunrise Bakeries" },
-                new Models.Supplier { Name = "Golden Beverages LLC" },
-                new Models.Supplier { Name = "Nature's Best Produce" },
-                new Models.Supplier { Name = "Sweet Treats Confections" },
-                new Models.Supplier { Name = "Sunny Farms Dairy" },
-                new Models.Supplier { Name = "Premium Pet Supplies" },
-                new Models.Supplier { Name = "Tech Gadgets Distributors" },
-                new Models.Supplier { Name = "Office Essentials Co" },
-                new Models.Supplier { Name = "Home Goods Wholesale" }
-            );
-
-            db.SaveChanges();
-        }
+      
 
         private static void PopulateType(SupermarketDbContext db)
         {

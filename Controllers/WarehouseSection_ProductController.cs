@@ -92,7 +92,7 @@ namespace Supermarket.Controllers
 
             var warehouseSection_Product = await _context.WarehouseSection_Product
                 .Include(w => w.Product)
-                .Include(w => w.Supplier)
+                .Include(w => w.Suppliers)
                 .Include(w => w.WarehouseSection)
                 .FirstOrDefaultAsync(m => m.WarehouseSection_ProductId == id);
             if (warehouseSection_Product == null)
@@ -236,7 +236,7 @@ namespace Supermarket.Controllers
                     warehouseSection_Product.WarehouseSection = await _context.WarehouseSection.FindAsync(warehouseSection_Product.WarehouseSectionId);
                     warehouseSection_Product = await _context.WarehouseSection_Product
                     .Include(w => w.Product)
-                    .Include(w => w.Supplier)
+                    .Include(w => w.Suppliers)
                     .Include(w => w.WarehouseSection)
                     .FirstOrDefaultAsync(m => m.WarehouseSection_ProductId == id);
 
@@ -274,7 +274,7 @@ namespace Supermarket.Controllers
 
             var warehouseSection_Product = await _context.WarehouseSection_Product
                 .Include(w => w.Product)
-                .Include(w => w.Supplier)
+                .Include(w => w.Suppliers)
                 .Include(w => w.WarehouseSection)
                 .FirstOrDefaultAsync(m => m.WarehouseSection_ProductId == id);
 
