@@ -228,7 +228,7 @@ namespace Supermarket.Controllers
                 return Problem("Entity set 'SupermarketDbContext.Category'  is null.");
             }
             var category = await _context.Category.FindAsync(id);
-            var product = await _context.Product.Where(p => p.BrandId == id).ToListAsync();
+            var product = await _context.Product.Where(p => p.BrandId == id).FirstOrDefaultAsync();
             if (product != null)
             {
                 ModelState.AddModelError(string.Empty, "There is a product with this category, can't be deleted.");
