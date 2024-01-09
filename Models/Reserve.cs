@@ -11,6 +11,7 @@ namespace Supermarket.Models
         [Key]
         public int ReserveId { get; set; }
 
-        public ICollection<ReserveDepartment> Name { get; set; }
+        [Required]
+        public int NumeroDeFunc { get; set; }
     }
 }

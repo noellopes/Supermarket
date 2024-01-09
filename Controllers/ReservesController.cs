@@ -56,7 +56,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReserveId")] Reserve reserve)
+        public async Task<IActionResult> Create([Bind("ReserveId,NumeroDeFunc")] Reserve reserve)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReserveId")] Reserve reserve)
+        public async Task<IActionResult> Edit(int id, [Bind("ReserveId,NumeroDeFunc")] Reserve reserve)
         {
             if (id != reserve.ReserveId)
             {
