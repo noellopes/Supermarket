@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Supermarket.Models.Alert>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa; /* Cor de fundo mais clara */
+        color: #343a40; /* Cor do texto mais escura */
+    }
+
+    h1 {
+        color: #007bff; /* Azul Bootstrap */
+        margin-top: 20px; /* Margem superior maior */
+    }
+
+
+
+    .card {
+        background-color: #fff; /* Cor de fundo do cartão */
+        border: 1px solid rgba(0, 0, 0, 0.125); /* Borda do cartão */
+        border-radius: 0.25rem; /* Borda arredondada */
+        padding: 20px; /* Espaçamento interno do cartão */
+        margin-bottom: 20px; /* Margem inferior do cartão */
+    }
+
+</style>
+<div class="card">
+    <h1> Seen Alerts List</h1>
+</div>
+
+
+
+<form asp-action="Index">
+    <input type="submit" value="See Alerts Not Seen"/>
+</form>
+
+
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.AlertId" class="btn btn-secondary">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

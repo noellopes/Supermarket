@@ -12,6 +12,25 @@ namespace Supermarket.Data.Migrations.Supermarket
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Alert",
+                columns: table => new
+                {
+                    AlertId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
+                    Function = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Page = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Search = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Alert", x => x.AlertId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Brand",
                 columns: table => new
                 {
@@ -277,7 +296,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                     TotalQuantity = table.Column<int>(type: "int", nullable: false),
                     MinimumQuantity = table.Column<int>(type: "int", nullable: false),
                     UnitPrice = table.Column<double>(type: "float", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastCountDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -827,19 +847,30 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "WarehouseSection_Product",
                 columns: table => new
                 {
+                    WarehouseSection_ProductId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     WarehouseSectionId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    ReservedQuantity = table.Column<int>(type: "int", nullable: false)
+                    ReservedQuantity = table.Column<int>(type: "int", nullable: false),
+                    BatchNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SupplierID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WarehouseSection_Product", x => new { x.ProductId, x.WarehouseSectionId });
+                    table.PrimaryKey("PK_WarehouseSection_Product", x => x.WarehouseSection_ProductId);
                     table.ForeignKey(
                         name: "FK_WarehouseSection_Product_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WarehouseSection_Product_Suppliers_SupplierID",
+                        column: x => x.SupplierID,
+                        principalTable: "Suppliers",
+                        principalColumn: "SupplierId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_WarehouseSection_Product_WarehouseSection_WarehouseSectionId",
@@ -1158,6 +1189,16 @@ namespace Supermarket.Data.Migrations.Supermarket
                 column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_WarehouseSection_Product_ProductId",
+                table: "WarehouseSection_Product",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseSection_Product_SupplierID",
+                table: "WarehouseSection_Product",
+                column: "SupplierID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WarehouseSection_Product_WarehouseSectionId",
                 table: "WarehouseSection_Product",
                 column: "WarehouseSectionId");
@@ -1166,6 +1207,9 @@ namespace Supermarket.Data.Migrations.Supermarket
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Alert");
+
             migrationBuilder.DropTable(
                 name: "CardMovement");
 

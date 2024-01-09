@@ -117,6 +117,7 @@ namespace Supermarket.Data
         public DbSet<TakeAwayProduct> TakeAwayProduct { get; set; } = default!;
         public DbSet<User_Order> User_Order { get; set; } = default!;
         public DbSet<Order> Order { get; set; } = default!;
+        public DbSet<Supermarket.Models.Alert> Alert { get; set; } = default!;
 
     }
 }
