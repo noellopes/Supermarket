@@ -177,6 +177,40 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("ClientCard");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.Departments", b =>
+                {
+                    b.Property<int>("IDDepartments")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IDDepartments"));
+
+                    b.Property<string>("DescriptionDepartments")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("NameDepartments")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("QuatDepMed")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SkillsDepartments")
+                        .IsRequired()
+                        .HasMaxLength(155)
+                        .HasColumnType("nvarchar(155)");
+
+                    b.Property<bool>("StateDepartments")
+                        .HasColumnType("bit");
+
+                    b.HasKey("IDDepartments");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
                 {
                     b.Property<int>("EmployeeId")
@@ -492,7 +526,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("time");
 
                     b.Property<string>("Justificative")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LunchEndTime")

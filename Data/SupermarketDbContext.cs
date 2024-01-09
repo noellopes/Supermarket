@@ -73,7 +73,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.EmployeeSchedule> EmployeeSchedule { get; set; } = default!;
 
-
+        public DbSet<Departments> Departments { get; set; }
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
         public object Pontos { get; internal set; }
     }

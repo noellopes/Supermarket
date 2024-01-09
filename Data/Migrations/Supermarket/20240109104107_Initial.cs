@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class AtualizarDatas : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,6 +52,23 @@ namespace Supermarket.Data.Migrations.Supermarket
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Client", x => x.ClientId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    IDDepartments = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NameDepartments = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    DescriptionDepartments = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    StateDepartments = table.Column<bool>(type: "bit", nullable: false),
+                    SkillsDepartments = table.Column<string>(type: "nvarchar(155)", maxLength: 155, nullable: false),
+                    QuatDepMed = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.IDDepartments);
                 });
 
             migrationBuilder.CreateTable(
@@ -314,10 +331,10 @@ namespace Supermarket.Data.Migrations.Supermarket
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     GestorId = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: true),
-                    DataPedido = table.Column<DateTime>(type: "date", nullable: true),
-                    DataResultado = table.Column<DateTime>(type: "date", nullable: true),
-                    DataInicio = table.Column<DateTime>(type: "date", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "date", nullable: false),
+                    DataPedido = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataResultado = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
                     motivo = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -365,7 +382,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     LunchEndTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RealCheckOutTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Justificative = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Justificative = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExtraHours = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
@@ -744,6 +761,9 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             migrationBuilder.DropTable(
                 name: "CategoryDiscounts");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
 
             migrationBuilder.DropTable(
                 name: "EmployeeEvaluation");
