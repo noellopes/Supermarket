@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,7 @@ namespace Supermarket.Controllers
 
 
         // GET: Tickets
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Index(int page = 1, int departmentName = 0)
         {
 
@@ -83,6 +85,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Tickets/Details/5
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Tickets == null)
@@ -144,7 +147,7 @@ namespace Supermarket.Controllers
         //    return View("Details",tickets);
         //}
         //return View(tickets);
-
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public IActionResult Create()
         {
             //// Set default values for the ticket
@@ -161,7 +164,7 @@ namespace Supermarket.Controllers
 
             return View();
         }
-
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket, int departmentId =0)
@@ -191,6 +194,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: TicketsPriority/Create
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public IActionResult CreatePriority()
         {
 
@@ -201,6 +205,7 @@ namespace Supermarket.Controllers
   
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> CreatePriority([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket, int departmentId = 0)
         {
 
@@ -236,7 +241,7 @@ namespace Supermarket.Controllers
         //    return View("Details",tickets);
         //}
         //return View(tickets);
-
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Edit(int? id)
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
@@ -258,6 +263,7 @@ namespace Supermarket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Edit(int id, [Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
         {
             if (id != tickets.TicketId)
@@ -290,6 +296,7 @@ namespace Supermarket.Controllers
 
 
         // GET: Tickets/Edit/5
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Atender(int? id)
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
@@ -311,6 +318,7 @@ namespace Supermarket.Controllers
       
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Atender(int id, [Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
         {
             if (id != tickets.TicketId)
@@ -345,6 +353,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Tickets/Delete/5
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Tickets == null)
@@ -365,6 +374,7 @@ namespace Supermarket.Controllers
         // POST: Tickets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Tickets == null)

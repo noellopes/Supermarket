@@ -8,7 +8,15 @@
     ViewData["Title"] = "Tickets";
 }
 
+@{
 
+    var isAdmin = User.IsInRole("Gestor");
+    var isAdmin2 = User.IsInRole("Funcionário");
+    var isAdmin3 = User.IsInRole("Cliente");
+}
+
+@if (isAdmin || isAdmin2 || isAdmin3)
+{
 <div class="card mt-5">
     <div class="card-body">
         <form asp-action="Index" method="get">
