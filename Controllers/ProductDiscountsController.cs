@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using Supermarket.Data;
 using Supermarket.Models;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -90,7 +86,7 @@ namespace Supermarket.Controllers
             var productDiscounts = from b in _context.ProductDiscount.Include(b => b.ClientCard).Include(b => b.Product) select b; ;
             //pesquisa dos descontos produto
             if (product != "")
-            {
+            {   
                 productDiscounts = productDiscounts.Where(b => b.Product.Name.Contains(product));
             }
             if (value.HasValue)
