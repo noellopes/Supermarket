@@ -7,7 +7,7 @@ namespace Supermarket.Models
 {
     public class MealCard
     {
-
+        [Key]
         public int MealCardId { get; set; }
 
         [Required]
