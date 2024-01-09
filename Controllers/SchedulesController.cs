@@ -23,19 +23,28 @@ namespace Supermarket.Controllers
             _context = context;
         }
         [Authorize(Roles = "Gestor")]
-        public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0 )
+        public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0, Boolean BotaoVigor = false)
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
+            //var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
             var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
-           
+
+            if (BotaoVigor == true)
+            {
+                schedules =  schedules.Where(b => b.StartDate.Date <= DateTime.Now.Date && b.EndDate.Value.Date >= DateTime.Now.Date);
+            }
+            else
+            {
+                
+            }
 
             if (departmentDrop!=0)
             {
                 schedules = schedules.Where(x => x.IDDepartments==departmentDrop);
             }
 
-       
+            //
 
             PagingInfo paging = new PagingInfo
             {
