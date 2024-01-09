@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -20,10 +16,55 @@ namespace Supermarket.Controllers
         }
 
         // GET: ReserveDepartments1
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string reserveid = "", string employee = "", string numeroDeFunc = "")
         {
-            var supermarketDbContext = _context.ReserveDepartment.Include(r => r.Employee).Include(r => r.Reserve);
-            return View(await supermarketDbContext.ToListAsync());
+            var reserveDepartments = from r in _context.ReserveDepartment.Include(r => r.Employee).Include(r => r.Reserve) select r;
+
+            if (reserveid != "")
+            {
+                reserveDepartments = reserveDepartments.Where(x => x.ReserveId.ToString().Contains(reserveid));
+            }
+
+            if (employee != "")
+            {
+                reserveDepartments = reserveDepartments.Where(r => r.Employee.Employee_Name.Contains(employee));
+            }
+
+            if (numeroDeFunc != "")
+            {
+                reserveDepartments = reserveDepartments.Where(r => r.NumeroDeFunc.ToString().Contains(numeroDeFunc));
+            }
+
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await reserveDepartments.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new ReserveDepartmentViewModel
+            {
+                ReserveDepartment = await reserveDepartments
+                    .OrderBy(r => r.ReserveId)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfo = paging,
+                SearchEmployeeName = employee,
+                SearchNumeroFunc = numeroDeFunc,
+                SearchReserveId = reserveid
+
+            };
+
+            return View(vm);
         }
 
         // GET: ReserveDepartments1/Details/5
@@ -167,14 +208,14 @@ namespace Supermarket.Controllers
             {
                 _context.ReserveDepartment.Remove(reserveDepartment);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ReserveDepartmentExists(int id)
         {
-          return (_context.ReserveDepartment?.Any(e => e.ReserveId == id)).GetValueOrDefault();
+            return (_context.ReserveDepartment?.Any(e => e.ReserveId == id)).GetValueOrDefault();
         }
     }
 }

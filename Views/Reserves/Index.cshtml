@@ -30,8 +30,8 @@
                 @Html.DisplayFor(modelItem => item.NumeroDeFunc)
             </td>
             <td>
-                    <a asp-action="Edit" asp-route-id="@item.ReserveId" class="btn btn-primary">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.ReserveId" class="btn btn-info">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.ReserveId" class="btn btn-info">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.ReserveId" class="btn btn-primary">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@item.ReserveId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
