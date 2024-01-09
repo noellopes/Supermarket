@@ -97,7 +97,7 @@
 
 
 
-                            <a class="page-link" asp-action="Atender" asp-route-id="@Model.SearchDepartment">Atender</a>
+                            <a class="page-link" asp-action="Atender" asp-route-id="@item.TicketId">Atender</a>
 
                             @* <form asp-action="Atender"><input type="hidden" asp-for="@item.TicketId" /><div class="form-group">     <input type="submit" value="Save" class="btn btn-primary" /> </div> </form> *@
                             <a asp-action="Details" class="card-link  mt-3" asp-route-id="@item.TicketId">Details</a> |

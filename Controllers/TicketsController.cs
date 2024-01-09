@@ -302,63 +302,85 @@ namespace Supermarket.Controllers
             return View(tickets);
         }
 
-
-        // GET: Tickets/Edit/5
-        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
-        public async Task<IActionResult> Atender(int? id)
+        [Authorize(Roles = "Gestor,Funcionário")]
+        public IActionResult Atender(int id)
         {
-            ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
+            // Retrieve the ticket with the given ID from the database
+            var ticket = _context.Tickets.Find(id);
 
-            if (id == null || _context.Tickets == null)
+            if (ticket == null)
             {
-                return NotFound();
+                return NotFound(); // Handle the case where the ticket with the given ID is not found
             }
 
-            var tickets = await _context.Tickets.FindAsync(id);
-            if (tickets == null)
-            {
-                return NotFound();
-            }
-            return View(tickets);
+            // Call a method to perform the "Atender" operation
+            ticket.DataAtendimento = DateTime.Now;
+            ticket.Estado = true;
+
+            _context.Update(ticket);
+            // Save changes to the database
+            _context.SaveChanges();
+
+            // Redirect to the Index or another action
+            return RedirectToAction("Index");
         }
 
-        // POST: Tickets/Edit/5
-      
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
-        public async Task<IActionResult> Atender(int id, [Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
-        {
-            if (id != tickets.TicketId)
-            {
-                return NotFound();
-            }
+        //// GET: Tickets/Edit/5
+        //[Authorize(Roles = "Gestor,Funcionário,Cliente")]
+        //public async Task<IActionResult> Atender(int? id)
+        //{
+        //    ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    tickets.Estado = true;
-                    tickets.DataAtendimento = DateTime.Now;
-                    _context.Update(tickets);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TicketsExists(tickets.TicketId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                
-            }
-            return View(tickets);
-        }
+        //    if (id == null || _context.Tickets == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var tickets = await _context.Tickets.FindAsync(id);
+        //    if (tickets == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(tickets);
+        //}
+
+        //// POST: Tickets/Edit/5
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Gestor,Funcionário,Cliente")]
+        //public async Task<IActionResult> Atender(int id, [Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
+        //{
+        //    if (id != tickets.TicketId)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            tickets.Estado = true;
+        //            tickets.DataAtendimento = DateTime.Now;
+        //            _context.Update(tickets);
+        //            await _context.SaveChangesAsync();
+        //            return RedirectToAction("Index");
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!TicketsExists(tickets.TicketId))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+
+        //    }
+        //    return View(tickets);
+        //}
 
         // GET: Tickets/Delete/5
         [Authorize(Roles = "Gestor,Funcionário,Cliente")]
