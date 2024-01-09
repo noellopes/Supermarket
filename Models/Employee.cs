@@ -55,7 +55,14 @@ namespace Supermarket.Models
 
         [Required]
         public required DateTime Employee_Time_Bank { get; set; }
+      
+        //Ligação N para 1 com Função
+        public Funcao? Funcao { get; set; }
+        public int? Funcao_FK { get; set; }
 
+        //Ligação N para 1 com Função
+        public GrupoProjeto? GrupoProjeto { get; set; }
+        public int ProjetoId {  get; set; } = 0;
 
         //Ligação de 1 para 1 com Meal_Card
         public MealCard? MealCard { get; set; }

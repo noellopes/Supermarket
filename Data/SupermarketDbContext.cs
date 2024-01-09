@@ -14,6 +14,12 @@ namespace Supermarket.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
+
+            //ModelBuilder das funções
+            modelBuilder.Entity<Employee>()
+                .HasOne(f => f.Funcao)
+                .WithMany(e => e.Employees)
+                .HasForeignKey(k =>k.Funcao_FK);
         }
 
         public DbSet<Folga> Folga { get; set; } = default!;
@@ -68,6 +74,8 @@ namespace Supermarket.Data
         public DbSet<Employee> Funcionarios { get; set; } = default!;
 
         public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.GrupoProjeto> GrupoProjeto { get; set; } = default!;
 
     }
 }

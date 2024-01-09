@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Supermarket
+namespace Supermarket.Data.Migrations.SuperMarket
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class NewgroupCRUDwithlinktoEmployee : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -67,32 +67,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
-                name: "Employee",
-                columns: table => new
-                {
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Employee_Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Employee_Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Employee_Password = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Employee_Phone = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false),
-                    Employee_NIF = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false),
-                    Employee_Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Employee_Birth_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Employee_Admission_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Employee_Termination_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Standard_Check_In_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Standard_Check_Out_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Standard_Lunch_Hour = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Standard_Lunch_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Employee_Time_Bank = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Employee", x => x.EmployeeId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Folga",
                 columns: table => new
                 {
@@ -111,17 +85,31 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
-                name: "Funcao",
+                name: "GrupoProjeto",
                 columns: table => new
                 {
-                    FuncaoId = table.Column<int>(type: "int", nullable: false)
+                    ProjetoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NomeFuncao = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    DescricaoFuncao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                    NomeProjeto = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    DescricaoProjeto = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Objectives = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Funcao", x => x.FuncaoId);
+                    table.PrimaryKey("PK_GrupoProjeto", x => x.ProjetoId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Hierarquias",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hierarquias", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -235,44 +223,23 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmployeeEvaluation",
+                name: "Funcao",
                 columns: table => new
                 {
-                    EmployeeEvaluationId = table.Column<int>(type: "int", nullable: false)
+                    FuncaoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GradeNumber = table.Column<int>(type: "int", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
+                    NomeFuncao = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    DescricaoFuncao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    GrupoProjetoProjetoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmployeeEvaluation", x => x.EmployeeEvaluationId);
+                    table.PrimaryKey("PK_Funcao", x => x.FuncaoId);
                     table.ForeignKey(
-                        name: "FK_EmployeeEvaluation_Employee_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employee",
-                        principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MealCard",
-                columns: table => new
-                {
-                    MealCardId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Balance = table.Column<int>(type: "int", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MealCard", x => x.MealCardId);
-                    table.ForeignKey(
-                        name: "FK_MealCard_Employee_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employee",
-                        principalColumn: "EmployeeId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Funcao_GrupoProjeto_GrupoProjetoProjetoId",
+                        column: x => x.GrupoProjetoProjetoId,
+                        principalTable: "GrupoProjeto",
+                        principalColumn: "ProjetoId");
                 });
 
             migrationBuilder.CreateTable(
@@ -360,26 +327,42 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
-                name: "CardMovement",
+                name: "Employee",
                 columns: table => new
                 {
-                    CardMovementId = table.Column<int>(type: "int", nullable: false)
+                    EmployeeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Movement_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Value = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MealCardId = table.Column<int>(type: "int", nullable: false)
+                    Employee_Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Employee_Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Employee_Password = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Employee_Phone = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false),
+                    Employee_NIF = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false),
+                    Employee_Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Employee_Birth_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Employee_Admission_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Employee_Termination_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Standard_Check_In_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Standard_Check_Out_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Standard_Lunch_Hour = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Standard_Lunch_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Employee_Time_Bank = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Funcao_FK = table.Column<int>(type: "int", nullable: true),
+                    GrupoProjetoProjetoId = table.Column<int>(type: "int", nullable: true),
+                    ProjetoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CardMovement", x => x.CardMovementId);
+                    table.PrimaryKey("PK_Employee", x => x.EmployeeId);
                     table.ForeignKey(
-                        name: "FK_CardMovement_MealCard_MealCardId",
-                        column: x => x.MealCardId,
-                        principalTable: "MealCard",
-                        principalColumn: "MealCardId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Employee_Funcao_Funcao_FK",
+                        column: x => x.Funcao_FK,
+                        principalTable: "Funcao",
+                        principalColumn: "FuncaoId");
+                    table.ForeignKey(
+                        name: "FK_Employee_GrupoProjeto_GrupoProjetoProjetoId",
+                        column: x => x.GrupoProjetoProjetoId,
+                        principalTable: "GrupoProjeto",
+                        principalColumn: "ProjetoId");
                 });
 
             migrationBuilder.CreateTable(
@@ -425,6 +408,48 @@ namespace Supermarket.Data.Migrations.Supermarket
                         column: x => x.WarehouseSectionId,
                         principalTable: "WarehouseSection",
                         principalColumn: "WarehouseSectionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmployeeEvaluation",
+                columns: table => new
+                {
+                    EmployeeEvaluationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GradeNumber = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    EvaluationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeeEvaluation", x => x.EmployeeEvaluationId);
+                    table.ForeignKey(
+                        name: "FK_EmployeeEvaluation_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MealCard",
+                columns: table => new
+                {
+                    MealCardId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Balance = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MealCard", x => x.MealCardId);
+                    table.ForeignKey(
+                        name: "FK_MealCard_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -489,15 +514,53 @@ namespace Supermarket.Data.Migrations.Supermarket
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CardMovement",
+                columns: table => new
+                {
+                    CardMovementId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Movement_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Value = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MealCardId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CardMovement", x => x.CardMovementId);
+                    table.ForeignKey(
+                        name: "FK_CardMovement_MealCard_MealCardId",
+                        column: x => x.MealCardId,
+                        principalTable: "MealCard",
+                        principalColumn: "MealCardId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CardMovement_MealCardId",
                 table: "CardMovement",
                 column: "MealCardId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Employee_Funcao_FK",
+                table: "Employee",
+                column: "Funcao_FK");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employee_GrupoProjetoProjetoId",
+                table: "Employee",
+                column: "GrupoProjetoProjetoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EmployeeEvaluation_EmployeeId",
                 table: "EmployeeEvaluation",
                 column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Funcao_GrupoProjetoProjetoId",
+                table: "Funcao",
+                column: "GrupoProjetoProjetoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Hallway_StoreId",
@@ -590,7 +653,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "Folga");
 
             migrationBuilder.DropTable(
-                name: "Funcao");
+                name: "Hierarquias");
 
             migrationBuilder.DropTable(
                 name: "Issues");
@@ -644,7 +707,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "Warehouse");
 
             migrationBuilder.DropTable(
+                name: "Funcao");
+
+            migrationBuilder.DropTable(
                 name: "Store");
+
+            migrationBuilder.DropTable(
+                name: "GrupoProjeto");
         }
     }
 }

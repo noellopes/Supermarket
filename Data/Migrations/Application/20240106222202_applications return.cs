@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Groups
+namespace Supermarket.Data.Migrations.Application
 {
     /// <inheritdoc />
-    public partial class Artualizacao_tabelas : Migration
+    public partial class applicationsreturn : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -13,7 +13,7 @@ namespace Supermarket.Models
         [StringLength(100, MinimumLength = 3)]
         public string? DescricaoFuncao { get; set;}
 
-
+        public IReadOnlyCollection<Employee>? Employees { get; set; }
 
 
     }

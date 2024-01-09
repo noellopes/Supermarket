@@ -9,11 +9,11 @@ using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.Supermarket
+namespace Supermarket.Data.Migrations.Application
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20231215112502_ChangedEmployeeEvaluationModel")]
-    partial class ChangedEmployeeEvaluationModel
+    [Migration("20240106222202_applications return")]
+    partial class applicationsreturn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -186,6 +186,15 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<DateTime>("Employee_Time_Bank")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("Funcao_FK")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GrupoProjetoProjetoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjetoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Standard_Check_In_Time")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -203,6 +212,10 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployeeId");
+
+                    b.HasIndex("Funcao_FK");
+
+                    b.HasIndex("GrupoProjetoProjetoId");
 
                     b.ToTable("Employee");
                 });
@@ -280,6 +293,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("GrupoProjetoProjetoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("NomeFuncao")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -287,7 +303,35 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.HasKey("FuncaoId");
 
+                    b.HasIndex("GrupoProjetoProjetoId");
+
                     b.ToTable("Funcao");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.GrupoProjeto", b =>
+                {
+                    b.Property<int>("ProjetoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjetoId"));
+
+                    b.Property<string>("DescricaoProjeto")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("NomeProjeto")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Objectives")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProjetoId");
+
+                    b.ToTable("GrupoProjeto");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Hallway", b =>
@@ -311,6 +355,22 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasIndex("StoreId");
 
                     b.ToTable("Hallway");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.HierarquiasModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Hierarquias");
                 });
 
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>
@@ -697,6 +757,21 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("MealCard");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.Employee", b =>
+                {
+                    b.HasOne("Supermarket.Models.Funcao", "Funcao")
+                        .WithMany("Employees")
+                        .HasForeignKey("Funcao_FK");
+
+                    b.HasOne("Supermarket.Models.GrupoProjeto", "GrupoProjeto")
+                        .WithMany("Employees")
+                        .HasForeignKey("GrupoProjetoProjetoId");
+
+                    b.Navigation("Funcao");
+
+                    b.Navigation("GrupoProjeto");
+                });
+
             modelBuilder.Entity("Supermarket.Models.EmployeeEvaluation", b =>
                 {
                     b.HasOne("Supermarket.Models.Employee", "Employee")
@@ -706,6 +781,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Funcao", b =>
+                {
+                    b.HasOne("Supermarket.Models.GrupoProjeto", null)
+                        .WithMany("Funcoes")
+                        .HasForeignKey("GrupoProjetoProjetoId");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Hallway", b =>
@@ -864,6 +946,18 @@ namespace Supermarket.Data.Migrations.Supermarket
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
                 {
                     b.Navigation("MealCard");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Funcao", b =>
+                {
+                    b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.GrupoProjeto", b =>
+                {
+                    b.Navigation("Employees");
+
+                    b.Navigation("Funcoes");
                 });
 
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>
