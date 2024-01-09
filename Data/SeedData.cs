@@ -445,15 +445,15 @@ namespace Supermarket.Data {
 
             db.SubsidySetup.AddRange(
 
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) }
+                new SubsidySetup { HorasMinTrabalhadas = 4f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2023, 01, 01, 00, 00, 00, 500) },
+                new SubsidySetup { HorasMinTrabalhadas = 4f, ValorSubsidioDiario = 6, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) }
 
                );
 
             db.SaveChanges();
         }
+
+
 
         private static void PopulateEmployee(SupermarketDbContext db)
         {

@@ -7,10 +7,7 @@
 
 <h1> Subsidy Calculation</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
 
-</p>
 
 <div class="card mb-3">
     <div class="card-body">
@@ -24,133 +21,62 @@
                 <input class="btn btn-primary" type="submit" value="Search"/>
                 <a class="btn btn-secondary" asp-action="Index">Cancel</a>
             </div>
+
+            
+
         </form>
     </div>
 </div>
-<div>
 
 
-<table class="table table-success table-striped">
-    <thead>
-        <tr>
+    <table class="table">
+        <thead>
+            <tr>
 
-            <th>
-                    <p>Empregado</p>
-            </th>
-            
-            <th>
-                <p> Hora de Entrada </p>
-            </th>
-            <th>
-                <p> Hora de Saída </p>
-            </th>
-            <th>
-                <p>Total Horas</p>
-            </th>
+               
                 <th>
-                    <p>Valor diario a receber</p>
+                    <p>Employee </p>
                 </th>
             <th>
-                <p>Data</p>
+                <p>Email </p>
             </th>
-            
+            <th>
+                <p>Contacto </p>
+            </th>
+            <th>
+                <p>Calcular Subdidio Diaria </p>
+            </th>
+            </tr>
+        </thead>
 
-           
-
-         
-
-           
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Pontos )
+        <tbody>
+        @foreach (var item in Model.Pontos)
         {
-        <tr>
-         
-            <td>
-                        @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
-                
-            </td>
-
-               
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckInTime)
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckOutTime)
-                </td>
-
-               
-                <td>
-                    
-                    @{
-                       // TimeSpan diff = TimeSpan.FromHours(0);
-                      //  TimeSpan diff = TimeSpan.Parse(item.Ponto.CheckOutTime) -TimeSpan.Parse(item.Ponto.CheckInTime);
-                        string diffFormatted;
-
-                     //  @if ( item.Ponto != null && item.Ponto.CheckInTime != null)
-                   //   {
-                        TimeSpan entrada = TimeSpan.Parse(item.CheckInTime);
-
-                        TimeSpan saida = TimeSpan.Parse(item.CheckOutTime);
-                            TimeSpan diff = saida - entrada;
-                    //  }
-                        
-
-                         diffFormatted = $"{(int)diff.TotalHours}h{diff.Minutes:D2}";
-
-                        @diffFormatted
-                    }
-                    
-                    
-                </td>
-
-                <td>
-                    @{
-
-                        double VALOR_DIARIO_RECEBER = 6;
-                            double VALOR_DIARIO_RECEB = 5;
-
-                        double diferencaEmHoras = diff.TotalHours;
-                        string SEM_VALOR_DIARIO = " valor a receber: 0€";
-
-                            if (diferencaEmHoras > 4 && item.Date.Value.Year == DateTime.Today.Year)
-
-                        {
-                           
-                            @($" valor a recebr: {VALOR_DIARIO_RECEBER}{"€"}")
-                            ;
-
-                           
-                        }
-                            else if (diferencaEmHoras > 3 && item.Date.Value.Year < DateTime.Today.Year)
-                        {
-                                @($" valor a recebr: {VALOR_DIARIO_RECEB}{"€"}")
-                                ;
-                               
-                            }
-                            else
-                            {
-                                @SEM_VALOR_DIARIO
-                            }
-
-
-                    }
-                </td>
+            <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-               
-                  
-        </tr>
-          
-}
-    </tbody>
-</table>
+                        @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.Employee_Email)      
 
-<nav aria-label="employees">
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Employee.Employee_Phone)     
+
+                </td>
+                <td>
+                <a asp-action="Details" asp-controller="SubsidyCalculations" asp-route-id="@item.Employee.Employee_Name" class="btn btn-dark btn-sm">Calcular</a>
+                </td>
+            
+            </tr>
+        }
+    </tbody>
+
+    </table>
+
+
+
+<nav aria-label="subsidyCalculation">
     <ul class="pagination">
         @if (Model.PagingInfo.CurrentPage == 1)
         {
@@ -205,4 +131,5 @@
 
 
 </nav>
+
 
