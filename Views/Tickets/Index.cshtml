@@ -8,182 +8,169 @@
     ViewData["Title"] = "Tickets";
 }
 
+@{
 
-<div class="card mt-5">
-    <div class="card-body">
-        <form asp-action="Index" method="get">
-            <p><strong>Search Tickets</strong></p>
+    var isAdmin = User.IsInRole("Gestor");
+    var isAdmin2 = User.IsInRole("Funcionário");
+    var isAdmin3 = User.IsInRole("Cliente");
+}
+
+@if (isAdmin || isAdmin2 || isAdmin3)
+{
+    <div class="card mt-5">
+        <div class="card-body">
+            <form asp-action="Index" method="get">
+                <p><strong>Search Tickets</strong></p>
 
             <div class="form-group">
                 <select id="selectedDepartment" name="departmentName"
                         asp-items="@(new SelectList(Model.Departments, "IDDepartments", "NameDepartments"))"
                         class="form-control">
-                    <option value="0">No Department Selected</option>
+                    <option value="0">-- All Departments --</option>
                 </select>
             </div>
 
-            <div class="mt-3">
-                <input class="btn btn-primary" type="submit" name="searchButton" value="Search" />
-                <a class="btn btn-secondary" asp-action="Index">Cancel</a>
-            </div>
+                <div class="mt-3">
+                    <input class="btn btn-primary" type="submit" name="searchButton" value="Search" />
+                    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+                </div>
 
-        </form>
-    </div>
-</div>
-<hr class="mt-4">
-
-@if (Model.Tickets.Any() && Model.SearchDepartment != 0)
-{
-   
-    <div class="row">
-        
-        <div class="col card border-dark mt-5 center" style="width: 18rem;">
-            <form asp-action="Create" asp-route-departmentId="@Model.SearchDepartment" method="post">
-
-            <div class="card-body">
-                    <input type="image" class="mx-auto d-block"  src="https://pngimg.com/uploads/plus/plus_PNG106.png" alt="Submit" width="128" height="128">
-               @*  <a asp-action="Create"><img width="128" class="mx-auto d-block" height="128" src="https://pngimg.com/uploads/plus/plus_PNG106.png" alt="Card image cap"></a> *@
-
-            </div>
             </form>
         </div>
-        
-        
-        <div class="col card border-primary mt-5 pr-5 center" style="width: 18rem;">
-            <form asp-action="CreatePriority" asp-route-departmentId="@Model.SearchDepartment" method="post">
-
-            <div class="card-body">
-                    <input type="image" class="mx-auto d-block" src="~/images/P+.png" alt="Submit" width="128" height="128">
-                @* <a asp-action="CreatePriority"><img width="128" class="mx-auto d-block" height="128" src="~/images/P+.png" alt="Card image cap"></a> *@
-
-            </div>
-            </form>
-        </div>
-        
     </div>
-    
+    <hr class="mt-4">
 
-    <div class="row">
+    @if (Model.Tickets.Any() && Model.SearchDepartment != 0)
+    {
+        <div class="row">
 
-        @foreach (var item in Model.Tickets)
-        {
-            <div class="col mt-3">
-                <div class="card" style="width: 18rem;">
+            <div class="col card border-dark mt-5 center" style="width: 18rem;">
+                <form asp-action="Create" asp-route-departmentId="@Model.SearchDepartment" method="post">
+
                     <div class="card-body">
-                        <h5 class="card-title mt-3">Número da Senha:  #@item.NumeroDaSenha)</h5>
-                        <h6 class="card-title mt-3">Departamento: @item.Departments.NameDepartments</h6>
-                        <h6 class="card-subtitle mb-2 mt-3 text-muted">Emitida:  @item.DataEmissao</h6>
-                        <h6 class="mt-3">Tempo previsto:  Por desenvolver</h6>
-                        <h6 class="card-subtitle mb-2 mt-3 text-muted">Atendida:  @item.DataAtendimento</h6>
+                        <input type="image" class="mx-auto d-block"  src="https://pngimg.com/uploads/plus/plus_PNG106.png" alt="Submit" width="128" height="128">
+                        @*  <a asp-action="Create"><img width="128" class="mx-auto d-block" height="128" src="https://pngimg.com/uploads/plus/plus_PNG106.png" alt="Card image cap"></a> *@
 
-                        @* <h6 class="mt-3">Departamento:  @Html.DisplayFor(modelItem => item.Departments.NameDepartments)</h6> *@
-                        @if (item.Departments == null)
-                        {
-                            <h6>Sem departamento</h6>
-                        }
-                        else
-                        {
-                            //   <h6>@item.Departments.NameDepartments</h6>
-                        }
-                        <h6 class="card-subtitle mt-3 text-muted"> Prioritário:   @(item.Prioritario ? "Sim" : "Não")</h6>
-                        <h6 class="card-subtitle mb-2 mt-3 text-muted">Estado:  @(item.Estado ? "Atendido" : "Não atendido")</h6>
+                    </div>
+                </form>
+            </div>
 
-                        <a href="@Url.Action("Atender")" class="btn btn-primary">Atender</a>
-                        @* <form asp-action="Atender"><input type="hidden" asp-for="@item.TicketId" /><div class="form-group">     <input type="submit" value="Save" class="btn btn-primary" /> </div> </form> *@
-                        <a asp-action="Details" class="card-link  mt-3" asp-route-id="@item.TicketId">Details</a> |
-                        <a asp-action="Delete" class="card-link  mt-3" asp-route-id="@item.TicketId">Delete</a>
+
+            <div class="col card border-primary mt-5 pr-5 center" style="width: 18rem;">
+                <form asp-action="CreatePriority" asp-route-departmentId="@Model.SearchDepartment" method="post">
+
+                    <div class="card-body">
+                        <input type="image" class="mx-auto d-block" src="~/images/P+.png" alt="Submit" width="128" height="128">
+                        @* <a asp-action="CreatePriority"><img width="128" class="mx-auto d-block" height="128" src="~/images/P+.png" alt="Card image cap"></a> *@
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+            @foreach (var item in Model.Tickets)
+            {
+                <div class="col mt-3">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title mt-3">Número da Senha:  #@item.NumeroDaSenha)</h5>
+                            <h6 class="card-title mt-3">Departamento: @item.Departments.NameDepartments</h6>
+                            <h6 class="card-subtitle mb-2 mt-3 text-muted">Emitida:  @item.DataEmissao</h6>
+                            <h6 class="mt-3">Tempo previsto:  Por desenvolver</h6>
+                            <h6 class="card-subtitle mb-2 mt-3 text-muted">Atendida:  @item.DataAtendimento</h6>
+
+                            @* <h6 class="mt-3">Departamento:  @Html.DisplayFor(modelItem => item.Departments.NameDepartments)</h6> *@
+                            @if (item.Departments == null)
+                            {
+                                <h6>Sem departamento</h6>
+                            }
+                            else
+                            {
+                                //   <h6>@item.Departments.NameDepartments</h6>
+                            }
+                            <h6 class="card-subtitle mt-3 text-muted"> Prioritário:   @(item.Prioritario ? "Sim" : "Não")</h6>
+                            <h6 class="card-subtitle mb-2 mt-3 text-muted">Estado:  @(item.Estado ? "Atendido" : "Não atendido")</h6>
+
+
+
+                            <a class="page-link" asp-action="Atender" asp-route-id="@Model.SearchDepartment">Atender</a>
+
+                            @* <form asp-action="Atender"><input type="hidden" asp-for="@item.TicketId" /><div class="form-group">     <input type="submit" value="Save" class="btn btn-primary" /> </div> </form> *@
+                            <a asp-action="Details" class="card-link  mt-3" asp-route-id="@item.TicketId">Details</a> |
+                            <a asp-action="Delete" class="card-link  mt-3" asp-route-id="@item.TicketId">Delete</a>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        }
-
-    </div>
-
-    <nav aria-label="tickets" class="mt-5">
-        <ul class="pagination">
-            @if (Model.PagingInfo.CurrentPage == 1)
-            {
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">First</a>
-                </li>
-            }
-            else
-            {
-                <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="1" asp-route-departmentName="@Model.SearchDepartment">First</a>
-                </li>
             }
 
-            @{
-                int first = Model.PagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-                if (first < 1) first = 1;
+        </div>
 
-                int last = Model.PagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-                if (last > Model.PagingInfo.TotalPages) last = Model.PagingInfo.TotalPages;
-            }
-
-            @for (int p = first; p <= last; p++)
-            {
-                @if (p == Model.PagingInfo.CurrentPage)
+        <nav aria-label="tickets" class="mt-5">
+            <ul class="pagination">
+                @if (Model.PagingInfo.CurrentPage == 1)
                 {
-                    <li class="page-item active" aria-current="page">
-                        <a class="page-link" href="#">@p</a>
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">First</a>
                     </li>
                 }
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Index" asp-route-page="@p" asp-route-departmentName="@Model.SearchDepartment">@p</a>
+                        <a class="page-link" asp-action="Index" asp-route-page="1" asp-route-departmentName="@Model.SearchDepartment">First</a>
                     </li>
                 }
-            }
-            @if (Model.PagingInfo.CurrentPage == Model.PagingInfo.TotalPages)
-            {
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">Last</a>
-                </li>
-            }
-            else
-            {
-                <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages" asp-route-departmentName="@Model.SearchDepartment">Last</a>
-                </li>
-            }
-        </ul>
-    </nav>
 
+                @{
+                    int first = Model.PagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                    if (first < 1) first = 1;
+
+                    int last = Model.PagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
+                    if (last > Model.PagingInfo.TotalPages) last = Model.PagingInfo.TotalPages;
+                }
+
+                @for (int p = first; p <= last; p++)
+                {
+                    @if (p == Model.PagingInfo.CurrentPage)
+                    {
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#">@p</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-action="Index" asp-route-page="@p" asp-route-departmentName="@Model.SearchDepartment">@p</a>
+                        </li>
+                    }
+                }
+                @if (Model.PagingInfo.CurrentPage == Model.PagingInfo.TotalPages)
+                {
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Last</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages" asp-route-departmentName="@Model.SearchDepartment">Last</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+        <hr>
+    }
+    else
+    {
+        <p>No Department Selected</p>
+    }
 }
 else
 {
-    <p>No Department Selected</p>
+    <p>Não tem permissão para visualizar esta página.</p>
 }
-
-    
-
-
-
-  <hr>
-
-  @* 
-@foreach (var item in Model.Departments)
-{
-<div class="row">
-   
-        <div class="col mt-3">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title mt-3">Departamento Nome </h5>
-
-                <a asp-action="CriarTicketNaoPrioritario">
-                    <img src="" />
-                </a>
-                    <a asp-action="CriarTicketPrioritario">
-                        <img src="" />
-                    </a>
-                </div>
-            </div>
-        </div>
-
-</div> *@
 
