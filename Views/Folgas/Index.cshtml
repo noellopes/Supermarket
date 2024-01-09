@@ -11,28 +11,36 @@
 }
 
 <p>
-    <a asp-action="Create">Criar novo pedido de folga</a>
+    <a asp-action="Create">Criar Novo Pedido de Folga</a><br />
+    <a asp-action="FolgasPendentes">Folgas Pendentes</a><br />
+    <a asp-action="FolgasAprovadas">Folgas Aprovadas</a><br />
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                Gestor
+                GestorId
             </th>
             <th>
-                Status
+                Status 
             </th>
             <th>
-                Data Pedido
+                Data do Pedido 
             </th>
             <th>
-                Início
+                Data da Aprovação/Rejeição
             </th>
             <th>
-                Fim
+                Data de Início
+            </th>
+            <th>
+                Data de Fim
             </th>
             <th>
                 Motivo
+            </th>
+            <th>
+                Id do Funcionário
             </th>
             <th></th>
         </tr>
@@ -41,7 +49,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Gestor)
+                @Html.DisplayFor(modelItem => item.GestorId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
@@ -50,16 +58,22 @@
                 @Html.DisplayFor(modelItem => item.DataPedido)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.DataResultado)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.DataInicio)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DataFim)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Motivo)
+                @Html.DisplayFor(modelItem => item.motivo)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FolgaId">Alterar</a> |
+                @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FolgaId">Editar</a> |
                 <a asp-action="Details" asp-route-id="@item.FolgaId">Detalhes</a> |
                 <a asp-action="Delete" asp-route-id="@item.FolgaId">Eliminar</a>
             </td>

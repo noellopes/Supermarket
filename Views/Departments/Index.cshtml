@@ -5,13 +5,20 @@
     ViewData["Title"] = "Departamentos";
     var pageSizes = new List<int> { 2, 8, 10,12,int.MaxValue };
 }
+@{
+    
+    var isAdmin = User.IsInRole("Gestor");
+}
+
+@if (isAdmin)
+{
 <h1>Departamentos</h1>
 <div class="containerPesquisa">
     <div class="row">
         <div class="col-12 col-md-4">
             <form asp-controller="Departments" asp-action="Index" method="get">
                 <div class="input-group">
-                    <input type="search" name="searchTerm" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" value="@ViewData["SearchTerm"]" />
+                    <input type="search" name="searchTerm" class="form-control rounded" placeholder="Pesquisa por Nome" aria-label="Search" aria-describedby="search-addon" value="@ViewData["SearchTerm"]" />
                     <button type="submit" class="btn btn-outline-primary" data-mdb-ripple-init>Pesquisa</button>
                     <a asp-controller="Departments" asp-action="Index" class="btn btn-outline-danger">Limpar</a>
                     @if (ViewBag.Message != null)
@@ -51,13 +58,15 @@
              Numero de senhas para a calculo media 
             </th>
             <th>
-                Média de Tempo de Serviço (minutos)
+                Tempo de Atendimento 
             </th>
             <th></th>
         </tr>
     </thead>
 
     <tbody>
+        @if (Model.Departments.Any())
+        {
         @foreach (var item in Model.Departments)
         {
         <tr>
@@ -77,7 +86,37 @@
                 @Html.DisplayFor(modelItem => item.QuatDepMed)
             </td>
             <td>
-               
+                    @if (Model.TimeDifferences.Count > 0)
+                    {
+                        // Inicializa o índice atual para rastrear o item em Model.Departments
+                        int currentIndex = 0;
+                        // Itera sobre cada departamento em Model.Departments
+                        foreach (var departmentItem in Model.Departments)
+                        {
+                            // Verifica se o departamento atual é o mesmo que o item na tabela
+                            if (departmentItem == item)
+                            {
+                                // Verifica a diferença de tempo
+                                var timeDifference = Model.TimeDifferences[currentIndex];
+
+                                // Adiciona classes do Bootstrap com base na diferença de tempo
+                                string textClass = timeDifference.TotalMinutes >= 17 ? "text-danger" : (timeDifference.TotalMinutes >= 12 ? "text-warning" : (timeDifference.TotalMinutes >= 0 ? "text-success" : ""));
+
+                                // Exibe a diferença de tempo correspondente ao item com classes do Bootstrap
+                                <span class="@textClass">@timeDifference.ToString(@"hh\:mm")</span>
+
+                                // Encerra o loop, pois encontramos a correspondência
+                                break;
+                            }
+                            // Incrementa o índice para rastrear o próximo item em Model.Departments
+                            currentIndex++;
+                        }
+                    }
+                    else
+                    {
+                        // Se não houver diferenças de tempo, exibe "N/A"
+                        <p>N/A</p>
+                    }
             </td>
             <td>
                 <div class="btn-group" role="group" aria-label="Edit,Details,Delete">
@@ -88,7 +127,16 @@
                 </div>
             </td>
         </tr>
-}
+        }        
+        }
+        else
+        {
+        <tr>
+            <td colspan="7">
+                <p class="text-center">Nenhum departamento encontrado.</p>
+            </td>
+        </tr>
+        }
     </tbody>
 </table>
 <nav aria-label="Page navigation">
@@ -128,3 +176,8 @@
       </div>
     </div>
 </nav>
+}
+else
+{
+    <p>Não tem permissão para visualizar esta página.</p>
+}

@@ -170,9 +170,8 @@ namespace Supermarket.Controllers
         {
             if (!startDate.HasValue || !endDate.HasValue)
             {
-                // Defina valores padrão ou lide com o caso em que as datas não foram fornecidas
-                startDate = DateTime.Today.AddDays(-7); // Exemplo: 7 dias atrás
-                endDate = DateTime.Today;
+                startDate = DateTime.Today.AddDays(-7);
+                endDate = DateTime.Today.AddDays(1);
             }
 
             var cardMovements = await _context.CardMovement
@@ -186,10 +185,10 @@ namespace Supermarket.Controllers
                 .Select(group => new TopEmployeeSpending
                 {
                     Employee = group.Key,
-                    TotalSpent = group.Where(c => c.Value < 0).Sum(c => c.Value) // Suponha que Amount seja a propriedade que representa o valor gasto em CardMovement
+                    TotalSpent = group.Where(c => c.Value < 0).Sum(c => c.Value)
                 })
                 .OrderBy(x => x.TotalSpent)
-                .Take(10); // Você pode ajustar para a quantidade desejada
+                .Take(10);
 
             var vm = new MealCardTopViewModel
             {
