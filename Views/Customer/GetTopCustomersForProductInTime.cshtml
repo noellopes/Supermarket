@@ -1,0 +1,23 @@
+﻿
+@model List<Customer>
+
+
+@if (Model != null)
+{
+   
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.CustomerName
+                </td>
+
+            </tr>
+        }
+    </tbody>
+  
+
+    
+}

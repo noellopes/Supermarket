@@ -1,0 +1,72 @@
+﻿@model Supermarket.Models.SubsidySetup
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Success</h4>
+        <p>@ViewBag.Message</p>
+    </div>
+}
+
+<style>
+
+    .teste {
+        margin-left: 15%;
+        border: 1px solid;
+        padding: 10px;
+        box-shadow: 5px 10px;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 20px;
+        border-radius: 50px 20px;
+    }
+
+    dt{
+        margin:20px;
+    }
+
+    .testo {
+        text-align: center;
+        padding-top: 20px;
+    }
+
+</style>
+
+
+<h1>Details</h1>
+
+<div>
+    <h4>SubsidySetup</h4>
+    <hr />
+    <div class="teste">
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HorasMinTrabalhadas)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HorasMinTrabalhadas)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ValorSubsidioDiario)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ValorSubsidioDiario)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DataEntradaVigor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DataEntradaVigor)
+        </dd>
+    </dl>
+</div>
+</div>
+<div class="testo">
+  
+    <a asp-action="Edit" asp-route-id="@Model?.SubsidySetupId" class="btn btn-warning btn-smm">Edit</a>
+    <a asp-action="Index" class="btn btn-danger btn-sm">Back to List</a>
+</div>

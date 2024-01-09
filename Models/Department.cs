@@ -19,7 +19,7 @@ namespace Supermarket.Models
         // Descrição do Estado do departamento
         public required bool StateDepartments { get; set; }
         // Qualificaçao funcionario no Departamento
-        [StringLength(155, ErrorMessage = "The Department Description field must have a maximum of 155 characters.")]
+        [StringLength(5, ErrorMessage = "The Department Description select field select.")]
         public required string SkillsDepartments { get; set; }
         //Quantidade de senhas que cada gestor de departamento definir para o calculo da media
         [Required(ErrorMessage = "O campo QuatDepMed é obrigatório.")]

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Supermarket.Models.SubsidySetup>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<h2>
+    <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
+</h2>
+<table class="table table-success table-striped">
+    <thead>
+        <tr>
+            <th>
+                <p>Horas Minimas Trabalhadas</p>
+            </th>
+            <th>
+             <p>  Valor Subsidio Diario</p>
+            </th>
+            <th>
+                <p>Data Entrada Vigor</p>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HorasMinTrabalhadas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ValorSubsidioDiario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataEntradaVigor)
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.SubsidySetupId" class="btn btn-warning btn-smm">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.SubsidySetupId" class="btn btn-info btn-smm">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.SubsidySetupId" class="btn btn-danger btn-smm">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
