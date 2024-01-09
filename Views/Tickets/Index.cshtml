@@ -17,7 +17,16 @@
 
 @if (isAdmin || isAdmin2 || isAdmin3)
 {
+    @if (ViewBag.ErrorMessage != null)
+    {
+                 <div style="color: red;">             
+                     @ViewBag.ErrorMessage         
+                 </div>
+    }
+
     <div class="card mt-5">
+
+
         <div class="card-body">
             <form asp-action="Index" method="get">
                 <p><strong>Search Tickets</strong></p>
@@ -26,7 +35,7 @@
                 <select id="selectedDepartment" name="departmentName"
                         asp-items="@(new SelectList(Model.Departments, "IDDepartments", "NameDepartments"))"
                         class="form-control">
-                    <option value="0">-- All Departments --</option>
+                    <option value="0">-- No Department Selected --</option>
                 </select>
             </div>
 
@@ -38,7 +47,7 @@
             </form>
         </div>
     </div>
-    <hr class="mt-4">
+    <hr class="mt-5">
 
     @if (Model.Tickets.Any() && Model.SearchDepartment != 0)
     {
@@ -77,10 +86,9 @@
                 <div class="col mt-3">
                     <div class="card" style="width: 18rem;">
                         <div class="card-body">
-                            <h5 class="card-title mt-3">Número da Senha:  #@item.NumeroDaSenha)</h5>
+                            <h5 class="card-title mt-3">Número da Senha:  #@item.NumeroDaSenha</h5>
                             <h6 class="card-title mt-3">Departamento: @item.Departments.NameDepartments</h6>
                             <h6 class="card-subtitle mb-2 mt-3 text-muted">Emitida:  @item.DataEmissao</h6>
-                            <h6 class="mt-3">Tempo previsto:  Por desenvolver</h6>
                             <h6 class="card-subtitle mb-2 mt-3 text-muted">Atendida:  @item.DataAtendimento</h6>
 
                             @* <h6 class="mt-3">Departamento:  @Html.DisplayFor(modelItem => item.Departments.NameDepartments)</h6> *@
@@ -93,11 +101,11 @@
                                 //   <h6>@item.Departments.NameDepartments</h6>
                             }
                             <h6 class="card-subtitle mt-3 text-muted"> Prioritário:   @(item.Prioritario ? "Sim" : "Não")</h6>
-                            <h6 class="card-subtitle mb-2 mt-3 text-muted">Estado:  @(item.Estado ? "Atendido" : "Não atendido")</h6>
+                            @* <h6 class="card-subtitle mb-2 mt-3 text-muted">Estado:  @(item.Estado ? "Atendido" : "Não atendido")</h6> *@
 
 
 
-                            <a class="page-link" asp-action="Atender" asp-route-id="@item.TicketId">Atender</a>
+                            <a class="mt-3 mb-2 page-link" asp-action="Atender" asp-route-id="@item.TicketId">Atender</a>
 
                             @* <form asp-action="Atender"><input type="hidden" asp-for="@item.TicketId" /><div class="form-group">     <input type="submit" value="Save" class="btn btn-primary" /> </div> </form> *@
                             <a asp-action="Details" class="card-link  mt-3" asp-route-id="@item.TicketId">Details</a> |

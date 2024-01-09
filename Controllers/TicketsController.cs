@@ -150,8 +150,7 @@ namespace Supermarket.Controllers
         [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public IActionResult Create()
         {
-            //// Set default values for the ticket
-            //var newTicket = new Ticket
+ 
             //{
             //    DataEmissao = DateTime.Now,
             //    DataAtendimento = null,
@@ -192,6 +191,10 @@ namespace Supermarket.Controllers
                 _context.SaveChanges();
 
                 return RedirectToAction("Index"); // Redirect to the ticket list or another action
+            }else
+            {
+                ViewBag.ErrorMessage = "The current time is outside the allowed Schedule.";
+                return View("Index");
             }
 
             return View(ticket);
@@ -241,14 +244,7 @@ namespace Supermarket.Controllers
             return View(ticket);
 
         }
-        //if (ModelState.IsValid)
-        //{
-        //    _context.Add(tickets);
-        //    await _context.SaveChangesAsync();
-        //    ViewBag.Message = "Ticket created sucessfully.";
-        //    return View("Details",tickets);
-        //}
-        //return View(tickets);
+
         [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Edit(int? id)
         {
