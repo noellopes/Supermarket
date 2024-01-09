@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 namespace Supermarket.Data {
     public class SeedData {
         private const string ROLE_ADMIN = "Administrator";
+        private const string ROLE_MANAGER = "Manager";
 
         internal static void Populate(SupermarketDbContext db) {
             PopulateBrand(db);
@@ -525,9 +526,15 @@ namespace Supermarket.Data {
 
         internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager) {
             var user = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
+            var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
 
             if (!await userManager!.IsInRoleAsync(user, ROLE_ADMIN)) {
                 await userManager!.AddToRoleAsync(user, ROLE_ADMIN);
+            }
+
+            if (!await userManager!.IsInRoleAsync(manager, ROLE_MANAGER))
+            {
+                await userManager!.AddToRoleAsync(manager, ROLE_MANAGER);
             }
         }
 
@@ -540,10 +547,12 @@ namespace Supermarket.Data {
             }
 
             return user;
+            
         }
 
         internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager) {
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_MANAGER);
 
         }
 

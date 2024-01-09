@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+    //[Authorize]
     public class EmployeesController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -28,6 +30,8 @@ namespace Supermarket.Controllers
                           Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
         }
         */
+
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index(int page = 1, string employee_name = "")
         {
             var employees = from b in _context.Employee select b;
@@ -120,6 +124,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time")] Employee employee)
         {
             if (ModelState.IsValid)
@@ -177,6 +182,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, Employee employee)
         {
             if (id != employee.EmployeeId)
@@ -272,6 +278,7 @@ namespace Supermarket.Controllers
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Employee == null)
