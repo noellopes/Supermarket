@@ -20,10 +20,42 @@ namespace Supermarket.Controllers
         }
 
         // GET: ClientCards
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string name = "", bool? estado = null)
         {
-            var supermarketDbContext = _context.ClientCard.Include(c => c.Client);
-            return View(await supermarketDbContext.ToListAsync());
+            var clientCards = from b in _context.ClientCard.Include(b=>b.Client) select b;
+            if (name != "")
+            {
+                clientCards = clientCards.Where(x => x.Client!.ClientName.Contains(name));
+            }
+            if (estado.HasValue)
+            {
+                clientCards = clientCards.Where(b => b.Estado == estado.Value);
+            }
+
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await clientCards.CountAsync(),
+            };
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new ClientCardsViewModel
+            {
+                ClientCards = await clientCards
+                    .OrderBy(b => b.ClientCardNumber)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfo = paging,
+            };
+            return View(vm);
         }
 
         // GET: ClientCards/Details/5

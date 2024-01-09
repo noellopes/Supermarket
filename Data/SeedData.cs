@@ -8,6 +8,7 @@ namespace Supermarket.Data
     public class SeedData
     {
         private const string ROLE_ADMIN = "Administrator";
+        private const string ROLE_CLIENT = "Client";
         private const string ROLE_ADMIN1 = "Funcionário";
         private const string ROLE_ADMIN2 = "Gestor";
         private const string ROLE_ADMIN3 = "Cliente";
@@ -1113,6 +1114,10 @@ namespace Supermarket.Data
             }
 
             var costumer = await EnsureUserIsCreatedAsync(userManager!, "costumer@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(costumer, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(costumer, ROLE_CLIENT);
+            }
             if (!await userManager!.IsInRoleAsync(costumer, "Avaliar_Funcionarios"))
             {
                 await userManager!.AddToRoleAsync(costumer, "Avaliar_Funcionarios");
@@ -1136,7 +1141,16 @@ namespace Supermarket.Data
                 await userManager!.AddToRoleAsync(employee, "Create_Reports");
             }
 
+
             var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(manager, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(manager, ROLE_CLIENT);
+            }
+            if (!await userManager!.IsInRoleAsync(manager, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN);
+            }
             if (!await userManager!.IsInRoleAsync(manager, "Avaliar_Funcionarios"))
             {
                 await userManager!.AddToRoleAsync(manager, "Avaliar_Funcionarios");
@@ -1191,6 +1205,7 @@ namespace Supermarket.Data
         internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager)
         {
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_CLIENT);
             await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN3);
