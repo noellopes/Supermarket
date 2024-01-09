@@ -169,8 +169,12 @@ namespace Supermarket.Controllers
            
             var ticketlista = await _context.Tickets.ToListAsync();
 
+            var schedules = await _context.Schedule.Where(b => b.IDDepartments == departmentId).FirstOrDefaultAsync();
+
             // Perform validation and save the new ticket to the database
-            if (ModelState.IsValid)
+
+            //  if (ModelState.IsValid && (DateTime.Now.Date<= schedules.EndDate.Value.Date&& DateTime.Now.Date >= schedules.StartDate.Date) && (DateTime.Now.Hour <= schedules.DailyFinishTime.Hour && DateTime.Now.Hour >= schedules.DailyStartTime.Hour && DateTime.Now.Minute <= schedules.DailyFinishTime.Minute && DateTime.Now.Minute >= schedules.DailyStartTime.Minute))
+            if (ModelState.IsValid && DateTime.Now >= schedules.StartDate.Date && DateTime.Now <= schedules.EndDate.Value.Date)
             {
 
                 ticket.DataEmissao = DateTime.Now;
@@ -207,8 +211,12 @@ namespace Supermarket.Controllers
             var ticketlista = await _context.Tickets.ToListAsync();
 
 
+            var schedules = await _context.Schedule.Where(b => b.IDDepartments == departmentId).FirstOrDefaultAsync();
+
             // Perform validation and save the new ticket to the database
-            if (ModelState.IsValid)
+
+            //  if (ModelState.IsValid && (DateTime.Now.Date<= schedules.EndDate.Value.Date&& DateTime.Now.Date >= schedules.StartDate.Date) && (DateTime.Now.Hour <= schedules.DailyFinishTime.Hour && DateTime.Now.Hour >= schedules.DailyStartTime.Hour && DateTime.Now.Minute <= schedules.DailyFinishTime.Minute && DateTime.Now.Minute >= schedules.DailyStartTime.Minute))
+            if (ModelState.IsValid && DateTime.Now >= schedules.StartDate.Date && DateTime.Now <= schedules.EndDate.Value.Date)
             {
 
                 ticket.DataEmissao = DateTime.Now;
