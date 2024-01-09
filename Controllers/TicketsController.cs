@@ -150,8 +150,7 @@ namespace Supermarket.Controllers
         [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public IActionResult Create()
         {
-            //// Set default values for the ticket
-            //var newTicket = new Ticket
+ 
             //{
             //    DataEmissao = DateTime.Now,
             //    DataAtendimento = null,
@@ -182,23 +181,36 @@ namespace Supermarket.Controllers
                 // Check if the current time is within the daily time range
                 TimeSpan currentTimeOfDay = DateTime.Now.TimeOfDay;
 
-                if (currentTimeOfDay >= schedules.DailyStartTime.TimeOfDay && currentTimeOfDay <= schedules.DailyFinishTime.TimeOfDay) { 
+                if (currentTimeOfDay >= schedules.DailyStartTime.TimeOfDay && currentTimeOfDay <= schedules.DailyFinishTime.TimeOfDay)
+                {
                     ticket.DataEmissao = DateTime.Now;
-                ticket.DataAtendimento = null;
-                ticket.NumeroDaSenha = ticketlista.Last().NumeroDaSenha + 1;
-                ticket.Estado = false;
-                ticket.Prioritario = false;
-                ticket.IDDepartments = departmentId;
+                    ticket.DataAtendimento = null;
+                    ticket.NumeroDaSenha = ticketlista.Last().NumeroDaSenha + 1;
+                    ticket.Estado = false;
+                    ticket.Prioritario = false;
+                    ticket.IDDepartments = departmentId;
 
-                // Save the new ticket to the database
-                _context.Tickets.Add(ticket);
-                _context.SaveChanges();
+                    // Save the new ticket to the database
+                    _context.Tickets.Add(ticket);
+                    _context.SaveChanges();
 
-                return RedirectToAction("Index"); // Redirect to the ticket list or another action
+                    TempData["NoDataMessage"] = "Senha : " + ticket.TicketId + " Criada com sucesso!" ;
+                    return RedirectToAction("Index"); // Redirect to the ticket list or another action
+                    // Redirect to the ticket list or another action
+                }
+                else
+                {
+                    TempData["NoDataMessage"] = "Erro. Fora de horario.";
+                    return RedirectToAction("Index"); // Redirect to the ticket list or another action
+
                 }
             }
+            else
+            {
+                TempData["NoDataMessage"] = "Erro. Fora de datas";
+                return RedirectToAction("Index"); // Redirect to the ticket list or another action
+            }
 
-            return View(ticket);
         }
 
         // GET: TicketsPriority/Create
@@ -219,7 +231,6 @@ namespace Supermarket.Controllers
 
             var ticketlista = await _context.Tickets.ToListAsync();
 
-
             var schedules = await _context.Schedule.Where(b => b.IDDepartments == departmentId).FirstOrDefaultAsync();
 
             // Perform validation and save the new ticket to the database
@@ -227,32 +238,41 @@ namespace Supermarket.Controllers
             //  if (ModelState.IsValid && (DateTime.Now.Date<= schedules.EndDate.Value.Date&& DateTime.Now.Date >= schedules.StartDate.Date) && (DateTime.Now.Hour <= schedules.DailyFinishTime.Hour && DateTime.Now.Hour >= schedules.DailyStartTime.Hour && DateTime.Now.Minute <= schedules.DailyFinishTime.Minute && DateTime.Now.Minute >= schedules.DailyStartTime.Minute))
             if (ModelState.IsValid && DateTime.Now >= schedules.StartDate.Date && DateTime.Now <= schedules.EndDate.Value.Date)
             {
+                // Check if the current time is within the daily time range
+                TimeSpan currentTimeOfDay = DateTime.Now.TimeOfDay;
 
-                ticket.DataEmissao = DateTime.Now;
-                ticket.DataAtendimento = null;
-                ticket.NumeroDaSenha = ticketlista.Last().NumeroDaSenha + 1;
-                ticket.Estado = false;
-                ticket.Prioritario = true;
-                ticket.IDDepartments = departmentId;
+                if (currentTimeOfDay >= schedules.DailyStartTime.TimeOfDay && currentTimeOfDay <= schedules.DailyFinishTime.TimeOfDay)
+                {
+                    ticket.DataEmissao = DateTime.Now;
+                    ticket.DataAtendimento = null;
+                    ticket.NumeroDaSenha = ticketlista.Last().NumeroDaSenha + 1;
+                    ticket.Estado = false;
+                    ticket.Prioritario = true;
+                    ticket.IDDepartments = departmentId;
 
-                // Save the new ticket to the database
-                _context.Tickets.Add(ticket);
-                _context.SaveChanges();
+                    // Save the new ticket to the database
+                    _context.Tickets.Add(ticket);
+                    _context.SaveChanges();
 
+                    TempData["NoDataMessage"] = "Senha Prioritária: " + ticket.TicketId + " Criada com sucesso!";
+                    return RedirectToAction("Index"); // Redirect to the ticket list or another action
+                    // Redirect to the ticket list or another action
+                }
+                else
+                {
+                    TempData["NoDataMessage"] = "Erro. Fora de horario.";
+                    return RedirectToAction("Index"); // Redirect to the ticket list or another action
+
+                }
+            }
+            else
+            {
+                TempData["NoDataMessage"] = "Erro. Fora de datas";
                 return RedirectToAction("Index"); // Redirect to the ticket list or another action
             }
 
-            return View(ticket);
-
         }
-        //if (ModelState.IsValid)
-        //{
-        //    _context.Add(tickets);
-        //    await _context.SaveChangesAsync();
-        //    ViewBag.Message = "Ticket created sucessfully.";
-        //    return View("Details",tickets);
-        //}
-        //return View(tickets);
+
         [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Edit(int? id)
         {
