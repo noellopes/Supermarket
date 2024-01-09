@@ -24,29 +24,28 @@ namespace Supermarket.Controllers
 
 
         // GET: Tickets
-        public async Task<IActionResult> Index (string searchButton, int page = 1,int departmentName = 0)
+        public async Task<IActionResult> Index(int page = 1, int departmentName = 0)
         {
 
-            ViewBag.SearchButtonClicked = !string.IsNullOrEmpty(searchButton);
 
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
-        var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
-      
-    
-        if (departmentName != 0)
-           {
+            var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
+
+
+            if (departmentName != 0)
+            {
                 tickets = tickets.Where(x => x.IDDepartments == departmentName);
             }
 
-        var Departments = await _context.Departments.ToListAsync();
+            var Departments = await _context.Departments.ToListAsync();
 
 
-        PagingInfo paging = new PagingInfo
-        {
-            CurrentPage = page,
-            TotalItems = await tickets.CountAsync(),
-        };
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await tickets.CountAsync(),
+            };
 
             if (paging.CurrentPage <= 1)
             {
@@ -69,8 +68,9 @@ namespace Supermarket.Controllers
                 SearchDepartment = departmentName,
                 //SearchButtonDepartment = departmentButtonName,
             };
-                
-            return View(tm);
+
+           return View(tm);
+
         }
 
         private int GetDepartmentId(string departmentName)
