@@ -16,23 +16,23 @@ namespace Supermarket.Controllers
         }
 
         // GET: ReserveDepartments1
-        public async Task<IActionResult> Index(int page = 1, string reserveid = "", string employee = "", string numeroDeFunc = "")
+        public async Task<IActionResult> Index(int page = 1, int reserveid = 0, string employee = "", int numeroDeFunc = 0)
         {
             var reserveDepartments = from r in _context.ReserveDepartment.Include(r => r.Employee).Include(r => r.Reserve) select r;
 
-            if (reserveid != "")
+            if (reserveid != 0)
             {
-                reserveDepartments = reserveDepartments.Where(x => x.ReserveId.ToString().Contains(reserveid));
+                reserveDepartments = reserveDepartments.Where(x => x.ReserveId == reserveid);
             }
 
             if (employee != "")
             {
-                reserveDepartments = reserveDepartments.Where(r => r.Employee.Employee_Name.Contains(employee));
+                reserveDepartments = reserveDepartments.Where(b => b.Employee.Employee_Name.Contains(employee));
             }
 
-            if (numeroDeFunc != "")
+            if (numeroDeFunc != 0)
             {
-                reserveDepartments = reserveDepartments.Where(r => r.NumeroDeFunc.ToString().Contains(numeroDeFunc));
+                reserveDepartments = reserveDepartments.Where(c => c.NumeroDeFunc == numeroDeFunc);
             }
 
             PagingInfo paging = new PagingInfo
@@ -61,11 +61,11 @@ namespace Supermarket.Controllers
                 SearchEmployeeName = employee,
                 SearchNumeroFunc = numeroDeFunc,
                 SearchReserveId = reserveid
-
             };
 
             return View(vm);
         }
+
 
         // GET: ReserveDepartments1/Details/5
         public async Task<IActionResult> Details(int? id)
