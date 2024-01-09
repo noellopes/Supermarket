@@ -6,11 +6,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class MigracaoCompleta : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Alert",
+                columns: table => new
+                {
+                    AlertId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
+                    Function = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Page = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Search = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Alert", x => x.AlertId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Brand",
                 columns: table => new
@@ -1188,6 +1207,9 @@ namespace Supermarket.Data.Migrations.Supermarket
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Alert");
+
             migrationBuilder.DropTable(
                 name: "CardMovement");
 

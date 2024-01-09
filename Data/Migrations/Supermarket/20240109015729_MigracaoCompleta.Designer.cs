@@ -12,13 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-<<<<<<<< HEAD:Data/Migrations/Supermarket/20240109014133_Initial.Designer.cs
-    [Migration("20240109014133_Initial")]
-    partial class Initial
-========
-    [Migration("20240108234553_MigracaoCompleta")]
+    [Migration("20240109015729_MigracaoCompleta")]
     partial class MigracaoCompleta
->>>>>>>> b22fa45bc255a1c7aaf6aeb9da28c0b64a645824:Data/Migrations/Supermarket/20240108234553_MigracaoCompleta.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +38,47 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasIndex("ProductsId");
 
                     b.ToTable("OrderTakeAwayProduct");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Alert", b =>
+                {
+                    b.Property<int>("AlertId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AlertId"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<string>("Function")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Page")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Search")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AlertId");
+
+                    b.ToTable("Alert");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Brand", b =>
