@@ -4,6 +4,7 @@ using System.Drawing.Printing;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index(string searchTerm, int page = 1, int pageSize = 2)
         {
             IQueryable<Department> departmentsQuery = _context.Departments;
@@ -91,7 +93,7 @@ namespace Supermarket.Controllers
 
             return View(viewModel);
         }
-
+        [Authorize(Roles = "Administrator")]
         // GET: DepartmentsInop
         public IActionResult IndexInop(string searchTerm, int page = 1, int pageSize = 2)
         {
@@ -145,6 +147,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments/Details/
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Departments == null)
@@ -173,6 +176,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department departments)
         {
             if (ModelState.IsValid)
@@ -218,6 +222,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department departments)
         {
             if (id != departments.IDDepartments)
@@ -281,6 +286,7 @@ namespace Supermarket.Controllers
         // POST: Departments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Departments == null)

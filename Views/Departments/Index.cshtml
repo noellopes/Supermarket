@@ -5,6 +5,13 @@
     ViewData["Title"] = "Departamentos";
     var pageSizes = new List<int> { 2, 8, 10,12,int.MaxValue };
 }
+@{
+    
+    var isAdmin = User.IsInRole("Administrator");
+}
+
+@if (isAdmin)
+{
 <h1>Departamentos</h1>
 <div class="containerPesquisa">
     <div class="row">
@@ -169,3 +176,8 @@
       </div>
     </div>
 </nav>
+}
+else
+{
+    <p>Não tem permissão para visualizar esta página.</p>
+}
