@@ -20,36 +20,56 @@ namespace Supermarket.Controllers
         }
 
         // GET: FormationEmployees
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string employeeName = "", string formationName = "")
         {
-            var supermarketDbContext = _context.FormationEmployee.Include(f => f.Employee).Include(f => f.Formation);
-            return View(await supermarketDbContext.ToListAsync());
-        }
+            var formationEmployees = from fe in _context.FormationEmployee
+                                     .Include(fe => fe.Employee)
+                                     .Include(fe => fe.Formation)
+                                     select fe;
 
-        // GET: FormationEmployees/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.FormationEmployee == null)
+            if (!string.IsNullOrEmpty(employeeName))
             {
-                return NotFound();
+                formationEmployees = formationEmployees.Where(fe => fe.Employee.Employee_Name.Contains(employeeName));
             }
 
-            var formationEmployee = await _context.FormationEmployee
-                .Include(f => f.Employee)
-                .Include(f => f.Formation)
-                .FirstOrDefaultAsync(m => m.FormationEmployeeId == id);
-            if (formationEmployee == null)
+            if (!string.IsNullOrEmpty(formationName))
             {
-                return NotFound();
+                formationEmployees = formationEmployees.Where(fe => fe.Formation.Formation_Name.Contains(formationName));
             }
 
-            return View(formationEmployee);
-        }
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await formationEmployees.CountAsync(),
+            };
 
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new FormationEmployeeViewModel
+            {
+                FormationEmployees = await formationEmployees
+                    .OrderBy(fe => fe.Employee.Employee_Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfo = paging,
+                SearchEmployeeName = employeeName,
+                SearchFormationName = formationName,
+            };
+
+            return View(vm);
+        }
         // GET: FormationEmployees/Create
         public IActionResult Create()
         {
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "EmployeeId");
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
             ViewData["FormationId"] = new SelectList(_context.Formation, "FormationId", "Formation_Name");
             return View();
         }
@@ -67,7 +87,7 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "EmployeeId", formationEmployee.EmployeeId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", formationEmployee.EmployeeId);
             ViewData["FormationId"] = new SelectList(_context.Formation, "FormationId", "Formation_Name", formationEmployee.FormationId);
             return View(formationEmployee);
         }
@@ -85,7 +105,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "EmployeeId", formationEmployee.EmployeeId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", formationEmployee.EmployeeId);
             ViewData["FormationId"] = new SelectList(_context.Formation, "FormationId", "Formation_Name", formationEmployee.FormationId);
             return View(formationEmployee);
         }
@@ -122,7 +142,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "EmployeeId", formationEmployee.EmployeeId);
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", formationEmployee.EmployeeId);
             ViewData["FormationId"] = new SelectList(_context.Formation, "FormationId", "Formation_Name", formationEmployee.FormationId);
             return View(formationEmployee);
         }
@@ -161,14 +181,14 @@ namespace Supermarket.Controllers
             {
                 _context.FormationEmployee.Remove(formationEmployee);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool FormationEmployeeExists(int id)
         {
-          return (_context.FormationEmployee?.Any(e => e.FormationEmployeeId == id)).GetValueOrDefault();
+            return (_context.FormationEmployee?.Any(e => e.FormationEmployeeId == id)).GetValueOrDefault();
         }
     }
 }
