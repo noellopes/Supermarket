@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: CategoryDiscounts
+        [Authorize(Roles ="Administrator")]
         public async Task<IActionResult> CategoryDiscountTopSeller()
         {
             // Definir o período desejado (por exemplo, 4 meses a partir da data atual)
@@ -73,7 +75,7 @@ namespace Supermarket.Controllers
         }
 
 
-
+        [Authorize(Roles = "Client")]
         public async Task<IActionResult> Index(int page = 1, string category = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
      
@@ -125,6 +127,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: CategoryDiscounts/Details/5
+        [Authorize(Roles = "Client")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.CategoryDiscounts == null)
@@ -145,6 +148,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: CategoryDiscounts/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Category, "CategoryId", "Name");
@@ -157,6 +161,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("CategoryDiscountsId,CategoryId,ClientCardId,Value,StartDate,EndDate")] CategoryDiscounts categoryDiscounts)
         {
             if (ModelState.IsValid)
@@ -233,6 +238,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: CategoryDiscounts/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.CategoryDiscounts == null)
@@ -255,6 +261,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("CategoryDiscountsId,CategoryId,ClientCardId,Value,StartDate,EndDate")] CategoryDiscounts categoryDiscounts)
         {
             if (id != categoryDiscounts.CategoryDiscountsId)
@@ -288,6 +295,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: CategoryDiscounts/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.CategoryDiscounts == null)
@@ -310,6 +318,7 @@ namespace Supermarket.Controllers
         // POST: CategoryDiscounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.CategoryDiscounts == null)
