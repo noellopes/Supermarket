@@ -1000,7 +1000,41 @@ namespace Supermarket.Data
 
         internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager)
         {
-          
+            var user1 = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
+            var user2 = await EnsureUserIsCreatedAsync(userManager!, "anasilva_pinhel@hotmail.com", "Informatica_123");
+            var user3 = await EnsureUserIsCreatedAsync(userManager!, "Afonso@gmail.com", "Afonso#123");
+            var user4 = await EnsureUserIsCreatedAsync(userManager!, "Hugo@gmail.com", "Hugo#123");
+            var user5 = await EnsureUserIsCreatedAsync(userManager!, "Alberto1@gmail.com", "Alberto#123");
+            var user6 = await EnsureUserIsCreatedAsync(userManager!, "Afonso1@gmail.com", "AfonsoI#123");
+            var user7 = await EnsureUserIsCreatedAsync(userManager!, "Jessica1@gmail.com", "JessicaI#123");
+            var user8 = await EnsureUserIsCreatedAsync(userManager!, "Hugo1@gmail.com", "HugoI#123");
+            var user9 = await EnsureUserIsCreatedAsync(userManager!, "Alberto2@gmail.com", "AlbertoI#123");
+            var user10 = await EnsureUserIsCreatedAsync(userManager!, "Afonso2@gmail.com", "AfonsoII#123");
+            var user11 = await EnsureUserIsCreatedAsync(userManager!, "Jessica2@gmail.com", "JessicaII#123");
+            var user12 = await EnsureUserIsCreatedAsync(userManager!, "Hugo2@gmail.com", "HugoII#123");
+            var user13 = await EnsureUserIsCreatedAsync(userManager!, "Afonso3@gmail.com", "AfonsoIII#123");
+            var user14 = await EnsureUserIsCreatedAsync(userManager!, "Jessica3@gmail.com", "JessicaIII#123");
+            var user15 = await EnsureUserIsCreatedAsync(userManager!, "Hugo3@gmail.com", "HugoIII#123");
+            var user17 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
+            var user18 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
+
+            //Group4----------------------------------------------------------------
+            var userJoaoStockAdmin = await EnsureUserIsCreatedAsync(userManager!, "joaostockadmin@ipg.pt", "Secret#123");
+            var userAndreStockOp = await EnsureUserIsCreatedAsync(userManager!, "andrestockop@ipg.pt", "Secret#123");
+            var userIvoStockOp = await EnsureUserIsCreatedAsync(userManager!, "ivostockop@ipg.pt", "Secret#123");
+
+            if (!await userManager!.IsInRoleAsync(userJoaoStockAdmin, ROLE_STOCK_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(userJoaoStockAdmin, ROLE_STOCK_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(userAndreStockOp, ROLE_STOCK_OP))
+            {
+                await userManager!.AddToRoleAsync(userAndreStockOp, ROLE_STOCK_OP);
+            }
+            if (!await userManager!.IsInRoleAsync(userIvoStockOp, ROLE_STOCK_OP))
+            {
+                await userManager!.AddToRoleAsync(userIvoStockOp, ROLE_STOCK_OP);
+            }
 
             //Group7----------------------------------------------------------------
             var adminGroup7 = await EnsureUserIsCreatedAsync(userManager!, "adminGroup7@ipg.pt", "Secret#123");
@@ -1032,7 +1066,142 @@ namespace Supermarket.Data
             }
             */
             //--------------------------------------------------------------------
-          
+
+            if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
+            {
+                await userManager!.AddToRoleAsync(user1, "Gestor");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user2, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user2, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user3, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user3, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user4, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user4, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user5, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user5, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user6, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user6, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user5, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user5, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user7, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user7, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user8, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user8, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user9, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user9, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user10, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user10, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user11, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user11, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user12, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user12, "Funcionário");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user13, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user13, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user14, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user14, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user15, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user15, "Funcionário");
+            }
+
+            var costumer = await EnsureUserIsCreatedAsync(userManager!, "costumer@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(costumer, "Avaliar_Funcionarios"))
+            {
+                await userManager!.AddToRoleAsync(costumer, "Avaliar_Funcionarios");
+            }
+
+            var employee = await EnsureUserIsCreatedAsync(userManager!, "employee@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(employee, "Avaliar_Funcionarios"))
+            {
+                await userManager!.AddToRoleAsync(employee, "Avaliar_Funcionarios");
+            }
+            if (!await userManager!.IsInRoleAsync(employee, "Role_Funcionario"))
+            {
+                await userManager!.AddToRoleAsync(employee, "Role_Funcionario");
+            }
+            if (!await userManager!.IsInRoleAsync(employee, "View_Reports"))
+            {
+                await userManager!.AddToRoleAsync(employee, "View_Reports");
+            }
+            if (!await userManager!.IsInRoleAsync(employee, "Create_Reports"))
+            {
+                await userManager!.AddToRoleAsync(employee, "Create_Reports");
+            }
+
+
+            var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(manager, "Avaliar_Funcionarios"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Avaliar_Funcionarios");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "View_Reports"))
+            {
+                await userManager!.AddToRoleAsync(manager, "View_Reports");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "Create_Reports"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Create_Reports");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "Create_Edit_Del_IssueType"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Create_Edit_Del_IssueType");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "Edit_Del_Reports"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Edit_Del_Reports");
+            }
+
+            var clienteAlberto = await EnsureUserIsCreatedAsync(userManager!, "zealberto@gmail.com", "Alberto#123");
+            if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN3))
+            {
+                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN3);
+            }
+
+            var funcAndre = await EnsureUserIsCreatedAsync(userManager!, "andre@gmail.com", "Andre#123");
+            if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN1))
+            {
+                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN1);
+            }
+
+            if (!await userManager!.IsInRoleAsync(manager, ROLE_MANAGER))
+            {
+                await userManager!.AddToRoleAsync(manager, ROLE_MANAGER);
+            }
         }
 
 
