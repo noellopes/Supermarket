@@ -54,7 +54,7 @@ namespace Supermarket.Data
             PopulateSchedules(db);
             PopulateTickets(db);
             PopulateOrder(db);
-
+            PopulatePonto(db);
 
         }
         private static void PopulateDepartment(SupermarketDbContext db)
@@ -916,7 +916,16 @@ namespace Supermarket.Data
             if (db.MealCard.Any()) return;
 
             db.MealCard.AddRange(
-                new MealCard { EmployeeId = 1 }
+                new MealCard { EmployeeId = 1 },
+                new MealCard { EmployeeId = 3},
+                new MealCard { EmployeeId = 2 },
+                new MealCard { EmployeeId = 4 },
+                new MealCard { EmployeeId = 6 },
+                new MealCard { EmployeeId = 7 },
+                new MealCard { EmployeeId = 5},
+                new MealCard { EmployeeId = 10 },
+                new MealCard { EmployeeId = 9 },
+                new MealCard { EmployeeId = 8 }
             );
 
             db.SaveChanges();
@@ -928,25 +937,22 @@ namespace Supermarket.Data
             if (db.CardMovement.Any()) return;
 
             db.CardMovement.AddRange(
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -200, Type = "Debit" }
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200 },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 150 },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 180 },
+                new CardMovement { MealCardId = 2, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 250 },
+                new CardMovement { MealCardId = 1, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -100 },
+                new CardMovement { MealCardId = 1, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -120 },
+                new CardMovement { MealCardId = 4, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200 },
+                new CardMovement { MealCardId = 3, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 180 },
+                new CardMovement { MealCardId = 4, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -90 },
+                new CardMovement { MealCardId = 5, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200 },
+                new CardMovement { MealCardId = 6, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 120 },
+                new CardMovement { MealCardId = 6, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -110 },
+                new CardMovement { MealCardId = 7, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 170 },
+                new CardMovement { MealCardId = 8, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 210 },
+                new CardMovement { MealCardId = 9, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 230 },
+                new CardMovement { MealCardId = 9, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -130 }
             );
 
             db.SaveChanges();
@@ -1404,7 +1410,30 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
+        private static void PopulatePonto(SupermarketDbContext db)
+        {
+            if (db.Ponto.Any()) return;
 
+            db.Ponto.AddRange(
+                new Ponto { CheckInTime = "07:30", CheckOutTime = "16:30", Date = DateTime.Now, LunchStartTime = "12:00", LunchEndTime = "13:00", RealCheckOutTime = "17:00", EmployeeId = 1, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "08:00", CheckOutTime = "17:00", Date = DateTime.Now, LunchStartTime = "12:30", LunchEndTime = "13:30", RealCheckOutTime = "18:00", EmployeeId = 2, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "07:45", CheckOutTime = "16:45", Date = DateTime.Now, LunchStartTime = "12:15", LunchEndTime = "13:15", RealCheckOutTime = "17:30", EmployeeId = 3, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "08:15", CheckOutTime = "17:15", Date = DateTime.Now, LunchStartTime = "12:45", LunchEndTime = "13:45", RealCheckOutTime = "18:15", EmployeeId = 4, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "07:30", CheckOutTime = "16:30", Date = DateTime.Now, LunchStartTime = "12:00", LunchEndTime = "13:00", RealCheckOutTime = "17:00", EmployeeId = 5, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "08:00", CheckOutTime = "17:00", Date = DateTime.Now, LunchStartTime = "12:30", LunchEndTime = "13:30", RealCheckOutTime = "18:00", EmployeeId = 6, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "07:45", CheckOutTime = "16:45", Date = DateTime.Now, LunchStartTime = "12:15", LunchEndTime = "13:15", RealCheckOutTime = "17:30", EmployeeId = 7, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "08:15", CheckOutTime = "17:15", Date = DateTime.Now, LunchStartTime = "12:45", LunchEndTime = "13:45", RealCheckOutTime = "18:15", EmployeeId = 8, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "07:30", CheckOutTime = "16:30", Date = DateTime.Now, LunchStartTime = "12:00", LunchEndTime = "13:00", RealCheckOutTime = "15:00", EmployeeId = 9, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "08:00", CheckOutTime = "17:00", Date = DateTime.Now, LunchStartTime = "12:30", LunchEndTime = "13:30", RealCheckOutTime = "14:00", EmployeeId = 10, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "07:45", CheckOutTime = "16:45", Date = DateTime.Now, LunchStartTime = "12:15", LunchEndTime = "13:15", RealCheckOutTime = "15:30", EmployeeId = 11, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "08:15", CheckOutTime = "17:15", Date = DateTime.Now, LunchStartTime = "12:45", LunchEndTime = "13:45", RealCheckOutTime = "14:25", EmployeeId = 12, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "07:30", CheckOutTime = "16:30", Date = DateTime.Now, LunchStartTime = "12:00", LunchEndTime = "13:00", RealCheckOutTime = "15:00", EmployeeId = 13, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "08:00", CheckOutTime = "17:00", Date = DateTime.Now, LunchStartTime = "12:30", LunchEndTime = "13:30", RealCheckOutTime = "16:00", EmployeeId = 14, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "07:45", CheckOutTime = "16:45", Date = DateTime.Now, LunchStartTime = "12:15", LunchEndTime = "13:15", RealCheckOutTime = "15:30", EmployeeId = 15, Status = "notworkOvertime", Justificative = "Médico" }
+            );
+
+            db.SaveChanges();
+        }
 
 
     }
