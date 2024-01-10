@@ -9,7 +9,7 @@ namespace Supermarket.Data
 {
     public class GroupsDbContext : DbContext
     {
-        public GroupsDbContext (DbContextOptions<GroupsDbContext> options)
+        public GroupsDbContext(DbContextOptions<GroupsDbContext> options)
             : base(options)
         {
         }

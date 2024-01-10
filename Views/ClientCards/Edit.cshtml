@@ -14,6 +14,16 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ClientCardId" />
             <div class="form-group">
+                <label asp-for="ClientId" class="control-label"></label>
+                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+                <span asp-validation-for="ClientId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpiredProductId" class="control-label"></label>
+                <input asp-for="ExpiredProductId" class="form-control" />
+                <span asp-validation-for="ExpiredProductId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="ClientCardNumber" class="control-label"></label>
                 <input asp-for="ClientCardNumber" class="form-control" />
                 <span asp-validation-for="ClientCardNumber" class="text-danger"></span>
@@ -22,6 +32,11 @@
                 <label asp-for="Balance" class="control-label"></label>
                 <input asp-for="Balance" class="form-control" />
                 <span asp-validation-for="Balance" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
+                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
