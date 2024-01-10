@@ -11,6 +11,5 @@ namespace Supermarket.Models
         [Required]
         public string Formation_Name { get; set; }
 
-
     }
 }
