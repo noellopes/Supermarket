@@ -7,42 +7,40 @@
 <h1>Details</h1>
 
 <div>
-    <h4>CardMovement</h4>
     <hr />
     <dl class="row">
+        <dt class="col-sm-2">
+            Employee
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MealCard.Employee.Employee_Name)
+        </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Movement_Date)
+            Movement Date
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Movement_Date)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Value)
+            Value
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Value)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+            Description
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
+            Type
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Type)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MealCard)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MealCard.MealCardId)
-        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.CardMovementId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Back" asp-controller="CardMovements" asp-route-mc="@Model.MealCard.MealCardId" class="btn btn-outline-dark button-text btn-sm">Back to MealCard</a>
 </div>

@@ -1,0 +1,30 @@
+﻿@model Supermarket.Models.User_Order
+
+@{
+    ViewData["Title"] = "Status Edit";
+}
+
+
+<h4>Status</h4>
+<hr />
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@using (Html.BeginForm("Update", "Order", FormMethod.Post))
+{
+    // ViewData'dan SelectList'i al
+    SelectList Status = ViewData["Status"] as SelectList;
+
+    @Html.DropDownList("Selected", Status, Model.Order.Status)
+    <input type="hidden" asp-for="OrderId" />
+    <input type="submit" value="Save" />
+}
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

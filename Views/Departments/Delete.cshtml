@@ -1,0 +1,49 @@
+﻿@model Supermarket.Models.Department
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Apagar Departamentos</h1>
+
+<h3>Tem a certeza que quer apagar o registo?</h3>
+<div>
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NameDepartments)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NameDepartments)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DescriptionDepartments)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DescriptionDepartments)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StateDepartments)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StateDepartments)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SkillsDepartments)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SkillsDepartments)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.QuatDepMed)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.QuatDepMed)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="IDDepartments" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

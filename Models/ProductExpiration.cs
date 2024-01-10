@@ -18,9 +18,9 @@ namespace Supermarket.Models
         //public Brand? Brand { get; set; }
 
         //Relation with foreign key for Product
-        //[Display(Name = "Product")]
-        //public int ProductId { get; set; }
-        //public Product? Product { get; set; }
+        [Display(Name = "Product")]
+        public int ProductId { get; set; }
+        public Product? Product { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]

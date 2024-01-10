@@ -1,0 +1,39 @@
+﻿@model Supermarket.Models.Customer
+
+<form asp-action="UpdateCustomer">
+
+    <div class="col-md-10 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Customer Update</h4>
+
+                <div class="form-group">
+                    <label for="exampleInputUsername1">Customer Name</label>
+                    <input asp-for="CustomerName" type="text" class="form-control" id="customerName" placeholder="Customer Name" />
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputUsername1">Customer Email</label>
+                    <input asp-for="CustomerEmail" type="email" class="form-control" id="customerEmail" placeholder="Customer Email" />
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputUsername1">Customer Phone</label>
+                    <input asp-for="CustomerPhone" type="text" class="form-control" id="CustomerPhone" placeholder="Customer Phone" />
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleTextarea1">Customer Address</label>
+                    <textarea asp-for="CustomerAddress" class="form-control"
+                              id="CustomerAddress"
+                              rows="4"></textarea>
+                </div>
+
+                <button id="submitForm" type="submit" class="btn btn-primary mr-2"> Save </button>
+
+            </div>
+        </div>
+    </div>
+
+
+</form>

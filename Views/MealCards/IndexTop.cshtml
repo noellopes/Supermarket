@@ -1,0 +1,65 @@
+﻿@model Supermarket.Models.MealCardTopViewModel
+
+<h2>Top Funcionários com Maior Gasto</h2>
+@using (Html.BeginForm("IndexTop", "MealCards", FormMethod.Get))
+{
+    <div class="card-group mb-3">
+        <div class="card mb-3">
+            <div class="form-group">
+                <label asp-for="SelectedDepartmentId" class="control-label">Departments</label>
+                <select asp-for="SelectedDepartmentId" class="form-control" asp-items="ViewBag.IDDepartments">
+                    <option value="">-- All Departments --</option>
+                </select>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div>
+                <label for="startDate">Data Inicial:</label>
+                <input type="date" id="startDate" name="startDate" value="@Model.Start_Filter.ToString("yyyy-MM-dd")" class="form-control" />
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div>
+                <label for="endDate">Data Final:</label>
+                <input type="date" id="endDate" name="endDate" value="@Model.End_Filter.ToString("yyyy-MM-dd")" class="form-control" />
+            </div>
+        </div>
+    </div>
+    
+
+    
+
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+}
+
+@if (Model.SelectedDepartmentId != 0)
+{
+    <p>
+        Departamento: @(ViewBag.IDDepartments != null ? ((SelectList)ViewBag.IDDepartments).FirstOrDefault(d => d.Value == Model.SelectedDepartmentId.ToString())?.Text : "Desconhecido")
+    </p>
+}
+else
+{
+    <p>
+        Departamento: Todos os Departamentos
+    </p>
+}
+<p>Período: @Model.Start_Filter.ToString("dd/MM/yyyy") - @Model.End_Filter.ToString("dd/MM/yyyy")</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Funcionário</th>
+            <th>Total Gasto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.TopEmployees)
+        {
+            <tr>
+                <td>@item.Employee.Employee_Name</td>
+                <td>@Math.Abs(item.TotalSpent)</td>
+            </tr>
+        }
+    </tbody>
+</table>
