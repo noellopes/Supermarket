@@ -51,6 +51,7 @@ namespace Supermarket.Data
             PopulateDepartment(db);
             PopulateSchedules(db);
             PopulateTickets(db);
+            PopulateOrder(db);
 
         }
         private static void PopulateDepartment(SupermarketDbContext db)
@@ -1291,6 +1292,57 @@ namespace Supermarket.Data
                 new Models.Issues { ProductId = 2, IssueTypeId = 3, Description = "Issue Description 2", SupplierId = 2, EmployeeId = 1, Severity = Severity.Light },
                 new Models.Issues { ProductId = 1, IssueTypeId = 2, Description = "Issue Description 3", SupplierId = 1, EmployeeId = 4, Severity = Severity.Severe }
               );
+
+            db.SaveChanges();
+        }
+        private static void PopulateOrder(SupermarketDbContext db)
+        {
+            if (db.Orders.Any()) return;
+
+            db.Orders.AddRange(
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream")!,
+                        Quantity = 100,
+                        Date = new DateTime(2023, 1, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 1),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages")!,
+                        Quantity = 10,
+                        Date = new DateTime(2023, 1, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 1),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages")!,
+                        Quantity = 1000,
+                        Date = new DateTime(2023, 5, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 2),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2023, 9, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2024, 1, 9),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2024, 1, 14),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    }
+                );
 
             db.SaveChanges();
         }
