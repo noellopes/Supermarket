@@ -99,7 +99,7 @@
                 <a asp-action="Index">Back to List</a>
             </div>
 
-        } else
+        } @if (User.IsInRole("Employeer") && !User.IsInRole("Manager"))
         {
             <h4>Employee</h4>
     <hr />

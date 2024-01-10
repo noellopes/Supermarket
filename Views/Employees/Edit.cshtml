@@ -76,7 +76,8 @@
 
 
 
-    } else
+    }
+    @if (User.IsInRole("Employeer") && !User.IsInRole("Manager"))
     {
          <div class="row">
             <div class="col-md-4">
