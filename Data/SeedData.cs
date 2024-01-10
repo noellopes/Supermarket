@@ -1021,10 +1021,9 @@ namespace Supermarket.Data
             var userJoaoStockAdmin = await EnsureUserIsCreatedAsync(userManager!, "joaostockadmin@ipg.pt", "Secret#123");
             var userAndreStockOp = await EnsureUserIsCreatedAsync(userManager!, "andrestockop@ipg.pt", "Secret#123");
             var userIvoStockOp = await EnsureUserIsCreatedAsync(userManager!, "ivostockop@ipg.pt", "Secret#123");
-  
-            //Group7----------------------------------------------------------------
+
             var user = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
-  
+
             if (!await userManager!.IsInRoleAsync(user1, ROLE_ADMIN))
             {
                 await userManager!.AddToRoleAsync(user1, ROLE_ADMIN);
@@ -1041,6 +1040,8 @@ namespace Supermarket.Data
             {
                 await userManager!.AddToRoleAsync(userIvoStockOp, ROLE_STOCK_OP);
             }
+            //Group7----------------------------------------------------------------
+
 
             //--------------------------------------------------------------------
             //Group6----------------------------------------------------------------
