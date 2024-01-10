@@ -23,7 +23,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Pontoes
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Index(int page = 1, DateTime? searchMonth = null)
         {
             // Obtém todos os pontos sem modificar a lista completa
@@ -101,6 +101,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Pontoes/Details/5
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Ponto == null)
@@ -131,7 +132,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Create([Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,RealCheckOutTime,Status,Justificative,ExtraHours")] Ponto ponto)
         {
             if (ModelState.IsValid)
@@ -184,7 +185,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Edit(int id, [Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,RealCheckOutTime,Status,Justificative,ExtraHours")] Ponto ponto)
         {
             if (id != ponto.PontoId)
@@ -238,7 +239,7 @@ namespace Supermarket.Controllers
         // POST: Pontoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Ponto == null)
