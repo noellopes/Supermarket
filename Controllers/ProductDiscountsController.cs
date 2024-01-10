@@ -34,8 +34,8 @@ namespace Supermarket.Controllers
             {
                 //Verificar se um desconto com o mesmo nome e valor existe 
                 bool discountExists = _context.ProductDiscount
-                    .Any(pd => pd.ProductId == productDiscount.ProductId 
-                    && pd.Value == productDiscount.Value);
+                    .Any(b => b.ProductId == productDiscount.ProductId 
+                    && b.Value == productDiscount.Value);
 
                 if (discountExists)
                 {
