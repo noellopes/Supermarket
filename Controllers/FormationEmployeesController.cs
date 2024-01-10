@@ -27,12 +27,12 @@ namespace Supermarket.Controllers
                                      .Include(fe => fe.Formation)
                                      select fe;
 
-            if (!string.IsNullOrEmpty(employeeName))
+            if (employeeName != "")
             {
                 formationEmployees = formationEmployees.Where(fe => fe.Employee.Employee_Name.Contains(employeeName));
             }
 
-            if (!string.IsNullOrEmpty(formationName))
+            if (formationName != "")
             {
                 formationEmployees = formationEmployees.Where(fe => fe.Formation.Formation_Name.Contains(formationName));
             }
