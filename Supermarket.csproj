@@ -9,22 +9,18 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
+
   <ItemGroup>
-    <Compile Remove="Migrations\**" />
-    <Content Remove="Migrations\**" />
-    <EmbeddedResource Remove="Migrations\**" />
-    <None Remove="Migrations\**" />
+    <Compile Remove="Data\Migrations\Groups\**" />
+    <Content Remove="Data\Migrations\Groups\**" />
+    <EmbeddedResource Remove="Data\Migrations\Groups\**" />
+    <None Remove="Data\Migrations\Groups\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\Application\20240103142051_InitialCreate.cs" />
-    <Compile Remove="Data\Migrations\Application\20240103142051_InitialCreate.Designer.cs" />
-    <Compile Remove="Data\Migrations\Application\20240103230807_Test1.cs" />
-    <Compile Remove="Data\Migrations\Application\20240103230807_Test1.Designer.cs" />
-    <Compile Remove="Data\Migrations\Application\ApplicationDbContextModelSnapshot.cs" />
-    <Compile Remove="Data\Migrations\Supermarket\20231230122554_Folgas3.cs" />
-    <Compile Remove="Data\Migrations\Supermarket\20231230122554_Folgas3.Designer.cs" />
-    <Compile Remove="Models\FuncionarioDepartamento.cs" />
+    <Compile Remove="Models\Class.cs" />
+    <Compile Remove="Models\Schedule - Cópia.cs" />
+    <Compile Remove="Models\SchedulesViewModel - Cópia.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,8 +36,29 @@
   </ItemGroup>
 
   <ItemGroup>
+
     <Folder Include="Data\Migrations\Application\" />
+
     <Folder Include="Data\Migrations\Supermarket\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Alerts\Create.cshtml" />
+    <None Include="Views\Alerts\Delete.cshtml" />
+    <None Include="Views\Alerts\Details.cshtml" />
+    <None Include="Views\Alerts\Edit.cshtml" />
+    <None Include="Views\Alerts\Index.cshtml" />
+    <None Include="Views\CategoryDiscounts\CategoryDiscountTopSeller.cshtml" />
+    <None Include="Views\CategoryDiscounts\Create.cshtml" />
+    <None Include="Views\CategoryDiscounts\Delete.cshtml" />
+    <None Include="Views\CategoryDiscounts\Details.cshtml" />
+    <None Include="Views\CategoryDiscounts\Edit.cshtml" />
+    <None Include="Views\CategoryDiscounts\Index.cshtml" />
+    <None Include="Views\Orders\Create.cshtml" />
+    <None Include="Views\Orders\Delete.cshtml" />
+    <None Include="Views\Orders\Details.cshtml" />
+    <None Include="Views\Orders\Edit.cshtml" />
+    <None Include="Views\Orders\Index.cshtml" />
   </ItemGroup>
 
 

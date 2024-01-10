@@ -1,55 +1,57 @@
 ﻿@model PontoDateViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Lista de Todos os Pontos";
 }
 
 
-<h1>@ViewData["Title"]</h1>
 
 
-<h1>Top 5 Funcionários com Mais Horas Extras</h1>
-
-@if (Model.SearchMonth.HasValue)
+@if (User.IsInRole("Manager"))
 {
+    <h1>The five best-performing employees</h1>
 
-    @if (Model.Pontos != null && Model.Pontos.Any())
+    @if (Model.SearchMonth.HasValue)
     {
-        var topEmployees = Model.Pontos
-            .Where(p => TimeSpan.Parse(p.RealCheckOutTime) > TimeSpan.Parse(p.CheckOutTime))
-            .OrderByDescending(p => p.ExtraHours)
-            .Take(5);
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Funcionário</th>
-                    <th>Total de Horas Extras</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in topEmployees)
-                {
+        @if (Model.Pontos != null && Model.Pontos.Any())
+        {
+            var topEmployees = Model.Pontos
+                .Where(p => TimeSpan.Parse(p.RealCheckOutTime) > TimeSpan.Parse(p.CheckOutTime) && p.Status.Equals("workOvertime", StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(p => p.ExtraHours)
+                .Take(5);
+
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Employee.Employee_Name)</td>
-                        <td>@item.ExtraHours.ToString(@"hh\:mm")</td>
+                        <th>Funcionário</th>
+                        <th>Total de Horas Extras</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in topEmployees)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Employee.Employee_Name)</td>
+                            <td>@item.ExtraHours.ToString(@"hh\:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+
+        else
+        {
+            <p>Nenhum dado disponível para a data pesquisada.</p>
+        }
+
     }
-
-
     else
     {
-        <p>Nenhum dado disponível para a data pesquisada.</p>
+        <p>Enter a month and year to show the top 5 Employees </p>
     }
-}
-else
-{
-    <p>Enter a month and year to show the top 5 Employees </p>
-}
-<div class="card mb-3">
+    <div class="card mb-3">
         <div class="card-body">
             <form asp-action="Index" method="get">
                 <p><strong>Search Month</strong></p>
@@ -64,12 +66,16 @@ else
             </form>
         </div>
     </div>
+}
 
 
-<h1>Lista de Todos os Pontos</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div>
-    <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
+    @if (User.IsInRole("Manager") && !User.IsInRole("Administrator"))
+    {
+        <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
+    }
 </div>
 <table class="table">
     <thead>
@@ -78,7 +84,7 @@ else
 
                 @Html.DisplayNameFor(model => model.Pontos[0].Date)
             </th>
-           
+
             <th></th>
         </tr>
     </thead>
@@ -98,6 +104,7 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
                 </td>
+
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
@@ -133,9 +140,11 @@ else
                     @formattedExtraHours
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.PontoId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.PontoId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.PontoId">Delete</a>
+                    @if (User.IsInRole("Manager"))
+                    {
+                        <a asp-action="Details" asp-route-id="@item.PontoId" class="btn btn-info btn-smm">Details</a>
+                    }
+                    
                 </td>
             </tr>
         }
