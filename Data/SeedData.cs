@@ -51,6 +51,7 @@ namespace Supermarket.Data
             PopulateDepartment(db);
             PopulateSchedules(db);
             PopulateTickets(db);
+            PopulateOrder(db);
 
         }
         private static void PopulateDepartment(SupermarketDbContext db)
@@ -1041,6 +1042,22 @@ namespace Supermarket.Data
             }
 
             //--------------------------------------------------------------------
+            //Group6----------------------------------------------------------------
+            var adminGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "adminGrupo6@ipg.pt", "Secret#123");
+            var clientGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "clientGrupo6@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_CLIENT);
+            }
+            if (!await userManager!.IsInRoleAsync(clientGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(clientGrupo6, ROLE_CLIENT);
+            }
+            //--------------------------------------------------------------------
             if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
             {
                 await userManager!.AddToRoleAsync(user1, "Gestor");
@@ -1114,10 +1131,6 @@ namespace Supermarket.Data
             }
 
             var costumer = await EnsureUserIsCreatedAsync(userManager!, "costumer@ipg.pt", "Secret#123");
-            if (!await userManager!.IsInRoleAsync(costumer, ROLE_CLIENT))
-            {
-                await userManager!.AddToRoleAsync(costumer, ROLE_CLIENT);
-            }
             if (!await userManager!.IsInRoleAsync(costumer, "Avaliar_Funcionarios"))
             {
                 await userManager!.AddToRoleAsync(costumer, "Avaliar_Funcionarios");
@@ -1143,14 +1156,6 @@ namespace Supermarket.Data
 
 
             var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
-            if (!await userManager!.IsInRoleAsync(manager, ROLE_CLIENT))
-            {
-                await userManager!.AddToRoleAsync(manager, ROLE_CLIENT);
-            }
-            if (!await userManager!.IsInRoleAsync(manager, ROLE_ADMIN))
-            {
-                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN);
-            }
             if (!await userManager!.IsInRoleAsync(manager, "Avaliar_Funcionarios"))
             {
                 await userManager!.AddToRoleAsync(manager, "Avaliar_Funcionarios");
@@ -1291,6 +1296,57 @@ namespace Supermarket.Data
                 new Models.Issues { ProductId = 2, IssueTypeId = 3, Description = "Issue Description 2", SupplierId = 2, EmployeeId = 1, Severity = Severity.Light },
                 new Models.Issues { ProductId = 1, IssueTypeId = 2, Description = "Issue Description 3", SupplierId = 1, EmployeeId = 4, Severity = Severity.Severe }
               );
+
+            db.SaveChanges();
+        }
+        private static void PopulateOrder(SupermarketDbContext db)
+        {
+            if (db.Orders.Any()) return;
+
+            db.Orders.AddRange(
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream")!,
+                        Quantity = 100,
+                        Date = new DateTime(2023, 1, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 1),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages")!,
+                        Quantity = 10,
+                        Date = new DateTime(2023, 1, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 1),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages")!,
+                        Quantity = 1000,
+                        Date = new DateTime(2023, 5, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 2),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2023, 9, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2024, 1, 9),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2024, 1, 14),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    }
+                );
 
             db.SaveChanges();
         }
