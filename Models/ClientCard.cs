@@ -11,6 +11,10 @@ namespace Supermarket.Models
         public int ClientId { get; set; }
         public Client? Client {get;  set;}
 
+
+        public int ExpiredProductId { get; set; }
+        public ExpiredProducts? ExpiredProducts { get; set; }
+
         public int ClientCardNumber { get; set; }
 
         public float Balance { get; set; } = 0;
