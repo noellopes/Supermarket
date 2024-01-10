@@ -1,26 +1,26 @@
-﻿@model HierarquiasModel
+﻿@model Supermarket.Models.Hierarquias;
 
 @{
-    ViewData["Title"] = "Editar Hierarquias";
+    ViewData["Title"] = "Editar Relacao Hierarquica";
 }
 
-<h2>Editar Hierarquias</h2>
+<h2>Editar Relacão Hierarquica</h2>
 
 <form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="HierarquiaId" />
+    <input type="hidden" asp-for="Id" />
 
     <div class="form-group">
-        <label asp-for="HierarquiaNome"></label>
-        <input asp-for="HierarquiaNome" class="form-control" />
-        <span asp-validation-for="HierarquiaNome" class="text-danger"></span>
+        <label asp-for="SuperiorId" class="control-label">Superiores</label>
+        <select asp-for="SuperiorId" class="form-control" asp-items="ViewBag.SuperiorId"></select>
     </div>
-
     <div class="form-group">
-        <label asp-for="NivelHierarquico"></label>
-        <input asp-for="NivelHierarquico" class="form-control" />
-        <span asp-validation-for="NivelHierarquico" class="text-danger"></span>
+        <label asp-for="SubordinadoId" class="control-label">Subordinado</label>
+        <select asp-for="SubordinadoId" class="form-control" asp-items="ViewBag.SubordinadoId"></select>
     </div>
-    <p></p>
-    <button type="submit" class="btn btn-primary">Salvar</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
 </form>
+
+<a asp-action="Index">Back to List</a>
+

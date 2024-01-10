@@ -1,7 +1,7 @@
-﻿@model HierarquiasModel
+﻿@model Supermarket.Models.Hierarquias;
 
 @{
-    ViewData["Title"] = "Detalhes do Hierarquias";
+    ViewData["Title"] = "Detalhes da Relacão Hierarquica";
 }
 
 @if (ViewBag.MensagemCriadoSuccess != null)
@@ -14,23 +14,28 @@
     </div>
 }
 
-<h2>Detalhes do Hierarquias</h2>
+<h2>Detalhes da Relacão Hierarquica</h2>
 
 <div>
     <dl class="row">
-        <dt class="col-sm-2">ID:</dt>
-        <dd class="col-sm-10">@Model.HierarquiaId</dd>
-
-        <dt class="col-sm-2">Nome:</dt>
-        <dd class="col-sm-10">@Model.HierarquiaNome</dd>
-
-        <dt class="col-sm-2">Nivel:</dt>
-        <dd class="col-sm-10">@Model.NivelHierarquico</dd>
+        <dt class="col-sm-2">
+            Superiores:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Superiores.Employee_Name)
+        </dd>
+        <dt class="col-sm-2">
+            Subordinado:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Subordinados.Employee_Name)
+        </dd>
     </dl>
 </div>
 
 <p>
-    <a asp-action="Index" class="btn btn-primary">Voltar para a Lista</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </p>
 
 <style>

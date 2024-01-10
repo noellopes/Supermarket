@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Supermarket.Models;
 using Supermarket.Data;
+using Supermarket.Models;
 
-namespace Hierarquias.Controllers
+namespace Supermarket.Controllers
 {
     public class HierarquiasController : Controller
     {
@@ -18,37 +17,28 @@ namespace Hierarquias.Controllers
             _context = context;
         }
 
-        public IActionResult AllHierarquias()
-        {
-            var allHierarquias = _context.Hierarquias.ToList();
-            return View(allHierarquias);
-        }
-
         // GET: Hierarquias
         public async Task<IActionResult> Index()
         {
-            var employees = await _context.Employee
-        .Include(e => e.Hierarquia)
-        .Include(e => e.Funcao)
-        .Select(e => new EmployeeViewModel
-        {
-            EmployeeId = e.EmployeeId,
-            EmployeeName = e.Employee_Name,
-            HierarquiaNome = e.Hierarquia != null ? e.Hierarquia.HierarquiaNome : "Sem Hierarquia",
-            NivelHierarquia = e.Hierarquia != null ? e.Hierarquia.NivelHierarquico : 0,
-            FuncaoNome = e.Funcao != null ? e.Funcao.NomeFuncao : "Sem Função"
-        })
-        .ToListAsync();
-            if (TempData.ContainsKey("MensagemExclusao"))
-            {
-                ViewBag.MensagemExclusao = TempData["MensagemExclusao"];
-            }
-            var hierarquias = await _context.Hierarquias.OrderBy(h => h.NivelHierarquico).ToListAsync();
+            var hierarquias = await _context.Hierarquias
+                .Include(h => h.Superiores)
+                .Include(h => h.Subordinados)
+                .ToListAsync();
 
-            return View(employees);
+            var employeesViewModel = ObterEmployeesViewModel();
+
+            ViewData["EmployeesViewModel"] = employeesViewModel;
+
+            return View(hierarquias);
         }
 
-        // GET: Hierarquias/Detalhes
+        private EmployeesViewModel ObterEmployeesViewModel()
+        {
+            var employees = _context.Employee.ToList();
+            return new EmployeesViewModel { Employees = employees };
+        }
+
+        // GET: Hierarquias/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -56,60 +46,43 @@ namespace Hierarquias.Controllers
                 return NotFound();
             }
 
-            var Hierarquia = await _context.Hierarquias
-                .FirstOrDefaultAsync(m => m.HierarquiaId == id);
-            if (Hierarquia == null)
+            var hierarquia = await _context.Hierarquias
+                .Include(h => h.Superiores)
+                .Include(h => h.Subordinados)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (hierarquia == null)
             {
-                return RedirectToAction("Error");
+                return NotFound();
             }
 
-            if (TempData.ContainsKey("MensagemCriadoSuccess"))
-            {
-                ViewBag.MensagemCriadoSuccess = TempData["MensagemCriadoSuccess"];
-            }
-
-            return View(Hierarquia);
+            return View(hierarquia);
         }
 
-        // GET: Hierarquias/Criar
+        // GET: Hierarquias/Create
         public IActionResult Create()
         {
+            PopulateEmployeeDropdowns();
             return View();
         }
 
-        // POST: Hierarquias/Criar
+        // POST: Hierarquias/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,NivelHierarquia")] HierarquiasModel Hierarquia)
+        public async Task<IActionResult> Create([Bind("Id,SuperiorId,SubordinadoId")] Hierarquias hierarquia)
         {
             if (ModelState.IsValid)
             {
-                // Verificar se o nome do Hierarquia já existe
-                if (_context.Hierarquias.Any(c => c.HierarquiaNome == Hierarquia.HierarquiaNome))
-                {
-                    ModelState.AddModelError("Nome", "Já existe um Hierarquia com este nome.");
-                    return View(Hierarquia);
-                }
-
-                // Verificar se o nível de hierarquia já foi atribuído a outra hierarquia
-                if (_context.Hierarquias.Any(c => c.NivelHierarquico == Hierarquia.NivelHierarquico))
-                {
-                    ModelState.AddModelError("NivelHierarquia", "Este nível de hierarquia já foi atribuído a outra hierarquia.");
-                    return View(Hierarquia);
-                }
-
-                _context.Add(Hierarquia);
+                _context.Add(hierarquia);
                 await _context.SaveChangesAsync();
-
-                TempData["MensagemCriadoSuccess"] = "Hierarquia criado com sucesso!";
-
-                return RedirectToAction(nameof(Details), new { id = Hierarquia.HierarquiaId });
+                return RedirectToAction(nameof(Index));
             }
 
-            return View(Hierarquia);
+            PopulateEmployeeDropdowns();
+            return View(hierarquia);
         }
 
-        // GET: Hierarquias/Editar
+        // GET: Hierarquias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -117,46 +90,37 @@ namespace Hierarquias.Controllers
                 return NotFound();
             }
 
-            var Hierarquia = await _context.Hierarquias.FindAsync(id);
-            if (Hierarquia == null)
+            var hierarquia = await _context.Hierarquias.FindAsync(id);
+
+            if (hierarquia == null)
             {
-                return RedirectToAction("Error");
+                return NotFound();
             }
-            return View(Hierarquia);
+
+            PopulateEmployeeDropdowns();
+            return View(hierarquia);
         }
 
-        // POST: Hierarquias/Editar
+        // POST: Hierarquias/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome")] HierarquiasModel Hierarquia)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SuperiorId,SubordinadoId")] Hierarquias hierarquia)
         {
-            if (id != Hierarquia.HierarquiaId)
+            if (id != hierarquia.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                // Verificar se o nome do Hierarquia já existe (exceto para o Hierarquia sendo editado)
-                if (_context.Hierarquias.Any(c => c.HierarquiaNome == Hierarquia.HierarquiaNome && c.HierarquiaId != Hierarquia.HierarquiaId))
-                {
-                    ModelState.AddModelError("Nome", "Já existe um Hierarquia com este nome.");
-                    return View(Hierarquia);
-                }
-                if (_context.Hierarquias.Any(c => c.NivelHierarquico == Hierarquia.NivelHierarquico))
-                {
-                    ModelState.AddModelError("NivelHierarquia", "Este nível de hierarquia já foi atribuído a outra hierarquia.");
-                    return View(Hierarquia);
-                }
-
                 try
                 {
-                    _context.Update(Hierarquia);
+                    _context.Update(hierarquia);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!HierarquiaExists(Hierarquia.HierarquiaId))
+                    if (!HierarquiaExists(hierarquia.Id))
                     {
                         return NotFound();
                     }
@@ -167,10 +131,12 @@ namespace Hierarquias.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(Hierarquia);
+
+            PopulateEmployeeDropdowns();
+            return View(hierarquia);
         }
 
-        // GET: Hierarquias/Deletar
+        // GET: Hierarquias/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -178,103 +144,39 @@ namespace Hierarquias.Controllers
                 return NotFound();
             }
 
-            var Hierarquia = await _context.Hierarquias
-                .FirstOrDefaultAsync(m => m.HierarquiaId == id);
-            if (Hierarquia == null)
+            var hierarquia = await _context.Hierarquias
+                .Include(h => h.Superiores)
+                .Include(h => h.Subordinados)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (hierarquia == null)
             {
                 return NotFound();
             }
 
-            return View(Hierarquia);
+            return View(hierarquia);
         }
 
-        // POST: Hierarquias/Deletar
+        // POST: Hierarquias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var Hierarquias = await _context.Hierarquias.FindAsync(id);
-            if (Hierarquias == null)
-            {
-                return NotFound();
-            }
-
-            _context.Hierarquias.Remove(Hierarquias);
+            var hierarquia = await _context.Hierarquias.FindAsync(id);
+            _context.Hierarquias.Remove(hierarquia);
             await _context.SaveChangesAsync();
-
-            TempData["MensagemExclusao"] = "Hierarquia excluído com sucesso.";
-
-            return RedirectToAction(nameof(AllHierarquias));
+            return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult ItemNaoEncontrado()
+        private bool HierarquiaExists(int id)
         {
-            return View();
+            return _context.Hierarquias.Any(e => e.Id == id);
         }
 
-        // GET: Hierarquias/AssignHierarquia/5
-        public IActionResult AssignHierarquia(int? id)
+        private void PopulateEmployeeDropdowns()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            // Obter o empregado pelo ID
-            var employee = _context.Employee.Find(id);
-
-            if (employee == null)
-            {
-                return NotFound();
-            }
-
-            // Lógica para atribuir hierarquia ao empregado com o ID especificado
-            // Exemplo: Atribuir hierarquia de nível 1
-            employee.Hierarquia = new HierarquiasModel
-            {
-                HierarquiaNome = "Chefe",
-                NivelHierarquico = 1
-            };
-
-            // Salvar as alterações no contexto
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
-        }
-
-        // GET: Hierarquias/AssignFuncao/5
-        public IActionResult AssignFuncao(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            // Obter o empregado pelo ID
-            var employee = _context.Employee.Find(id);
-
-            if (employee == null)
-            {
-                return NotFound();
-            }
-
-            // Lógica para atribuir função ao empregado com o ID especificado
-            // Exemplo: Atribuir a função "Funcionario Padrão"
-            employee.Funcao = new Funcao
-            {
-                NomeFuncao = "Funcionario Padrão",
-                DescricaoFuncao = "Descrição da função padrão"
-            };
-
-            // Salvar as alterações no contexto
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
-        }
-
-    private bool HierarquiaExists(int id)
-        {
-            return _context.Hierarquias.Any(e => e.HierarquiaId == id);
+            ViewData["SuperiorId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
+            ViewData["SubordinadoId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
         }
     }
 }

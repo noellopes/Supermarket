@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,29 +12,70 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+    [Authorize(Roles = "Avaliar_Funcionarios")]
     public class EmployeeEvaluationsController : Controller
     {
         private readonly SupermarketDbContext _context;
+        private readonly UserManager<IdentityUser>? _userManager;
 
-        public EmployeeEvaluationsController(SupermarketDbContext context)
+        public EmployeeEvaluationsController(SupermarketDbContext context, UserManager<IdentityUser>? userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: EmployeeEvaluation
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> IndexAsync(int page = 1, string description = "", string employeeName = "", int employeeId = 0)
         {
+            var evaluationsFiltered = _context.EmployeeEvaluation.Include(ee => ee.Employee).AsQueryable();
+
+            IdentityUser? user = _userManager!.GetUserAsync(User).Result;
+            //Remove own employee evaluations
+            if (await _userManager!.IsInRoleAsync(user!, "Role_Funcionario"))
+            {
+                evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Employee!.Employee_Email != user!.UserName);
+            }
+
+            //Description filter
+            if (description != "")
+            {
+                evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Description!.Contains(description));
+            }
+
+            //Employee name filter
+            if (employeeName != "")
+            {
+                evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Employee!.Employee_Name.Contains(employeeName));
+            }
+
+            //Employee filter
+            if (employeeId > 0)
+            {
+                //cannot show own evaluations
+                if (user!.UserName == _context.Employee.Find(employeeId)!.Employee_Email)
+                {
+                    return Forbid();
+                }
+                evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Employee!.EmployeeId == employeeId);
+                ViewBag.EmployeeName = _context.Employee.Find(employeeId)!.Employee_Name;
+                ViewBag.EmployeeId = employeeId;
+                ViewBag.AvgGrade = EmployeeGradeAsync(employeeId);
+            }
+
             var pagination = new PagingInfo
             {
                 CurrentPage = page,
                 PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
-                TotalItems = _context.EmployeeEvaluation.Count()
+                TotalItems = evaluationsFiltered.Count()
             };
+
+            ViewBag.FilterDescription = description;
+            ViewBag.FilterEmployeeName = employeeName;
 
             return View(
                 new EmployeeEvaluationListViewModel
                 {
-                    EmployeeEvaluation = _context.EmployeeEvaluation.Include(ee => ee.Employee).OrderByDescending(ee => ee.EvaluationDate)
+                    EmployeeEvaluation = evaluationsFiltered.OrderByDescending(ee => ee.EvaluationDate)
                         .Skip((page - 1) * pagination.PageSize).Take(pagination.PageSize),
                     Pagination = pagination
                 }
@@ -53,15 +96,30 @@ namespace Supermarket.Controllers
             if (employeeEvaluation == null)
             {
                 TempData["MessageError"] = "The employee evaluation has already been deleted!";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexAsync));
             }
             return View(employeeEvaluation);
         }
 
         // GET: EmployeeEvaluation/Create
-        public IActionResult Create()
+        public IActionResult Create(int employeeId = 0)
         {
-            ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
+            IdentityUser? user = _userManager!.GetUserAsync(User).Result;
+            if (employeeId > 0)
+            {
+                //cannot show own evaluations
+                if (user!.UserName == _context.Employee.Find(employeeId)!.Employee_Email)
+                {
+                    return Forbid();
+                }
+                ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>().Where(ee=>ee.EmployeeId==employeeId), "EmployeeId", "Employee_Name");
+                ViewBag.EmployeeId = employeeId;
+            }
+            else
+            {
+                
+                ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>().Where(ee => ee.Employee_Email != user!.UserName), "EmployeeId", "Employee_Name");
+            }
             return View();
         }
 
@@ -97,9 +155,9 @@ namespace Supermarket.Controllers
             if (employeeEvaluation == null)
             {
                 TempData["MessageError"] = "The employee evaluation has already been deleted!";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(IndexAsync));
             }
-            ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>(), "EmployeeId", "Employee_Name");
+            ViewData["EmployeesList"] = new SelectList(_context.Set<Employee>().Where(ee => ee.EmployeeId == employeeEvaluation.EmployeeId), "EmployeeId", "Employee_Name");
             return View(employeeEvaluation);
         }
 
@@ -191,17 +249,16 @@ namespace Supermarket.Controllers
         }
 
         // GET: EmployeeEvaluation/EmployeeView
-        public async Task<IActionResult> EmployeeView()
+        public async Task<IActionResult> EmployeeListView()
         {
-            var Employees = _context.Employee.Include(f=>EmployeeGradeAsync(f.EmployeeId));
-
-            return Employees != null ?
-                          View(await Employees.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.EmployeeEvaluation'  is null.");
+            return _context.Employee != null ?
+                        View(await _context.Employee.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
         }
 
         private float EmployeeGradeAsync(int? EmployeeId)
         {
+            var assiduidade = 1.0;
             if (EmployeeId == null || _context.Employee == null)
             {
                 //The employee doesn't exist!
@@ -216,14 +273,26 @@ namespace Supermarket.Controllers
             }
 
             var Evaluations = _context.EmployeeEvaluation.Where(af => af.EmployeeId==Employee.EmployeeId).ToList();
-            var sum = 0;
-            foreach (var evaluation in Evaluations) 
+            if (Evaluations.Count < 1)
             {
-                sum += evaluation.GradeNumber;
+                //There are no evaluations for this employee
+                return 0;
             }
+            else
+            {
+                //TO-DO calcular assiduidade
+                var sum = 0;
+                foreach (var evaluation in Evaluations)
+                {
+                    sum += evaluation.GradeNumber;
+                }
 
-            var mean = sum/ Evaluations.Count;
-            return mean;
+                var mean = sum / Evaluations.Count;
+
+                mean = (int)(mean * assiduidade);
+                return mean;
+            }
+            
         }
     }
 }

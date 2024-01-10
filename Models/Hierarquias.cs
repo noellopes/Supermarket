@@ -1,14 +1,13 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿
 namespace Supermarket.Models
 {
-    public class HierarquiasModel
+    public class Hierarquias
     {
-        [Key]
-        public int HierarquiaId { get; set; }
-        public string ?HierarquiaNome { get; set; }
-        public int NivelHierarquico { get; set; }
+        public int Id { get; set; }
+        public int SuperiorId { get; set; } // Id do superior (chave estrangeira)
+        public Employee? Superiores { get; set; } // Funcionário superior
+
+        public int SubordinadoId { get; set; } // Id do subordinado (chave estrangeira)
+        public Employee? Subordinados { get; set; } // Funcionário subordinado
     }
-
 }
-

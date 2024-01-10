@@ -2,74 +2,28 @@
 @{
     ViewData["Title"] = "FolgasAprovadas";
 }
-
+@model List<Folga>
 <h1>Folgas Aprovadas</h1>
-<table>
-    <thead>
-        <tr>
-
-            <th>Pedido</th>>
-            <th></th>
-            <th></th>
-            <th>Início</th>
-            <th></th>
-            <th></th>
-            <th> Fim</th>
-            <th></th>
-            <th></th>
-            <th>Motivo</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-
-
-            <th>Gestor</th>
 
 
 
+@foreach (var folga in Model)
+{
+    
+    {
+        
+    
+    <div><h4>Folga de @folga.Employee.Employee_Name</h4>
+        <p>Gestor:@folga.GestorId</p>
+        <p>Aprovada a:@folga.DataResultado.ToString()</p>
+        <p>Pedida a @folga.DataPedido.ToString()</p>
+        <p>Início: @folga.DataInicio.ToShortDateString()</p>
+        <p>Fim: @folga.DataFim.ToShortDateString()</p>
+            <p>Motivo: @Html.DisplayFor(modelItem=>folga.motivo)</p>
+        <br>
+        <br>
+        </div>
+} 
+}
 
-
-
-        </tr>
-    </thead>
-
-
-    <tbody>
-        @foreach (var Folga in Model)
-        {
-
-
-            <tr>
-
-                <td>@Folga.DataPedido.ToShortDateString()</td>
-                <td></td>
-                <td></td>
-                <td>@Folga.DataInicio.ToShortDateString()</td>
-                <td></td>
-                <td></td>
-                <td>@Folga.DataFim.ToShortDateString()</td>
-                <td></td>
-                <td></td>
-                <td>@Folga.Motivo</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              
-                <td>@Folga.Gestor</td>
-                <td></td>
-                <td></td>
-                
-            </tr>
-        }
-    </tbody>
-</table>
-
-
-        }
-
-
-
+<a asp-action="Index">Voltar ao Index</a>

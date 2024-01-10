@@ -1,50 +1,71 @@
-﻿@model List<EmployeeViewModel>
+﻿@model IEnumerable<Supermarket.Models.Hierarquias>
 
 @{
-    ViewData["Title"] = "Hierarquias";
+    ViewData["Title"] = "Relacoes Hierarquicas";
+    var employeesViewModel = ViewData["EmployeesViewModel"] as Supermarket.Models.EmployeesViewModel;
 }
 
-<h2>Superidade Hierarquica Supermarket</h2>
+@if (ViewBag.MensagemExclusao != null)
+{
+    <div id="mensagemExclusao" class="alert alert-danger" role="alert" style="width: 33%;">
+        @ViewBag.MensagemExclusao
+        <div class="progress" style="height: 10px; margin-top: 5px;">
+            <div id="progressBar" class="progress-bar bg-danger" role="progressbar"></div>
+        </div>
+    </div>
+}
+
+<h2>Lista de Relacoes Hierarquicas</h2>
 
 <p>
-    <a asp-controller="Employees" asp-action="Index" class="btn btn-info">Gerenciar Empregados</a>
-
-    <a asp-action="AllHierarquias" class="btn btn-info">Gerenciar Cargos Hierárquicos</a>
-
-    <a asp-controller="Funcao" asp-action="Index" class="btn btn-info">Gerenciar Funcoes</a>
+    <a asp-action="Create" class="btn btn-success">Nova Relacao Hierarquica</a>
+    <a asp-controller="Employees" asp-action="Index" class="btn btn-primary">Gerenciar Funcionarios</a>
+    <a asp-action="SearchSubordinates" class="btn btn-info">Pesquisar Subordinados</a>
+    <a asp-action="SearchSuperiors" class="btn btn-info">Pesquisar Superiores</a>
 </p>
 
 <table class="table">
-<thead>
-    <tr>
-        <th>ID</th>
-        <th>Nome do Funcionário</th>
-        <th>Hierarquia</th>
-        <th>Nível Hierárquico</th>
-        <th>Função</th>
-        <th>Ações</th>
-    </tr>
-</thead>
-<tbody>
-    @foreach (var employee in Model)
-    {
+    <thead>
         <tr>
-            <td>@employee.EmployeeId</td>
-            <td>@employee.EmployeeName</td>
-            <td>@employee.HierarquiaNome != null ? employee.Hierarquia.Nome : "Sem Hierarquia"</td>
-            <td>@employee.HierarquiaNome != null ? employee.Hierarquia.NivelHierarquia : 0</td>
-            <td>@employee.FuncaoNome != null ? employee.Funcao.NomeFuncao : "Sem Função"</td>
-            <td>
-                <a asp-action="Details" asp-route-id="@employee.EmployeeId" class="btn btn-info">Detalhes</a>
-                <a asp-action="Edit" asp-route-id="@employee.EmployeeId" class="btn btn-warning">Editar</a>
-                <!-- Adicione botões para atribuir hierarquia e função -->
-                <a asp-action="AssignHierarquia" asp-route-id="@employee.EmployeeId" class="btn btn-primary">Atribuir Hierarquia</a>
-                <a asp-action="AssignFuncao" asp-route-id="@employee.EmployeeId" class="btn btn-success">Atribuir Função</a>
-            </td>
+            <th>Funcionário</th>
+            <th>Superior</th>
+            <th>Ações</th>
         </tr>
-    }
-</tbody>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Subordinados.Employee_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Superiores.Employee_Name)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+
+        <tr>
+            <th>Todos os funcionários</th>
+        </tr>
+        @if (employeesViewModel != null)
+        {
+            foreach (var employee in employeesViewModel.Employees)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => employee.Employee_Name)</td>
+                    @* <td>@Html.DisplayFor(modelItem => employee.Employee_NIF)</td> *@
+                </tr>
+            }
+        }
+    </tbody>
 </table>
+
 <style>
     .progress {
         height: 10px;
@@ -58,7 +79,8 @@
     }
 </style>
 
-<script>var progressBar = document.getElementById('progressBar');
+<script>
+    var progressBar = document.getElementById('progressBar');
     var mensagemExclusao = document.getElementById('mensagemExclusao');
 
     progressBar.style.width = '100%';
@@ -75,4 +97,5 @@
                 mensagemExclusao.style.display = 'none';
             }, duracaoAnimacao);
         }
-    }, duracaoAnimacao / 1000);</script>
+    }, duracaoAnimacao / 1000);
+</script>

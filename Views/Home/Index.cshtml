@@ -2,7 +2,107 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    body {
+        padding: 20px;
+        background-color: #f8f9fa;
+        color: #343a40;
+    }
+
+    h1 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        background-color: #3498db;
+        color: #fff;
+        border: 2px solid #3498db;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+    }
+
+        .btn:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
+        }
+
+    }
+</style>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    @if (User.IsInRole("Stock Administrator"))
+    {
+        <div class="card">
+            <h1 class="display-4">Welcome Stock Administrator</h1>
+        </div>
+
+        <div>
+            <a asp-controller="Categories" asp-action="Index" class="btn btn-primary">Categories</a>
+            <a asp-controller="Brands" asp-action="Index" class="btn btn-primary">Brands</a>
+            <a asp-controller="Products" asp-action="Index" class="btn btn-primary">Products</a>
+            <a asp-controller="ReduceProducts" asp-action="Index" class="btn btn-primary">Reduce Products</a>
+            <a asp-controller="Warehouses" asp-action="Index" class="btn btn-primary">Warehouses</a>
+            <a asp-controller="Stores" asp-action="Index" class="btn btn-primary">Stores</a>
+            <a asp-controller="Alerts" asp-action="Index" class="btn btn-primary">Alerts</a>
+        </div>
+    }
+
+    else if (User.IsInRole("Stock Operator"))
+    {
+        <div class="card">
+            <h1 class="display-4">Welcome Stock Operator</h1>
+        </div>
+        <div>
+            <a asp-controller="Categories" asp-action="Index" class="btn btn-primary">Categories</a>
+            <a asp-controller="Brands" asp-action="Index" class="btn btn-primary">Brands</a>
+            <a asp-controller="Products" asp-action="Index" class="btn btn-primary">Products</a>
+            <a asp-controller="Products" asp-action="RotativeInventoryCriteria" class="btn btn-primary">Rotative Inventory</a>
+            <a asp-controller="Products" asp-action="RestoreExposure" class="btn btn-primary">Restore Exposure</a>
+            <a asp-controller="ReduceProducts" asp-action="Index" class="btn btn-primary">Reduce Products</a>
+            <a asp-controller="Warehouses" asp-action="Index" class="btn btn-primary">Warehouses</a>
+            <a asp-controller="Stores" asp-action="Index" class="btn btn-primary">Stores</a>
+            <a asp-controller="Alerts" asp-action="Index" class="btn btn-primary">Alerts</a>
+        </div>
+    }
+    else
+    {
+        
+            <h1 class="display-4">Welcome to</h1>
+            <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+            <div>
+                
+                
+                
+                <a asp-controller="Customer" asp-action="Customer" class="btn btn-Info">Customer</a>
+                <a asp-controller="Order" asp-action="Index" class="btn btn-Info">Orders</a>
+                <a asp-controller="TakeAwayProduct" asp-action="Index" class="btn btn-secondary">Take Away Product</a>
+                <a asp-controller="TakeAwayProduct" asp-action="Basket" class="btn btn-secondary">Basket</a>
+                <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">Product</a>
+                
+                <a asp-controller="Folgas" asp-action="Index" class="btn btn-info">Folgas</a>
+         
+
+        </div>
+    }
 </div>

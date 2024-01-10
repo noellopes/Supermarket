@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,42 @@ namespace Supermarket.Controllers
         }
 
         // GET: ClientCards
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string name = "", bool? estado = null )
         {
-              return _context.ClientCard != null ? 
-                          View(await _context.ClientCard.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ClientCard'  is null.");
+            var clientCards = from b in _context.ClientCard.Include(b => b.Client) select b;
+            if (name != "")
+            {
+                clientCards = clientCards.Where(x => x.Client!.ClientName.Contains(name));
+            }
+            if (estado.HasValue)
+            {
+                clientCards = clientCards.Where(b => b.Estado == estado.Value);
+            }
+
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await clientCards.CountAsync(),
+            };
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new ClientCardsViewModel
+            {
+                ClientCards = await clientCards
+                    .OrderBy(b => b.ClientCardNumber)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfo = paging,
+            };
+            return View(vm);
         }
 
         // GET: ClientCards/Details/5
@@ -36,6 +68,7 @@ namespace Supermarket.Controllers
             }
 
             var clientCard = await _context.ClientCard
+                .Include(c => c.Client)
                 .FirstOrDefaultAsync(m => m.ClientCardId == id);
             if (clientCard == null)
             {
@@ -48,6 +81,7 @@ namespace Supermarket.Controllers
         // GET: ClientCards/Create
         public IActionResult Create()
         {
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName");
             return View();
         }
 
@@ -56,14 +90,19 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientCardId,ClientCardNumber,Balance")] ClientCard clientCard)
+        public async Task<IActionResult> Create([Bind("ClientCardId,ClientId,ExpiredProductId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
         {
             if (ModelState.IsValid)
             {
+                clientCard.ClientCardNumber = new Random().Next(100000, 999999);
+                clientCard.Balance = 0;
+                clientCard.Estado = true;
+
                 _context.Add(clientCard);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
@@ -80,6 +119,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
@@ -88,7 +128,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientCardId,ClientCardNumber,Balance")] ClientCard clientCard)
+        public async Task<IActionResult> Edit(int id, [Bind("ClientCardId,ClientId,ExpiredProductId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
         {
             if (id != clientCard.ClientCardId)
             {
@@ -115,6 +155,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["ClientId"] = new SelectList(_context.Client, "ClientId", "ClientName", clientCard.ClientId);
             return View(clientCard);
         }
 
@@ -127,6 +168,7 @@ namespace Supermarket.Controllers
             }
 
             var clientCard = await _context.ClientCard
+                .Include(c => c.Client)
                 .FirstOrDefaultAsync(m => m.ClientCardId == id);
             if (clientCard == null)
             {

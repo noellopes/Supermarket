@@ -1,15 +1,46 @@
 ﻿@model IEnumerable<Supermarket.Models.Store>
 
-@{
-    ViewData["Title"] = "Store";
-}
+<style>
+     body {
+         padding: 20px;
+         background-color: #f8f9fa; /* Cor de fundo mais clara */
+         color: #343a40; /* Cor do texto mais escura */
+     }
 
-<h1>Store List </h1>
+     h1 {
+         color: #007bff; /* Azul Bootstrap */
+         margin-top: 20px; /* Margem superior maior */
+     }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+     .card {
+         background-color: #fff; /* Cor de fundo do cartão */
+         border: 1px solid rgba(0, 0, 0, 0.125); /* Borda do cartão */
+         border-radius: 0.25rem; /* Borda arredondada */
+         padding: 20px; /* Espaçamento interno do cartão */
+         margin-bottom: 20px; /* Margem inferior do cartão */
+     }
+
+     .btn-group a {
+         margin-right: 5px; /* Espaçamento à direita entre os botões do grupo */
+     }
+
+     .table th,
+     .table td {
+         background-color: #f8f8f8; /* Cor de fundo alternativa (cinza mais claro) para as células da tabela */
+         color: #000; /* Cor do texto na tabela */
+         border: none; /* Remove bordas das células da tabela */
+     }
+</style>
+
+<div class="card">
+    <h1>Store List</h1>
+ </div>
+ @*   <p>
+        <a asp-action="Create" class="btn btn-success">Create New</a>
+    </p> *@
+
+    <div class="table-responsive">
+<table class="table table-bordered table-striped">
     <thead>
         <tr>
             <th>
@@ -18,24 +49,31 @@
             <th>
                 @Html.DisplayNameFor(model => model.Adress)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Adress)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.StoreId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.StoreId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.StoreId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Adress)
+                </td>
+                <td>
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a asp-action="Edit" asp-route-id="@item.StoreId" class="btn btn-secondary">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.StoreId" class="btn btn-secondary">Details</a>
+                           @*  <a asp-action="Delete" asp-route-id="@item.StoreId" class="btn btn-danger">Delete</a> *@
+                            <a asp-action="StoreProducts" asp-route-storeId="@item.StoreId" class="btn btn-secondary">View Products</a>
+                            <a asp-controller="Hallways" asp-action="Index" asp-route-storeId="@item.StoreId" class="btn btn-secondary">View Hallways</a>
+                        </div>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+    </div>
+
