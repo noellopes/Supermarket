@@ -361,7 +361,7 @@ namespace Supermarket.Controllers
             return View(
                 new PurchaseListViewModel
                 {
-                    Purchase = purchase.OrderByDescending(i => i.ExpirationDate)
+                    Purchase = purchase.OrderBy(i => i.ExpirationDate)
                                        .Skip((page - 1) * pagination.PageSize)
                                                  .Take(pagination.PageSize),
                     Pagination = pagination,
