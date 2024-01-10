@@ -16,14 +16,34 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var discount in Model)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@discount.Category.Name</td>
-                <td>@discount.ClientCardId</td>
-                <td>@discount.Value</td>
-                <td>@discount.StartDate</td>
-                <td>@discount.EndDate</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.CategoryDiscountsId" class="btn btn-outline-secondary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.CategoryDiscountsId" class="btn btn-outline-secondary">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.CategoryDiscountsId" class="btn btn-outline-secondary">Delete</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Details" asp-route-id="@item.CategoryDiscountsId" class="btn btn-outline-secondary">Details</a>
+                    }
+
+                </td>
             </tr>
         }
     </tbody>
@@ -31,6 +51,6 @@
 
 <div>
     <a asp-action="Index">Back to List</a>
-    <a asp-action="EditConfirmedDiscounts">Edit</a>
+    <a asp-action="Edit">Edit</a>
     <a asp-action="CancelConfirmedDiscounts">Cancel</a>
 </div>

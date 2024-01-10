@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +17,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: CategoryDiscounts
-        [Authorize(Roles ="Administrator")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CategoryDiscountTopSeller()
         {
             // Definir o período desejado (por exemplo, 4 meses a partir da data atual)
@@ -70,9 +66,12 @@ namespace Supermarket.Controllers
             }
 
             await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Seasonal Discounts Created with Success!";
+            TempData["SuccessMessage"] = "Discounts Created with Success!";
             return RedirectToAction(nameof(Index));
         }
+
+
+
 
 
 
@@ -126,8 +125,28 @@ namespace Supermarket.Controllers
                 .Include(cd => cd.ClientCard)
                 .Where(cd => cd.StartDate == startDate.AddDays(7) && cd.EndDate == startDate.AddDays(14))
                 .ToListAsync();
+            // Loop para criar descontos para as categorias dos produtos mais vendidos
+            foreach (var topProductGroup in topSellingProducts)
+            {
+                var productCategory = topProductGroup.ProductId;
 
-            return View(confirmedDiscounts);
+                // Loop para criar descontos apenas para ClientCardIds existentes
+                foreach (var clientCardId in existingClientCardIds)
+                {
+                    var categoryDiscount = new CategoryDiscounts
+                    {
+                        CategoryId = productCategory,
+                        ClientCardId = clientCardId,
+                        Value = 10, // valor desconto
+                        StartDate = startDate.AddDays(7),
+                        EndDate = startDate.AddDays(14), // data de fim do desconto
+                    };
+
+                    _context.Add(categoryDiscount);
+                }
+            }
+
+            return View(nameof(ConfirmCategoryDiscounts),confirmedDiscounts);
         }
 
 
@@ -143,7 +162,7 @@ namespace Supermarket.Controllers
                 .ToListAsync();
 
             // Redirecionar para página de edição com descontos confirmados
-            return RedirectToAction("Edit", new { id = confirmedDiscounts.FirstOrDefault()?.CategoryDiscountsId });
+            return View(nameof(Edit), confirmedDiscounts);
         }
 
         [Authorize(Roles = "Administrator")]
@@ -160,8 +179,8 @@ namespace Supermarket.Controllers
             _context.CategoryDiscounts.RemoveRange(confirmedDiscounts);
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = "Seasonal Discounts creation canceled!";
-            return RedirectToAction("Index");
+            TempData["SuccessMessage"] = "Discounts creation canceled!";
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -207,9 +226,9 @@ namespace Supermarket.Controllers
         [Authorize(Roles = "Client")]
         public async Task<IActionResult> Index(int page = 1, string category = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
-     
+
             //obter os descontos de categorias
-            var categoryDiscounts = from b in _context.CategoryDiscounts.Include(b => b.ClientCard).Include(b => b.Category) select b;  
+            var categoryDiscounts = from b in _context.CategoryDiscounts.Include(b => b.ClientCard).Include(b => b.Category) select b;
             //pesquisa dos descontos de categorias
             if (category != "")
             {
@@ -459,14 +478,14 @@ namespace Supermarket.Controllers
             {
                 _context.CategoryDiscounts.Remove(categoryDiscounts);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryDiscountsExists(int id)
         {
-          return (_context.CategoryDiscounts?.Any(e => e.CategoryDiscountsId == id)).GetValueOrDefault();
+            return (_context.CategoryDiscounts?.Any(e => e.CategoryDiscountsId == id)).GetValueOrDefault();
         }
     }
 }
