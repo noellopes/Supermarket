@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -31,14 +32,20 @@ namespace Supermarket.Controllers
         }
         */
 
-        [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Index(int page = 1, string employee_name = "")
+        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Employeer")]
+        public async Task<IActionResult> Index(int page = 1, string employee_name = "", string employee_nif = "")
         {
             var employees = from b in _context.Employee select b;
 
             if (!string.IsNullOrEmpty(employee_name))
             {
                 employees = employees.Where(x => x.Employee_Name.Contains(employee_name));
+            }
+
+            if (!string.IsNullOrEmpty(employee_nif))
+            {
+                employees = employees.Where(x => x.Employee_NIF.Contains(employee_nif));
             }
 
             PagingInfo paging = new PagingInfo
@@ -65,6 +72,7 @@ namespace Supermarket.Controllers
                     .ToListAsync(),
                 PagingInfo = paging,
                 SearchName = employee_name,
+                SearchNIF = employee_nif
             };
 
             return View(vm);
@@ -72,6 +80,7 @@ namespace Supermarket.Controllers
 
 
         // GET: Employees/Details/5
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Employee == null)
@@ -80,7 +89,9 @@ namespace Supermarket.Controllers
             }
 
             var employee = await _context.Employee
+                .Include(e => e.Departments)
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
+
 
             if (employee == null)
             {
@@ -111,11 +122,13 @@ namespace Supermarket.Controllers
             }
         }
 
-        
+
 
         // GET: Employees/Create
+
         public IActionResult Create()
         {
+            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments");
             return View();
         }
 
@@ -124,8 +137,8 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
-        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time")] Employee employee)
+        [Authorize(Roles = "Employeer")]
+        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,IDDepartments")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -157,7 +170,7 @@ namespace Supermarket.Controllers
 
                 return View("Details", employee);
             }
-        
+            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", employee.IDDepartments);
             return View(employee);
         }
 
@@ -174,6 +187,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", employee.IDDepartments);
             return View(employee);
         }
 
@@ -182,7 +196,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Edit(int id, Employee employee)
         {
             if (id != employee.EmployeeId)
@@ -212,32 +226,7 @@ namespace Supermarket.Controllers
                     {
                         ModelState.AddModelError("Employee_NIF", "NIF is already in use.");
                     }
-
-                    // Verifique se é uma ação de edição antes de validar campos obrigatórios
-                    if (employee.EmployeeId > 0)
-                    {
-                        // Se for uma edição, valide os campos obrigatórios
-                        if (employee.Employee_Birth_Date == null)
-                        {
-                            ModelState.AddModelError("Employee_Birth_Date", "Birth date is required.");
-                        }
-
-                        if (employee.Employee_Admission_Date == null)
-                        {
-                            ModelState.AddModelError("Employee_Admission_Date", "Admission date is required.");
-                        }
-
-                        if (string.IsNullOrEmpty(employee.Employee_NIF))
-                        {
-                            ModelState.AddModelError("Employee_NIF", "NIF number is required.");
-                        }
-                    }
-
-                    if (ModelState.ErrorCount > 0)
-                    {
-                        return View(employee);
-                    }
-
+                   
                     _context.Update(employee);
                     await _context.SaveChangesAsync();
                     return View("Details", employee);
@@ -254,6 +243,7 @@ namespace Supermarket.Controllers
                     }
                 }
             }
+            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", employee.IDDepartments);
             return View(employee);
         }
 
@@ -278,7 +268,7 @@ namespace Supermarket.Controllers
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Employee == null)

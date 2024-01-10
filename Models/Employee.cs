@@ -63,14 +63,10 @@ namespace Supermarket.Models
         [DisplayFormat(DataFormatString = "{0:hh\\:mm}")]
         public TimeSpan Employee_Time_Bank { get; set; }
 
-
-        //Ligação de 1 para 1 com Meal_Card
-        
-
-        //Ligação de 1 para 1 com Meal_Card
         public MealCard? MealCard { get; set; }
 
-       
+        public int IDDepartments { get; set; }
+        public Department? Departments { get; set; }
 
     }
 }
