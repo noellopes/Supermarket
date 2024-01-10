@@ -10,5 +10,6 @@ namespace Supermarket.Models
         [StringLength(50, MinimumLength = 3)]
         [Required]
         public string Formation_Name { get; set; }
+
     }
 }
