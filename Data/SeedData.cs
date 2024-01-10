@@ -1103,22 +1103,7 @@ namespace Supermarket.Data
                 await userManager!.AddToRoleAsync(clientGrupo6, ROLE_CLIENT);
             }
             //--------------------------------------------------------------------
-            //Group6----------------------------------------------------------------
-            var adminGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "adminGrupo6@ipg.pt", "Secret#123");
-            var clientGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "clientGrupo6@ipg.pt", "Secret#123");
-            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_ADMIN))
-            {
-                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_ADMIN);
-            }
-            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_CLIENT))
-            {
-                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_CLIENT);
-            }
-            if (!await userManager!.IsInRoleAsync(clientGrupo6, ROLE_CLIENT))
-            {
-                await userManager!.AddToRoleAsync(clientGrupo6, ROLE_CLIENT);
-            }
-            //--------------------------------------------------------------------
+
             if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
             {
                 await userManager!.AddToRoleAsync(user1, "Gestor");
