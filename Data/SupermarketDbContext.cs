@@ -76,6 +76,8 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
+
         public DbSet<Schedule> Schedule { get; set; }      
 
         public DbSet<CategoryDiscounts> CategoryDiscounts { get; set; }
@@ -102,6 +104,8 @@ namespace Supermarket.Data
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Formation> Formation { get; set; } = default!;
+
         public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Supplier> Suppliers { get; set; } = default!;
@@ -120,6 +124,5 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Alert> Alert { get; set; } = default!;
 
         public DbSet<Orders> Orders { get; set; } = default!;
-
     }
 }
