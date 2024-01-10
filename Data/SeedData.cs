@@ -53,7 +53,8 @@ namespace Supermarket.Data
             PopulateDepartment(db);
             PopulateSchedules(db);
             PopulateTickets(db);
-            //PopulateOrder(db);
+            PopulateOrder(db);
+
 
         }
         private static void PopulateDepartment(SupermarketDbContext db)
@@ -1042,6 +1043,8 @@ namespace Supermarket.Data
             {
                 await userManager!.AddToRoleAsync(userIvoStockOp, ROLE_STOCK_OP);
             }
+            //Group7----------------------------------------------------------------
+
 
             //Group7----------------------------------------------------------------
 
@@ -1084,6 +1087,22 @@ namespace Supermarket.Data
             }
 
 
+            //Group6----------------------------------------------------------------
+            var adminGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "adminGrupo6@ipg.pt", "Secret#123");
+            var clientGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "clientGrupo6@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_CLIENT);
+            }
+            if (!await userManager!.IsInRoleAsync(clientGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(clientGrupo6, ROLE_CLIENT);
+            }
+            //--------------------------------------------------------------------
             //Group6----------------------------------------------------------------
             var adminGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "adminGrupo6@ipg.pt", "Secret#123");
             var clientGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "clientGrupo6@ipg.pt", "Secret#123");
@@ -1348,57 +1367,59 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-        //private static void PopulateOrder(SupermarketDbContext db)
-        //{
-        //    if (db.Order.Any()) return;
 
-        //    db.Order.AddRange(
-        //            new Order
-        //            {
-        //                Product = db.Product.FirstOrDefault(a => a.Name == "Cream")!,
-        //                Quantity = 100,
-        //                Date = new DateTime(2023, 1, 1),
-        //                ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 1),
-        //            },
-        //            new Order
-        //            {
-        //                Product = db.Product.FirstOrDefault(a => a.Name == "Sausages")!,
-        //                Quantity = 10,
-        //                Date = new DateTime(2023, 1, 1),
-        //                ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 1),
-        //            },
-        //            new Order
-        //            {
-        //                Product = db.Product.FirstOrDefault(a => a.Name == "Sausages")!,
-        //                Quantity = 1000,
-        //                Date = new DateTime(2023, 5, 1),
-        //                ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 2),
-        //            },
-        //            new Order
-        //            {
-        //                Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
-        //                Quantity = 10000,
-        //                Date = new DateTime(2023, 9, 1),
-        //                ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
-        //            },
-        //            new Orders
-        //            {
-        //                Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
-        //                Quantity = 10000,
-        //                Date = new DateTime(2024, 1, 9),
-        //                ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
-        //            },
-        //            new 
-        //            {
-        //                Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
-        //                Quantity = 10000,
-        //                Date = new DateTime(2024, 1, 14),
-        //                ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
-        //            }
-        //        );
+        private static void PopulateOrder(SupermarketDbContext db)
+        {
+            if (db.Orders.Any()) return;
 
-        //    db.SaveChanges();
-        //}
+            db.Orders.AddRange(
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream")!,
+                        Quantity = 100,
+                        Date = new DateTime(2023, 1, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 1),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages")!,
+                        Quantity = 10,
+                        Date = new DateTime(2023, 1, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 1),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages")!,
+                        Quantity = 1000,
+                        Date = new DateTime(2023, 5, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 2),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2023, 9, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2024, 1, 9),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2024, 1, 14),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    }
+                );
+
+            db.SaveChanges();
+        }
+
 
 
     }
