@@ -95,8 +95,8 @@
             </dl>
 
             <div>
-                <a asp-action="Edit" asp-route-id="@Model?.EmployeeId">Edit</a> |
-                <a asp-action="Index">Back to List</a>
+                <a asp-action="Edit" asp-route-id="@Model?.EmployeeId" class="btn btn-success btn-sm">Edit</a> |
+                <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
             </div>
 
         } @if (User.IsInRole("Employeer") && !User.IsInRole("Manager"))
@@ -197,8 +197,8 @@
     </dl>
 
             <div>
-                <a asp-action="Edit" asp-route-id="@Model?.EmployeeId">Edit</a> |
-                <a asp-action="Index">Back to List</a>
+                <a asp-action="Edit" asp-route-id="@Model?.EmployeeId" class="btn btn-success btn-sm">Edit</a> |
+                <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
             </div>
         }
     </div>
