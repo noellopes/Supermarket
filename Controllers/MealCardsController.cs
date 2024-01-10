@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
@@ -22,6 +23,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: MealCards
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Index(int page = 1, string employee_name = "", bool sOEwithoutMC = false, bool sOEwithMC = false)
         {
             var employees = from b in _context.Employee.Include(m => m.MealCard) select b;
@@ -72,6 +74,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: MealCards/Details/5
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Details(int? id, int cardMovementPage = 1)
         {
             if (id == null || _context.MealCard == null)
@@ -131,6 +134,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: MealCards/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
@@ -142,7 +146,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create(int employeeId)
         {
             var employee = _context.Employee.Find(employeeId);
@@ -162,11 +166,11 @@ namespace Supermarket.Controllers
                 _context.Add(mealCard);
                 _context.SaveChanges();
             }
-
+            TempData["SuccessMessage"] = "The card was created successfully";
             return RedirectToAction(nameof(Index));
         }
-
-        public async Task<IActionResult> IndexTop(DateTime? startDate, DateTime? endDate)
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> IndexTop(DateTime? startDate, DateTime? endDate, int? selectedDepartmentId)
         {
             if (!startDate.HasValue || !endDate.HasValue)
             {
@@ -174,11 +178,19 @@ namespace Supermarket.Controllers
                 endDate = DateTime.Today.AddDays(1);
             }
 
-            var cardMovements = await _context.CardMovement
+            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", selectedDepartmentId);
+
+            var cardMovementsQuery = _context.CardMovement
                 .Include(c => c.MealCard)
                 .Include(c => c.MealCard.Employee)
-                .Where(c => c.Movement_Date >= startDate && c.Movement_Date <= endDate)
-                .ToListAsync();
+                .Where(c => c.Movement_Date >= startDate && c.Movement_Date <= endDate);
+
+            if (selectedDepartmentId.HasValue && selectedDepartmentId.Value > 0)
+            {
+                cardMovementsQuery = cardMovementsQuery.Where(c => c.MealCard.Employee.IDDepartments == selectedDepartmentId.Value);
+            }
+
+            var cardMovements = await cardMovementsQuery.ToListAsync();
 
             var topEmployees = cardMovements
                 .GroupBy(c => c.MealCard.Employee)
@@ -194,6 +206,7 @@ namespace Supermarket.Controllers
             {
                 Start_Filter = (DateTime)startDate,
                 End_Filter = (DateTime)endDate,
+                SelectedDepartmentId = selectedDepartmentId ?? 0,
                 TopEmployees = topEmployees.ToList()
             };
 

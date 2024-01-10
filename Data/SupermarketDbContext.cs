@@ -78,7 +78,7 @@ namespace Supermarket.Data
 
         public DbSet<Schedule> Schedule { get; set; }      
 
-        public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }
+        public DbSet<CategoryDiscounts> CategoryDiscounts { get; set; }
 
         public DbSet<Department> Departments { get; set; }
 
@@ -118,6 +118,8 @@ namespace Supermarket.Data
         public DbSet<User_Order> User_Order { get; set; } = default!;
         public DbSet<Order> Order { get; set; } = default!;
         public DbSet<Supermarket.Models.Alert> Alert { get; set; } = default!;
+
+        public DbSet<Orders> Orders { get; set; } = default!;
 
     }
 }

@@ -15,6 +15,8 @@ namespace Supermarket.Data
         private const string ROLE_STOCK_ADMIN = "Stock Administrator";
         private const string ROLE_STOCK_OP = "Stock Operator";
         private const string ROLE_MANAGER = "Manager";
+        private const string ROLE_EMPLOYEER = "Employeer";
+        private const string ROLE_REGISTER = "Cash Register";
 
         internal static void Populate(SupermarketDbContext db)
         {
@@ -51,6 +53,8 @@ namespace Supermarket.Data
             PopulateDepartment(db);
             PopulateSchedules(db);
             PopulateTickets(db);
+            PopulateOrder(db);
+
 
         }
         private static void PopulateDepartment(SupermarketDbContext db)
@@ -1020,11 +1024,9 @@ namespace Supermarket.Data
             var userJoaoStockAdmin = await EnsureUserIsCreatedAsync(userManager!, "joaostockadmin@ipg.pt", "Secret#123");
             var userAndreStockOp = await EnsureUserIsCreatedAsync(userManager!, "andrestockop@ipg.pt", "Secret#123");
             var userIvoStockOp = await EnsureUserIsCreatedAsync(userManager!, "ivostockop@ipg.pt", "Secret#123");
-  
-            //Group7----------------------------------------------------------------
+
             var user = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
-            var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
-  
+
             if (!await userManager!.IsInRoleAsync(user1, ROLE_ADMIN))
             {
                 await userManager!.AddToRoleAsync(user1, ROLE_ADMIN);
@@ -1041,7 +1043,81 @@ namespace Supermarket.Data
             {
                 await userManager!.AddToRoleAsync(userIvoStockOp, ROLE_STOCK_OP);
             }
+            //Group7----------------------------------------------------------------
 
+
+            //Group7----------------------------------------------------------------
+
+            var adminGroup7 = await EnsureUserIsCreatedAsync(userManager!, "adminGroup7@ipg.pt", "Secret#123");
+            var employeeGroup7 = await EnsureUserIsCreatedAsync(userManager!, "employeeGroup7@ipg.pt", "Secret#123");
+            var managerGroup7 = await EnsureUserIsCreatedAsync(userManager!, "managerGroup7@ipg.pt", "Secret#123");
+            var registerGroup7 = await EnsureUserIsCreatedAsync(userManager!, "registerGroup7@ipg.pt", "Secret#123");
+
+            if (!await userManager!.IsInRoleAsync(adminGroup7, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(adminGroup7, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(adminGroup7, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(adminGroup7, ROLE_EMPLOYEER);
+            }
+            if (!await userManager!.IsInRoleAsync(adminGroup7, ROLE_MANAGER))
+            {
+                await userManager!.AddToRoleAsync(adminGroup7, ROLE_MANAGER);
+            }
+            if (!await userManager!.IsInRoleAsync(employeeGroup7, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(employeeGroup7, ROLE_EMPLOYEER);
+            }
+            if (!await userManager!.IsInRoleAsync(managerGroup7, ROLE_MANAGER))
+            {
+                await userManager!.AddToRoleAsync(managerGroup7, ROLE_MANAGER);
+            }
+            if (!await userManager!.IsInRoleAsync(managerGroup7, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(managerGroup7, ROLE_EMPLOYEER);
+            }
+            if (!await userManager!.IsInRoleAsync(registerGroup7, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(registerGroup7, ROLE_EMPLOYEER);
+            }
+            if (!await userManager!.IsInRoleAsync(registerGroup7, ROLE_REGISTER))
+            {
+                await userManager!.AddToRoleAsync(registerGroup7, ROLE_REGISTER);
+            }
+
+
+            //Group6----------------------------------------------------------------
+            var adminGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "adminGrupo6@ipg.pt", "Secret#123");
+            var clientGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "clientGrupo6@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_CLIENT);
+            }
+            if (!await userManager!.IsInRoleAsync(clientGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(clientGrupo6, ROLE_CLIENT);
+            }
+            //--------------------------------------------------------------------
+            //Group6----------------------------------------------------------------
+            var adminGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "adminGrupo6@ipg.pt", "Secret#123");
+            var clientGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "clientGrupo6@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_CLIENT);
+            }
+            if (!await userManager!.IsInRoleAsync(clientGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(clientGrupo6, ROLE_CLIENT);
+            }
             //--------------------------------------------------------------------
             if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
             {
@@ -1116,10 +1192,6 @@ namespace Supermarket.Data
             }
 
             var costumer = await EnsureUserIsCreatedAsync(userManager!, "costumer@ipg.pt", "Secret#123");
-            if (!await userManager!.IsInRoleAsync(costumer, ROLE_CLIENT))
-            {
-                await userManager!.AddToRoleAsync(costumer, ROLE_CLIENT);
-            }
             if (!await userManager!.IsInRoleAsync(costumer, "Avaliar_Funcionarios"))
             {
                 await userManager!.AddToRoleAsync(costumer, "Avaliar_Funcionarios");
@@ -1145,14 +1217,6 @@ namespace Supermarket.Data
 
 
             var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
-            if (!await userManager!.IsInRoleAsync(manager, ROLE_CLIENT))
-            {
-                await userManager!.AddToRoleAsync(manager, ROLE_CLIENT);
-            }
-            if (!await userManager!.IsInRoleAsync(manager, ROLE_ADMIN))
-            {
-                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN);
-            }
             if (!await userManager!.IsInRoleAsync(manager, "Avaliar_Funcionarios"))
             {
                 await userManager!.AddToRoleAsync(manager, "Avaliar_Funcionarios");
@@ -1218,12 +1282,12 @@ namespace Supermarket.Data
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN3);
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_MANAGER);
-
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_EMPLOYEER);
             await EnsureRoleIsCreatedAsync(roleManager!, "Funcionário");
             await EnsureRoleIsCreatedAsync(roleManager!, "Gestor");
             await EnsureRoleIsCreatedAsync(roleManager!, "View_Reports");
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Edit_Del_IssueType");
-
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_REGISTER);
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Reports");
             await EnsureRoleIsCreatedAsync(roleManager!, "Edit_Del_Reports");
 
@@ -1303,6 +1367,59 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
+
+        private static void PopulateOrder(SupermarketDbContext db)
+        {
+            if (db.Orders.Any()) return;
+
+            db.Orders.AddRange(
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream")!,
+                        Quantity = 100,
+                        Date = new DateTime(2023, 1, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 1),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages")!,
+                        Quantity = 10,
+                        Date = new DateTime(2023, 1, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 1),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages")!,
+                        Quantity = 1000,
+                        Date = new DateTime(2023, 5, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 2),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2023, 9, 1),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2024, 1, 9),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    },
+                    new Orders
+                    {
+                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips")!,
+                        Quantity = 10000,
+                        Date = new DateTime(2024, 1, 14),
+                        ClientCard = db.ClientCard.FirstOrDefault(a => a.ClientCardId == 3),
+                    }
+                );
+
+            db.SaveChanges();
+        }
+
 
 
     }
