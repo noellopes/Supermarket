@@ -18,7 +18,7 @@ namespace Supermarket.Controllers
         // GET: ReserveDepartments1
         public async Task<IActionResult> Index(int page = 1, int reserveid = 0, string employee = "", int numeroDeFunc = 0)
         {
-            var reserveDepartments = from r in _context.ReserveDepartment.Include(r => r.Employee).Include(r => r.Reserve) select r;
+            var reserveDepartments = from r in _context.ReserveDepartment.Include(r => r.Employee)select r;
 
             if (reserveid != 0)
             {
@@ -27,12 +27,12 @@ namespace Supermarket.Controllers
 
             if (employee != "")
             {
-                reserveDepartments = reserveDepartments.Where(b => b.Employee.Employee_Name.Contains(employee));
+                reserveDepartments = reserveDepartments.Where(r => r.Employee!.Employee_Name.Contains(employee));
             }
 
             if (numeroDeFunc != 0)
             {
-                reserveDepartments = reserveDepartments.Where(c => c.NumeroDeFunc == numeroDeFunc);
+                reserveDepartments = reserveDepartments.Where(b => b.NumeroDeFunc == numeroDeFunc);
             }
 
             PagingInfo paging = new PagingInfo
@@ -101,7 +101,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReserveId,EmployeeId,NumeroDeFunc")] ReserveDepartment reserveDepartment)
+        public async Task<IActionResult> Create([Bind("ReserveId,EmployeeId,NumeroDeFunc")] ReserveDepartment1 reserveDepartment)
         {
             if (ModelState.IsValid)
             {
@@ -116,14 +116,15 @@ namespace Supermarket.Controllers
         }
 
         // GET: ReserveDepartments1/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, int? id2)
         {
             if (id == null || _context.ReserveDepartment == null)
             {
                 return NotFound();
             }
 
-            var reserveDepartment = await _context.ReserveDepartment.FindAsync(id);
+            var reserveDepartment = await _context.ReserveDepartment.FirstOrDefaultAsync(r => r.ReserveId == id && r.EmployeeId == id2);
+    
             if (reserveDepartment == null)
             {
                 return NotFound();
@@ -139,7 +140,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReserveId,Employee_Name,NumeroDeFunc")] ReserveDepartment reserveDepartment)
+        public async Task<IActionResult> Edit(int id, [Bind("ReserveId,Employee_Name,NumeroDeFunc")] ReserveDepartment1 reserveDepartment)
         {
             if (id != reserveDepartment.ReserveId)
             {
