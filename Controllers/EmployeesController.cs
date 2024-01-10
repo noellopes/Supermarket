@@ -32,8 +32,8 @@ namespace Supermarket.Controllers
         }
         */
 
-        [Authorize(Roles = "Administrator")]
-        // [Authorize(Roles = "Employees")]
+        //[Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Index(int page = 1, string employee_name = "", string employee_nif = "")
         {
             var employees = from b in _context.Employee select b;
@@ -80,7 +80,7 @@ namespace Supermarket.Controllers
 
 
         // GET: Employees/Details/5
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Employee == null)
@@ -137,7 +137,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,IDDepartments")] Employee employee)
         {
             if (ModelState.IsValid)
@@ -196,7 +196,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Edit(int id, Employee employee)
         {
             if (id != employee.EmployeeId)
@@ -268,7 +268,7 @@ namespace Supermarket.Controllers
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Employee == null)
