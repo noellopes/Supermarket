@@ -18,19 +18,19 @@ namespace Supermarket.Models
         public int EmployeeId { get; set; }
         public Employee? Employee { get; set; }
 
-        //FK DEPARTMENTS
-        //Relação de muitos para muitos
-        //public int ID_Departments { get; set; }
-        //public Departments Departments { get; set; }
+        ////FK DEPARTMENTS
+        ////Relação de muitos para muitos
+        //public int IDDepartments { get; set; }
+        //public Department? Departments1 { get; set; }
 
         // NUMERO DE FUNCIONARIOS NA RESERVA
         [Required]
         public int NumeroDeFunc { get; set; }
-        
 
-        /* FK Ticket
-          public int TicketID { get; set; }
 
-        public Ticket? Ticket { get; set; } */
+        //FK Ticket
+        public int TicketID { get; set; }
+
+        public Ticket? Ticket { get; set; } 
     }
 }
