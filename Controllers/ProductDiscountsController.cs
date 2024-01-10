@@ -74,7 +74,7 @@ namespace Supermarket.Controllers
         }
         // GET: ProductDiscounts
         [Authorize(Roles = "Client")]
-        public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
+        public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null, bool? applicable = null)
         {
             //variavel para a data do aniversário
             var today = DateTime.Today;
@@ -104,6 +104,12 @@ namespace Supermarket.Controllers
             {
                 productDiscounts = productDiscounts.Where(b => b.EndDate <= endDate.Value.Date);
             }
+            // filtrar os descontos par asaber se sao aplicaveis ou nao
+            if (applicable.HasValue)
+            {
+                bool isApplicable = applicable.Value;
+                productDiscounts = isApplicable? productDiscounts.Where(b => b.StartDate <= DateTime.Today && b.EndDate >= DateTime.Today) : productDiscounts.Where(b => !(b.StartDate <= DateTime.Today && b.EndDate >= DateTime.Today));
+            }
 
             PagingInfo paging = new PagingInfo
             {
@@ -129,6 +135,7 @@ namespace Supermarket.Controllers
                     .ToListAsync(),
                 PagingInfo = paging,
                 ClientsWithBirthday = clientsWithBirthday,
+                Applicable = applicable,
             };
             return View(vm);
         }
