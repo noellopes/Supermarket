@@ -166,7 +166,7 @@ namespace Supermarket.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> IndexTop(DateTime? startDate, DateTime? endDate)
+        public async Task<IActionResult> IndexTop(DateTime? startDate, DateTime? endDate, int? selectedDepartmentId)
         {
             if (!startDate.HasValue || !endDate.HasValue)
             {
@@ -174,11 +174,19 @@ namespace Supermarket.Controllers
                 endDate = DateTime.Today.AddDays(1);
             }
 
-            var cardMovements = await _context.CardMovement
+            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", selectedDepartmentId);
+
+            var cardMovementsQuery = _context.CardMovement
                 .Include(c => c.MealCard)
                 .Include(c => c.MealCard.Employee)
-                .Where(c => c.Movement_Date >= startDate && c.Movement_Date <= endDate)
-                .ToListAsync();
+                .Where(c => c.Movement_Date >= startDate && c.Movement_Date <= endDate);
+
+            if (selectedDepartmentId.HasValue && selectedDepartmentId.Value > 0)
+            {
+                cardMovementsQuery = cardMovementsQuery.Where(c => c.MealCard.Employee.IDDepartments == selectedDepartmentId.Value);
+            }
+
+            var cardMovements = await cardMovementsQuery.ToListAsync();
 
             var topEmployees = cardMovements
                 .GroupBy(c => c.MealCard.Employee)
@@ -194,6 +202,7 @@ namespace Supermarket.Controllers
             {
                 Start_Filter = (DateTime)startDate,
                 End_Filter = (DateTime)endDate,
+                SelectedDepartmentId = selectedDepartmentId ?? 0,
                 TopEmployees = topEmployees.ToList()
             };
 
