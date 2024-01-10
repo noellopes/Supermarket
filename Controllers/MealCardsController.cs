@@ -166,7 +166,7 @@ namespace Supermarket.Controllers
                 _context.Add(mealCard);
                 _context.SaveChanges();
             }
-
+            TempData["SuccessMessage"] = "The card was created successfully";
             return RedirectToAction(nameof(Index));
         }
         [Authorize(Roles = "Manager")]
