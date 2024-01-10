@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
@@ -22,6 +23,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: MealCards
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Index(int page = 1, string employee_name = "", bool sOEwithoutMC = false, bool sOEwithMC = false)
         {
             var employees = from b in _context.Employee.Include(m => m.MealCard) select b;
@@ -72,6 +74,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: MealCards/Details/5
+        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Details(int? id, int cardMovementPage = 1)
         {
             if (id == null || _context.MealCard == null)
@@ -131,6 +134,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: MealCards/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
@@ -142,7 +146,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create(int employeeId)
         {
             var employee = _context.Employee.Find(employeeId);
@@ -165,7 +169,7 @@ namespace Supermarket.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> IndexTop(DateTime? startDate, DateTime? endDate, int? selectedDepartmentId)
         {
             if (!startDate.HasValue || !endDate.HasValue)
