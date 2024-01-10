@@ -60,9 +60,9 @@ namespace Supermarket.Controllers
                     {
                         CategoryId = productCategory,
                         ClientCardId = clientCardId,
-                        Value = 10, // Defina o valor do desconto conforme necessário
+                        Value = 10, // valor desconto
                         StartDate = startDate.AddDays(7),
-                        EndDate = startDate.AddDays(14), // Ajuste conforme necessário
+                        EndDate = startDate.AddDays(14), // data de fim do desconto
                     };
 
                     _context.Add(categoryDiscount);
@@ -73,6 +73,135 @@ namespace Supermarket.Controllers
             TempData["SuccessMessage"] = "Seasonal Discounts Created with Success!";
             return RedirectToAction(nameof(Index));
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> ConfirmCategoryDiscounts()
+        {
+            var startDate = DateTime.Now;
+            var endDate = startDate.AddMonths(4);
+
+            var topSellingProducts = await _context.Orders
+                .Include(o => o.Product)
+                .Where(o => o.Date >= startDate && o.Date <= endDate)
+                .ToListAsync();
+
+            // Agrupar por CategoryId e calcular a quantidade total vendida localmente
+            var categoryQuantities = topSellingProducts
+                .GroupBy(o => o.Product.CategoryId)
+                .Select(g => new
+                {
+                    CategoryId = g.Key,
+                    TotalQuantitySold = g.Sum(o => o.Quantity)
+                });
+
+            // Obter os ClientCardIds existentes
+            var existingClientCardIds = await _context.ClientCard
+                .Select(cc => cc.ClientCardId)
+                .ToListAsync();
+
+            var confirmedDiscounts = await _context.CategoryDiscounts
+                .Include(cd => cd.Category)
+                .Include(cd => cd.ClientCard)
+                .Where(cd => cd.StartDate == startDate.AddDays(7) && cd.EndDate == startDate.AddDays(14))
+                .ToListAsync();
+
+            return View(confirmedDiscounts);
+        }
+
+
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> EditConfirmedDiscounts()
+        {
+            // Obter novamente os descontos
+            var startDate = DateTime.Now;
+            var endDate = startDate.AddMonths(4);
+
+            var confirmedDiscounts = await _context.CategoryDiscounts
+                .Where(cd => cd.StartDate == startDate.AddDays(0) && cd.EndDate == startDate.AddDays(14))
+                .ToListAsync();
+
+            // Redirecionar para página de edição com descontos confirmados
+            return RedirectToAction("Edit", new { id = confirmedDiscounts.FirstOrDefault()?.CategoryDiscountsId });
+        }
+
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> CancelConfirmedDiscounts()
+        {
+            // Remover ou cancelar descontos
+            var startDate = DateTime.Now;
+            var endDate = startDate.AddMonths(4);
+
+            var confirmedDiscounts = await _context.CategoryDiscounts
+                .Where(cd => cd.StartDate == startDate.AddDays(7) && cd.EndDate == startDate.AddDays(14))
+                .ToListAsync();
+
+            _context.CategoryDiscounts.RemoveRange(confirmedDiscounts);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Seasonal Discounts creation canceled!";
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         [Authorize(Roles = "Client")]

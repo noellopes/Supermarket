@@ -1,0 +1,36 @@
+﻿@model List<Supermarket.Models.CategoryDiscounts>
+
+@{
+    ViewData["Title"] = "ConfirmCategoryDiscounts";
+}
+
+<h1>ConfirmCategoryDiscounts</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Client Card</th>
+            <th>Value</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var discount in Model)
+        {
+            <tr>
+                <td>@discount.Category.Name</td>
+                <td>@discount.ClientCardId</td>
+                <td>@discount.Value</td>
+                <td>@discount.StartDate</td>
+                <td>@discount.EndDate</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+    <a asp-action="EditConfirmedDiscounts">Edit</a>
+    <a asp-action="CancelConfirmedDiscounts">Cancel</a>
+</div>
