@@ -9,11 +9,11 @@ using Supermarket.Data;
 
 #nullable disable
 
-namespace Supermarket.Data.Migrations.SuperMarket
+namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240106222323_New group CRUD with link to Employee")]
-    partial class NewgroupCRUDwithlinktoEmployee
+    [Migration("20240110214234_initialMmigration2")]
+    partial class initialMmigration2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -293,9 +293,6 @@ namespace Supermarket.Data.Migrations.SuperMarket
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("GrupoProjetoProjetoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("NomeFuncao")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -303,9 +300,22 @@ namespace Supermarket.Data.Migrations.SuperMarket
 
                     b.HasKey("FuncaoId");
 
-                    b.HasIndex("GrupoProjetoProjetoId");
-
                     b.ToTable("Funcao");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.FuncaoGrupoProjeto", b =>
+                {
+                    b.Property<int>("FuncaoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjetoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FuncaoId", "ProjetoId");
+
+                    b.HasIndex("ProjetoId");
+
+                    b.ToTable("FuncaoGrupoProjeto");
                 });
 
             modelBuilder.Entity("Supermarket.Models.GrupoProjeto", b =>
@@ -783,11 +793,23 @@ namespace Supermarket.Data.Migrations.SuperMarket
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.Funcao", b =>
+            modelBuilder.Entity("Supermarket.Models.FuncaoGrupoProjeto", b =>
                 {
-                    b.HasOne("Supermarket.Models.GrupoProjeto", null)
+                    b.HasOne("Supermarket.Models.Funcao", "funcao")
+                        .WithMany("GrupoProjetos")
+                        .HasForeignKey("FuncaoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Supermarket.Models.GrupoProjeto", "GrupoProjeto")
                         .WithMany("Funcoes")
-                        .HasForeignKey("GrupoProjetoProjetoId");
+                        .HasForeignKey("ProjetoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GrupoProjeto");
+
+                    b.Navigation("funcao");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Hallway", b =>
@@ -951,6 +973,8 @@ namespace Supermarket.Data.Migrations.SuperMarket
             modelBuilder.Entity("Supermarket.Models.Funcao", b =>
                 {
                     b.Navigation("Employees");
+
+                    b.Navigation("GrupoProjetos");
                 });
 
             modelBuilder.Entity("Supermarket.Models.GrupoProjeto", b =>

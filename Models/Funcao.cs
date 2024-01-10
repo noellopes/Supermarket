@@ -15,6 +15,8 @@ namespace Supermarket.Models
 
         public IReadOnlyCollection<Employee>? Employees { get; set; }
 
+        public ICollection<FuncaoGrupoProjeto>? GrupoProjetos { get; set; }  
+
 
     }
 }

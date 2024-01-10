@@ -177,7 +177,7 @@ namespace Supermarket.Controllers
                             }
                             else
                             {
-                                TempData["Mensagem"] = "funcao identica";
+                                TempData["Mensagem"] = "funcao existente";
                                 return RedirectToAction(nameof(Index));
                             }
                         }

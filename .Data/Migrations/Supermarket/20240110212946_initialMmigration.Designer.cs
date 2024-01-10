@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Supermarket.Data;
 
@@ -11,9 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240110212946_initialMmigration")]
+    partial class initialMmigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -422,7 +425,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<DateTime>("IssueRegisterDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IssueTypeId")
+                    b.Property<int?>("IssueTypeId")
                         .HasColumnType("int");
 
                     b.Property<int>("Severity")
@@ -831,9 +834,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                 {
                     b.HasOne("Supermarket.Models.IssueType", "IssueType")
                         .WithMany()
-                        .HasForeignKey("IssueTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("IssueTypeId");
 
                     b.Navigation("IssueType");
                 });

@@ -76,6 +76,7 @@ namespace Supermarket.Data
         public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
 
         public DbSet<Supermarket.Models.GrupoProjeto> GrupoProjeto { get; set; } = default!;
+        public DbSet<Supermarket.Models.FuncaoGrupoProjeto> FuncaoGrupoProjeto { get; set; } = default!;
 
     }
 }

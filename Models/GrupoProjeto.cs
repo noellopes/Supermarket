@@ -21,7 +21,7 @@ namespace Supermarket.Models
 
         public ICollection<Employee>? Employees { get; set; }
 
-        public ICollection<Funcao>? Funcoes { get; set; }
+        public ICollection<FuncaoGrupoProjeto>? Funcoes { get; set; }
     }
 
 }
