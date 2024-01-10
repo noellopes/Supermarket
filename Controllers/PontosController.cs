@@ -153,7 +153,13 @@ namespace Supermarket.Controllers
                         return View(ponto);
                     }
                 }
-
+                var employee = await _context.Employee.FindAsync(ponto.EmployeeId);
+                if(employee.Employee_Termination_Date != null && ponto.Date > employee.Employee_Termination_Date)
+                {
+                    ModelState.AddModelError("Date", "The employee is no longer working.");
+                    ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
+                    return View(ponto);
+                }
                 _context.Add(ponto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
