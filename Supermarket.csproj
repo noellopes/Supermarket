@@ -48,6 +48,17 @@
     <None Include="Views\Alerts\Details.cshtml" />
     <None Include="Views\Alerts\Edit.cshtml" />
     <None Include="Views\Alerts\Index.cshtml" />
+    <None Include="Views\CategoryDiscounts\CategoryDiscountTopSeller.cshtml" />
+    <None Include="Views\CategoryDiscounts\Create.cshtml" />
+    <None Include="Views\CategoryDiscounts\Delete.cshtml" />
+    <None Include="Views\CategoryDiscounts\Details.cshtml" />
+    <None Include="Views\CategoryDiscounts\Edit.cshtml" />
+    <None Include="Views\CategoryDiscounts\Index.cshtml" />
+    <None Include="Views\Orders\Create.cshtml" />
+    <None Include="Views\Orders\Delete.cshtml" />
+    <None Include="Views\Orders\Details.cshtml" />
+    <None Include="Views\Orders\Edit.cshtml" />
+    <None Include="Views\Orders\Index.cshtml" />
   </ItemGroup>
 
 
