@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,9 +21,9 @@ namespace Supermarket.Controllers
         }
 
         // GET: ClientCards
-        public async Task<IActionResult> Index(int page = 1, string name = "", bool? estado = null)
+        public async Task<IActionResult> Index(int page = 1, string name = "", bool? estado = null )
         {
-            var clientCards = from b in _context.ClientCard.Include(b=>b.Client) select b;
+            var clientCards = from b in _context.ClientCard.Include(b => b.Client) select b;
             if (name != "")
             {
                 clientCards = clientCards.Where(x => x.Client!.ClientName.Contains(name));
@@ -90,10 +90,14 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ClientCardId,ClientId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
+        public async Task<IActionResult> Create([Bind("ClientCardId,ClientId,ExpiredProductId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
         {
             if (ModelState.IsValid)
             {
+                clientCard.ClientCardNumber = new Random().Next(100000, 999999);
+                clientCard.Balance = 0;
+                clientCard.Estado = true;
+
                 _context.Add(clientCard);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -124,7 +128,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ClientCardId,ClientId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
+        public async Task<IActionResult> Edit(int id, [Bind("ClientCardId,ClientId,ExpiredProductId,ClientCardNumber,Balance,Estado")] ClientCard clientCard)
         {
             if (id != clientCard.ClientCardId)
             {
