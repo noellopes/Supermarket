@@ -121,24 +121,29 @@ namespace Supermarket.Controllers
         }
 
         // GET: ReserveDepartment1/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: ReserveDepartment1/Edit/5
+        public async Task<IActionResult> Edit(int? id, int? id1)
         {
-            if (id == null || _context.ReserveDepartment == null)
+            if (id == null || id1 == null || _context.ReserveDepartment == null)
             {
                 return NotFound();
             }
 
-            var reserveDepartment1 = await _context.ReserveDepartment.FindAsync(id);
+            // Modifique esta linha para usar um array de valores para a chave primária composta
+            var reserveDepartment1 = await _context.ReserveDepartment.FindAsync(new object[] { id, id1 });
+
             if (reserveDepartment1 == null)
             {
                 return NotFound();
             }
+
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", reserveDepartment1.EmployeeId);
             ViewData["ReserveId"] = new SelectList(_context.Reserve, "ReserveId", "ReserveId", reserveDepartment1.ReserveId);
             ViewData["TicketID"] = new SelectList(_context.Ticket, "TicketId", "TicketId", reserveDepartment1.TicketID);
             ViewData["NumeroDeFunc"] = new SelectList(_context.Reserve, "NumeroDeFunc", "NumeroDeFunc");
             return View(reserveDepartment1);
         }
+
 
         // POST: ReserveDepartment1/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -161,7 +166,7 @@ namespace Supermarket.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ReserveDepartment1Exists(reserveDepartment1.ReserveId))
+                    if (!ReserveDepartment1Exists(reserveDepartment1.ReserveId, reserveDepartment1.EmployeeId))
                     {
                         return NotFound();
                     }
@@ -180,18 +185,18 @@ namespace Supermarket.Controllers
         }
 
         // GET: ReserveDepartment1/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id, int? id1)
         {
-            if (id == null || _context.ReserveDepartment == null)
+            if (id == null || id1 == null || _context.ReserveDepartment == null)
             {
                 return NotFound();
             }
 
+
             var reserveDepartment1 = await _context.ReserveDepartment
                 .Include(r => r.Employee)
                 .Include(r => r.Reserve)
-                .Include(r => r.Ticket)
-                .FirstOrDefaultAsync(m => m.ReserveId == id);
+                .FirstOrDefaultAsync(r => r.ReserveId == id && r.EmployeeId == id1);
             if (reserveDepartment1 == null)
             {
                 return NotFound();
@@ -203,25 +208,25 @@ namespace Supermarket.Controllers
         // POST: ReserveDepartment1/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, int id1)
         {
             if (_context.ReserveDepartment == null)
             {
                 return Problem("Entity set 'SupermarketDbContext.ReserveDepartment'  is null.");
             }
-            var reserveDepartment1 = await _context.ReserveDepartment.FindAsync(id);
+            var reserveDepartment1 = await _context.ReserveDepartment.Where(r => r.ReserveId == id && r.EmployeeId == id1).ToListAsync();
             if (reserveDepartment1 != null)
             {
-                _context.ReserveDepartment.Remove(reserveDepartment1);
+                _context.ReserveDepartment.Remove(reserveDepartment1[0]);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ReserveDepartment1Exists(int id)
+        private bool ReserveDepartment1Exists(int id, int id1)
         {
-          return (_context.ReserveDepartment?.Any(e => e.ReserveId == id)).GetValueOrDefault();
+          return (_context.ReserveDepartment.Any(e => e.ReserveId == id && e.EmployeeId == id1));
         }
     }
 }

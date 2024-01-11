@@ -37,10 +37,9 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="ReserveId" />
-        <input type="hidden" asp-for="EmployeeId" />
+    <form asp-action="Delete" asp-route-id="@Model.ReserveId" asp-route-id1="@Model.EmployeeId">
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>
+
 </div>

@@ -62,8 +62,8 @@
             </td>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.ReserveId" class="btn btn-info btn-sm">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@item.ReserveId" class="btn btn-warning btn-sm">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.ReserveId" class="btn btn-danger btn-sm">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.ReserveId" asp-route-id1="@item.EmployeeId" class="btn btn-warning btn-sm">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ReserveId" asp-route-id1="@item.EmployeeId" class="btn btn-danger btn-sm">Delete</a>
                 </td>
         </tr>
 }
