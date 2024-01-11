@@ -13,11 +13,28 @@ namespace Supermarket.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
             modelBuilder.Entity<Employee>().HasKey(e => e.EmployeeId);
             modelBuilder.Entity<Employee>().Property(e => e.EmployeeId).UseIdentityColumn();
 
+
+            //ModelBuilder das funções
+            modelBuilder.Entity<Employee>()
+                .HasOne(f => f.Funcao)
+                .WithMany(e => e.Employees)
+                .HasForeignKey(k =>k.Funcao_FK);
+
+            modelBuilder.Entity<FuncaoGrupoProjeto>()
+                .HasOne(fg => fg.funcao)
+                .WithMany(gp => gp.GrupoProjetos)
+                .HasForeignKey(fg => fg.FuncaoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FuncaoGrupoProjeto>()
+                .HasOne(gp => gp.GrupoProjeto)
+                .WithMany(f => f.Funcoes)
+                .HasForeignKey(gp => gp.ProjetoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<Folga> Folga { get; set; } = default!;
@@ -27,6 +44,7 @@ namespace Supermarket.Data
 
         public DbSet<Employee> Employee { get; set; } = default!;
 
+      
         public DbSet<Supermarket.Models.IssueType> IssueType { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Issues> Issues { get; set; } = default!;
@@ -82,6 +100,9 @@ namespace Supermarket.Data
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
 
         public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.GrupoProjeto> GrupoProjeto { get; set; } = default!;
+        public DbSet<Supermarket.Models.FuncaoGrupoProjeto> FuncaoGrupoProjeto { get; set; } = default!;
 
     }
 }
