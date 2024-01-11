@@ -157,7 +157,6 @@ namespace Supermarket.Controllers
             var issueType = await _context.IssueType.FindAsync(id);
             if (issueType != null)
             {
-                //_context.IssueType.Remove(issueType);
                 try
                 {
                     _context.IssueType.Remove(issueType);
@@ -171,7 +170,6 @@ namespace Supermarket.Controllers
             }
 
             await _context.SaveChangesAsync();
-            //return RedirectToAction(nameof(Index));
             return View("DeleteCompleted", issueType);
         }
 
