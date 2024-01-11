@@ -20,12 +20,44 @@ namespace Supermarket.Controllers
         }
 
         // GET: Reserves
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int numeroDeFunc = 0)
         {
-              return _context.Reserve != null ? 
-                          View(await _context.Reserve.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Reserve'  is null.");
+            var reserve = _context.Reserve.AsQueryable();
+
+            if (numeroDeFunc != 0)
+            {
+                reserve = reserve.Where(r => r.NumeroDeFunc == numeroDeFunc);
+            }
+
+            PagingInfo paging = new PagingInfo
+            {
+                CurrentPage = page,
+                TotalItems = await reserve.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new ReserveViewModel
+            {
+                Reserve = await reserve
+                    .OrderBy(r => r.ReserveId)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfo = paging,
+                SearchNumeroFunc = numeroDeFunc,
+            };
+
+            return View(vm);
         }
+
 
         // GET: Reserves/Details/5
         public async Task<IActionResult> Details(int? id)
