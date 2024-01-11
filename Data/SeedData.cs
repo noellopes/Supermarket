@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Identity;
 using Supermarket.Models;
 using System;
@@ -38,7 +37,7 @@ namespace Supermarket.Data
             PopulateProductDiscounts(db);
             PopulateTakeAwayCategories(db);
             PopulateTakeAwayProducts(db);
-            PopulateCustomer(db);
+            //PopulateCustomer(db);
             //PopulateEmployees(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
@@ -49,13 +48,34 @@ namespace Supermarket.Data
             PopulateIssueType(db);
             PopulatePurchase(db);
             PopulateIssue(db);
-            PopulateAlerts(db);
+            //PopulateAlerts(db);
             PopulateDepartment(db);
             PopulateSchedules(db);
             PopulateTickets(db);
             PopulateOrder(db);
             PopulatePonto(db);
+            PopulateFormation(db);
 
+        }
+        private static void PopulateFormation(SupermarketDbContext db)
+        {
+            if (db.Formation.Any())
+            {
+                return;
+            }
+
+            db.Formation.AddRange(
+                new Models.Formation { Formation_Name = "Padeiro" },
+                new Models.Formation { Formation_Name = "Caixa" },
+                new Models.Formation { Formation_Name = "Talhante" },
+                new Models.Formation { Formation_Name = "Limpeza" },
+                new Models.Formation { Formation_Name = "Peixeira" },
+                new Models.Formation { Formation_Name = "Cafetaria" },
+                new Models.Formation { Formation_Name = "Operador de Armazen" },
+                new Models.Formation { Formation_Name = "Reposição" }
+            );
+
+            db.SaveChanges();
         }
         private static void PopulateDepartment(SupermarketDbContext db)
         {
@@ -78,11 +98,11 @@ namespace Supermarket.Data
             if (db.Schedule.Any()) return;
 
             db.Schedule.AddRange(
-                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2028, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 18, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Peixaria").Select(a => a.IDDepartments).FirstOrDefault() },
-                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2025, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 15, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Talho").Select(a => a.IDDepartments).FirstOrDefault() },
-                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2028, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 10, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Take-Way").Select(a => a.IDDepartments).FirstOrDefault() },
-                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2029, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 23, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Congelados").Select(a => a.IDDepartments).FirstOrDefault() },
-                    new Schedule { StartDate = DateTime.Now, EndDate = null, DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 22, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Armazem").Select(a => a.IDDepartments).FirstOrDefault() }
+                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2028, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 18, 30, 0), DeptID = db.Departments.Where(a => a.NameDepartments == "Peixaria").Select(a => a.IDDepartments).FirstOrDefault() },
+                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2025, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 15, 30, 0), DeptID = db.Departments.Where(a => a.NameDepartments == "Talho").Select(a => a.IDDepartments).FirstOrDefault() },
+                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2028, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 10, 30, 0), DeptID = db.Departments.Where(a => a.NameDepartments == "Take-Way").Select(a => a.IDDepartments).FirstOrDefault() },
+                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2029, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 23, 30, 0), DeptID = db.Departments.Where(a => a.NameDepartments == "Congelados").Select(a => a.IDDepartments).FirstOrDefault() },
+                    new Schedule { StartDate = DateTime.Now, EndDate = null, DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 22, 30, 0), DeptID = db.Departments.Where(a => a.NameDepartments == "Armazem").Select(a => a.IDDepartments).FirstOrDefault() }
                 );
 
             db.SaveChanges();
@@ -119,7 +139,7 @@ namespace Supermarket.Data
             if (db.Brand.Any()) return;
 
             db.Brand.AddRange(
-                    
+
                     new Brand { Name = "Coca-Cola" },
                     new Brand { Name = "Colgate" },
                     new Brand { Name = "Dove" },
@@ -453,7 +473,7 @@ namespace Supermarket.Data
         private static void PopulateWarehouseSection_Product(SupermarketDbContext db)
         {
             if (db.WarehouseSection_Product.Any()) return;
-            
+
             db.WarehouseSection_Product.AddRange(
                     new WarehouseSection_Product
                     {
@@ -576,10 +596,6 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-<<<<<<< HEAD
-
-        private static void PopulateEmployees(SupermarketDbContext db) {
-=======
         private static void PopulateAlerts(SupermarketDbContext db)
         {
             DateTime specificDate = new DateTime(2023, 1, 2);
@@ -648,7 +664,6 @@ namespace Supermarket.Data
 
         private static void PopulateEmployees(SupermarketDbContext db)
         {
->>>>>>> 12867d8d10c8efc3ac4a39aebc4efb92156694ba
             if (db.Employee.Any()) return;
 
             // db.Employee.AddRange(
@@ -706,12 +721,8 @@ namespace Supermarket.Data
         }
 
 
-<<<<<<< HEAD
-        private static void PopulateEmployeeEvaluations(SupermarketDbContext db) {
-=======
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
         {
->>>>>>> 12867d8d10c8efc3ac4a39aebc4efb92156694ba
             if (db.EmployeeEvaluation.Any()) return;
 
             db.EmployeeEvaluation.AddRange(
@@ -897,17 +908,9 @@ namespace Supermarket.Data
             if (db.Employee.Any()) return;
 
             db.Employee.AddRange(
-<<<<<<< HEAD
 
                 new Employee { Employee_Name = "Afonso Almeida", Employee_Email = "Afonso@gmail.com", Employee_Password = "afonso123", Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
 
-
-                new Employee { Employee_Name = "Afonso Almeida", Employee_Email = "anasilva_pinhel@hotmail.com", Employee_Password = "Informatica_1706869", Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-
-=======
-
-                new Employee { Employee_Name = "Afonso Almeida", Employee_Email = "anasilva_pinhel@hotmail.com", Employee_Password = "Informatica_1706869", Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
->>>>>>> 12867d8d10c8efc3ac4a39aebc4efb92156694ba
                 new Employee { Employee_Name = "Jessica Azevedo", Employee_Email = "Jessica@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837462856", Employee_NIF = "875436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Hugo Braga", Employee_Email = "Hugo@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620559", Employee_NIF = "938475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Alberto Barros", Employee_Email = "Alberto1@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843257712", Employee_NIF = "098764084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
@@ -935,12 +938,12 @@ namespace Supermarket.Data
 
             db.MealCard.AddRange(
                 new MealCard { EmployeeId = 1 },
-                new MealCard { EmployeeId = 3},
+                new MealCard { EmployeeId = 3 },
                 new MealCard { EmployeeId = 2 },
                 new MealCard { EmployeeId = 4 },
                 new MealCard { EmployeeId = 6 },
                 new MealCard { EmployeeId = 7 },
-                new MealCard { EmployeeId = 5},
+                new MealCard { EmployeeId = 5 },
                 new MealCard { EmployeeId = 10 },
                 new MealCard { EmployeeId = 9 },
                 new MealCard { EmployeeId = 8 }
@@ -1279,20 +1282,8 @@ namespace Supermarket.Data
             }
 
             return user;
-            
+
         }
-
-<<<<<<< HEAD
-        internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager) {
-
-           
-            await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
-            await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
-
-            await EnsureRoleIsCreatedAsync(roleManager!, "Funcionário");
-            await EnsureRoleIsCreatedAsync(roleManager!, "Gestor");
-
-=======
 
         internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager)
         {
@@ -1313,7 +1304,6 @@ namespace Supermarket.Data
 
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_STOCK_ADMIN);
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_STOCK_OP);
->>>>>>> 12867d8d10c8efc3ac4a39aebc4efb92156694ba
         }
 
 
@@ -1330,7 +1320,7 @@ namespace Supermarket.Data
             }
         }
 
-      
+
 
         private static void PopulateType(SupermarketDbContext db)
         {

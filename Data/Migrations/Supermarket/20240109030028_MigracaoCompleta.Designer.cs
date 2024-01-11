@@ -314,6 +314,9 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
 
+                    b.Property<int?>("DepartmentsIDDepartments")
+                        .HasColumnType("int");
+
                     b.Property<string>("Employee_Address")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -372,6 +375,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployeeId");
+
+                    b.HasIndex("DepartmentsIDDepartments");
 
                     b.ToTable("Employee");
                 });
