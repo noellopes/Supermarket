@@ -125,7 +125,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     Standard_Check_In_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Standard_Check_Out_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Standard_Lunch_Hour = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Standard_Lunch_Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Standard_Lunch_Time = table.Column<int>(type: "int", nullable: false),
                     Employee_Time_Bank = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
@@ -445,10 +445,10 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CheckInTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    CheckOutTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    LunchStartTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    LunchTime = table.Column<TimeSpan>(type: "time", nullable: false)
+                    CheckInTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CheckOutTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LunchStartTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LunchTime = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -514,13 +514,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                     PontoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CheckInTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CheckOutTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LunchStartTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LunchEndTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CheckInTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CheckOutTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LunchStartTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LunchEndTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RealCheckOutTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Justificative = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExtraHours = table.Column<TimeSpan>(type: "time", nullable: false)
                 },

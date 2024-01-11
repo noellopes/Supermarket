@@ -12,11 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-<<<<<<<< HEAD:Data/Migrations/Supermarket/20240109113808_Initial.Designer.cs
-    [Migration("20240109113808_Initial")]
-========
-    [Migration("20240111183531_Initial")]
->>>>>>>> 2cdcf1f4a4f7dc0012f12dbdbedc2e6bd3ce87dc:Data/Migrations/Supermarket/20240111183531_Initial.Designer.cs
+    [Migration("20240111215657_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -717,15 +713,12 @@ namespace Supermarket.Data.Migrations.Supermarket
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PontoId"));
 
                     b.Property<string>("CheckInTime")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CheckOutTime")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Date")
-                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("EmployeeId")
@@ -738,11 +731,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LunchEndTime")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LunchStartTime")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RealCheckOutTime")
@@ -750,7 +741,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PontoId");

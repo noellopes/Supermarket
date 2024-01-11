@@ -67,10 +67,11 @@ else
 
 
 <h1>Lista de Todos os Pontos</h1>
-
-<div>
-    <a asp-action="Create" class="btn btn-success btn-sm">Registrar Ponto</a>
-</div>
+<form asp-action="Create">
+    <div class="form-group">
+        <input type="submit" value="Registrar Ponto" class="btn btn-primary" />
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>

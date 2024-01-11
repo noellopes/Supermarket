@@ -74,8 +74,6 @@ namespace Supermarket.Controllers
             return View(vm);
         }
 
-
-
         private void CalculateExtraHours(Ponto ponto)
         {
             if (!string.IsNullOrEmpty(ponto.CheckOutTime) && !string.IsNullOrEmpty(ponto.RealCheckOutTime))
@@ -120,51 +118,49 @@ namespace Supermarket.Controllers
         }
 
         // GET: Pontoes/Create
-        public IActionResult Create()
-        {
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
-            return View();
-        }
-
-        // POST: Pontoes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,RealCheckOutTime,Status,Justificative,ExtraHours")] Ponto ponto)
+        public async void Create()
         {
-            
-            //if (string.Equals())
-            //ponto.Date = DateTime.Now;
-            //ponto.CheckInTime = TimeOnly.MinValue.ToString();
-            //ponto.RealCheckOutTime = TimeOnly.MaxValue.ToString();
-            //ponto.CheckOutTime = TimeOnly.MinValue.ToString();
-
-            if (ModelState.IsValid)
+            var funcionario = await _context.Employee.Where(x => x.Employee_Email == User.Identity.Name).FirstOrDefaultAsync();
+            if (funcionario is not null)
             {
-                //StringComparison = Não é necessário escrever igual ao nome, pode ser tudo em letra minuscula ou maiuscula
-                if (string.Equals(ponto.Status, "workOvertime", StringComparison.OrdinalIgnoreCase))
+                var escala = await _context.EmployeeSchedule.Where(x => x.EmployeeId == funcionario.EmployeeId && x.Date==DateTime.Now.Date).FirstOrDefaultAsync();
+                var pontoDia = await _context.Ponto.Where(x => x.EmployeeId == funcionario.EmployeeId && x.Date == DateTime.Now.Date).FirstOrDefaultAsync();
+                if (pontoDia is not null)
                 {
-                    ponto.Justificative = "Don't need justification";
-                }
-                else if (string.Equals(ponto.Status, "notworkOvertime", StringComparison.OrdinalIgnoreCase))
-                {
-                    
-                    if (string.IsNullOrEmpty(ponto.Justificative))
+                    if(pontoDia.CheckInTime is not null && pontoDia.LunchStartTime is null && pontoDia.LunchEndTime is null && pontoDia.CheckOutTime is null)
                     {
-                        ModelState.AddModelError("Justificative", "Justificative is required.");
-                        ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
-                        return View(ponto);
+                        pontoDia.LunchStartTime = DateTime.Now.ToString("HH:mm");
                     }
+                    else if(pontoDia.CheckInTime is not null && pontoDia.LunchStartTime is not null && pontoDia.LunchEndTime is null && pontoDia.CheckOutTime is null)
+                    {
+                        pontoDia.LunchEndTime = DateTime.Now.ToString("HH:mm");
+                    }
+                    else if (pontoDia.CheckInTime is not null && pontoDia.LunchStartTime is not null && pontoDia.LunchEndTime is not null && pontoDia.CheckOutTime is null)
+                    {
+                        pontoDia.CheckOutTime = DateTime.Now.ToString("HH:mm");
+                    }
+                    else
+                    {
+
+                    }
+                    _context.Update(pontoDia);
+                    await _context.SaveChangesAsync();
                 }
+                else
+                {
+                    var ponto = new Ponto
+                    {
+                        EmployeeId = funcionario.EmployeeId,
+                        Date = DateTime.Now.Date,
+                        CheckInTime = DateTime.Now.ToString("HH:mm")
+                    };
 
-                _context.Add(ponto);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    _context.Add(ponto);
+                    await _context.SaveChangesAsync();
+                }
             }
-
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
-            return View(ponto);
         }
 
         // GET: Pontoes/Edit/5
