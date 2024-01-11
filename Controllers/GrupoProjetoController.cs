@@ -11,7 +11,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class GrupoProjetoController : Controller
+    public class GrupoProjetoController : Controller 
     {
         private readonly SupermarketDbContext _context;
 
@@ -77,18 +77,17 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            var funcionarios = _context.Employee.Where(F => F.ProjetoId == id).Include(E => E.Funcao);
-            List<Employee> employee = new List<Employee>();
-            foreach( var funcionario in funcionarios)
-            {
-                if (grupoProjeto.Employees == null)
-                {
-                    grupoProjeto.Employees = employee;
-                }
-                //grupoProjeto.Funcoes!.Add(funcionario.Funcao!);
-                grupoProjeto.Employees!.Add(funcionario);
-            }
+            
+            var funcionarios = _context.Employee.Where(F => F.ProjetoId == id).ToList();
+            grupoProjeto.Employees = funcionarios;
 
+            foreach (var funcao in _context.FuncaoGrupoProjeto.Where(w=> w.ProjetoId == grupoProjeto.ProjetoId).Include(f=>f.funcao))
+            {
+                if (!grupoProjeto.Funcoes!.Contains(funcao))
+                {
+                    grupoProjeto .Funcoes.Add(funcao);
+                }
+            }
             return View(grupoProjeto);
         }
 
@@ -107,7 +106,7 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProjetoId,NomeProjeto,DescricaoProjeto,Objectives")] GrupoProjeto grupoProjeto, int[] funcoesId)
         {
-            List<Employee> employee = new List<Employee>();
+            ICollection<Employee> employee = new List<Employee>();
             if (ModelState.IsValid)
             {
                 bool existeGrupoProjeto = await _context.GrupoProjeto.AnyAsync(
@@ -121,10 +120,19 @@ namespace Supermarket.Controllers
                         await _context.SaveChangesAsync();
                         foreach (var item in funcoesId)
                         {
+                            FuncaoGrupoProjeto fgp = new FuncaoGrupoProjeto();
                             employee.Add(GetBestEmployeeFunction(item));
+
+                            fgp.FuncaoId = item;
+                            fgp.funcao = GetFuncaoById(item);
+                            fgp.ProjetoId = grupoProjeto.ProjetoId;
+                           
+                            _context.FuncaoGrupoProjeto.Add(fgp);
+                            await _context.SaveChangesAsync();
                         }
                         foreach (var e in employee)
                         {
+                           
                             e.ProjetoId = grupoProjeto.ProjetoId;
                             _context.Update(e);
                         }
@@ -222,6 +230,7 @@ namespace Supermarket.Controllers
 
             grupoProjeto.Funcoes = null;
             grupoProjeto.Employees = null;
+            deleteFuncaoGrupoProjetoById(id);
 
             if (grupoProjeto == null)
             {
@@ -265,6 +274,17 @@ namespace Supermarket.Controllers
           return (_context.GrupoProjeto?.Any(e => e.ProjetoId == id)).GetValueOrDefault();
         }
 
+        private Funcao GetFuncaoById(int id)
+        {
+            Funcao funcao = _context.Funcao.Find(id)!;
+            return funcao;
+        }
+        private void deleteFuncaoGrupoProjetoById(int? id)
+        {
+            var recordsToDelete = _context.FuncaoGrupoProjeto.Where(f => f.ProjetoId == id);
+            _context.FuncaoGrupoProjeto.RemoveRange(recordsToDelete);
+            _context.SaveChanges();
+        }
         private Employee GetBestEmployeeFunction(int funcaoId)
         {
             if (funcaoId == 0) throw new Exception("Id funcao nao existe");

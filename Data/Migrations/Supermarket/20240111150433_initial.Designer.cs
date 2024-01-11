@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240110214713_inicial")]
-    partial class inicial
+    [Migration("20240111150433_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -798,13 +798,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasOne("Supermarket.Models.Funcao", "funcao")
                         .WithMany("GrupoProjetos")
                         .HasForeignKey("FuncaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Supermarket.Models.GrupoProjeto", "GrupoProjeto")
                         .WithMany("Funcoes")
                         .HasForeignKey("ProjetoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("GrupoProjeto");

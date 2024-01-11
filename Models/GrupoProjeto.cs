@@ -19,7 +19,7 @@ namespace Supermarket.Models
         [Required]
         public required string Objectives { get; set; }
 
-        public ICollection<Employee>? Employees { get; set; }
+       public ICollection<Employee>? Employees { get; set; }
 
         public ICollection<FuncaoGrupoProjeto>? Funcoes { get; set; }
     }

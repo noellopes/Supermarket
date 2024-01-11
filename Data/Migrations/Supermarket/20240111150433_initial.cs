@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class inicial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -290,13 +290,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                         column: x => x.FuncaoId,
                         principalTable: "Funcao",
                         principalColumn: "FuncaoId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FuncaoGrupoProjeto_GrupoProjeto_ProjetoId",
                         column: x => x.ProjetoId,
                         principalTable: "GrupoProjeto",
                         principalColumn: "ProjetoId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

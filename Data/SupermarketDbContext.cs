@@ -20,6 +20,18 @@ namespace Supermarket.Data
                 .HasOne(f => f.Funcao)
                 .WithMany(e => e.Employees)
                 .HasForeignKey(k =>k.Funcao_FK);
+
+            modelBuilder.Entity<FuncaoGrupoProjeto>()
+                .HasOne(fg => fg.funcao)
+                .WithMany(gp => gp.GrupoProjetos)
+                .HasForeignKey(fg => fg.FuncaoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FuncaoGrupoProjeto>()
+                .HasOne(gp => gp.GrupoProjeto)
+                .WithMany(f => f.Funcoes)
+                .HasForeignKey(gp => gp.ProjetoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<Folga> Folga { get; set; } = default!;
