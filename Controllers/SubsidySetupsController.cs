@@ -56,13 +56,16 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SubsidySetupId,HorasMinTrabalhadas,valorSubsidioDiario,DataPagamentoMensal")] SubsidySetup subsidySetup)
+        public async Task<IActionResult> Create([Bind("SubsidySetupId,HorasMinTrabalhadas,ValorSubsidioDiario,DataEntradaVigor")] SubsidySetup subsidySetup)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(subsidySetup);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ViewBag.Message = "Setup successfully created.";
+                //   return RedirectToAction(nameof(Index));
+                return View("Details", subsidySetup);
+
             }
             return View(subsidySetup);
         }
@@ -80,6 +83,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+
             return View(subsidySetup);
         }
 
@@ -88,7 +92,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("SubsidySetupId,HorasMinTrabalhadas,valorSubsidioDiario,DataPagamentoMensal")] SubsidySetup subsidySetup)
+        public async Task<IActionResult> Edit(int id, [Bind("SubsidySetupId,HorasMinTrabalhadas,ValorSubsidioDiario,DataEntradaVigor")] SubsidySetup subsidySetup)
         {
             if (id != subsidySetup.SubsidySetupId)
             {
@@ -101,6 +105,11 @@ namespace Supermarket.Controllers
                 {
                     _context.Update(subsidySetup);
                     await _context.SaveChangesAsync();
+                    ViewBag.Message = "Setup successfully edited.";
+
+                  
+
+                    return View("Details", subsidySetup);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -15,11 +15,18 @@ namespace Supermarket.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
+            modelBuilder.Entity<Employee>().HasKey(e => e.EmployeeId);
+            modelBuilder.Entity<Employee>().Property(e => e.EmployeeId).UseIdentityColumn();
+
         }
 
         public DbSet<Folga> Folga { get; set; } = default!;
+        public DbSet<Supermarket.Models.SubsidyCalculation> SubsidyCalculation { get; set; } = default!;
 
-       
+        public DbSet<Employee> Funcionarios { get; set; } = default!;
+
+        public DbSet<Employee> Employee { get; set; } = default!;
+
         public DbSet<Supermarket.Models.IssueType> IssueType { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Issues> Issues { get; set; } = default!;
@@ -30,9 +37,7 @@ namespace Supermarket.Data
 
         public DbSet<EmployeeEvaluation> EmployeeEvaluation { get; set; } = default!;
 
-        public DbSet<Employee> Employee { get; set; } = default!;
-
-        public DbSet<ProductDiscount> ProductDiscount { get; internal set; }
+        public DbSet<Supermarket.Models.ProductDiscount> ProductDiscount { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Product> Product { get; set; } = default!;
 
@@ -56,17 +61,25 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
-        public DbSet<ClientCard> ClientCard { get; set; } = default!;
+        public DbSet<Supermarket.Models.ClientCard> ClientCard { get; set; } = default!;
 
-        public DbSet<CategoryDiscount> CategoryDiscounts { get; set; } = default!;
+        public DbSet<Supermarket.Models.Client> Client { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.CategoryDiscount> CategoryDiscounts { get; set; } = default!;
+
+        //public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
 
         public DbSet<MealCard> MealCard { get; set; } = default!;
 
         public DbSet<CardMovement> CardMovement { get; set; } = default!;
+        public DbSet<Supermarket.Models.Ponto> Ponto { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.EmployeeSchedule> EmployeeSchedule { get; set; } = default!;
+
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
-
-        public DbSet<Employee> Funcionarios { get; set; } = default!;
 
         public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
 
