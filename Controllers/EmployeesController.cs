@@ -71,8 +71,7 @@ namespace Supermarket.Controllers
                     .Take(paging.PageSize)
                     .ToListAsync(),
                 PagingInfo = paging,
-                SearchName = employee_name,
-                SearchNIF = employee_nif
+                SearchName = employee_name
             };
 
             return View(vm);

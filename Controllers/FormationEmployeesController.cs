@@ -23,8 +23,8 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index(int page = 1, string employeeName = "", string formationName = "")
         {
             var formationEmployees = from fe in _context.FormationEmployees
-                                   .Include(fe => fe.Employee)
-                                   .Include(fe => fe.Formation)
+                                     .Include(fe => fe.Employee)
+                                     .Include(fe => fe.Formation)
                                      select fe;
 
             if (!string.IsNullOrEmpty(employeeName))
@@ -208,7 +208,8 @@ namespace Supermarket.Controllers
 
         private bool FormationEmployeeExists(int id)
         {
-          return (_context.FormationEmployees?.Any(e => e.FormationEmployeeId == id)).GetValueOrDefault();
+            return (_context.FormationEmployees?.Any(e => e.FormationEmployeeId == id)).GetValueOrDefault();
+
         }
     }
 }

@@ -27,12 +27,12 @@ namespace Supermarket.Controllers
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
-            var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
+            var schedules = from b in _context.Schedule.Include(b => b.Department) select b;
            
 
             if (departmentDrop!=0)
             {
-                schedules = schedules.Where(x => x.IDDepartments==departmentDrop);
+                schedules = schedules.Where(x => x.DeptID==departmentDrop);
             }
 
        
@@ -98,7 +98,7 @@ namespace Supermarket.Controllers
             }
             // Fetch the department name based on IDDepartments
             var departmentName = _context.Departments
-                .Where(d => d.IDDepartments == schedule.IDDepartments)
+                .Where(d => d.IDDepartments == schedule.DeptID)
                 .Select(d => d.NameDepartments)
                 .FirstOrDefault();
 
