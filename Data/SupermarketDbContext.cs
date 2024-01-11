@@ -51,7 +51,7 @@ namespace Supermarket.Data
 
         public DbSet<EmployeeEvaluation> EmployeeEvaluation { get; set; } = default!;
 
-
+        public DbSet<FormationEmployee>FormationEmployees { get; set; } = default!;
         public DbSet<Supermarket.Models.ProductDiscount> ProductDiscount { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Product> Product { get; set; } = default!;
@@ -93,7 +93,7 @@ namespace Supermarket.Data
 
         //public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
+        
 
         public DbSet<MealCard> MealCard { get; set; } = default!;
 
@@ -104,10 +104,9 @@ namespace Supermarket.Data
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
 
-<<<<<<< HEAD
-=======
+
         public DbSet<Supermarket.Models.Formation> Formation { get; set; } = default!;
->>>>>>> 12867d8d10c8efc3ac4a39aebc4efb92156694ba
+
 
         public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
 
@@ -115,16 +114,12 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.MealCard> MealCards { get; set; } = default!;
         
-        public DbSet<Supermarket.Models.ExpiredProducts> ExpiredProducts { get; set; } = default!;
-        
         public DbSet<Supermarket.Models.Purchase> Purchase { get; set; } = default!;
 
-<<<<<<< HEAD
-
         public object Pontos { get; internal set; }
 
-=======
-        public object Pontos { get; internal set; }
+
+        ///public object Pontos { get; internal set; }
         public DbSet<TakeAwayCategory> TakeAwayCategory { get; set; } = default!;
         public DbSet<TakeAwayProduct> TakeAwayProduct { get; set; } = default!;
         public DbSet<User_Order> User_Order { get; set; } = default!;
@@ -132,6 +127,6 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Alert> Alert { get; set; } = default!;
 
         public DbSet<Orders> Orders { get; set; } = default!;
->>>>>>> 12867d8d10c8efc3ac4a39aebc4efb92156694ba
+
     }
 }
