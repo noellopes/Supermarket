@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Supermarket.Models.ProductPurchaseSupplier>
+﻿@model IEnumerable<Supermarket.Models.PurchaseProductSupplier>
 
 @{
     ViewData["Title"] = "Index";
@@ -61,9 +61,9 @@
                 @Html.DisplayFor(modelItem => item.LineTotal)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductPurchaseSupplierId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductPurchaseSupplierId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductPurchaseSupplierId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.PurchaseProductSupplierId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PurchaseProductSupplierId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PurchaseProductSupplierId">Delete</a>
             </td>
         </tr>
 }

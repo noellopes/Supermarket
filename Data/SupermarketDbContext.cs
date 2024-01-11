@@ -24,7 +24,9 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.AvailabilitySupplier> AvailabilitySupplier { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.ProductPurchaseSupplier> ProductPurchaseSupplier { get; set; } = default!;
+        public DbSet<Supermarket.Models.PurchaseProductSupplier> PurchaseProductSupplier { get; set; } = default!;
+
+        
 
         
 

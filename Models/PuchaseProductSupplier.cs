@@ -1,8 +1,8 @@
 ﻿namespace Supermarket.Models
 {
-    public class ProductPurchaseSupplier
+    public class PurchaseProductSupplier
     {
-        public int ProductPurchaseSupplierId { get; set; }
+        public int PurchaseProductSupplierId { get; set; }
 
         public int ProductId { get; set; }
         public Product? Product { get; set; }
@@ -20,3 +20,4 @@
 
     }
 }
+

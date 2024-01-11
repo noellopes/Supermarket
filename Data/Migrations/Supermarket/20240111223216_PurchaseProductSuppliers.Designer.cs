@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240103164740_ProductPurchaseSuppliers")]
-    partial class ProductPurchaseSuppliers
+    [Migration("20240111223216_PurchaseProductSuppliers")]
+    partial class PurchaseProductSuppliers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -195,13 +195,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Product");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.ProductPurchaseSupplier", b =>
+            modelBuilder.Entity("Supermarket.Models.PurchaseProductSupplier", b =>
                 {
-                    b.Property<int>("ProductPurchaseSupplierId")
+                    b.Property<int>("PurchaseProductSupplierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductPurchaseSupplierId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PurchaseProductSupplierId"));
 
                     b.Property<int>("AskedQuantity")
                         .HasColumnType("int");
@@ -224,13 +224,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<int>("PurchaseSupplierId")
                         .HasColumnType("int");
 
-                    b.HasKey("ProductPurchaseSupplierId");
+                    b.HasKey("PurchaseProductSupplierId");
 
                     b.HasIndex("ProductId");
 
                     b.HasIndex("PurchaseSupplierId");
 
-                    b.ToTable("ProductPurchaseSupplier");
+                    b.ToTable("PurchaseProductSupplier");
                 });
 
             modelBuilder.Entity("Supermarket.Models.PurchaseSupplier", b =>
@@ -339,7 +339,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.ProductPurchaseSupplier", b =>
+            modelBuilder.Entity("Supermarket.Models.PurchaseProductSupplier", b =>
                 {
                     b.HasOne("Supermarket.Models.Product", "Product")
                         .WithMany()
