@@ -22,11 +22,32 @@ namespace Supermarket.Controllers
 
         // GET: IssueTypes
         [Authorize(Roles = "View_Reports")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string issuetype = "")
         {
-            return _context.IssueType != null ?
-                        View(await _context.IssueType.ToListAsync()) :
-                        Problem("Entity set 'SupermarketDbContext.IssueType'  is null.");
+            var issues_type = from i in _context.IssueType select i;
+
+            if (issuetype != "")
+            {
+                issues_type = issues_type.Where(x => x!.Name.Contains(issuetype));                
+            }
+
+            var pagination = new PagingInfo
+            {
+                CurrentPage = page,
+                PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
+                TotalItems = issues_type.Count()
+            };
+
+            return View(
+                new IssuesTypeListViewModel
+                {
+                    IssueType = issues_type.OrderByDescending(i => i.Name)
+                                                 .Skip((page - 1) * pagination.PageSize)
+                                                 .Take(pagination.PageSize),
+                    Pagination = pagination,
+                    SearchIssueType = issuetype                 
+                }
+            );
         }
 
         // GET: IssueTypes/Details/5
