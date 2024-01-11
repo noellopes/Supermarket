@@ -22,7 +22,7 @@ namespace Supermarket.Controllers
         // GET: FormationEmployees
         public async Task<IActionResult> Index(int page = 1, string employeeName = "", string formationName = "")
         {
-            var formationEmployees = from fe in _context.FormationEmployee
+            var formationEmployees = from fe in _context.FormationEmployees
                                      .Include(fe => fe.Employee)
                                      .Include(fe => fe.Formation)
                                      select fe;
@@ -95,12 +95,12 @@ namespace Supermarket.Controllers
         // GET: FormationEmployees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.FormationEmployee == null)
+            if (id == null || _context.FormationEmployees == null)
             {
                 return NotFound();
             }
 
-            var formationEmployee = await _context.FormationEmployee.FindAsync(id);
+            var formationEmployee = await _context.FormationEmployees.FindAsync(id);
             if (formationEmployee == null)
             {
                 return NotFound();
@@ -150,12 +150,12 @@ namespace Supermarket.Controllers
         // GET: FormationEmployees/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.FormationEmployee == null)
+            if (id == null || _context.FormationEmployees == null)
             {
                 return NotFound();
             }
 
-            var formationEmployee = await _context.FormationEmployee
+            var formationEmployee = await _context.FormationEmployees
                 .Include(f => f.Employee)
                 .Include(f => f.Formation)
                 .FirstOrDefaultAsync(m => m.FormationEmployeeId == id);
@@ -172,14 +172,14 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.FormationEmployee == null)
+            if (_context.FormationEmployees == null)
             {
                 return Problem("Entity set 'SupermarketDbContext.FormationEmployee'  is null.");
             }
-            var formationEmployee = await _context.FormationEmployee.FindAsync(id);
+            var formationEmployee = await _context.FormationEmployees.FindAsync(id);
             if (formationEmployee != null)
             {
-                _context.FormationEmployee.Remove(formationEmployee);
+                _context.FormationEmployees.Remove(formationEmployee);
             }
 
             await _context.SaveChangesAsync();
@@ -188,7 +188,7 @@ namespace Supermarket.Controllers
 
         private bool FormationEmployeeExists(int id)
         {
-            return (_context.FormationEmployee?.Any(e => e.FormationEmployeeId == id)).GetValueOrDefault();
+            return (_context.FormationEmployees?.Any(e => e.FormationEmployeeId == id)).GetValueOrDefault();
         }
     }
 }

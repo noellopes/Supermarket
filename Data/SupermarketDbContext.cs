@@ -19,9 +19,9 @@ namespace Supermarket.Data
             modelBuilder.Entity<MealCard>().HasKey(MC => MC.MealCardId);
             //Relação entre Schedule e Departments
             modelBuilder.Entity<Schedule>()
-                .HasOne(s => s.Departments)
+                .HasOne(s => s.Department)
                 .WithMany()
-                .HasForeignKey(s => s.IDDepartments);
+                .HasForeignKey(s => s.DeptID);
             modelBuilder.Entity<Ticket>()
                 .HasOne(s => s.Departments)
                 .WithMany()
@@ -51,6 +51,7 @@ namespace Supermarket.Data
 
         public DbSet<EmployeeEvaluation> EmployeeEvaluation { get; set; } = default!;
 
+        public DbSet<FormationEmployee> FormationEmployees { get; set; } = default!;
 
         public DbSet<Supermarket.Models.ProductDiscount> ProductDiscount { get; set; } = default!;
 
@@ -91,9 +92,9 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Client> Client { get; set; } = default!;
 
 
-        //public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
+        public DbSet<Supermarket.Models.ReserveDepartment1> ReserveDepartment { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
+        public DbSet<Supermarket.Models.Reserve> Reserves { get; set; } = default!;
 
         public DbSet<MealCard> MealCard { get; set; } = default!;
 

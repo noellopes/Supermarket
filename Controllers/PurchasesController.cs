@@ -289,28 +289,28 @@ namespace Supermarket.Controllers
         {
             var allPurchases = _context.Purchase;
 
-            foreach (var purchase in allPurchases)
+            foreach (var purchase1 in allPurchases)
             {
-                if (IsProductExpired(purchase.ExpirationDate))
+                if (IsProductExpired(purchase1.ExpirationDate))
                 {
-                    // Update the expiration status for the product in the purchase
-                    purchase.ProductExpired = true;
+                    // Update the expiration status for the product in the purchase1
+                    purchase1.ProductExpired = true;
 
                     // Checa se o produto está expirado e ainda não está na tabela de ExpiredProducts
-                    if (purchase.ProductExpired &&
-                        !_context.ExpiredProducts.Any(ep => ep.PurchaseId == purchase.PurchaseId))
+                    if (purchase1.ProductExpired &&
+                        !_context.ExpiredProducts.Any(ep => ep.PurchaseId == purchase1.PurchaseId))
                     {
 
                         //Escrever na tabela de produtos expirados
                         var expiredProduct = new ExpiredProducts
                         {
-                            PurchaseId = purchase.PurchaseId,
-                            ProductId = purchase.ProductId,
-                            ExpirationDate = purchase.ExpirationDate,
-                            SupplierId = purchase.SupplierId,
-                            EmployeeId = purchase.EmployeeId,
+                            PurchaseId = purchase1.PurchaseId,
+                            ProductId = purchase1.ProductId,
+                            ExpirationDate = purchase1.ExpirationDate,
+                            SupplierId = purchase1.SupplierId,
+                            EmployeeId = purchase1.EmployeeId,
                             // Set other properties as needed
-                            BatchNumber = purchase.BatchNumber
+                            BatchNumber = purchase1.BatchNumber
                         };
 
                         _context.ExpiredProducts.Add(expiredProduct);
@@ -318,7 +318,7 @@ namespace Supermarket.Controllers
                 }
                 else
                 {
-                    purchase.ProductExpired = false;
+                    purchase1.ProductExpired = false;
                 }
             }
 

@@ -95,7 +95,7 @@ namespace Supermarket.Controllers
         {
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
             ViewData["ReserveId"] = new SelectList(_context.Reserve, "ReserveId", "ReserveId");
-            ViewData["TicketID"] = new SelectList(_context.Ticket, "TicketId", "TicketId");
+            ViewData["TicketID"] = new SelectList(_context.Tickets, "TicketId", "TicketId");
             ViewData["NumeroDeFunc"] = new SelectList(_context.Reserve, "NumeroDeFunc", "NumeroDeFunc");
             return View();
         }
@@ -115,7 +115,7 @@ namespace Supermarket.Controllers
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", reserveDepartment1.EmployeeId);
             ViewData["ReserveId"] = new SelectList(_context.Reserve, "ReserveId", "ReserveId", reserveDepartment1.ReserveId);
-            ViewData["TicketID"] = new SelectList(_context.Ticket, "TicketId", "TicketId", reserveDepartment1.TicketID);
+            ViewData["TicketID"] = new SelectList(_context.Tickets, "TicketId", "TicketId", reserveDepartment1.TicketID);
             ViewData["NumeroDeFunc"] = new SelectList(_context.Reserve, "NumeroDeFunc", "NumeroDeFunc");
             return View(reserveDepartment1);
         }
@@ -139,7 +139,7 @@ namespace Supermarket.Controllers
 
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", reserveDepartment1.EmployeeId);
             ViewData["ReserveId"] = new SelectList(_context.Reserve, "ReserveId", "ReserveId", reserveDepartment1.ReserveId);
-            ViewData["TicketID"] = new SelectList(_context.Ticket, "TicketId", "TicketId", reserveDepartment1.TicketID);
+            ViewData["TicketID"] = new SelectList(_context.Tickets, "TicketId", "TicketId", reserveDepartment1.TicketID);
             ViewData["NumeroDeFunc"] = new SelectList(_context.Reserve, "NumeroDeFunc", "NumeroDeFunc");
             return View(reserveDepartment1);
         }
@@ -179,7 +179,7 @@ namespace Supermarket.Controllers
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", reserveDepartment1.EmployeeId);
             ViewData["ReserveId"] = new SelectList(_context.Reserve, "ReserveId", "ReserveId", reserveDepartment1.ReserveId);
-            ViewData["TicketID"] = new SelectList(_context.Ticket, "TicketId", "TicketId", reserveDepartment1.TicketID);
+            ViewData["TicketID"] = new SelectList(_context.Tickets, "TicketId", "TicketId", reserveDepartment1.TicketID);
             ViewData["NumeroDeFunc"] = new SelectList(_context.Reserve, "NumeroDeFunc", "NumeroDeFunc");
             return View(reserveDepartment1);
         }
