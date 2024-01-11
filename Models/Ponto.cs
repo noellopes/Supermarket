@@ -56,8 +56,6 @@ namespace Supermarket.Models
 
         public string? Justificative { get; set; }
 
-
-
         [DisplayFormat(DataFormatString = "{0:hh\\:mm}")]
         public TimeSpan ExtraHours { get; set; }
 

@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Identity;
 using Supermarket.Models;
 using System;
@@ -13,7 +12,6 @@ namespace Supermarket.Data
         private const string ROLE_ADMIN3 = "Cliente";
         private const string ROLE_STOCK_ADMIN = "Stock Administrator";
         private const string ROLE_STOCK_OP = "Stock Operator";
-
 
         internal static void Populate(SupermarketDbContext db)
         {
@@ -50,8 +48,9 @@ namespace Supermarket.Data
             PopulateDepartment(db);
             PopulateSchedules(db);
             PopulateTickets(db);
-
+            LoadWeekEmployeeSchedules(db);
         }
+        
         private static void PopulateDepartment(SupermarketDbContext db)
         {
             if (db.Departments.Any()) return;
@@ -68,6 +67,7 @@ namespace Supermarket.Data
                 );
             db.SaveChanges();
         }
+        
         private static void PopulateSchedules(SupermarketDbContext db)
         {
             if (db.Schedule.Any()) return;
@@ -82,6 +82,7 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
+        
         private static void PopulateTickets(SupermarketDbContext db)
         {
             if (db.Tickets.Any()) return;
@@ -168,7 +169,6 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-
 
         private static void PopulateProduct(SupermarketDbContext db)
         {
@@ -536,7 +536,6 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-
         private static void PopulateReduceProduct(SupermarketDbContext db)
         {
             if (db.ReduceProduct.Any()) return;
@@ -636,7 +635,6 @@ namespace Supermarket.Data
 
         }
 
-
         private static void PopulateEmployees(SupermarketDbContext db)
         {
             if (db.Employee.Any()) return;
@@ -694,7 +692,6 @@ namespace Supermarket.Data
 
             //db.SaveChanges();
         }
-
 
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
         {
@@ -806,7 +803,6 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-
         private static void PopulateClientCard(SupermarketDbContext db)
         {
             if (db.ClientCard.Any()) return;
@@ -842,7 +838,6 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-
 
         private static void PopulateProductDiscounts(SupermarketDbContext db)
         {
@@ -884,23 +879,25 @@ namespace Supermarket.Data
 
             db.Employee.AddRange(
 
-                new Employee { Employee_Name = "Afonso Almeida", Employee_Email = "anasilva_pinhel@hotmail.com", Employee_Password = "Informatica_1706869", Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-                new Employee { Employee_Name = "Jessica Azevedo", Employee_Email = "Jessica@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837462856", Employee_NIF = "875436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
-                new Employee { Employee_Name = "Hugo Braga", Employee_Email = "Hugo@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620559", Employee_NIF = "938475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
-                new Employee { Employee_Name = "Alberto Barros", Employee_Email = "Alberto1@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843257712", Employee_NIF = "098764084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-                new Employee { Employee_Name = "Afonso Campos", Employee_Email = "Afonso1@gmail.com", Employee_Password = "afonso123", Employee_Phone = "123454789", Employee_NIF = "987655321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-                new Employee { Employee_Name = "Jessica Cardoso", Employee_Email = "Jessica1@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837468856", Employee_NIF = "872436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
-                new Employee { Employee_Name = "Hugo Correia", Employee_Email = "Hugo1@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620959", Employee_NIF = "238475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
-                new Employee { Employee_Name = "Alberto Castro ", Employee_Email = "Alberto1@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "849252712", Employee_NIF = "394749084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-                new Employee { Employee_Name = "Afonso Costa", Employee_Email = "Afonso2@gmail.com", Employee_Password = "afonso123", Employee_Phone = "143456789", Employee_NIF = "487654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-                new Employee { Employee_Name = "Jessica Fontes", Employee_Email = "Jessica2@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "827462856", Employee_NIF = "575436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
-                new Employee { Employee_Name = "Hugo Guimarães", Employee_Email = "Hugo2@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975120959", Employee_NIF = "738475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
-                new Employee { Employee_Name = "Alberto Magalhães", Employee_Email = "Alberto2@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "849257702", Employee_NIF = "898749084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-                new Employee { Employee_Name = "Afonso Macedo", Employee_Email = "Afonso3@gmail.com", Employee_Password = "afonso123", Employee_Phone = "128256789", Employee_NIF = "444654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-                new Employee { Employee_Name = "Jessica Matos", Employee_Email = "Jessica3@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837238856", Employee_NIF = "875242712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
-                new Employee { Employee_Name = "Hugo Pedreira", Employee_Email = "Hugo3@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620579", Employee_NIF = "345675610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
-                new Employee { Employee_Name = "Alberto Queirós", Employee_Email = "Alberto3@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-                new Employee { Employee_Name = "Employee", Employee_Email = "employee@ipg.pt", Employee_Password = "Secret#123", Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" }
+                new Employee { Employee_Name = "Afonso Almeida",    Employee_Email = "anasilva_pinhel@hotmail.com", Employee_Password = "Informatica_1706869",  Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
+                new Employee { Employee_Name = "Jessica Azevedo",   Employee_Email = "Jessica@gmail.com",           Employee_Password = "Jessica123",           Employee_Phone = "837462856", Employee_NIF = "875436712", Employee_Address = "Rua da direita",  Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
+                new Employee { Employee_Name = "Hugo Braga",        Employee_Email = "Hugo@gmail.com",              Employee_Password = "hugo123",              Employee_Phone = "975620559", Employee_NIF = "938475610", Employee_Address = "Rua da meio",     Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
+                new Employee { Employee_Name = "Alberto Barros",    Employee_Email = "Alberto1@gmail.com",          Employee_Password = "Alberto123",           Employee_Phone = "843257712", Employee_NIF = "098764084", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
+                new Employee { Employee_Name = "Afonso Campos",     Employee_Email = "Afonso1@gmail.com",           Employee_Password = "afonso123",            Employee_Phone = "123454789", Employee_NIF = "987655321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
+                new Employee { Employee_Name = "Jessica Cardoso",   Employee_Email = "Jessica1@gmail.com",          Employee_Password = "Jessica123",           Employee_Phone = "837468856", Employee_NIF = "872436712", Employee_Address = "Rua da direita",  Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
+                new Employee { Employee_Name = "Hugo Correia",      Employee_Email = "Hugo1@gmail.com",             Employee_Password = "hugo123",              Employee_Phone = "975620959", Employee_NIF = "238475610", Employee_Address = "Rua da meio",     Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
+                new Employee { Employee_Name = "Alberto Castro ",   Employee_Email = "Alberto1@gmail.com",          Employee_Password = "Alberto123",           Employee_Phone = "849252712", Employee_NIF = "394749084", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
+                new Employee { Employee_Name = "Afonso Costa",      Employee_Email = "Afonso2@gmail.com",           Employee_Password = "afonso123",            Employee_Phone = "143456789", Employee_NIF = "487654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
+                new Employee { Employee_Name = "Jessica Fontes",    Employee_Email = "Jessica2@gmail.com",          Employee_Password = "Jessica123",           Employee_Phone = "827462856", Employee_NIF = "575436712", Employee_Address = "Rua da direita",  Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
+                new Employee { Employee_Name = "Hugo Guimarães",    Employee_Email = "Hugo2@gmail.com",             Employee_Password = "hugo123",              Employee_Phone = "975120959", Employee_NIF = "738475610", Employee_Address = "Rua da meio",     Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
+                new Employee { Employee_Name = "Alberto Magalhães", Employee_Email = "Alberto2@gmail.com",          Employee_Password = "Alberto123",           Employee_Phone = "849257702", Employee_NIF = "898749084", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
+                new Employee { Employee_Name = "Afonso Macedo",     Employee_Email = "Afonso3@gmail.com",           Employee_Password = "afonso123",            Employee_Phone = "128256789", Employee_NIF = "444654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
+                new Employee { Employee_Name = "Jessica Matos",     Employee_Email = "Jessica3@gmail.com",          Employee_Password = "Jessica123",           Employee_Phone = "837238856", Employee_NIF = "875242712", Employee_Address = "Rua da direita",  Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
+                new Employee { Employee_Name = "Hugo Pedreira",     Employee_Email = "Hugo3@gmail.com",             Employee_Password = "hugo123",              Employee_Phone = "975620579", Employee_NIF = "345675610", Employee_Address = "Rua da meio",     Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
+                new Employee { Employee_Name = "Alberto Queirós",   Employee_Email = "Alberto3@gmail.com",          Employee_Password = "Alberto123",           Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
+                new Employee { Employee_Name = "Employee",          Employee_Email = "employee@ipg.pt",             Employee_Password = "Secret#123",           Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
+                new Employee { Employee_Name = "Sofia",             Employee_Email = "sofia@ipg.pt",                Employee_Password = "Sofia#123",            Employee_Phone = "111111111", Employee_NIF = "123456789", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
+                new Employee { Employee_Name = "Gabriel",           Employee_Email = "gabriel@ipg.pt",              Employee_Password = "Gabriel#123",          Employee_Phone = "222222222", Employee_NIF = "987654321", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2002, 11, 14), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 }
             );
 
             db.SaveChanges();
@@ -916,7 +913,6 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-
 
         private static void PopulateCardMovements(SupermarketDbContext db)
         {
@@ -975,6 +971,7 @@ namespace Supermarket.Data
                 );
             db.SaveChanges();
         }
+        
         private static void PopulateTakeAwayProducts(SupermarketDbContext db)
         {
             if (db.TakeAwayProduct.Any()) return;
@@ -994,28 +991,23 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-
-
-
         internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager)
         {
-            var user1 = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
-            var user2 = await EnsureUserIsCreatedAsync(userManager!, "anasilva_pinhel@hotmail.com", "Informatica_123");
-            var user3 = await EnsureUserIsCreatedAsync(userManager!, "Afonso@gmail.com", "Afonso#123");
-            var user4 = await EnsureUserIsCreatedAsync(userManager!, "Hugo@gmail.com", "Hugo#123");
-            var user5 = await EnsureUserIsCreatedAsync(userManager!, "Alberto1@gmail.com", "Alberto#123");
-            var user6 = await EnsureUserIsCreatedAsync(userManager!, "Afonso1@gmail.com", "AfonsoI#123");
-            var user7 = await EnsureUserIsCreatedAsync(userManager!, "Jessica1@gmail.com", "JessicaI#123");
-            var user8 = await EnsureUserIsCreatedAsync(userManager!, "Hugo1@gmail.com", "HugoI#123");
-            var user9 = await EnsureUserIsCreatedAsync(userManager!, "Alberto2@gmail.com", "AlbertoI#123");
+            var user1  = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
+            var user2  = await EnsureUserIsCreatedAsync(userManager!, "anasilva_pinhel@hotmail.com", "Informatica_123");
+            var user3  = await EnsureUserIsCreatedAsync(userManager!, "Afonso@gmail.com", "Afonso#123");
+            var user4  = await EnsureUserIsCreatedAsync(userManager!, "Hugo@gmail.com", "Hugo#123");
+            var user5  = await EnsureUserIsCreatedAsync(userManager!, "Alberto1@gmail.com", "Alberto#123");
+            var user6  = await EnsureUserIsCreatedAsync(userManager!, "Afonso1@gmail.com", "AfonsoI#123");
+            var user7  = await EnsureUserIsCreatedAsync(userManager!, "Jessica1@gmail.com", "JessicaI#123");
+            var user8  = await EnsureUserIsCreatedAsync(userManager!, "Hugo1@gmail.com", "HugoI#123");
+            var user9  = await EnsureUserIsCreatedAsync(userManager!, "Alberto2@gmail.com", "AlbertoI#123");
             var user10 = await EnsureUserIsCreatedAsync(userManager!, "Afonso2@gmail.com", "AfonsoII#123");
             var user11 = await EnsureUserIsCreatedAsync(userManager!, "Jessica2@gmail.com", "JessicaII#123");
             var user12 = await EnsureUserIsCreatedAsync(userManager!, "Hugo2@gmail.com", "HugoII#123");
             var user13 = await EnsureUserIsCreatedAsync(userManager!, "Afonso3@gmail.com", "AfonsoIII#123");
             var user14 = await EnsureUserIsCreatedAsync(userManager!, "Jessica3@gmail.com", "JessicaIII#123");
             var user15 = await EnsureUserIsCreatedAsync(userManager!, "Hugo3@gmail.com", "HugoIII#123");
-            var user17 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
-            var user18 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
 
             //Group4----------------------------------------------------------------
             var userJoaoStockAdmin = await EnsureUserIsCreatedAsync(userManager!, "joaostockadmin@ipg.pt", "Secret#123");
@@ -1038,51 +1030,62 @@ namespace Supermarket.Data
             {
                 await userManager!.AddToRoleAsync(userIvoStockOp, ROLE_STOCK_OP);
             }
+            
+            //Group2----------------------------------------------------------------
+            var userSofiaGest   = await EnsureUserIsCreatedAsync(userManager!, "sofia@ipg.pt",   "Sofia#123"   );
+            var userGabrielFunc = await EnsureUserIsCreatedAsync(userManager!, "gabriel@ipg.pt", "Gabriel#123");
+
+            if (!await userManager!.IsInRoleAsync(userSofiaGest,   ROLE_ADMIN2))
+            {
+                await userManager!.AddToRoleAsync(userSofiaGest, ROLE_ADMIN2);
+            }
+            if (!await userManager!.IsInRoleAsync(userSofiaGest,   ROLE_ADMIN1))
+            {
+                await userManager!.AddToRoleAsync(userSofiaGest, ROLE_ADMIN1);
+            }
+            if (!await userManager!.IsInRoleAsync(userGabrielFunc, ROLE_ADMIN1))
+            {
+                await userManager!.AddToRoleAsync(userGabrielFunc, ROLE_ADMIN1);
+            }
 
             //--------------------------------------------------------------------
-            if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
+            if (!await userManager!.IsInRoleAsync(user1,  "Gestor"))
             {
                 await userManager!.AddToRoleAsync(user1, "Gestor");
             }
-
-            if (!await userManager!.IsInRoleAsync(user2, "Funcionário"))
+            if (!await userManager!.IsInRoleAsync(user2,  "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user2, "Funcionário");
             }
-            if (!await userManager!.IsInRoleAsync(user3, "Funcionário"))
+            if (!await userManager!.IsInRoleAsync(user3,  "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user3, "Funcionário");
             }
-
-            if (!await userManager!.IsInRoleAsync(user4, "Funcionário"))
+            if (!await userManager!.IsInRoleAsync(user4,  "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user4, "Funcionário");
             }
-
-            if (!await userManager!.IsInRoleAsync(user5, "Funcionário"))
+            if (!await userManager!.IsInRoleAsync(user5,  "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user5, "Funcionário");
             }
-
-            if (!await userManager!.IsInRoleAsync(user6, "Funcionário"))
+            if (!await userManager!.IsInRoleAsync(user6,  "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user6, "Funcionário");
             }
-
-            if (!await userManager!.IsInRoleAsync(user5, "Funcionário"))
+            if (!await userManager!.IsInRoleAsync(user5,  "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user5, "Funcionário");
             }
-
-            if (!await userManager!.IsInRoleAsync(user7, "Funcionário"))
+            if (!await userManager!.IsInRoleAsync(user7,  "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user7, "Funcionário");
             }
-            if (!await userManager!.IsInRoleAsync(user8, "Funcionário"))
+            if (!await userManager!.IsInRoleAsync(user8,  "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user8, "Funcionário");
             }
-            if (!await userManager!.IsInRoleAsync(user9, "Funcionário"))
+            if (!await userManager!.IsInRoleAsync(user9,  "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user9, "Funcionário");
             }
@@ -1098,7 +1101,6 @@ namespace Supermarket.Data
             {
                 await userManager!.AddToRoleAsync(user12, "Funcionário");
             }
-
             if (!await userManager!.IsInRoleAsync(user13, "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user13, "Funcionário");
@@ -1171,8 +1173,6 @@ namespace Supermarket.Data
             }
         }
 
-
-
         private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password)
         {
             var user = await userManager.FindByNameAsync(username);
@@ -1186,7 +1186,6 @@ namespace Supermarket.Data
 
             return user;
         }
-
 
         internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager)
         {
@@ -1207,9 +1206,6 @@ namespace Supermarket.Data
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_STOCK_OP);
         }
 
-
-
-
         private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name)
         {
             var role = await roleManager.FindByNameAsync(name);
@@ -1220,8 +1216,6 @@ namespace Supermarket.Data
                 await roleManager.CreateAsync(role);
             }
         }
-
-      
 
         private static void PopulateType(SupermarketDbContext db)
         {
@@ -1279,7 +1273,34 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
+        
+        private static void LoadWeekEmployeeSchedules(SupermarketDbContext db)
+        {
+            if (db.EmployeeSchedule.Where(s => s.Date.Date == DateTime.Now.Date).FirstOrDefault() is null)
+            {
+                foreach (var employee in db.Employee.ToList())
+                {
+                    db.EmployeeSchedule.AddRange(
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(1)  },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(2)  },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(3)  },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(4)  },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(5)  },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(6)  },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(7)  },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(8)  },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(9)  },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(10) },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(11) },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(12) },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(13) },
+                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(14) }
+                    );
+                }
+            }
 
-
+            db.SaveChanges();
+        }
     }
 }

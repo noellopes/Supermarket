@@ -178,7 +178,7 @@ namespace Supermarket.Controllers
             basket.EstimatedPreparationTimeAsMinutes = (int)basket.Products.Select(x => x.EstimatedPreparationTimeAsMinutes * x.QuantityReserved).Sum();
             basket.TotalPrice = (double) basket.Products.Select(x => x.Price * x.QuantityReserved).Sum();
             basket.PreparingOrders = _context.Order.Where(x => x.Status == "Preparing").Count();
-            basket.OrdersCanPrepareSimultaneously = _context.EmployeeSchedule.Where(x => x.CheckInTime.Hours < DateTime.Now.Hour && x.CheckOutTime.Hours > DateTime.Now.Hour).Count();
+            basket.OrdersCanPrepareSimultaneously = _context.EmployeeSchedule.Where(x => DateTime.Parse(x.CheckInTime, System.Globalization.CultureInfo.CurrentCulture).Hour < DateTime.Now.Hour && DateTime.Parse(x.CheckOutTime, System.Globalization.CultureInfo.CurrentCulture).Hour > DateTime.Now.Hour).Count();
             basket.GuessProducts = guessProducts;
             _memoryCache.Set(CacheProductKey, basket);
 
