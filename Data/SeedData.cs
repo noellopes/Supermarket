@@ -18,12 +18,7 @@ namespace Books.Data
         private const string ROLE_EMPLOYEER = "Employeer";
         private const string ROLE_REGISTER = "Cash Register";
 
-        internal static void Populate(SupermarketDbContext db)
-        {
-            PopulateReserve(db);
-            
-            
-        }
+        
 
         
 
