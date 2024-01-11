@@ -68,5 +68,7 @@ namespace Supermarket.Models
         public int IDDepartments { get; set; }
         public Department? Departments { get; set; }
 
+       
+        public ICollection<Purchase>? Purchases { get; set; }
     }
 }

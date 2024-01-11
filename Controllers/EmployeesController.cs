@@ -278,7 +278,17 @@ namespace Supermarket.Controllers
             var employee = await _context.Employee.FindAsync(id);
             if (employee != null)
             {
-                _context.Employee.Remove(employee);
+                try
+                {
+                    _context.Employee.Remove(employee);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    ViewBag.ErrorDeleting = "The Employee cannot be deleted because it is associated with an Purchase.";
+                    return View();
+                }
+
             }
             
             await _context.SaveChangesAsync();

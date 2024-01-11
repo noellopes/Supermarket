@@ -30,6 +30,40 @@ namespace Supermarket.Data
             modelBuilder.Entity<Employee>().HasKey(e => e.EmployeeId);
             modelBuilder.Entity<Employee>().Property(e => e.EmployeeId).UseIdentityColumn();
 
+            // Deletar em ExpiredProducts se uma Purchase for deletada
+            modelBuilder.Entity<ExpiredProducts>()
+                .HasOne(e => e.Purchase)
+                .WithMany()
+                .HasForeignKey(e => e.PurchaseId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Restringir delete de employee que esteja vinculado a uma Purchase
+            modelBuilder.Entity<Employee>()
+                .HasMany(p => p.Purchases)
+                .WithOne(p => p.Employee)
+                .HasForeignKey(p => p.EmployeeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //Restringir delete de product que esteja vinculado a uma Purchase
+            modelBuilder.Entity<Product>()
+                .HasMany(e => e.Purchases)
+                .WithOne(p => p.Product)
+                .HasForeignKey(p => p.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //Restringir delete de product que esteja vinculado a uma Purchase
+            modelBuilder.Entity<Supplier>()
+                .HasMany(e => e.Purchases)
+                .WithOne(p => p.Supplier)
+                .HasForeignKey(p => p.SupplierId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<IssueType>()
+                .HasMany(it => it.Issue)
+                .WithOne(i => i.IssueType)
+                .HasForeignKey(i => i.IssueTypeId)
+                .OnDelete(DeleteBehavior.Restrict);                
+        }
 
         }
  
