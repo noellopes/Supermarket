@@ -138,6 +138,16 @@ namespace Supermarket.Controllers
                         }
                         ViewBag.Mensagem = "Grupo para projeto Criado com sucesso";
                         await _context.SaveChangesAsync();
+                        var funcionarios = _context.Employee.Where(F => F.ProjetoId == grupoProjeto.ProjetoId).ToList();
+                        grupoProjeto.Employees = funcionarios;
+
+                        foreach (var funcao in _context.FuncaoGrupoProjeto.Where(w => w.ProjetoId == grupoProjeto.ProjetoId).Include(f => f.funcao))
+                        {
+                            if (!grupoProjeto.Funcoes!.Contains(funcao))
+                            {
+                                grupoProjeto.Funcoes.Add(funcao);
+                            }
+                        }
                         return View("Details", grupoProjeto);
                     }
                     else //grupo existente
