@@ -23,16 +23,16 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index(int page = 1, string employeeName = "", string formationName = "")
         {
             var formationEmployees = from fe in _context.FormationEmployee
-                                     .Include(fe => fe.Employee)
-                                     .Include(fe => fe.Formation)
+                                   .Include(fe => fe.Employee)
+                                   .Include(fe => fe.Formation)
                                      select fe;
 
-            if (employeeName != "")
+            if (!string.IsNullOrEmpty(employeeName))
             {
                 formationEmployees = formationEmployees.Where(fe => fe.Employee.Employee_Name.Contains(employeeName));
             }
 
-            if (formationName != "")
+            if (!string.IsNullOrEmpty(formationName))
             {
                 formationEmployees = formationEmployees.Where(fe => fe.Formation.Formation_Name.Contains(formationName));
             }
@@ -66,10 +66,30 @@ namespace Supermarket.Controllers
 
             return View(vm);
         }
+        // GET: FormationEmployees/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.FormationEmployee_1 == null)
+            {
+                return NotFound();
+            }
+
+            var formationEmployee = await _context.FormationEmployee_1
+                .Include(f => f.Employee)
+                .Include(f => f.Formation)
+                .FirstOrDefaultAsync(m => m.FormationEmployeeId == id);
+            if (formationEmployee == null)
+            {
+                return NotFound();
+            }
+
+            return View(formationEmployee);
+        }
+
         // GET: FormationEmployees/Create
         public IActionResult Create()
         {
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Address");
             ViewData["FormationId"] = new SelectList(_context.Formation, "FormationId", "Formation_Name");
             return View();
         }
@@ -87,7 +107,7 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", formationEmployee.EmployeeId);
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Address", formationEmployee.EmployeeId);
             ViewData["FormationId"] = new SelectList(_context.Formation, "FormationId", "Formation_Name", formationEmployee.FormationId);
             return View(formationEmployee);
         }
@@ -95,17 +115,17 @@ namespace Supermarket.Controllers
         // GET: FormationEmployees/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.FormationEmployee == null)
+            if (id == null || _context.FormationEmployee_1 == null)
             {
                 return NotFound();
             }
 
-            var formationEmployee = await _context.FormationEmployee.FindAsync(id);
+            var formationEmployee = await _context.FormationEmployee_1.FindAsync(id);
             if (formationEmployee == null)
             {
                 return NotFound();
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", formationEmployee.EmployeeId);
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Address", formationEmployee.EmployeeId);
             ViewData["FormationId"] = new SelectList(_context.Formation, "FormationId", "Formation_Name", formationEmployee.FormationId);
             return View(formationEmployee);
         }
@@ -142,7 +162,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", formationEmployee.EmployeeId);
+            ViewData["EmployeeId"] = new SelectList(_context.Funcionarios, "EmployeeId", "Employee_Address", formationEmployee.EmployeeId);
             ViewData["FormationId"] = new SelectList(_context.Formation, "FormationId", "Formation_Name", formationEmployee.FormationId);
             return View(formationEmployee);
         }
@@ -150,12 +170,12 @@ namespace Supermarket.Controllers
         // GET: FormationEmployees/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.FormationEmployee == null)
+            if (id == null || _context.FormationEmployee_1 == null)
             {
                 return NotFound();
             }
 
-            var formationEmployee = await _context.FormationEmployee
+            var formationEmployee = await _context.FormationEmployee_1
                 .Include(f => f.Employee)
                 .Include(f => f.Formation)
                 .FirstOrDefaultAsync(m => m.FormationEmployeeId == id);
@@ -172,23 +192,23 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.FormationEmployee == null)
+            if (_context.FormationEmployee_1 == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.FormationEmployee'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.FormationEmployee_1'  is null.");
             }
-            var formationEmployee = await _context.FormationEmployee.FindAsync(id);
+            var formationEmployee = await _context.FormationEmployee_1.FindAsync(id);
             if (formationEmployee != null)
             {
-                _context.FormationEmployee.Remove(formationEmployee);
+                _context.FormationEmployee_1.Remove(formationEmployee);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool FormationEmployeeExists(int id)
         {
-            return (_context.FormationEmployee?.Any(e => e.FormationEmployeeId == id)).GetValueOrDefault();
+          return (_context.FormationEmployee_1?.Any(e => e.FormationEmployeeId == id)).GetValueOrDefault();
         }
     }
 }
