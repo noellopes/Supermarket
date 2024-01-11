@@ -25,21 +25,7 @@ namespace Books.Data
             
         }
 
-        private static void PopulateReserve(SupermarketDbContext db)
-        {
-            if (db.Reserve.Any())
-            {
-                return;
-            }
-
-            db.Reserve.AddRange(
-                new Reserve { NumeroDeFunc = 10 },
-                new Reserve { NumeroDeFunc = 20 },
-                new Reserve { NumeroDeFunc = 20 }
-            );
-
-            db.SaveChanges();
-        }
+        
 
         internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager)
         {
