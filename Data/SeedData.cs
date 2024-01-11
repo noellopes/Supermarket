@@ -55,7 +55,28 @@ namespace Supermarket.Data
             PopulateTickets(db);
             PopulateOrder(db);
             PopulatePonto(db);
+            PopulateFormation(db);
 
+        }
+        private static void PopulateFormation(SupermarketDbContext db)
+        {
+            if (db.Formation.Any())
+            {
+                return;
+            }
+
+            db.Formation.AddRange(
+                new Models.Formation { Formation_Name = "Padeiro" },
+                new Models.Formation { Formation_Name = "Caixa" },
+                new Models.Formation { Formation_Name = "Talhante" },
+                new Models.Formation { Formation_Name = "Limpeza" },
+                new Models.Formation { Formation_Name = "Peixeira" },
+                new Models.Formation { Formation_Name = "Cafetaria" },
+                new Models.Formation { Formation_Name = "Operador de Armazen" },
+                new Models.Formation { Formation_Name = "Reposição" }
+            );
+
+            db.SaveChanges();
         }
         private static void PopulateDepartment(SupermarketDbContext db)
         {
