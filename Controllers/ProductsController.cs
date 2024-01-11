@@ -200,9 +200,18 @@ namespace Supermarket.Controllers
             var product = await _context.Product.FindAsync(id);
             if (product != null)
             {
-                _context.Product.Remove(product);
+                try
+                {
+                    _context.Product.Remove(product);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    ViewBag.ErrorDeleting = "The Product cannot be deleted because it is associated with an Purchase.";
+                    return View();
+                }
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
