@@ -55,7 +55,7 @@ namespace Supermarket.Data
             PopulateOrder(db);
             PopulatePonto(db);
             PopulateFormation(db);
-
+            PopulateReserve(db);
         }
 
         private static void PopulateReserve(SupermarketDbContext db)
