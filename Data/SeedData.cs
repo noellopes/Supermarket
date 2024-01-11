@@ -26,6 +26,7 @@ namespace Supermarket.Data {
             PopulateMealCards(db);
             PopulateCardMovements(db);
             PopulateEmployeeEvaluations(db);
+            PopulatePontos(db);
         }
 
         private static void PopulateBrand(SupermarketDbContext db) {
@@ -484,6 +485,21 @@ namespace Supermarket.Data {
                 new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
                 new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
                 new CardMovement { MealCardId = 1, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -200, Type = "Debit" }
+                );
+
+            db.SaveChanges();
+        }
+
+        private static void PopulatePontos(SupermarketDbContext db)
+        {
+            if (db.Ponto.Any()) return;
+
+            db.Ponto.AddRange(
+                new Ponto { CheckInTime = "", CheckOutTime = "", Date = DateTime.Now, LunchEndTime = "", LunchStartTime = "", RealCheckOutTime = "", Status = "Aprovado", EmployeeId = db.Employee.FirstOrDefault()!.EmployeeId },
+                new Ponto { CheckInTime = "", CheckOutTime = "", Date = DateTime.Now, LunchEndTime = "", LunchStartTime = "", RealCheckOutTime = "", Status = "Aprovado", EmployeeId = db.Employee.FirstOrDefault()!.EmployeeId },
+                new Ponto { CheckInTime = "", CheckOutTime = "", Date = DateTime.Now, LunchEndTime = "", LunchStartTime = "", RealCheckOutTime = "", Status = "Aprovado", EmployeeId = db.Employee.FirstOrDefault()!.EmployeeId },
+                new Ponto { CheckInTime = "", CheckOutTime = "", Date = DateTime.Now, LunchEndTime = "", LunchStartTime = "", RealCheckOutTime = "", Status = "Aprovado", EmployeeId = db.Employee.FirstOrDefault()!.EmployeeId },
+                new Ponto { CheckInTime = "", CheckOutTime = "", Date = DateTime.Now, LunchEndTime = "", LunchStartTime = "", RealCheckOutTime = "", Status = "Negado", EmployeeId = db.Employee.FirstOrDefault()!.EmployeeId }
                 );
 
             db.SaveChanges();
