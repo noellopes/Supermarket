@@ -5,11 +5,14 @@
 }
 
 <h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
+<div>
+    @if (User.IsInRole("Admistrador"))
+    {
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+</div>
 <div class="card mb-3">
     <div class="card-body">
         <form asp-action="Index" method="get">
