@@ -100,7 +100,7 @@ void UpdateExpirationStatusForAllPurchases()
     var purchasesController = new PurchasesController(serviceScope.ServiceProvider.GetRequiredService<SupermarketDbContext>());
 
     // Chama o m�todo UpdateExpirationStatusForAllPurchases() no controller
-    purchasesController.UpdateExpirationStatusForAllPurchases();
+   // purchasesController.UpdateExpirationStatusForAllPurchases();
 }
 
 app.Run();
