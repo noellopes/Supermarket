@@ -83,14 +83,16 @@ namespace Supermarket.Data {
             // Instantiate random number generator using system-supplied value as seed.
             var rand = new Random();
 
-            for (int i = 0; i < 200; i++)
+            //Geração aleatoria para testes
+            for (int i = 0; i <= 200; i++)
             {
+                var DataAleatoria = new DateTime(2022, 1, 1).AddMonths(rand.Next(1, 13)).AddDays(rand.Next(1, 31)).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
                 var randomBool = rand.Next(2) == 1;
                 db.Add(
                     new Ticket
                     {
-                        DataEmissao = new DateTime(rand.Next(2022,2023), rand.Next(01,12), rand.Next(1,30), rand.Next(1,23), rand.Next(0,59), rand.Next(0,59)),
-                        DataAtendimento = DateTime.Now.AddMinutes(rand.Next(5,20)),
+                        DataEmissao = DataAleatoria,
+                        DataAtendimento = DataAleatoria.AddMinutes(rand.Next(0,20)),
                         NumeroDaSenha = i,
                         Estado = true,
                         Prioritario = randomBool,
@@ -98,22 +100,40 @@ namespace Supermarket.Data {
                     }
                     );
             }
-            for (int i = 0; i < 150; i++)
+            //Geração aleatoria para testes de afluencia no mesmo mes
+            for (int i = 0; i <= 150; i++)
             {
+                var DataAleatoria = new DateTime(2022, 1, 1).AddMonths(rand.Next(1, 13)).AddDays(rand.Next(1, 31)).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
                 var randomBool = rand.Next(2) == 1;
                 db.Add(
                     new Ticket
                     {
-                        DataEmissao = new DateTime(2024, 01, rand.Next(1, DateTime.Now.Day), rand.Next(1, 23), rand.Next(0, 59), rand.Next(0, 59)),
-                        DataAtendimento = DateTime.Now.AddMinutes(rand.Next(5, 20)),
-                        NumeroDaSenha = i,
+                        DataEmissao = DataAleatoria,
+                        DataAtendimento = DataAleatoria.AddMinutes(rand.Next(0, 20)),
+                        NumeroDaSenha = 200+i,
                         Estado = true,
                         Prioritario = randomBool,
                         IDDepartments = rand.Next(1, db.Departments.Count())
                     }
                     );
             }
-
+            //Geração para testes de afluencia no mesmo dia
+            for (int i = 0; i <= 150; i++)
+            {
+                var DataAleatoria = new DateTime(2023, 1, 11).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
+                var randomBool = rand.Next(2) == 1;
+                db.Add(
+                    new Ticket
+                    {
+                        DataEmissao = DataAleatoria,
+                        DataAtendimento = DataAleatoria.AddMinutes(rand.Next(0, 20)),
+                        NumeroDaSenha = 350 + i,
+                        Estado = true,
+                        Prioritario = randomBool,
+                        IDDepartments = rand.Next(1, db.Departments.Count())
+                    }
+                    );
+            }
 
 
             db.SaveChanges();
