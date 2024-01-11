@@ -89,7 +89,7 @@ namespace Supermarket.Data {
                 db.Add(
                     new Ticket
                     {
-                        DataEmissao = DateTime.Now,
+                        DataEmissao = new DateTime(rand.Next(2022,2023), rand.Next(00,12), rand.Next(1,30), rand.Next(1,23), rand.Next(0,59), rand.Next(0,59)),
                         DataAtendimento = DateTime.Now.AddMinutes(rand.Next(5,20)),
                         NumeroDaSenha = i,
                         Estado = true,
@@ -98,8 +98,24 @@ namespace Supermarket.Data {
                     }
                     );
             }
+            for (int i = 0; i < 150; i++)
+            {
+                var randomBool = rand.Next(2) == 1;
+                db.Add(
+                    new Ticket
+                    {
+                        DataEmissao = new DateTime(2024, 01, rand.Next(1, DateTime.Now.Day), rand.Next(1, 23), rand.Next(0, 59), rand.Next(0, 59)),
+                        DataAtendimento = DateTime.Now.AddMinutes(rand.Next(5, 20)),
+                        NumeroDaSenha = i,
+                        Estado = true,
+                        Prioritario = randomBool,
+                        IDDepartments = rand.Next(1, db.Departments.Count())
+                    }
+                    );
+            }
 
-       
+
+
             db.SaveChanges();
         }
 
