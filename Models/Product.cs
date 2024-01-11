@@ -37,8 +37,6 @@ namespace Supermarket.Models
 
         public ICollection<WarehouseSection_Product>? WarehouseSection { get; set; }
 
-
-
-
+        public ICollection<Purchase>? Purchases { get; set; }
     }
 }
