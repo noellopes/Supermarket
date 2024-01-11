@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240110215330_initialMigration")]
-    partial class initialMigration
+    [Migration("20240111225935_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -229,6 +229,15 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<TimeSpan>("Employee_Time_Bank")
                         .HasColumnType("time");
 
+                    b.Property<int?>("Funcao_FK")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GrupoProjetoProjetoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjetoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Standard_Check_In_Time")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -246,6 +255,10 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EmployeeId");
+
+                    b.HasIndex("Funcao_FK");
+
+                    b.HasIndex("GrupoProjetoProjetoId");
 
                     b.ToTable("Employee");
                 });
@@ -364,6 +377,47 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasKey("FuncaoId");
 
                     b.ToTable("Funcao");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.FuncaoGrupoProjeto", b =>
+                {
+                    b.Property<int>("FuncaoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjetoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("FuncaoId", "ProjetoId");
+
+                    b.HasIndex("ProjetoId");
+
+                    b.ToTable("FuncaoGrupoProjeto");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.GrupoProjeto", b =>
+                {
+                    b.Property<int>("ProjetoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjetoId"));
+
+                    b.Property<string>("DescricaoProjeto")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("NomeProjeto")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Objectives")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProjetoId");
+
+                    b.ToTable("GrupoProjeto");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Hallway", b =>
@@ -900,6 +954,21 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("Client");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.Employee", b =>
+                {
+                    b.HasOne("Supermarket.Models.Funcao", "Funcao")
+                        .WithMany("Employees")
+                        .HasForeignKey("Funcao_FK");
+
+                    b.HasOne("Supermarket.Models.GrupoProjeto", "GrupoProjeto")
+                        .WithMany("Employees")
+                        .HasForeignKey("GrupoProjetoProjetoId");
+
+                    b.Navigation("Funcao");
+
+                    b.Navigation("GrupoProjeto");
+                });
+
             modelBuilder.Entity("Supermarket.Models.EmployeeEvaluation", b =>
                 {
                     b.HasOne("Supermarket.Models.Employee", "Employee")
@@ -920,6 +989,25 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsRequired();
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.FuncaoGrupoProjeto", b =>
+                {
+                    b.HasOne("Supermarket.Models.Funcao", "funcao")
+                        .WithMany("GrupoProjetos")
+                        .HasForeignKey("FuncaoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Supermarket.Models.GrupoProjeto", "GrupoProjeto")
+                        .WithMany("Funcoes")
+                        .HasForeignKey("ProjetoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("GrupoProjeto");
+
+                    b.Navigation("funcao");
                 });
 
             modelBuilder.Entity("Supermarket.Models.Hallway", b =>
@@ -1108,6 +1196,20 @@ namespace Supermarket.Data.Migrations.Supermarket
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
                 {
                     b.Navigation("MealCard");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.Funcao", b =>
+                {
+                    b.Navigation("Employees");
+
+                    b.Navigation("GrupoProjetos");
+                });
+
+            modelBuilder.Entity("Supermarket.Models.GrupoProjeto", b =>
+                {
+                    b.Navigation("Employees");
+
+                    b.Navigation("Funcoes");
                 });
 
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>

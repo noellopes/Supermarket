@@ -58,8 +58,6 @@ namespace Supermarket.Models
         [Required]
         public required string Standard_Lunch_Time { get; set; }
 
-        [Required]
-        public required DateTime Employee_Time_Bank { get; set; }
       
         //Ligação N para 1 com Função
         public Funcao? Funcao { get; set; }

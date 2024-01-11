@@ -215,6 +215,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Funcoes"] = new SelectList(_context.Set<Funcao>(), "FuncaoId", "NomeFuncao");
             return View(employee);
         }
 
