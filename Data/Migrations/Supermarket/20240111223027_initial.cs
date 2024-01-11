@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -122,6 +122,19 @@ namespace Supermarket.Data.Migrations.Supermarket
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Funcao", x => x.FuncaoId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Hierarquias",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hierarquias", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -242,7 +255,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GradeNumber = table.Column<int>(type: "int", nullable: false),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false)
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    EvaluationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -591,6 +605,9 @@ namespace Supermarket.Data.Migrations.Supermarket
 
             migrationBuilder.DropTable(
                 name: "Funcao");
+
+            migrationBuilder.DropTable(
+                name: "Hierarquias");
 
             migrationBuilder.DropTable(
                 name: "Issues");
