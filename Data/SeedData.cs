@@ -1269,8 +1269,29 @@ namespace Supermarket.Data
             if (!await userManager!.IsInRoleAsync(manager, ROLE_MANAGER))
             {
                 await userManager!.AddToRoleAsync(manager, ROLE_MANAGER);
+          
+            
+            
+            }
+
+            //GROUP 3
+
+
+            var userluzAdmin = await EnsureUserIsCreatedAsync(userManager!, "luz@ipg.pt", "Secret#123");
+            var usertestEmp = await EnsureUserIsCreatedAsync(userManager!, "test@ipg.pt", "Secret#123");
+
+            if (!await userManager!.IsInRoleAsync(userluzAdmin, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(userluzAdmin, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(usertestEmp, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(usertestEmp, ROLE_EMPLOYEER);
             }
         }
+
+
+
 
 
 
