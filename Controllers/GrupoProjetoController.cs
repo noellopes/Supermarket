@@ -127,7 +127,7 @@ namespace Supermarket.Controllers
                             fgp.funcao = GetFuncaoById(item);
                             fgp.ProjetoId = grupoProjeto.ProjetoId;
                            
-                            _context.FuncaoGrupoProjeto.Add(fgp);
+                            _context.Add(fgp);
                             await _context.SaveChangesAsync();
                         }
                         foreach (var e in employee)
