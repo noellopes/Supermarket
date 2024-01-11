@@ -13,7 +13,6 @@ namespace Supermarket.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<EmployeeEvaluation>().HasKey(EE => EE.EmployeeEvaluationId);
 
             modelBuilder.Entity<MealCard>().HasKey(MC => MC.MealCardId);
@@ -63,6 +62,24 @@ namespace Supermarket.Data
                 .WithOne(i => i.IssueType)
                 .HasForeignKey(i => i.IssueTypeId)
                 .OnDelete(DeleteBehavior.Restrict);                
+
+            //ModelBuilder das funções
+            modelBuilder.Entity<Employee>()
+                .HasOne(f => f.Funcao)
+                .WithMany(e => e.Employees)
+                .HasForeignKey(k =>k.Funcao_FK);
+
+            modelBuilder.Entity<FuncaoGrupoProjeto>()
+                .HasOne(fg => fg.funcao)
+                .WithMany(gp => gp.GrupoProjetos)
+                .HasForeignKey(fg => fg.FuncaoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FuncaoGrupoProjeto>()
+                .HasOne(gp => gp.GrupoProjeto)
+                .WithMany(f => f.Funcoes)
+                .HasForeignKey(gp => gp.ProjetoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         }
@@ -75,6 +92,7 @@ namespace Supermarket.Data
 
         public DbSet<Employee> Employee { get; set; } = default!;
 
+      
         public DbSet<Supermarket.Models.IssueType> IssueType { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Issues> Issues { get; set; } = default!;
@@ -165,6 +183,8 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Alert> Alert { get; set; } = default!;
 
         public DbSet<Orders> Orders { get; set; } = default!;
+        public DbSet<Supermarket.Models.GrupoProjeto> GrupoProjeto { get; set; } = default!;
+        public DbSet<Supermarket.Models.FuncaoGrupoProjeto> FuncaoGrupoProjeto { get; set; } = default!;
 
     }
 }

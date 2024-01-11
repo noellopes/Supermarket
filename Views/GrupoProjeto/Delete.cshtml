@@ -1,4 +1,4 @@
-﻿@model Supermarket.Models.Funcao
+﻿@model Supermarket.Models.GrupoProjeto
 
 @{
     ViewData["Title"] = "Delete";
@@ -6,27 +6,33 @@
 
 <h1>Excluir</h1>
 
-<h3>Você tem certeza que deseja excluir ?</h3>
+<h3>Você tem certeza que deseja excluir?</h3>
 <div>
-    <h4>Funcao</h4>
+    <h4>Projeto em grupo dividido por Funções</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NomeFuncao)
+            @Html.DisplayNameFor(model => model.NomeProjeto)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NomeFuncao)
+            @Html.DisplayFor(model => model.NomeProjeto)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DescricaoFuncao)
+            @Html.DisplayNameFor(model => model.DescricaoProjeto)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DescricaoFuncao)
+            @Html.DisplayFor(model => model.DescricaoProjeto)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Objectives)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Objectives)
         </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="FuncaoId" />
+        <input type="hidden" asp-for="ProjetoId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index" class="btn btn-outline-warning">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
