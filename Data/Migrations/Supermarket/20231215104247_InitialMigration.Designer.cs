@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240111223027_initial")]
-    partial class initial
+    [Migration("20231215104247_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -221,9 +221,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("EvaluationDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("GradeNumber")
                         .HasColumnType("int");
 
@@ -311,22 +308,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.HasIndex("StoreId");
 
                     b.ToTable("Hallway");
-                });
-
-            modelBuilder.Entity("Supermarket.Models.HierarquiasModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Hierarquias");
                 });
 
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>
