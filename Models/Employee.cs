@@ -56,7 +56,7 @@ namespace Supermarket.Models
         public required string Standard_Lunch_Hour { get; set; }
 
         [Required]
-        public required string Standard_Lunch_Time { get; set; }
+        public required int Standard_Lunch_Time { get; set; }
 
 
 

@@ -1,65 +1,64 @@
-﻿@model IEnumerable<Supermarket.Models.EmployeeSchedule>
+﻿@model EmployeeSchedulesViewModel
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h2>Schedules</h2>
+
+<div>
+    <form method="get">
+        <div asp-validation-summary="ModelOnly" class="text-danger">
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label"></label>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+            </div>
+        </div>
+        <label for="funcionario">Funcionário:</label>
+        <input type="text" name="funcionario" placeholder="Nome do funcionário" />
+
+        <label for="departamento">Departamento:</label>
+        <input type="text" name="departamento" placeholder="Nome do departamento" />
+
+        <label for="data">Data:</label>
+        <input type="date" name="data" />
+
+        <button type="submit">Buscar</button>
+    </form>
+</div>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckInTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CheckOutTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LunchStartTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LunchTime)
-            </th>
-            <th></th>
+            <th>Employee</th>
+            <th>Date</th>
+            <th>Check in time</th>
+            <th>Check out time</th>
+            <th>Lunch time</th>
+            <th>Lunch duration</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckInTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CheckOutTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LunchStartTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LunchTime)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EmployeeScheduleId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EmployeeScheduleId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EmployeeScheduleId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.EmployeeSchedules)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Employee.Employee_Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                <td>@Html.DisplayFor(modelItem => item.CheckInTime)</td>
+                <td>@Html.DisplayFor(modelItem => item.CheckOutTime)</td>
+                <td>@Html.DisplayFor(modelItem => item.LunchStartTime)</td>
+                <td>@Html.DisplayFor(modelItem => item.LunchTime)</td>
+                @if (User.IsInRole("Gestor"))
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.EmployeeScheduleId">Edit</a>
+                    </td>
+                }
+            </tr>
+        }
     </tbody>
 </table>
+<div>
+    <a asp-action="HRHome">Back to Home</a>
+</div>

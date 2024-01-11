@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240109105709_Initial")]
+    [Migration("20240111183531_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -367,9 +367,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Standard_Lunch_Time")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Standard_Lunch_Time")
+                        .HasColumnType("int");
 
                     b.HasKey("EmployeeId");
 
@@ -411,11 +410,13 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeScheduleId"));
 
-                    b.Property<TimeSpan>("CheckInTime")
-                        .HasColumnType("time");
+                    b.Property<string>("CheckInTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("CheckOutTime")
-                        .HasColumnType("time");
+                    b.Property<string>("CheckOutTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -423,11 +424,12 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("LunchStartTime")
-                        .HasColumnType("time");
+                    b.Property<string>("LunchStartTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("LunchTime")
-                        .HasColumnType("time");
+                    b.Property<int>("LunchTime")
+                        .HasColumnType("int");
 
                     b.HasKey("EmployeeScheduleId");
 

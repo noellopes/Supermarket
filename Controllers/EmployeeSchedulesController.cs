@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,11 +16,24 @@ namespace Supermarket.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Funcionário")]
+        public async Task<IActionResult> HRHome()
+        {
+            return View("HRHome");
+        }
+
         // GET: EmployeeSchedules
+        [Authorize(Roles = "Funcionário")]
         public async Task<IActionResult> Index()
         {
             var supermarketDbContext = _context.EmployeeSchedule.Include(e => e.Employee);
-            return View(await supermarketDbContext.ToListAsync());
+            var vm = new EmployeeSchedulesViewModel
+            {
+                EmployeeSchedules = await supermarketDbContext.ToListAsync(),
+            };
+
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
+            return View(vm);
         }
 
         // GET: EmployeeSchedules/Details/5
@@ -49,7 +59,7 @@ namespace Supermarket.Controllers
         public IActionResult Create()
         {
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
-            return View();
+            return View("Create");
         }
 
         // POST: EmployeeSchedules/Create
