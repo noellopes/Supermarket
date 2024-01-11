@@ -48,5 +48,7 @@ namespace Supermarket.Models
         [EnumDataType(typeof(Severity))]
         [Display(Name = "Severity")]
         public Severity Severity { get; set; }
+
+        public ICollection<IssueType>? IssueTypes { get; set; }
     }
 }

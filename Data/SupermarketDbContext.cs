@@ -28,6 +28,14 @@ namespace Supermarket.Data
                 .WithMany()
                 .HasForeignKey(e => e.PurchaseId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<IssueType>()
+                .HasMany(it => it.Issue)
+                .WithOne(i => i.IssueType)
+                .HasForeignKey(i => i.IssueTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+                
+                
         }
 
         public DbSet<Folga> Folga { get; set; } = default!;
