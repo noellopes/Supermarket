@@ -209,9 +209,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Property<int>("DeliveredQuantity")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EstimateDeliveryTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("LineTotal")
                         .HasColumnType("int");
 

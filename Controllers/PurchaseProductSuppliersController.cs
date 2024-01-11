@@ -59,7 +59,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PurchaseProductSupplierId,ProductId,PurchaseSupplierId,AskedQuantity,DeliveredQuantity,EstimateDeliveryTime,DeliveredDate,LineTotal")] PurchaseProductSupplier purchaseProductSupplier)
+        public async Task<IActionResult> Create([Bind("PurchaseProductSupplierId,ProductId,PurchaseSupplierId,AskedQuantity,DeliveredQuantity,DeliveredDate,LineTotal")] PurchaseProductSupplier purchaseProductSupplier)
         {
             if (ModelState.IsValid)
             {
@@ -85,8 +85,8 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", purchaseProductSupplier.ProductId);
-            ViewData["PurchaseSupplierId"] = new SelectList(_context.PurchaseSupplier, "PurchaseSupplierId", "PurchaseSupplierId", purchaseProductSupplier.PurchaseSupplierId);
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Name", purchaseProductSupplier.ProductId);
+            ViewData["PurchaseSupplierId"] = new SelectList(_context.PurchaseSupplier, "PurchaseSupplierId", "Date", purchaseProductSupplier.PurchaseSupplierId);
             return View(purchaseProductSupplier);
         }
 
@@ -95,7 +95,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PurchaseProductSupplierId,ProductId,PurchaseSupplierId,AskedQuantity,DeliveredQuantity,EstimateDeliveryTime,DeliveredDate,LineTotal")] PurchaseProductSupplier purchaseProductSupplier)
+        public async Task<IActionResult> Edit(int id, [Bind("PurchaseProductSupplierId,ProductId,PurchaseSupplierId,AskedQuantity,DeliveredQuantity,DeliveredDate,LineTotal")] PurchaseProductSupplier purchaseProductSupplier)
         {
             if (id != purchaseProductSupplier.PurchaseProductSupplierId)
             {
@@ -122,8 +122,8 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Description", purchaseProductSupplier.ProductId);
-            ViewData["PurchaseSupplierId"] = new SelectList(_context.PurchaseSupplier, "PurchaseSupplierId", "PurchaseSupplierId", purchaseProductSupplier.PurchaseSupplierId);
+            ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Name", purchaseProductSupplier.ProductId);
+            ViewData["PurchaseSupplierId"] = new SelectList(_context.PurchaseSupplier, "PurchaseSupplierId", "Date", purchaseProductSupplier.PurchaseSupplierId);
             return View(purchaseProductSupplier);
         }
 

@@ -12,7 +12,6 @@
         public int AskedQuantity { get; set; }
         public int DeliveredQuantity { get; set; }
 
-        public DateTime EstimateDeliveryTime { get; set; }
 
         public DateTime DeliveredDate { get; set; }
 

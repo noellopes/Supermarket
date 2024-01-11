@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240111223216_PurchaseProductSuppliers")]
+    [Migration("20240111231913_PurchaseProductSuppliers")]
     partial class PurchaseProductSuppliers
     {
         /// <inheritdoc />
@@ -211,9 +211,6 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     b.Property<int>("DeliveredQuantity")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("EstimateDeliveryTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("LineTotal")
                         .HasColumnType("int");
