@@ -11,27 +11,27 @@ namespace Supermarket.Models
         public int EmployeeId { get; set; }
         public Employee? Employee { get; set; }
 
-        [Required]
+        //[Required]
         [DataType(DataType.Date)]
-        public required DateTime? Date { get; set; }
+        public DateTime? Date { get; set; }
 
 
-        [Required]
+        //[Required]
         [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
-        public required string CheckInTime { get; set; }
+        public string? CheckInTime { get; set; }
+        
 
-
-        [Required]
+        //[Required]
         [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
-        public required string CheckOutTime { get; set; }
+        public string? CheckOutTime { get; set; }
 
-        [Required]
+        //[Required]
         [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
-        public required string LunchStartTime { get; set; }
+        public string? LunchStartTime { get; set; }
 
-        [Required]
+        //[Required]
         [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
-        public required string LunchEndTime { get; set; }
+        public string? LunchEndTime { get; set; }
 
 
         //pode ser o tempo das horas extras ou vice versa
@@ -40,7 +40,7 @@ namespace Supermarket.Models
 
         [Required]
         [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
-        public required string RealCheckOutTime { get; set; }
+        public string? RealCheckOutTime { get; set; }
 
 
 
@@ -51,8 +51,8 @@ namespace Supermarket.Models
     //a opção de "Ponto registrado"
     //mas, se o josefino so entrar por volta das 9h30, vai aparecer a opção de "ponto irregular" sendo assim
     //o josefino tem de fazer um documentário para justificar o seu atraso de 30min.
-        [Required]
-        public string Status { get; set; } 
+        //[Required]
+        public string? Status { get; set; } 
 
         public string? Justificative { get; set; }
 

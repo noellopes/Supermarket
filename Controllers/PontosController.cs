@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Numerics;
@@ -17,7 +19,7 @@ namespace Supermarket.Controllers
         private readonly SupermarketDbContext _context;
 
         public PontosController(SupermarketDbContext context)
-        {
+        { 
             _context = context;
         }
 
@@ -131,12 +133,18 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,RealCheckOutTime,Status,Justificative,ExtraHours")] Ponto ponto)
         {
+            
+            //if (string.Equals())
+            //ponto.Date = DateTime.Now;
+            //ponto.CheckInTime = TimeOnly.MinValue.ToString();
+            //ponto.RealCheckOutTime = TimeOnly.MaxValue.ToString();
+            //ponto.CheckOutTime = TimeOnly.MinValue.ToString();
+
             if (ModelState.IsValid)
             {
                 //StringComparison = Não é necessário escrever igual ao nome, pode ser tudo em letra minuscula ou maiuscula
                 if (string.Equals(ponto.Status, "workOvertime", StringComparison.OrdinalIgnoreCase))
                 {
-                   
                     ponto.Justificative = "Don't need justification";
                 }
                 else if (string.Equals(ponto.Status, "notworkOvertime", StringComparison.OrdinalIgnoreCase))
