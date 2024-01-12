@@ -138,49 +138,5 @@ namespace Supermarket.Controllers
             return View(data);
         }
 
-        // UPDATE: Update order information
-        [HttpPost]
-        public void UpdateOrder(int orderId, User_Order updatedOrder)
-        {
-            // find order with orderId
-            var existingOrder = _context.User_Order.FirstOrDefault(o => o.Id == orderId);
-
-            if (existingOrder != null)
-            {
-                // Perform update operations
-                existingOrder.Order.CustomerId = updatedOrder.Order.CustomerId;
-                existingOrder.Order.DeliveryDate = updatedOrder.Order.DeliveryDate;
-                //existingOrder.ProductList = updatedOrder.ProductList;
-                existingOrder.Order.Status = updatedOrder.Order.Status;
-                existingOrder.Order.TotalPrice = updatedOrder.Order.TotalPrice;
-
-                Console.WriteLine("Sipariş başarıyla güncellendi.");
-            }
-            else
-            {
-                Console.WriteLine("Belirtilen orderId'ye sahip sipariş bulunamadı.");
-            }
-        }
-
-        // DELETE: Delete order with specified orderId
-        [HttpPost]
-        public void DeleteOrder(int orderId)
-        {
-            // find order with orderId
-            var orderToDelete = _context.User_Order.FirstOrDefault(o => o.Id == orderId);
-
-            if (orderToDelete != null)
-            {
-                // Remove order from list
-                _context.User_Order.Remove(orderToDelete);
-
-                Console.WriteLine("Sipariş başarıyla silindi.");
-            }
-            else
-            {
-                Console.WriteLine("Belirtilen orderId'ye sahip sipariş bulunamadı.");
-            }
-        }
-
     }
 }

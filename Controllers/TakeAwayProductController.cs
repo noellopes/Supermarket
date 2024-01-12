@@ -214,7 +214,7 @@ namespace Supermarket.Controllers
         public IActionResult PlaceOrder(int id)
         {
             var basket = _memoryCache.Get<Basket>(CacheProductKey) ?? new Models.Basket();
-            basket.CustomerId = id;
+            basket.CustomerId = _memoryCache.Get<int>("customerId");
             return View(basket);
         }
 
@@ -239,7 +239,13 @@ namespace Supermarket.Controllers
             }
             _context.SaveChanges();
 
-
+            foreach (var product in basket.Products)
+            {
+                var getProduct = _context.TakeAwayProduct.FirstOrDefault(x=>x.Id == product.Id);
+                getProduct.Quantity -= (int)product.QuantityReserved;
+                _context.TakeAwayProduct.Update(getProduct);
+            }
+            _context.SaveChanges();
 
             return RedirectToAction("Index","Order");
         }

@@ -56,6 +56,10 @@ namespace Supermarket.Controllers
             if (customer != null)
             {
                 _memoryCache.Set("customerId", customer.CustomerId);
+                if (_memoryCache.TryGetValue("basketCache",out _))
+                {
+                    return RedirectToAction("PlaceOrder", "TakeAwayProduct");
+                }
                 return Redirect("/Customer/CustomerList");
             }
             return Redirect("/Customer/LoginCustomer");
@@ -73,7 +77,7 @@ namespace Supermarket.Controllers
         public IActionResult CustomerList()
         {
             var customers = _context.Customers.ToList();
-            return View(customers);
+            return View("CustomerList",customers);
         }
 
         public IActionResult CustomerDetail(int id) {
@@ -106,16 +110,14 @@ namespace Supermarket.Controllers
                 {
                     return CustomerList();
                 }
-                var existingCustomer = _context.Customers.FirstOrDefault(c => c.CustomerId == customer.CustomerId);
+                var existingCustomer = _context.Customers.AsNoTracking().FirstOrDefault(c => c.CustomerId == customer.CustomerId);
 
                 if (existingCustomer == null)
                 {
                     return NotFound();
                 }
 
-                existingCustomer.CustomerName = customer.CustomerName;
-                existingCustomer.CustomerPhone = customer.CustomerPhone;
-                existingCustomer.CustomerEmail = customer.CustomerEmail;
+                existingCustomer = customer;
                 _context.Update(customer);
                 _context.SaveChanges();
 
