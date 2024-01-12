@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Numerics;
+using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -73,6 +74,32 @@ namespace Supermarket.Controllers
 
             return View(vm);
         }
+        //private void CalculateExtraHours(Ponto ponto)
+        //{
+        //    if (!string.IsNullOrEmpty(ponto.CheckOutTime) && !string.IsNullOrEmpty(ponto.CheckInTime))
+        //    {
+        //        TimeSpan inTime = TimeSpan.Parse(ponto.CheckInTime);
+        //        TimeSpan outTime = TimeSpan.Parse(ponto.CheckOutTime);
+        //        TimeSpan LunchStart = TimeSpan.Parse(ponto.LunchStartTime);
+        //        TimeSpan LunchEnd = TimeSpan.Parse(ponto.LunchEndTime);
+
+        //        // Calcular o tempo total trabalhado
+        //        TimeSpan tempoTrabalhado = (outTime - inTime) - (LunchEnd - LunchStart);
+
+        //        // Tempo padrão de trabalho (8 horas)
+        //        TimeSpan tempoPadraoTrabalho = TimeSpan.Parse("08:00");
+
+        //        // Calcular as horas extras
+        //        TimeSpan horasExtras = TimeSpan.Zero;
+        //        if (tempoTrabalhado > tempoPadraoTrabalho)
+        //        {
+        //            horasExtras = tempoTrabalhado - tempoPadraoTrabalho;
+        //        }
+
+        //        // Retornar as horas extras
+        //        return horasExtras;
+        //    }
+        //}
 
         private void CalculateExtraHours(Ponto ponto)
         {
@@ -132,22 +159,41 @@ namespace Supermarket.Controllers
                     if(pontoDia.CheckInTime is not null && pontoDia.LunchStartTime is null && pontoDia.LunchEndTime is null && pontoDia.CheckOutTime is null)
                     {
                         pontoDia.LunchStartTime = DateTime.Now.ToString("HH:mm");
+
+                        if (pontoDia.LunchStartTime !=  escala.LunchStartTime.ToString("HH:mm"))
+                        {
+                            pontoDia.Status = "Irregular";
+                        }
+                        
                     }
                     else if(pontoDia.CheckInTime is not null && pontoDia.LunchStartTime is not null && pontoDia.LunchEndTime is null && pontoDia.CheckOutTime is null)
                     {
                         pontoDia.LunchEndTime = DateTime.Now.ToString("HH:mm");
+
+                        var horaAlmoco = (Convert.ToInt16(pontoDia.LunchEndTime) - Convert.ToInt16(pontoDia.LunchStartTime));
+                        if (horaAlmoco != Convert.ToUInt16(escala.LunchTime))
+                        {
+                            pontoDia.Status = "Irregular";
+
+                        }
+    
                     }
                     else if (pontoDia.CheckInTime is not null && pontoDia.LunchStartTime is not null && pontoDia.LunchEndTime is not null && pontoDia.CheckOutTime is null)
                     {
                         pontoDia.CheckOutTime = DateTime.Now.ToString("HH:mm");
+
+                        if (pontoDia.CheckOutTime != escala.CheckOutTime.ToString("HH:mm"))
+                        {
+                            pontoDia.Status = "Irregular";
+                        }
                     }
-                    else
+                    else 
                     {
 
                     }
-                    _context.Update(pontoDia);
-                    await _context.SaveChangesAsync();
+
                 }
+                    
                 else
                 {
                     var ponto = new Ponto
@@ -157,11 +203,20 @@ namespace Supermarket.Controllers
                         CheckInTime = DateTime.Now.ToString("HH:mm")
                     };
 
+                    if (ponto.CheckInTime == escala.CheckInTime.ToString("HH:mm"))
+                    {
+                        ponto.Status = "Registrado";
+                    }
+ 
                     _context.Add(ponto);
+                    await _context.SaveChangesAsync();
+
+                     _context.Update(pontoDia);
                     await _context.SaveChangesAsync();
                 }
             }
         }
+
 
         // GET: Pontoes/Edit/5
         public async Task<IActionResult> Edit(int? id)

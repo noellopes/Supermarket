@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240111215657_Initial")]
+    [Migration("20240111225255_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -719,6 +719,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Date")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<int>("EmployeeId")
