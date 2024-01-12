@@ -84,9 +84,9 @@ namespace Supermarket.Data {
             var rand = new Random();
 
             //Geração aleatoria para testes
-            for (int i = 0; i <= 1500; i++)
+            for (int i = 0; i <= 5000; i++)
             {
-                var DataAleatoria = new DateTime(2022, 1, 1).AddMonths(rand.Next(1, 13)).AddDays(rand.Next(1, 31)).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
+                var DataAleatoria = new DateTime(2023, 1, 1).AddMonths(rand.Next(1, 13)).AddDays(rand.Next(1, 31)).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
                 var randomBool = rand.Next(2) == 1;
                 db.Add(
                     new Ticket
@@ -103,14 +103,14 @@ namespace Supermarket.Data {
             //Geração aleatoria para testes de afluencia no mesmo mes
             for (int i = 0; i <= 300; i++)
             {
-                var DataAleatoria = new DateTime(2022, 1, 1).AddMonths(rand.Next(1, 13)).AddDays(rand.Next(1, 31)).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
+                var DataAleatoria = new DateTime(2023, 1, 1).AddMonths(rand.Next(1, 13)).AddDays(rand.Next(1, 31)).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
                 var randomBool = rand.Next(2) == 1;
                 db.Add(
                     new Ticket
                     {
                         DataEmissao = DataAleatoria,
                         DataAtendimento = DataAleatoria.AddMinutes(rand.Next(0, 20)),
-                        NumeroDaSenha = 1500+i,
+                        NumeroDaSenha = 5000+i,
                         Estado = true,
                         Prioritario = randomBool,
                         IDDepartments = rand.Next(1, db.Departments.Count())
@@ -127,7 +127,7 @@ namespace Supermarket.Data {
                     {
                         DataEmissao = DataAleatoria,
                         DataAtendimento = DataAleatoria.AddMinutes(rand.Next(0, 20)),
-                        NumeroDaSenha = 1800 + i,
+                        NumeroDaSenha = 5300 + i,
                         Estado = true,
                         Prioritario = randomBool,
                         IDDepartments = rand.Next(1, db.Departments.Count())

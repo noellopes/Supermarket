@@ -108,9 +108,10 @@ else {
                 {
                     @foreach (var spike in departmentModel.Tickets)
                     {
+
                         contadordoSpike++;
                         <tr>
-                            <th scope="row">@departmentModel.Department.NameDepartments</th>
+                            <th scope="row"> @departmentModel.Department.NameDepartments  </th>
                             <td>@contadordoSpike</td>
                             <td>@spike.DataEmissao.ToString("dd-MM-yyyy HH:mm:ss")</td>
                             <td>@spike.DataAtendimento?.ToString("dd-MM-yyyy HH:mm:ss")</td>
