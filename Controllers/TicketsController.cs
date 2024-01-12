@@ -30,7 +30,6 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index(int page = 1, int departmentName = 0)
         {
 
-
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
             var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
@@ -65,6 +64,7 @@ namespace Supermarket.Controllers
                 .OrderBy(b => b.TicketId)
                 .Skip((paging.CurrentPage - 1) * paging.PageSize)
                    .Take(paging.PageSize)
+                   .Where(b => b.DataAtendimento == null)
                    .ToListAsync(),
                 Departments = Departments,
                 PagingInfo = paging,
