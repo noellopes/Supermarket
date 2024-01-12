@@ -16,19 +16,16 @@ namespace Supermarket.Models
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
         public int Quantity { get; set; } = 0;
-        public int ProductId { get; set; } = 1;
 
         [DataType(DataType.Date)]
         public DateTime DeliveryDate { get; set; }
-
-        public int Quantity { get; set; }
 
         [Required]
         public int CustomerId { get; set; }
 
         public Customer? Customer { get; set; }
-        public int ProductId { get; set; }
 
+        public int ProductId { get; set; }
         public Product? Product { get; set; }
 
         public int EstimatedPreparationTimeAsMinutes { get; set; }

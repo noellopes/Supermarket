@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Compile Remove="Models\Class.cs" />
+    <Compile Remove="Models\Departments.cs" />
     <Compile Remove="Models\Schedule - Cópia.cs" />
     <Compile Remove="Models\SchedulesViewModel - Cópia.cs" />
   </ItemGroup>

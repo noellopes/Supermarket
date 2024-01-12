@@ -54,7 +54,7 @@ namespace Supermarket.Data
         public DbSet<EmployeeEvaluation> EmployeeEvaluation { get; set; } = default!;
         public DbSet<FormationEmployee> FormationEmployees { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.Employee> Employee { get; set; } = default!;
+        //public DbSet<Supermarket.Models.Employee> Employee { get; set; } = default!;
 
         public DbSet<Supermarket.Models.ProductDiscount> ProductDiscount { get; set; } = default!;
 
