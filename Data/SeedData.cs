@@ -55,7 +55,8 @@ namespace Supermarket.Data
             PopulateTickets(db);
             PopulateOrder(db);
             PopulatePonto(db);
-
+            PopulateUserOrder(db);
+            PopulateTakeAwayOrder(db);
         }
         private static void PopulateDepartment(SupermarketDbContext db)
         {
@@ -1000,6 +1001,36 @@ namespace Supermarket.Data
                         Price = 2,
                         Quantity = 20,
                         EstimatedPreparationTimeAsMinutes = 1,
+                    },
+                    new TakeAwayProduct
+                    {
+                        ProductName = "Cheese Burger",
+
+                        Category = db.TakeAwayCategory.FirstOrDefault(x => x.Name == "Burgers")!,
+
+                        Price = 15,
+                        Quantity = 20,
+                        EstimatedPreparationTimeAsMinutes = 10,
+                    },
+                    new TakeAwayProduct
+                    {
+                        ProductName = "Sandwich",
+
+                        Category = db.TakeAwayCategory.FirstOrDefault(x => x.Name == "Breakfast")!,
+
+                        Price = 5,
+                        Quantity = 20,
+                        EstimatedPreparationTimeAsMinutes = 15,
+                    },
+                    new TakeAwayProduct
+                    {
+                        ProductName = "Tomato Soup",
+
+                        Category = db.TakeAwayCategory.FirstOrDefault(x => x.Name == "Soups")!,
+
+                        Price = 7,
+                        Quantity = 20,
+                        EstimatedPreparationTimeAsMinutes = 5,
                     }
                 );
             db.SaveChanges();
@@ -1435,6 +1466,48 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
+        private static void PopulateTakeAwayOrder(SupermarketDbContext db)
+        {
+            if (db.Order.Any())
+                return;
+
+            db.Order.AddRange(
+                    new Order { CustomerId = 1, EstimatedPreparationTimeAsMinutes = 30, TotalPrice = 25},
+                    new Order { CustomerId = 2, EstimatedPreparationTimeAsMinutes = 20, TotalPrice = 20},
+                    new Order { CustomerId = 3, EstimatedPreparationTimeAsMinutes = 15, TotalPrice = 20},
+                    new Order { CustomerId = 1, EstimatedPreparationTimeAsMinutes = 5, TotalPrice = 10},
+                    new Order { CustomerId = 1, EstimatedPreparationTimeAsMinutes = 35, TotalPrice = 7},
+                    new Order { CustomerId = 1, EstimatedPreparationTimeAsMinutes = 10, TotalPrice = 50}
+                
+                );
+            db.SaveChanges();
+        }
+
+        private static void PopulateUserOrder(SupermarketDbContext db)
+        {
+            if (db.User_Order.Any()) return;
+
+            db.User_Order.AddRange(
+                    new User_Order { OrderId = 1, ProductId = 1 },
+                    new User_Order { OrderId = 1, ProductId = 2 },
+                    new User_Order { OrderId = 2, ProductId = 3 },
+                    new User_Order { OrderId = 2, ProductId = 4 },
+                    new User_Order { OrderId = 2, ProductId = 1 },
+                    new User_Order { OrderId = 3, ProductId = 2 },
+                    new User_Order { OrderId = 3, ProductId = 3 },
+                    new User_Order { OrderId = 4, ProductId = 3 },
+                    new User_Order { OrderId = 4, ProductId = 1 },
+                    new User_Order { OrderId = 4, ProductId = 1 },
+                    new User_Order { OrderId = 5, ProductId = 2 },
+                    new User_Order { OrderId = 5, ProductId = 3 },
+                    new User_Order { OrderId = 5, ProductId = 1 },
+                    new User_Order { OrderId = 6, ProductId = 2 },
+                    new User_Order { OrderId = 6, ProductId = 2 },
+                    new User_Order { OrderId = 6, ProductId = 2 }
+                    
+                );
+
+        }
 
     }
 }
