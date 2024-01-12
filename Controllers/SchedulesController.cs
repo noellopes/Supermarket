@@ -250,54 +250,85 @@ namespace Supermarket.Controllers
 
         [Authorize(Roles = "Gestor")]
 
-        public async Task<IActionResult> Afluencias(int procuraLimiteAfluencia = 0,DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null )
+        public async Task<IActionResult> Afluencias(int procuraLimiteAfluencia = 0, DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null)
         {
-            var departmentsWithTicketCount = _context.Departments
-        .Select(d => new { Department = d, TicketsCount = _context.Tickets.Count(t => t.IDDepartments == d.IDDepartments) })
-        .Where(joinResult => joinResult.TicketsCount >= procuraLimiteAfluencia)
-        .ToList();
-
             var model = new List<AfluenciasViewModel>();
 
-            foreach (var result in departmentsWithTicketCount)
+
+
+            var departmentsWithAfluencia = _context.Departments
+                .Select(d => new
+                {
+                    Department = d,
+                    AfluenciaCount = _context.Tickets
+                        .Count(t => t.IDDepartments == d.IDDepartments &&
+                                    t.DataAtendimento >= procuraDataInicial &&
+                                    t.DataAtendimento <= procuraDataFinal)
+                })
+                .Where(result => result.AfluenciaCount >= procuraLimiteAfluencia)
+                .ToList();
+
+            foreach (var result in departmentsWithAfluencia)
             {
-                var tickets = _context.Tickets
-                    .Where(t => t.IDDepartments == result.Department.IDDepartments);
+                var afluencias = _context.Tickets
+                    .Where(t => t.IDDepartments == result.Department.IDDepartments &&
+                                t.DataAtendimento >= procuraDataInicial &&
+                                t.DataAtendimento <= procuraDataFinal)
+                    .OrderBy(t => t.DataAtendimento)
+                    .ToList();
 
-                if (procuraDataInicial != null)
-                {
-                    tickets = tickets.Where(t => t.DataAtendimento >= procuraDataInicial);
-                }
-
-                if (procuraDataFinal != null)
-                {
-                    tickets = tickets.Where(t => t.DataAtendimento <= procuraDataFinal);
-                }
+                // Check for spikes within the specified time interval
+                var spikeAfluencias = FindTicketSpikes(afluencias);
 
                 var am = new AfluenciasViewModel
                 {
                     Department = result.Department,
-                    Tickets = await tickets
-                        .OrderBy(t => t.DataEmissao)
-                        .ToListAsync(),
+                    Tickets = spikeAfluencias, // No need to query the database again
                     SearchDataIntervaloInicial = procuraDataInicial,
                     SearchDataIntervaloFinal = procuraDataFinal
                 };
 
+                Console.WriteLine($"Model count: {model.Count}, procuraLimiteAfluencia: {procuraLimiteAfluencia}, procuraDataInicial: {procuraDataInicial}, procuraDataFinal: {procuraDataFinal}");
+
                 model.Add(am);
             }
+
             Console.WriteLine($"procuraDataInicial: {procuraDataInicial}, procuraDataFinal: {procuraDataFinal}");
+
             // Check if any filters are present
             if (procuraDataInicial != null || procuraDataFinal != null || procuraLimiteAfluencia > 0)
             {
-                return View("Afluencias",model);
+                return View("Afluencias", model);
             }
             else
             {
                 ViewData["NoDataMessage"] = "No data displayed. Please provide the filters to detect the spikes.";
                 return View();
             }
+        }
 
+        // Helper method to find spikes within a 10-minute interval
+        private List<Ticket> FindTicketSpikes(List<Ticket> tickets)
+        {
+            List<Ticket> spikeAfluencias = new List<Ticket>();
+
+            for (int i = 0; i < tickets.Count - 1; i++)
+            {
+                TimeSpan? interval = tickets[i + 1].DataAtendimento - tickets[i].DataAtendimento;
+
+                if (interval?.TotalMinutes <= 10)
+                {
+                    spikeAfluencias.Add(tickets[i]);
+                }
+            }
+
+            // Include the last ticket if it's part of a spike
+            if (tickets.Count > 0)
+            {
+                spikeAfluencias.Add(tickets.Last());
+            }
+
+            return spikeAfluencias;
         }
 
     }
