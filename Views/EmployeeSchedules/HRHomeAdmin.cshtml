@@ -1,8 +1,6 @@
-﻿
-@{
-    ViewData["Title"] = "HRHome";
+﻿@{
+    ViewData["Title"] = "HRHomeAdmin";
 }
-
 <style>
     .welcome-container {
         text-align: center;
@@ -19,10 +17,13 @@
         color: #555;
     }
 </style>
-<div class="welcome-container">
-    <h1>Welcome to the Human Resouces Module</h1>
-        <p>Ask for day-offs, register your presence in the company and see your future schedules</p>
-</div>
+@if (User.IsInRole("Gestor"))
+{
+    <div class="welcome-container">
+        <h1>Welcome to the Human Resouces Module</h1>
+        <p>Manage day-offs, schedules and logs of your employees</p>
+    </div>
+}
 <div class="album py-5">
     <div class="container">
         <div class="row">
@@ -31,7 +32,10 @@
                     <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22208%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20208%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18cfa33fce3%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A11pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18cfa33fce3%22%3E%3Crect%20width%3D%22208%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2266.93124771118164%22%20y%3D%22117.54000034332276%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
                     <div class="card-body">
                         <p class="card-text">
-                            <text>"Aqui é onde você pode gerenciar as suas folgas, pedir novas folgas, e ver resultados das mesmas."</text>
+                            @if (User.IsInRole("Gestor"))
+                            {
+                                <text>"Aqui é onde você pode gerenciar as folgas dos funcionarios, e aprovar solicitações."</text>
+                            }
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
@@ -46,11 +50,17 @@
                     <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22208%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20208%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18cfa33fce3%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A11pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18cfa33fce3%22%3E%3Crect%20width%3D%22208%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2266.93124771118164%22%20y%3D%22117.54000034332276%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
                     <div class="card-body">
                         <p class="card-text">
-                            <text>"Aqui é onde você pode visualizar suas escalas."</text>
+                            @if (User.IsInRole("Gestor"))
+                            {
+                                <text>"Aqui é onde você pode gerenciar as escalas dos funcionarios, e editar as mesmas de acordo com a necessidade."</text>
+                            }
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a asp-controller="EmployeeSchedules" asp-action="Index" class="btn btn-primary">Schedules</a>
+                                @if (User.IsInRole("Gestor"))
+                                {
+                                    <a asp-controller="EmployeeSchedules" asp-action="IndexAdmin" class="btn btn-primary">Schedules</a>
+                                }
                             </div>
                         </div>
                     </div>
@@ -61,7 +71,10 @@
                     <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [100%x225]" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22208%22%20height%3D%22225%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20208%20225%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_18cfa33fce3%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A11pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_18cfa33fce3%22%3E%3Crect%20width%3D%22208%22%20height%3D%22225%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2266.93124771118164%22%20y%3D%22117.54000034332276%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true" style="height: 225px; width: 100%; display: block;">
                     <div class="card-body">
                         <p class="card-text">
-                            <text>"Aqui é onde você pode vizualizar os seus pontos."</text>
+                            @if (User.IsInRole("Gestor"))
+                            {
+                                <text>"Aqui é onde você pode gerenciar os pontos funcionarios, e gerenciar pontos irregulares."</text>
+                            }
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
@@ -74,15 +87,11 @@
         </div>
     </div>
 </div>
-
-@if (User.IsInRole("Gestor"))
-{
-    <div class="container d-flex flex-row-reverse justify-content-between">
-        <form method="get" asp-action="HRHome">
-            <input type="hidden" name="funcionario" value="false" />
-            <div class="form-group mt-3">
-                <input type="submit" value="Change to manager view" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-}
+<div class="container d-flex flex-row-reverse justify-content-between">
+    <form method="get" asp-action="HRHome">
+        <input type="hidden" name="funcionario" value="true" />
+        <div class="form-group mt-3">
+            <input type="submit" value="Change to employee view" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
