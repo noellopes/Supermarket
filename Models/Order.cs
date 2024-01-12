@@ -15,6 +15,8 @@ namespace Supermarket.Models
         [DataType(DataType.Date)]
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
+        public int Quantity { get; set; } = 0;
+        public int ProductId { get; set; } = 1;
 
         [DataType(DataType.Date)]
         public DateTime DeliveryDate { get; set; }
