@@ -51,9 +51,9 @@
         </div>
     </div>
     <hr />
-    <a class="btn btn-secondary" asp-action="Index" asp-route-BotaoVigor="false">See all schedules</a>
+    <a class="btn btn-secondary" asp-action="Index" asp-route-BotaoHistorico="true">See all schedules including not-active</a>
 
-    <a class="btn btn-primary" asp-action="Index" asp-route-BotaoVigor="true">Ver horários em vigor / See active schedules</a>
+    <a class="btn btn-primary" asp-action="Index" asp-route-BotaoHistorico="false">See active schedules</a>
 
     <a class="btn btn-primary" asp-action="Create">Create New Schedule</a>
 
@@ -126,7 +126,7 @@
             else
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="1" asp-route-departmentDrop="@Model.SearchDepartment">First</a>
+                    <a class="page-link" asp-action="Index" asp-route-page="1" asp-route-BotaoHistorico="true" asp-route-departmentDrop="@Model.SearchDepartment">First</a>
                 </li>
             }
 
@@ -149,7 +149,7 @@
                 else
                 {
                     <li class="page-item">
-                        <a class="page-link" asp-action="Index" asp-route-page="@p" asp-route-departmentDrop="@Model.SearchDepartment">@p</a>
+                        <a class="page-link" asp-action="Index" asp-route-page="@p" asp-route-BotaoHistorico="true" asp-route-departmentDrop="@Model.SearchDepartment">@p</a>
                     </li>
                 }
             }
@@ -162,7 +162,7 @@
             else
             {
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages" asp-route-departmentDrop="@Model.SearchDepartment">Last</a>
+                    <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages" asp-route-BotaoHistorico="true" asp-route-departmentDrop="@Model.SearchDepartment">Last</a>
                 </li>
             }
         </ul>

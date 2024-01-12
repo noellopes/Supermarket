@@ -23,20 +23,20 @@ namespace Supermarket.Controllers
             _context = context;
         }
         [Authorize(Roles = "Gestor")]
-        public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0, Boolean BotaoVigor = false)
+        public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0, Boolean BotaoHistorico = false)
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
             //var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
             var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
 
-            if (BotaoVigor == true)
+            if (BotaoHistorico == true)
             {
-                schedules =  schedules.Where(b => b.StartDate.Date <= DateTime.Now.Date && b.EndDate.Value.Date >= DateTime.Now.Date);
+                
             }
             else
             {
-                
+                schedules = schedules.Where(b => b.StartDate.Date <= DateTime.Now.Date && b.EndDate.Value.Date >= DateTime.Now.Date);
             }
 
             if (departmentDrop!=0)
@@ -288,6 +288,7 @@ namespace Supermarket.Controllers
                     SearchDataIntervaloFinal = procuraDataFinal
                 };
 
+                //comando para debug
                 Console.WriteLine($"Model count: {model.Count}, procuraLimiteAfluencia: {procuraLimiteAfluencia}, procuraDataInicial: {procuraDataInicial}, procuraDataFinal: {procuraDataFinal}");
 
                 model.Add(am);
@@ -314,6 +315,7 @@ namespace Supermarket.Controllers
 
             for (int i = 0; i < tickets.Count - 1; i++)
             {
+                //Grab the interval bnetween tickts print
                 TimeSpan? interval = tickets[i + 1].DataAtendimento - tickets[i].DataAtendimento;
 
                 if (interval?.TotalMinutes <= 10)
