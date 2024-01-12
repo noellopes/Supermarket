@@ -148,7 +148,7 @@ namespace Supermarket.Data
         public DbSet<Order> Order { get; set; } = default!;
         public DbSet<Supermarket.Models.Alert> Alert { get; set; } = default!;
 
-        public DbSet<Orders> Orders { get; set; } = default!;
+        //public DbSet<Orders> Orders { get; set; } = default!;
 
 
         public DbSet<Supermarket.Models.Qualification> Qualification { get; set; }

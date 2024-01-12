@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240112085150_Initial")]
+    [Migration("20240112123802_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -625,7 +625,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.ToTable("Hallway");
                 });
 
-            modelBuilder.Entity("Supermarket.Models.HierarquiasModel", b =>
+            modelBuilder.Entity("Supermarket.Models.Hierarquias", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -633,10 +633,17 @@ namespace Supermarket.Data.Migrations.Supermarket
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("SubordinadoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SuperiorId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SubordinadoId");
+
+                    b.HasIndex("SuperiorId");
 
                     b.ToTable("Hierarquias");
                 });
@@ -1643,6 +1650,25 @@ namespace Supermarket.Data.Migrations.Supermarket
                     b.Navigation("Store");
                 });
 
+            modelBuilder.Entity("Supermarket.Models.Hierarquias", b =>
+                {
+                    b.HasOne("Supermarket.Models.Employee", "Subordinados")
+                        .WithMany("Superiores")
+                        .HasForeignKey("SubordinadoId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Supermarket.Models.Employee", "Superiores")
+                        .WithMany("Subordinados")
+                        .HasForeignKey("SuperiorId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Subordinados");
+
+                    b.Navigation("Superiores");
+                });
+
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>
                 {
                     b.HasOne("Supermarket.Models.IssueType", null)
@@ -2038,6 +2064,10 @@ namespace Supermarket.Data.Migrations.Supermarket
             modelBuilder.Entity("Supermarket.Models.Employee", b =>
                 {
                     b.Navigation("MealCard");
+
+                    b.Navigation("Subordinados");
+
+                    b.Navigation("Superiores");
                 });
 
             modelBuilder.Entity("Supermarket.Models.IssueType", b =>

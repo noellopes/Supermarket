@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     /// <inheritdoc />
-    public partial class MigracaoCompleta : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -91,7 +91,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                 });
 
             migrationBuilder.CreateTable(
-                name: "Departments",
+                name: "Department",
                 columns: table => new
                 {
                     IDDepartments = table.Column<int>(type: "int", nullable: false)
@@ -104,7 +104,20 @@ namespace Supermarket.Data.Migrations.Supermarket
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departments", x => x.IDDepartments);
+                    table.PrimaryKey("PK_Department", x => x.IDDepartments);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Formation",
+                columns: table => new
+                {
+                    FormationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Formation_Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Formation", x => x.FormationId);
                 });
 
             migrationBuilder.CreateTable(
@@ -146,7 +159,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                 columns: table => new
                 {
                     ReserveId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NumeroDeFunc = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -282,9 +296,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                 {
                     table.PrimaryKey("PK_Employee", x => x.EmployeeId);
                     table.ForeignKey(
-                        name: "FK_Employee_Departments_DepartmentsIDDepartments",
+                        name: "FK_Employee_Department_DepartmentsIDDepartments",
                         column: x => x.DepartmentsIDDepartments,
-                        principalTable: "Departments",
+                        principalTable: "Department",
                         principalColumn: "IDDepartments");
                 });
 
@@ -298,15 +312,15 @@ namespace Supermarket.Data.Migrations.Supermarket
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DailyStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DailyFinishTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IDDepartments = table.Column<int>(type: "int", nullable: false)
+                    DeptID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Schedule", x => x.ScheduleId);
                     table.ForeignKey(
-                        name: "FK_Schedule_Departments_IDDepartments",
-                        column: x => x.IDDepartments,
-                        principalTable: "Departments",
+                        name: "FK_Schedule_Department_DeptID",
+                        column: x => x.DeptID,
+                        principalTable: "Department",
                         principalColumn: "IDDepartments",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -329,14 +343,14 @@ namespace Supermarket.Data.Migrations.Supermarket
                 {
                     table.PrimaryKey("PK_Tickets", x => x.TicketId);
                     table.ForeignKey(
-                        name: "FK_Tickets_Departments_DepartmentIDDepartments",
+                        name: "FK_Tickets_Department_DepartmentIDDepartments",
                         column: x => x.DepartmentIDDepartments,
-                        principalTable: "Departments",
+                        principalTable: "Department",
                         principalColumn: "IDDepartments");
                     table.ForeignKey(
-                        name: "FK_Tickets_Departments_IDDepartments",
+                        name: "FK_Tickets_Department_IDDepartments",
                         column: x => x.IDDepartments,
-                        principalTable: "Departments",
+                        principalTable: "Department",
                         principalColumn: "IDDepartments",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -414,8 +428,8 @@ namespace Supermarket.Data.Migrations.Supermarket
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalPrice = table.Column<float>(type: "real", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
+                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     EstimatedPreparationTimeAsMinutes = table.Column<int>(type: "int", nullable: false)
@@ -528,6 +542,33 @@ namespace Supermarket.Data.Migrations.Supermarket
                         column: x => x.EmployeeId,
                         principalTable: "Employee",
                         principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FormationEmployees",
+                columns: table => new
+                {
+                    FormationEmployeeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FormationId = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    NotaAtribuida = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FormationEmployees", x => x.FormationEmployeeId);
+                    table.ForeignKey(
+                        name: "FK_FormationEmployees_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FormationEmployees_Formation_FormationId",
+                        column: x => x.FormationId,
+                        principalTable: "Formation",
+                        principalColumn: "FormationId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -681,6 +722,65 @@ namespace Supermarket.Data.Migrations.Supermarket
                         column: x => x.SupplierId,
                         principalTable: "Suppliers",
                         principalColumn: "SupplierId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Qualification",
+                columns: table => new
+                {
+                    QualificationId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    Level = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Qualification", x => x.QualificationId);
+                    table.ForeignKey(
+                        name: "FK_Qualification_Department_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Department",
+                        principalColumn: "IDDepartments",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Qualification_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReserveDepartment",
+                columns: table => new
+                {
+                    ReserveId = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    NumeroDeFunc = table.Column<int>(type: "int", nullable: false),
+                    TicketID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReserveDepartment", x => new { x.ReserveId, x.EmployeeId });
+                    table.ForeignKey(
+                        name: "FK_ReserveDepartment_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "EmployeeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReserveDepartment_Reserve_ReserveId",
+                        column: x => x.ReserveId,
+                        principalTable: "Reserve",
+                        principalColumn: "ReserveId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReserveDepartment_Tickets_TicketID",
+                        column: x => x.TicketID,
+                        principalTable: "Tickets",
+                        principalColumn: "TicketId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -1116,6 +1216,16 @@ namespace Supermarket.Data.Migrations.Supermarket
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FormationEmployees_EmployeeId",
+                table: "FormationEmployees",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FormationEmployees_FormationId",
+                table: "FormationEmployees",
+                column: "FormationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Hallway_StoreId",
                 table: "Hallway",
                 column: "StoreId");
@@ -1232,6 +1342,16 @@ namespace Supermarket.Data.Migrations.Supermarket
                 column: "SupplierId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Qualification_DepartmentId",
+                table: "Qualification",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Qualification_EmployeeId",
+                table: "Qualification",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ReduceProduct_ProductId",
                 table: "ReduceProduct",
                 column: "ProductId");
@@ -1247,9 +1367,19 @@ namespace Supermarket.Data.Migrations.Supermarket
                 column: "WarehouseSectionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Schedule_IDDepartments",
+                name: "IX_ReserveDepartment_EmployeeId",
+                table: "ReserveDepartment",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReserveDepartment_TicketID",
+                table: "ReserveDepartment",
+                column: "TicketID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedule_DeptID",
                 table: "Schedule",
-                column: "IDDepartments");
+                column: "DeptID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shelf_HallwayId",
@@ -1334,6 +1464,9 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "Folga");
 
             migrationBuilder.DropTable(
+                name: "FormationEmployees");
+
+            migrationBuilder.DropTable(
                 name: "Funcao");
 
             migrationBuilder.DropTable(
@@ -1355,10 +1488,13 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "ProductExpiration");
 
             migrationBuilder.DropTable(
+                name: "Qualification");
+
+            migrationBuilder.DropTable(
                 name: "ReduceProduct");
 
             migrationBuilder.DropTable(
-                name: "Reserve");
+                name: "ReserveDepartment");
 
             migrationBuilder.DropTable(
                 name: "Schedule");
@@ -1373,9 +1509,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "SubsidySetup");
 
             migrationBuilder.DropTable(
-                name: "Tickets");
-
-            migrationBuilder.DropTable(
                 name: "User_Order");
 
             migrationBuilder.DropTable(
@@ -1385,10 +1518,19 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "MealCard");
 
             migrationBuilder.DropTable(
+                name: "Formation");
+
+            migrationBuilder.DropTable(
                 name: "IssueType");
 
             migrationBuilder.DropTable(
                 name: "ClientCard");
+
+            migrationBuilder.DropTable(
+                name: "Reserve");
+
+            migrationBuilder.DropTable(
+                name: "Tickets");
 
             migrationBuilder.DropTable(
                 name: "Shelf");
@@ -1439,7 +1581,7 @@ namespace Supermarket.Data.Migrations.Supermarket
                 name: "Suppliers");
 
             migrationBuilder.DropTable(
-                name: "Departments");
+                name: "Department");
 
             migrationBuilder.DropTable(
                 name: "Brand");
