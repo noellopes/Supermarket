@@ -851,6 +851,8 @@ namespace Supermarket.Data {
 
 
 
+
+
             
 
             if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
@@ -974,13 +976,13 @@ namespace Supermarket.Data {
             var clienteAlberto = await EnsureUserIsCreatedAsync(userManager!, "zealberto@gmail.com", "Alberto#123");
             if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN3))
             {
-                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN3);
+                await userManager!.AddToRoleAsync(clienteAlberto, ROLE_ADMIN3);
             }
 
             var funcAndre = await EnsureUserIsCreatedAsync(userManager!, "andre@gmail.com", "Andre#123");
-            if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN1))
+            if (!await userManager!.IsInRoleAsync(funcAndre, ROLE_ADMIN1))
             {
-                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN1);
+                await userManager!.AddToRoleAsync(funcAndre, ROLE_ADMIN1);
             }
         }
 
