@@ -23,28 +23,25 @@ namespace Supermarket.Controllers
             _context = context;
         }
         [Authorize(Roles = "Gestor")]
-        public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0, Boolean BotaoHistorico = false)
+        public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0, bool BotaoHistorico = false)
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
-            //var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
-            var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
+            var schedules = from b in _context.Schedule.Include(b => b.Departments)
+                            select b;
 
-            if (BotaoHistorico == true)
+            if (BotaoHistorico == false)
             {
+                // Your current logic for filtering valid schedules based on start and end dates
+                schedules = schedules.Where(b => b.StartDate.Date <= DateTime.Now.Date && b.EndDate.Value.Date >= DateTime.Now.Date);
+
+                if (departmentDrop != 0)
+                {
+                    schedules = schedules.Where(x => x.IDDepartments == departmentDrop);
+                }
+
                 
             }
-            else
-            {
-                schedules = schedules.Where(b => b.StartDate.Date <= DateTime.Now.Date && b.EndDate.Value.Date >= DateTime.Now.Date);
-            }
-
-            if (departmentDrop!=0)
-            {
-                schedules = schedules.Where(x => x.IDDepartments==departmentDrop);
-            }
-
-            //
 
             PagingInfo paging = new PagingInfo
             {
@@ -62,32 +59,23 @@ namespace Supermarket.Controllers
                 paging.CurrentPage = paging.TotalPages;
             }
 
-            // Retrieve all departments from the database
-            var Departments = await _context.Departments.ToListAsync() ;
+            var Departments = await _context.Departments.ToListAsync();
 
             var vm = new SchedulesViewModel
             {
                 Schedules = await schedules
-                   .OrderBy(b => b.ScheduleId)
-                   .Skip((paging.CurrentPage - 1) * paging.PageSize)
-                   .Take(paging.PageSize)
-                   .ToListAsync(),
+                    .OrderBy(b => b.ScheduleId)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
                 Departments = Departments,
                 PagingInfo = paging,
                 SearchDepartment = departmentDrop,
-                //SearchButtonDepartment = departmentButtonName,
             };
 
             return View(vm);
         }
 
-        private int GetDepartmentId(string departmentName)
-        {
-            return _context.Departments
-                .Where(a => a.NameDepartments == departmentName)
-                .Select(a => a.IDDepartments)
-                .FirstOrDefault();
-        }
 
         // GET: Schedules/Details/5
         [Authorize(Roles = "Gestor")]
