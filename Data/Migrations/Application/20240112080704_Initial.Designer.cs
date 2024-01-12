@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Application
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240111225234_Initial")]
+    [Migration("20240112080704_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

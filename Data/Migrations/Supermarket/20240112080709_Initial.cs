@@ -519,10 +519,11 @@ namespace Supermarket.Data.Migrations.Supermarket
                     CheckOutTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LunchStartTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LunchEndTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RealCheckOutTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RealCheckOutTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Justificative = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ExtraHours = table.Column<TimeSpan>(type: "time", nullable: false)
+                    DayBalance = table.Column<TimeSpan>(type: "time", nullable: false),
+                    DayBalancePositive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

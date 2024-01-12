@@ -1,14 +1,9 @@
-﻿using Humanizer.Localisation;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using Supermarket.Data;
 using Supermarket.Models;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Supermarket.Controllers
 {

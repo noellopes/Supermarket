@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Numerics;
-using System.Runtime.Intrinsics.X86;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,108 +16,27 @@ namespace Supermarket.Controllers
             _context = context;
         }
 
-        // GET: Pontoes
-        public async Task<IActionResult> Index(int page = 1, DateTime? searchMonth = null)
+        [Authorize(Roles = "Funcionário")]
+        public async Task<IActionResult> Index()
         {
-            // Obtém todos os pontos sem modificar a lista completa
-            var allPoints = await _context.Ponto.Include(p => p.Employee).ToListAsync();
-
-            var date = _context.Ponto.AsQueryable();  // Certifique-se de que 'date' seja IQueryable<Ponto>
-
-            if (searchMonth.HasValue)
+            var funcionario = await _context.Employee.Where(x => x.Employee_Email == User.Identity.Name).FirstOrDefaultAsync();
+            if (funcionario is not null)
             {
-                date = date
-                    .Where(x => x.Date.HasValue &&
-                                x.Date.Value.Year == searchMonth.Value.Year &&
-                                x.Date.Value.Month == searchMonth.Value.Month);
-            }
-
-            PagingInfo paging = new PagingInfo
-            {
-                CurrentPage = page,
-                TotalItems = await date.CountAsync(),  // Agora, 'CountAsync' deve funcionar corretamente
-            };
-
-            if (paging.CurrentPage <= 1)
-            {
-                paging.CurrentPage = 1;
-            }
-            else if (paging.CurrentPage > paging.TotalPages)
-            {
-                paging.CurrentPage = paging.TotalPages;
-            }
-
-            var vm = new PontoDateViewModel
-            {
-                Pontos = await date
-                    .OrderBy(x => x.Date)
-                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
-                    .Take(paging.PageSize)
-                    .ToListAsync(),  // Agora, 'ToListAsync' deve funcionar corretamente
-                PagingInfo = paging,
-                SearchMonth = searchMonth,
-            };
-
-            // Calcular as horas extras para cada Ponto no ViewModel
-            foreach (var ponto in vm.Pontos)
-            {
-                CalculateExtraHours(ponto);
-            }
-
-            return View(vm);
-        }
-        //private void CalculateExtraHours(Ponto ponto)
-        //{
-        //    if (!string.IsNullOrEmpty(ponto.CheckOutTime) && !string.IsNullOrEmpty(ponto.CheckInTime))
-        //    {
-        //        TimeSpan inTime = TimeSpan.Parse(ponto.CheckInTime);
-        //        TimeSpan outTime = TimeSpan.Parse(ponto.CheckOutTime);
-        //        TimeSpan LunchStart = TimeSpan.Parse(ponto.LunchStartTime);
-        //        TimeSpan LunchEnd = TimeSpan.Parse(ponto.LunchEndTime);
-
-        //        // Calcular o tempo total trabalhado
-        //        TimeSpan tempoTrabalhado = (outTime - inTime) - (LunchEnd - LunchStart);
-
-        //        // Tempo padrão de trabalho (8 horas)
-        //        TimeSpan tempoPadraoTrabalho = TimeSpan.Parse("08:00");
-
-        //        // Calcular as horas extras
-        //        TimeSpan horasExtras = TimeSpan.Zero;
-        //        if (tempoTrabalhado > tempoPadraoTrabalho)
-        //        {
-        //            horasExtras = tempoTrabalhado - tempoPadraoTrabalho;
-        //        }
-
-        //        // Retornar as horas extras
-        //        return horasExtras;
-        //    }
-        //}
-
-        private void CalculateExtraHours(Ponto ponto)
-        {
-            if (!string.IsNullOrEmpty(ponto.CheckOutTime) && !string.IsNullOrEmpty(ponto.RealCheckOutTime))
-            {
-                TimeSpan outTime = TimeSpan.Parse(ponto.CheckOutTime);
-                TimeSpan realoutTime = TimeSpan.Parse(ponto.RealCheckOutTime);
-
-                if (realoutTime > outTime)
+                var vm = new PontoDateViewModel
                 {
-                    TimeSpan extraHours = realoutTime - outTime;
-                    ponto.ExtraHours = extraHours;
-                }
-                else
-                {
-                    TimeSpan extraHours = outTime - realoutTime;
-                    ponto.ExtraHours = extraHours;
-                }
+                    Pontos = await _context.Ponto.Where(s => s.EmployeeId==funcionario.EmployeeId).ToListAsync(),
+                    Employee = funcionario,
+                    PontoDia = await _context.Ponto.Where(x => x.EmployeeId == funcionario.EmployeeId && x.Date == DateTime.Now.Date).FirstOrDefaultAsync() ?? new Ponto { DayBalance = TimeSpan.Parse("00:00"), CheckInTime = "00:00", CheckOutTime = "00:00", LunchStartTime = "00:00", LunchEndTime = "00:00" }
+                };
+                return View(vm);
             }
             else
             {
-                ponto.ExtraHours = TimeSpan.Zero;
+                return View("HRHome");
             }
         }
 
-        // GET: Pontoes/Details/5
+        [Authorize(Roles = "Funcionário")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Ponto == null)
@@ -141,114 +52,126 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
-            return View(ponto);
+            var escala = await _context.EmployeeSchedule
+                .FirstOrDefaultAsync(m => m.Date == ponto.Date && m.EmployeeId == ponto.EmployeeId);
+            if (escala == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new PontoDetailsViewModel
+            {
+                Ponto = ponto,
+                Escala = escala
+            };
+            return View(vm);
         }
 
-        // GET: Pontoes/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async void Create()
+        [Authorize(Roles = "Funcionário")]
+        public async Task<IActionResult> RegistrarPonto()
         {
             var funcionario = await _context.Employee.Where(x => x.Employee_Email == User.Identity.Name).FirstOrDefaultAsync();
             if (funcionario is not null)
             {
-                var escala = await _context.EmployeeSchedule.Where(x => x.EmployeeId == funcionario.EmployeeId && x.Date==DateTime.Now.Date).FirstOrDefaultAsync();
-                var pontoDia = await _context.Ponto.Where(x => x.EmployeeId == funcionario.EmployeeId && x.Date == DateTime.Now.Date).FirstOrDefaultAsync();
+                var folga = await _context.Folga
+                    .Where(s => s.EmployeeId == funcionario.EmployeeId && DateTime.Now.Date >= s.DataInicio.Date && DateTime.Now.Date <= s.DataFim.Date && s.Status==Folga.FolgaStatus.Aprovada)
+                    .FirstOrDefaultAsync() is not null;
+                var escala = await _context.EmployeeSchedule
+                    .Where(x => x.EmployeeId == funcionario.EmployeeId && x.Date==DateTime.Now.Date)
+                    .FirstOrDefaultAsync();
+                var pontoDia = await _context.Ponto
+                    .Where(x => x.EmployeeId == funcionario.EmployeeId && x.Date == DateTime.Now.Date)
+                    .FirstOrDefaultAsync();
+                // O primeiro ponto já foi feito
                 if (pontoDia is not null)
                 {
-                    if(pontoDia.CheckInTime is not null && pontoDia.LunchStartTime is null && pontoDia.LunchEndTime is null && pontoDia.CheckOutTime is null)
+                    var escalaFimAlmoco = TimeSpan.Parse(escala.LunchStartTime).Add(TimeSpan.FromMinutes(escala.LunchTime));
+                    if (pontoDia.CheckInTime is not null && pontoDia.LunchStartTime is null && pontoDia.LunchEndTime is null && pontoDia.CheckOutTime is null)
                     {
                         pontoDia.LunchStartTime = DateTime.Now.ToString("HH:mm");
 
-                        if (pontoDia.LunchStartTime !=  escala.LunchStartTime.ToString("HH:mm"))
+                        // Verifica se funcionario esta de folga e se o horario está na margem de 5 minutos de diferença permitidos
+                        if (!folga && IsNotWithinMargin(pontoDia.LunchStartTime,escala.LunchStartTime)) pontoDia.Status = "Irregular";
+                        // Adiciona a quantidade de tempo que o funcionário fez a mais ou a menos do que o planejado
+                        pontoDia.DayBalance = pontoDia.DayBalance.Add(TimeSpan.Parse(pontoDia.LunchStartTime) - TimeSpan.Parse(pontoDia.CheckInTime) - TimeSpan.Parse(escala.LunchStartTime) + TimeSpan.Parse(escala.CheckInTime));
+                        if (pontoDia.DayBalance < TimeSpan.Zero)
                         {
-                            pontoDia.Status = "Irregular";
+                            pontoDia.DayBalancePositive = false;
+                            pontoDia.DayBalance = pontoDia.DayBalance.Duration();
                         }
-                        
                     }
                     else if(pontoDia.CheckInTime is not null && pontoDia.LunchStartTime is not null && pontoDia.LunchEndTime is null && pontoDia.CheckOutTime is null)
                     {
                         pontoDia.LunchEndTime = DateTime.Now.ToString("HH:mm");
 
-                        var horaAlmoco = (Convert.ToInt16(pontoDia.LunchEndTime) - Convert.ToInt16(pontoDia.LunchStartTime));
-                        if (horaAlmoco != Convert.ToUInt16(escala.LunchTime))
-                        {
-                            pontoDia.Status = "Irregular";
-
-                        }
-    
+                        if (!folga && IsNotWithinMargin(pontoDia.LunchEndTime, escalaFimAlmoco.ToString(@"hh\:mm"))) pontoDia.Status = "Irregular";
                     }
                     else if (pontoDia.CheckInTime is not null && pontoDia.LunchStartTime is not null && pontoDia.LunchEndTime is not null && pontoDia.CheckOutTime is null)
                     {
                         pontoDia.CheckOutTime = DateTime.Now.ToString("HH:mm");
 
-                        if (pontoDia.CheckOutTime != escala.CheckOutTime.ToString("HH:mm"))
+                        if (!folga && IsNotWithinMargin(pontoDia.CheckOutTime, escala.CheckOutTime)) pontoDia.Status = "Irregular";
+
+                        if(pontoDia.DayBalancePositive) pontoDia.DayBalance.Add(TimeSpan.Parse(pontoDia.CheckOutTime) - TimeSpan.Parse(pontoDia.LunchEndTime) - TimeSpan.Parse(escala.CheckOutTime) + escalaFimAlmoco);
+                        else pontoDia.DayBalance.Subtract(TimeSpan.Parse(pontoDia.CheckOutTime) - TimeSpan.Parse(pontoDia.LunchEndTime) - TimeSpan.Parse(escala.CheckOutTime) + escalaFimAlmoco);
+
+                        if (pontoDia.DayBalance < TimeSpan.Zero)
                         {
-                            pontoDia.Status = "Irregular";
+                            pontoDia.DayBalancePositive = false;
+                            pontoDia.DayBalance = pontoDia.DayBalance.Duration();
                         }
-                    }
-                    else 
-                    {
-
+                        else pontoDia.DayBalancePositive = true;
                     }
 
+                    _context.Update(pontoDia);
+                    await _context.SaveChangesAsync();
                 }
-                    
+                // O primeiro ponto não foi feito
                 else
                 {
-                    var ponto = new Ponto
+                    pontoDia = new Ponto
                     {
                         EmployeeId = funcionario.EmployeeId,
                         Date = DateTime.Now.Date,
-                        CheckInTime = DateTime.Now.ToString("HH:mm")
+                        CheckInTime = DateTime.Now.ToString("HH:mm"),
+                        DayBalance = TimeSpan.Parse("00:00"),
                     };
 
-                    if (ponto.CheckInTime == escala.CheckInTime.ToString("HH:mm"))
-                    {
-                        ponto.Status = "Registrado";
-                    }
+                    if (!folga && IsNotWithinMargin(pontoDia.CheckInTime, escala.CheckInTime)) pontoDia.Status = "Irregular";
+                    else pontoDia.Status = "Irregular";
  
-                    _context.Add(ponto);
-                    await _context.SaveChangesAsync();
-
-                     _context.Update(pontoDia);
+                    _context.Add(pontoDia);
                     await _context.SaveChangesAsync();
                 }
+                if (pontoDia.Status == "Irregular") return View("Justification", pontoDia);
+                var vm = new PontoDateViewModel
+                {
+                    Pontos = await _context.Ponto.Where(s => s.EmployeeId == funcionario.EmployeeId).ToListAsync(),
+                    Employee = funcionario,
+                    PontoDia = pontoDia
+                };
+                return View("Index",vm);
+            }
+            else
+            {
+                return View("HRHome");
             }
         }
-
-
-        // GET: Pontoes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        static bool IsNotWithinMargin(string time1, string time2)
         {
-            if (id == null || _context.Ponto == null)
-            {
-                return NotFound();
-            }
+            TimeSpan difference = (TimeSpan.Parse(time1) - TimeSpan.Parse(time2)).Duration();
 
-            var ponto = await _context.Ponto.FindAsync(id);
-            if (ponto == null)
-            {
-                return NotFound();
-            }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
-            return View(ponto);
+            return !(difference <= TimeSpan.FromMinutes(5));
         }
 
-        // POST: Pontoes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,RealCheckOutTime,Status,Justificative,ExtraHours")] Ponto ponto)
+        [Authorize(Roles = "Funcionário")]
+        public async Task<IActionResult> RegistrarJustificativa([Bind("PontoId,Justificative")] Ponto ponto)
         {
-            if (id != ponto.PontoId)
+            var justificativa = ponto.Justificative;
+            ponto = await _context.Ponto.Where(s => s.PontoId == ponto.PontoId).FirstOrDefaultAsync();
+            if (ponto is not null)
             {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
+                ponto.Justificative = justificativa;
                 try
                 {
                     _context.Update(ponto);
@@ -267,46 +190,7 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
-            return View(ponto);
-        }
-
-        // GET: Pontoes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Ponto == null)
-            {
-                return NotFound();
-            }
-
-            var ponto = await _context.Ponto
-                .Include(p => p.Employee)
-                .FirstOrDefaultAsync(m => m.PontoId == id);
-            if (ponto == null)
-            {
-                return NotFound();
-            }
-
-            return View(ponto);
-        }
-
-        // POST: Pontoes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Ponto == null)
-            {
-                return Problem("Entity set 'SupermarketDbContext.Ponto'  is null.");
-            }
-            var ponto = await _context.Ponto.FindAsync(id);
-            if (ponto != null)
-            {
-                _context.Ponto.Remove(ponto);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View("Index");
         }
 
         private bool PontoExists(int id)

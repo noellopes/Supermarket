@@ -9,16 +9,12 @@ namespace Supermarket.Models
         
         public int FolgaId { get; set; }
 
-        
-        
         public int EmployeeId { get; set; }
+
         public Employee? Employee { get; set; }
 
-
-
-
-
         public int? GestorId { get; set; }
+
         public enum  FolgaStatus
         {
             Aprovada,
@@ -28,22 +24,14 @@ namespace Supermarket.Models
 
         public FolgaStatus? Status { get; set; }
 
-
-
-
-
         [DataType(DataType.Date)]
         public DateTime? DataPedido { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? DataResultado { get; set; }
 
-
-
         [Required]
-
         [DataType(DataType.Date)]
-        
         public DateTime DataInicio { get; set; }
 
         [Required]
@@ -52,22 +40,11 @@ namespace Supermarket.Models
 
         [Required]
         public Motivo? motivo { get; set; }
-
-
-
-        
-
-
-
-
         public Folga()
         {
             DataPedido = DateTime.Now;
         }
-
         public enum Motivo
-
-
         {
             [Display(Name = "Doença")] Doenca,
             [Display(Name = "Férias")] Ferias,
