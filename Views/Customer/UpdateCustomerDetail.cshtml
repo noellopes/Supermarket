@@ -6,7 +6,8 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Customer Update</h4>
-
+                <input type="hidden" asp-for="CustomerId" />
+                <input type="hidden" asp-for="Password" />
                 <div class="form-group">
                     <label for="exampleInputUsername1">Customer Name</label>
                     <input asp-for="CustomerName" type="text" class="form-control" id="customerName" placeholder="Customer Name" />
