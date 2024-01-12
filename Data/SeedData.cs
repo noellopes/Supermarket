@@ -37,7 +37,7 @@ namespace Supermarket.Data
             PopulateProductDiscounts(db);
             PopulateTakeAwayCategories(db);
             PopulateTakeAwayProducts(db);
-            //PopulateCustomer(db);
+            PopulateCustomer(db);
             PopulateEmployees(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
