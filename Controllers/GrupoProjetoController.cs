@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -92,6 +93,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: GrupoProjetoes/Create
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
 
@@ -104,6 +106,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("ProjetoId,NomeProjeto,DescricaoProjeto,Objectives")] GrupoProjeto grupoProjeto, int[] funcoesId)
         {
             ICollection<Employee> employee = new List<Employee>();
@@ -167,6 +170,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: GrupoProjetoes/Edit/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.GrupoProjeto == null)
@@ -187,6 +191,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("ProjetoId,NomeProjeto,DescricaoProjeto,Objectives")] GrupoProjeto grupoProjeto)
         {
             if (id != grupoProjeto.ProjetoId)
@@ -228,6 +233,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: GrupoProjetoes/Delete/5
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.GrupoProjeto == null)
@@ -254,6 +260,7 @@ namespace Supermarket.Controllers
         // POST: GrupoProjetoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             List<Employee> employee = new List<Employee>();
