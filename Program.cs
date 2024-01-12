@@ -88,18 +88,18 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-// Chama função para atualizar o status de expiração
+// Chama fun��o para atualizar o status de expira��o
 UpdateExpirationStatusForAllPurchases();
 
 void UpdateExpirationStatusForAllPurchases()
 {
-    // Cria um novo escopo para injeção de dependência
+    // Cria um novo escopo para inje��o de depend�ncia
     using var serviceScope = app.Services.CreateScope();
 
-    // Obtém uma instância de SupermarketDbContext do provedor de serviços no escopo criado
+    // Obt�m uma inst�ncia de SupermarketDbContext do provedor de servi�os no escopo criado
     var purchasesController = new PurchasesController(serviceScope.ServiceProvider.GetRequiredService<SupermarketDbContext>());
 
-    // Chama o método UpdateExpirationStatusForAllPurchases() no controller
+    // Chama o m�todo UpdateExpirationStatusForAllPurchases() no controller
     purchasesController.UpdateExpirationStatusForAllPurchases();
 }
 

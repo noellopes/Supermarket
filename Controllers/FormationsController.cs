@@ -10,87 +10,87 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    public class ProductExpirationsController : Controller
+    public class FormationsController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public ProductExpirationsController(SupermarketDbContext context)
+        public FormationsController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: ProductExpirations
+        // GET: Formations
         public async Task<IActionResult> Index()
         {
-              return _context.ProductExpiration != null ? 
-                          View(await _context.ProductExpiration.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ProductExpiration'  is null.");
+              return _context.Formation != null ? 
+                          View(await _context.Formation.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.Formation'  is null.");
         }
 
-        // GET: ProductExpirations/Details/5
+        // GET: Formations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.ProductExpiration == null)
+            if (id == null || _context.Formation == null)
             {
                 return NotFound();
             }
 
-            var productExpiration = await _context.ProductExpiration
-                .FirstOrDefaultAsync(m => m.BatchId == id);
-            if (productExpiration == null)
+            var formation = await _context.Formation
+                .FirstOrDefaultAsync(m => m.FormationId == id);
+            if (formation == null)
             {
                 return NotFound();
             }
 
-            return View(productExpiration);
+            return View(formation);
         }
 
-        // GET: ProductExpirations/Create
+        // GET: Formations/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ProductExpirations/Create
+        // POST: Formations/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BatchId,BatchNumber,ExpirationDate,Quantity")] ProductExpiration productExpiration)
+        public async Task<IActionResult> Create([Bind("FormationId,Formation_Name")] Formation formation)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(productExpiration);
+                _context.Add(formation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(productExpiration);
+            return View(formation);
         }
 
-        // GET: ProductExpirations/Edit/5
+        // GET: Formations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ProductExpiration == null)
+            if (id == null || _context.Formation == null)
             {
                 return NotFound();
             }
 
-            var productExpiration = await _context.ProductExpiration.FindAsync(id);
-            if (productExpiration == null)
+            var formation = await _context.Formation.FindAsync(id);
+            if (formation == null)
             {
                 return NotFound();
             }
-            return View(productExpiration);
+            return View(formation);
         }
 
-        // POST: ProductExpirations/Edit/5
+        // POST: Formations/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BatchId,BatchNumber,ExpirationDate,Quantity")] ProductExpiration productExpiration)
+        public async Task<IActionResult> Edit(int id, [Bind("FormationId,Formation_Name")] Formation formation)
         {
-            if (id != productExpiration.BatchId)
+            if (id != formation.FormationId)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    _context.Update(productExpiration);
+                    _context.Update(formation);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExpirationExists(productExpiration.BatchId))
+                    if (!FormationExists(formation.FormationId))
                     {
                         return NotFound();
                     }
@@ -115,49 +115,49 @@ namespace Supermarket.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(productExpiration);
+            return View(formation);
         }
 
-        // GET: ProductExpirations/Delete/5
+        // GET: Formations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ProductExpiration == null)
+            if (id == null || _context.Formation == null)
             {
                 return NotFound();
             }
 
-            var productExpiration = await _context.ProductExpiration
-                .FirstOrDefaultAsync(m => m.BatchId == id);
-            if (productExpiration == null)
+            var formation = await _context.Formation
+                .FirstOrDefaultAsync(m => m.FormationId == id);
+            if (formation == null)
             {
                 return NotFound();
             }
 
-            return View(productExpiration);
+            return View(formation);
         }
 
-        // POST: ProductExpirations/Delete/5
+        // POST: Formations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.ProductExpiration == null)
+            if (_context.Formation == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.ProductExpiration'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.Formation'  is null.");
             }
-            var productExpiration = await _context.ProductExpiration.FindAsync(id);
-            if (productExpiration != null)
+            var formation = await _context.Formation.FindAsync(id);
+            if (formation != null)
             {
-                _context.ProductExpiration.Remove(productExpiration);
+                _context.Formation.Remove(formation);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExpirationExists(int id)
+        private bool FormationExists(int id)
         {
-          return (_context.ProductExpiration?.Any(e => e.BatchId == id)).GetValueOrDefault();
+          return (_context.Formation?.Any(e => e.FormationId == id)).GetValueOrDefault();
         }
     }
 }

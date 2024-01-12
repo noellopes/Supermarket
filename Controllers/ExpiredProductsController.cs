@@ -28,7 +28,7 @@ namespace Supermarket.Controllers
             var expiredproducts = from i in _context.ExpiredProducts
                     .Include(p => p.Product)
                     .Include(pr => pr.Purchase)
-            select i;
+                                  select i;
 
             if (product != "") expiredproducts = expiredproducts.Where(x => x.Product!.Name.Contains(product));
 
@@ -76,7 +76,7 @@ namespace Supermarket.Controllers
 
         private bool ExpiredProductsExists(int id)
         {
-          return (_context.ExpiredProducts?.Any(e => e.ExpiredProductId == id)).GetValueOrDefault();
+            return (_context.ExpiredProducts?.Any(e => e.ExpiredProductId == id)).GetValueOrDefault();
         }
     }
 }
