@@ -1330,8 +1330,6 @@ namespace Supermarket.Data
         {
             if (db.IssueType.Any()) return;
 
-            if (db.ProductExpiration.Any()) return;
-
             db.SaveChanges();
         }
 
