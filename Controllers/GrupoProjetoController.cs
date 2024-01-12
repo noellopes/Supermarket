@@ -204,7 +204,7 @@ namespace Supermarket.Controllers
                 try
                 {
                     bool existeGrupoProjeto = await _context.GrupoProjeto.AnyAsync(
-                        f => f.NomeProjeto == grupoProjeto.NomeProjeto || f.ProjetoId == grupoProjeto.ProjetoId);
+                        f => f.NomeProjeto == grupoProjeto.NomeProjeto && f.ProjetoId != grupoProjeto.ProjetoId);
                     if (existeGrupoProjeto)
                     {
                         TempData["Mensagem"] = "Projeto em grupo existente";
