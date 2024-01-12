@@ -81,8 +81,6 @@ namespace Supermarket.Data
                 .HasForeignKey(gp => gp.ProjetoId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
-
-        }
  
         public DbSet<Folga> Folga { get; set; } = default!;
         public DbSet<Customer> Customers { get; set; } = default!;

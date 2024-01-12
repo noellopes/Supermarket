@@ -61,10 +61,10 @@ if (app.Environment.IsDevelopment())
     app.UseMigrationsEndPoint();
     using var serviceScope = app.Services.CreateScope();
     var db = serviceScope.ServiceProvider.GetService<SupermarketDbContext>();
-    //SeedData.Populate(db!);
+    SeedData.Populate(db!);
 
     var userManager = reqServScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-    //SeedData.PopulateDevUsers(userManager);
+    SeedData.PopulateDevUsers(userManager);
 
 }
 else

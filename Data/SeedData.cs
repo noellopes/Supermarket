@@ -1227,6 +1227,7 @@ namespace Supermarket.Data
             }
 
 
+
             var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
             if (!await userManager!.IsInRoleAsync(manager, "Avaliar_Funcionarios"))
             {
@@ -1247,6 +1248,10 @@ namespace Supermarket.Data
             if (!await userManager!.IsInRoleAsync(manager, "Edit_Del_Reports"))
             {
                 await userManager!.AddToRoleAsync(manager, "Edit_Del_Reports");
+            }
+            if (!await userManager!.IsInRoleAsync(manager, "Employeer"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Employeer");
             }
 
             var clienteAlberto = await EnsureUserIsCreatedAsync(userManager!, "zealberto@gmail.com", "Alberto#123");
