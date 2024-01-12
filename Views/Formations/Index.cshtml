@@ -8,10 +8,10 @@
 
 <p>
     <!-- Link para criar uma nova formação, visível apenas para usuários no papel de "Administrator" -->
-    @if (User.IsInRole("Administrator"))
-    {
+    
+    
         <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
-    }
+    
 </p>
 <table class="table">
     <thead>
@@ -31,12 +31,11 @@
                 </td>
                 <td>
                     <!-- Botões condicionais com base nos papéis do usuário -->
-                    @if (User.IsInRole("Administrator"))
-                    {
+                  
                         <a asp-action="Edit" asp-route-id="@item.FormationId" class="btn btn-primary">Edit</a>
                         <a asp-action="Details" asp-route-id="@item.FormationId" class="btn btn-info">Details</a>
                         <a asp-action="Delete" asp-route-id="@item.FormationId" class="btn btn-danger">Delete</a>
-                    }
+                    
                 </td>
             </tr>
         }

@@ -39,6 +39,7 @@ namespace Supermarket.Data
             PopulateTakeAwayProducts(db);
             //PopulateCustomer(db);
             //PopulateEmployees(db);
+           
             PopulateConfSub(db);
             PopulateEmployee(db);
             PopulateMealCards(db);
@@ -55,6 +56,8 @@ namespace Supermarket.Data
             PopulateOrder(db);
             PopulatePonto(db);
             PopulateFormation(db);
+            PopulateReserve(db);
+            
 
         }
         private static void PopulateFormation(SupermarketDbContext db)
@@ -74,6 +77,26 @@ namespace Supermarket.Data
                 new Models.Formation { Formation_Name = "Operador de Armazen" },
                 new Models.Formation { Formation_Name = "Reposição" }
             );
+
+            db.SaveChanges();
+        }
+        private static void PopulateReserve(SupermarketDbContext db)
+        {
+            if (db.Reserve.Any())
+            {
+                return;
+            }
+
+            db.Reserve.AddRange(
+                new Models.Reserve { NumeroDeFunc = 10 },
+                new Models.Reserve { NumeroDeFunc = 20 },
+                new Models.Reserve { NumeroDeFunc = 30 },
+                new Models.Reserve { NumeroDeFunc = 40 },
+                new Models.Reserve { NumeroDeFunc = 50 },
+                new Models.Reserve { NumeroDeFunc = 60 },
+                new Models.Reserve { NumeroDeFunc = 70 },
+                new Models.Reserve { NumeroDeFunc = 80 }
+                );
 
             db.SaveChanges();
         }

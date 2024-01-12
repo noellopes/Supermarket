@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
 
-/*namespace Supermarket.Controllers
+namespace Supermarket.Controllers
 {
     public class FormationsController : Controller
     {
@@ -161,4 +161,3 @@ using Supermarket.Models;
         }
     }
 }
-*/
