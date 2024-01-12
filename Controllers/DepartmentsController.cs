@@ -8,89 +8,89 @@ using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
 
-/*namespace Supermarket.Controllers
+namespace Supermarket.Controllers
 {
-    public class ReserveDepartmentsController : Controller
+    public class DepartmentsController : Controller
     {
         private readonly SupermarketDbContext _context;
 
-        public ReserveDepartmentsController(SupermarketDbContext context)
+        public DepartmentsController(SupermarketDbContext context)
         {
             _context = context;
         }
 
-        // GET: ReserveDepartments
+        // GET: Departments
         public async Task<IActionResult> Index()
         {
-              return _context.ReserveDepartment != null ? 
-                          View(await _context.ReserveDepartment.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ReserveDepartment'  is null.");
+              return _context.Department != null ? 
+                          View(await _context.Department.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.Department'  is null.");
         }
 
-        // GET: ReserveDepartments/Details/5
+        // GET: Departments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.ReserveDepartment == null)
+            if (id == null || _context.Department == null)
             {
                 return NotFound();
             }
 
-            var reserveDepartment = await _context.ReserveDepartment
-                .FirstOrDefaultAsync(m => m.ReserveDepartmentId == id);
-            if (reserveDepartment == null)
+            var department = await _context.Department
+                .FirstOrDefaultAsync(m => m.IDDepartments == id);
+            if (department == null)
             {
                 return NotFound();
             }
 
-            return View(reserveDepartment);
+            return View(department);
         }
 
-        // GET: ReserveDepartments/Create
+        // GET: Departments/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: ReserveDepartments/Create
+        // POST: Departments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReserveDepartmentId,NumeroDeFunc")] ReserveDepartment reserveDepartment)
+        public async Task<IActionResult> Create([Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department department)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(reserveDepartment);
+                _context.Add(department);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(reserveDepartment);
+            return View(department);
         }
 
-        // GET: ReserveDepartments/Edit/5
+        // GET: Departments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.ReserveDepartment == null)
+            if (id == null || _context.Department == null)
             {
                 return NotFound();
             }
 
-            var reserveDepartment = await _context.ReserveDepartment.FindAsync(id);
-            if (reserveDepartment == null)
+            var department = await _context.Department.FindAsync(id);
+            if (department == null)
             {
                 return NotFound();
             }
-            return View(reserveDepartment);
+            return View(department);
         }
 
-        // POST: ReserveDepartments/Edit/5
+        // POST: Departments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReserveDepartmentId,NumeroDeFunc")] ReserveDepartment reserveDepartment)
+        public async Task<IActionResult> Edit(int id, [Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department department)
         {
-            if (id != reserveDepartment.ReserveDepartmentId)
+            if (id != department.IDDepartments)
             {
                 return NotFound();
             }
@@ -99,12 +99,12 @@ using Supermarket.Models;
             {
                 try
                 {
-                    _context.Update(reserveDepartment);
+                    _context.Update(department);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ReserveDepartmentExists(reserveDepartment.ReserveDepartmentId))
+                    if (!DepartmentExists(department.IDDepartments))
                     {
                         return NotFound();
                     }
@@ -115,50 +115,49 @@ using Supermarket.Models;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(reserveDepartment);
+            return View(department);
         }
 
-        // GET: ReserveDepartments/Delete/5
+        // GET: Departments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.ReserveDepartment == null)
+            if (id == null || _context.Department == null)
             {
                 return NotFound();
             }
 
-            var reserveDepartment = await _context.ReserveDepartment
-                .FirstOrDefaultAsync(m => m.ReserveDepartmentId == id);
-            if (reserveDepartment == null)
+            var department = await _context.Department
+                .FirstOrDefaultAsync(m => m.IDDepartments == id);
+            if (department == null)
             {
                 return NotFound();
             }
 
-            return View(reserveDepartment);
+            return View(department);
         }
 
-        // POST: ReserveDepartments/Delete/5
+        // POST: Departments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.ReserveDepartment == null)
+            if (_context.Department == null)
             {
-                return Problem("Entity set 'SupermarketDbContext.ReserveDepartment'  is null.");
+                return Problem("Entity set 'SupermarketDbContext.Department'  is null.");
             }
-            var reserveDepartment = await _context.ReserveDepartment.FindAsync(id);
-            if (reserveDepartment != null)
+            var department = await _context.Department.FindAsync(id);
+            if (department != null)
             {
-                _context.ReserveDepartment.Remove(reserveDepartment);
+                _context.Department.Remove(department);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ReserveDepartmentExists(int id)
+        private bool DepartmentExists(int id)
         {
-          return (_context.ReserveDepartment?.Any(e => e.ReserveDepartmentId == id)).GetValueOrDefault();
+          return (_context.Department?.Any(e => e.IDDepartments == id)).GetValueOrDefault();
         }
     }
 }
-*/
