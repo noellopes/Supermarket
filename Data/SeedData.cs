@@ -55,8 +55,30 @@ namespace Supermarket.Data
             PopulateOrder(db);
             PopulatePonto(db);
             PopulateFormation(db);
-
+            PopulateReserve(db);
         }
+
+        private static void PopulateReserve(SupermarketDbContext db)
+        {
+            if(db.Reserve.Any())
+            {
+                return;
+            }
+
+            db.Reserve.AddRange(
+                new Models.Reserve { NumeroDeFunc = 10 },
+                new Models.Reserve { NumeroDeFunc = 20 },
+                new Models.Reserve { NumeroDeFunc = 30 },
+                new Models.Reserve { NumeroDeFunc = 40 },
+                new Models.Reserve { NumeroDeFunc = 50 },
+                new Models.Reserve { NumeroDeFunc = 60 },
+                new Models.Reserve { NumeroDeFunc = 70 },
+                new Models.Reserve { NumeroDeFunc = 80 }
+                );
+
+            db.SaveChanges();
+        }
+
         private static void PopulateFormation(SupermarketDbContext db)
         {
             if (db.Formation.Any())
@@ -1269,8 +1291,29 @@ namespace Supermarket.Data
             if (!await userManager!.IsInRoleAsync(manager, ROLE_MANAGER))
             {
                 await userManager!.AddToRoleAsync(manager, ROLE_MANAGER);
+          
+            
+            
+            }
+
+            //GROUP 3
+
+
+            var userluzAdmin = await EnsureUserIsCreatedAsync(userManager!, "luz@ipg.pt", "Secret#123");
+            var usertestEmp = await EnsureUserIsCreatedAsync(userManager!, "test@ipg.pt", "Secret#123");
+
+            if (!await userManager!.IsInRoleAsync(userluzAdmin, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(userluzAdmin, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(usertestEmp, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(usertestEmp, ROLE_EMPLOYEER);
             }
         }
+
+
+
 
 
 
