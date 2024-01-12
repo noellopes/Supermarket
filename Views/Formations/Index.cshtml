@@ -10,7 +10,7 @@
     <!-- Link para criar uma nova formação, visível apenas para usuários no papel de "Administrator" -->
     @if (User.IsInRole("Administrator"))
     {
-        <a asp-action="Create">Create New</a>
+        <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
     }
 </p>
 <table class="table">
