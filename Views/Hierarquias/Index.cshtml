@@ -18,8 +18,11 @@
 <h2>Lista de Relacoes Hierarquicas</h2>
 
 <p>
+@*     @if (User.IsInRole("Administrator"))
+        { *@
     <a asp-action="Create" class="btn btn-success">Nova Relacao Hierarquica</a>
     <a asp-controller="Employees" asp-action="Index" class="btn btn-primary">Gerenciar Funcionarios</a>
+@*         } *@
     <a asp-action="SearchSubordinados" class="btn btn-info">Pesquisar Subordinados</a>
     <a asp-action="SearchSuperiores" class="btn btn-warning">Pesquisar Superiores</a>
 </p>
@@ -42,16 +45,24 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Superiores.Employee_Name)
                 </td>
-                <td>
+@*                 @if (User.IsInRole("Administrator"))
+                { *@
+                    <td>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detalhes</a> |
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Deletar</a>
-                </td>
+                    </td>
+@*                 } else
+                {
+                    <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detalhes</a>
+                    </td>
+                } *@
             </tr>
         }
-
-        <tr>
-            <th>Todos os funcionários</th>
+    </tbody>
+        <tr class="table-separator">
+            <th colspan="3">Todos os funcionários</th>
         </tr>
         @if (employeesViewModel != null)
         {
@@ -63,7 +74,6 @@
                 </tr>
             }
         }
-    </tbody>
 </table>
 
 <style>

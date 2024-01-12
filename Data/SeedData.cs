@@ -40,6 +40,7 @@ namespace Supermarket.Data
             PopulateTakeAwayProducts(db);
             PopulateCustomer(db);
             //PopulateEmployees(db);
+            PopulateHierarquias(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
             PopulateMealCards(db);
@@ -881,6 +882,21 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
+        internal static void PopulateHierarquias(SupermarketDbContext db)
+        {
+            if (db.Hierarquias.Any()) return;
+            db.Hierarquias.AddRange(
+            new Hierarquias { SuperiorId = 1, SubordinadoId = 2 },  
+            new Hierarquias { SuperiorId = 1, SubordinadoId = 3 },
+            new Hierarquias { SuperiorId = 1, SubordinadoId = 4 },
+            new Hierarquias { SuperiorId = 1, SubordinadoId = 5 },
+            new Hierarquias { SuperiorId = 2, SubordinadoId = 3 },
+            new Hierarquias { SuperiorId = 2, SubordinadoId = 4 },
+            new Hierarquias { SuperiorId = 3, SubordinadoId = 6 },
+            new Hierarquias { SuperiorId = 3, SubordinadoId = 7 }
+            );
+            db.SaveChanges();
+        }
 
 
         private static void PopulateEmployee(SupermarketDbContext db)

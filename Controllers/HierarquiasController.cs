@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
+    //[Authorize]
     public class HierarquiasController : Controller
     {
         private readonly SupermarketDbContext _context;
