@@ -43,7 +43,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(
         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
         options.Lockout.MaxFailedAccessAttempts = 5;
     })
-    
+
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI();
 
@@ -56,7 +56,8 @@ var roleManager = reqServScope.ServiceProvider.GetRequiredService<RoleManager<Id
 SeedData.PopulateRolesAsync(roleManager).Wait();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
+if (app.Environment.IsDevelopment())
+{
     app.UseMigrationsEndPoint();
     using var serviceScope = app.Services.CreateScope();
     var db = serviceScope.ServiceProvider.GetService<SupermarketDbContext>();
@@ -64,11 +65,15 @@ if (app.Environment.IsDevelopment()) {
 
     var userManager = reqServScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     SeedData.PopulateDevUsers(userManager);
-} else {
+
+}
+else
+{
+
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-    
+
 }
 
 app.UseHttpsRedirection();
@@ -83,18 +88,18 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-// Chama função para atualizar o status de expiração
+// Chama funï¿½ï¿½o para atualizar o status de expiraï¿½ï¿½o
 UpdateExpirationStatusForAllPurchases();
 
 void UpdateExpirationStatusForAllPurchases()
 {
-    // Cria um novo escopo para injeção de dependência
+    // Cria um novo escopo para injeï¿½ï¿½o de dependï¿½ncia
     using var serviceScope = app.Services.CreateScope();
 
-    // Obtém uma instância de SupermarketDbContext do provedor de serviços no escopo criado
+    // Obtï¿½m uma instï¿½ncia de SupermarketDbContext do provedor de serviï¿½os no escopo criado
     var purchasesController = new PurchasesController(serviceScope.ServiceProvider.GetRequiredService<SupermarketDbContext>());
 
-    // Chama o método UpdateExpirationStatusForAllPurchases() no controller
+    // Chama o mï¿½todo UpdateExpirationStatusForAllPurchases() no controller
     purchasesController.UpdateExpirationStatusForAllPurchases();
 }
 

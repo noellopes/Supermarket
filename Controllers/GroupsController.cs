@@ -23,7 +23,8 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Group != null ? 
-                          View(await _context.Group.ToListAsync()) :
+                          View(await _context.Group
+                       .ToListAsync()) :
                           Problem("Entity set 'GroupsDbContext.Group'  is null.");
         }
 
