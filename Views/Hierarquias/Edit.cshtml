@@ -4,23 +4,97 @@
     ViewData["Title"] = "Editar Relacao Hierarquica";
 }
 
+@if (ViewBag.MensagemErro != null)
+{
+    <div id="mensagem" class="alert alert-danger" role="alert" style="width: 33%;">
+        @ViewBag.MensagemErro
+        <div class="progress" style="height: 10px; margin-top: 5px;">
+            <div id="progressBar" class="progress-bar bg-danger" role="progressbar"></div>
+        </div>
+    </div>
+}
+
 <h2>Editar Relacão Hierarquica</h2>
 
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="Id" />
-
-    <div class="form-group">
-        <label asp-for="SuperiorId" class="control-label">Superiores</label>
-        <select asp-for="SuperiorId" class="form-control" asp-items="ViewBag.SuperiorId"></select>
-    </div>
     <div class="form-group">
         <label asp-for="SubordinadoId" class="control-label">Subordinado</label>
         <select asp-for="SubordinadoId" class="form-control" asp-items="ViewBag.SubordinadoId"></select>
     </div>
     <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
+        <label asp-for="SuperiorId" class="control-label">Superiores</label>
+        <select asp-for="SuperiorId" class="form-control" asp-items="ViewBag.SuperiorId"></select>
+    </div>
+    <hr />
+    <div class="form-group">
+        <input type="submit" value="Salvar" class="btn btn-success" />
+        <a asp-action="Index" class="btn btn-primary">Voltar a Lista</a>
     </div>
 </form>
 
-<a asp-action="Index">Back to List</a>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#SuperiorId').change(function () {
+                var selectedSuperiorId = $(this).val();
+                $('#SubordinadoId option[value="' + selectedSuperiorId + '"]').hide();
+            });
+
+            $('#SubordinadoId').change(function () {
+                var selectedSubordinadoId = $(this).val();
+                $('#SuperiorId option[value="' + selectedSubordinadoId + '"]').hide();
+            });
+        });
+
+        function validateForm() {
+            var subordinadoId = document.getElementById('SubordinadoId').value;
+            var superiorId = document.getElementById('SuperiorId').value;
+
+            if (subordinadoId === "" || superiorId === "") {
+                alert("Por favor, selecione um Subordinado e um Superior.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+    <style>
+        .progress {
+            height: 10px;
+            margin-top: 5px;
+        }
+
+        #progressBar {
+            width: 100%;
+            height: 100%;
+            transition: width 3s linear;
+        }
+    </style>
+
+    <script>
+        var progressBar = document.getElementById('progressBar');
+        var mensagem = document.getElementById('mensagem');
+
+        progressBar.style.width = '100%';
+
+        var duracaoAnimacao = 3000;
+
+        var interval = setInterval(function () {
+            var width = parseFloat(progressBar.style.width);
+            if (width > 0) {
+                progressBar.style.width = (width - (1 / 30) * 100, 0) + '%';
+            } else {
+                clearInterval(interval);
+                setTimeout(function () {
+                    mensagem.style.display = 'none';
+                }, duracaoAnimacao);
+            }
+        }, duracaoAnimacao / 1000);
+    </script>
+}
+
+
+
 

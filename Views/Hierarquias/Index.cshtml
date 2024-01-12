@@ -20,8 +20,8 @@
 <p>
     <a asp-action="Create" class="btn btn-success">Nova Relacao Hierarquica</a>
     <a asp-controller="Employees" asp-action="Index" class="btn btn-primary">Gerenciar Funcionarios</a>
-    <a asp-action="SearchSubordinates" class="btn btn-info">Pesquisar Subordinados</a>
-    <a asp-action="SearchSuperiors" class="btn btn-info">Pesquisar Superiores</a>
+    <a asp-action="SearchSubordinados" class="btn btn-info">Pesquisar Subordinados</a>
+    <a asp-action="SearchSuperiores" class="btn btn-warning">Pesquisar Superiores</a>
 </p>
 
 <table class="table">
@@ -43,9 +43,9 @@
                     @Html.DisplayFor(modelItem => item.Superiores.Employee_Name)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detalhes</a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Deletar</a>
                 </td>
             </tr>
         }
