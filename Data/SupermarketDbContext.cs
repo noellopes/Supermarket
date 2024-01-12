@@ -27,6 +27,21 @@ namespace Supermarket.Data
                 .WithMany()
                 .HasForeignKey(s => s.IDDepartments);
 
+            modelBuilder.Entity<Hierarquias>()
+                .HasKey(h => h.Id);
+
+            modelBuilder.Entity<Hierarquias>()
+                .HasOne(h => h.Superiores)
+                .WithMany(e => e.Subordinados)
+                .HasForeignKey(h => h.SuperiorId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Hierarquias>()
+                .HasOne(h => h.Subordinados)
+                .WithMany(e => e.Superiores)
+                .HasForeignKey(h => h.SubordinadoId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<Employee>().HasKey(e => e.EmployeeId);
             modelBuilder.Entity<Employee>().Property(e => e.EmployeeId).UseIdentityColumn();
 
@@ -40,6 +55,8 @@ namespace Supermarket.Data
         public DbSet<Employee> Funcionarios { get; set; } = default!;
 
         public DbSet<Employee> Employee { get; set; } = default!;
+
+        public DbSet<Hierarquias> Hierarquias { get; set; }
 
         public DbSet<Supermarket.Models.IssueType> IssueType { get; set; } = default!;
 
@@ -113,7 +130,7 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Formation> Formation { get; set; } = default!;
 
 
-        public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
+        public DbSet<Orders> Orders { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Supplier> Suppliers { get; set; } = default!;
 

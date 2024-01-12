@@ -150,7 +150,7 @@ namespace Supermarket.Controllers
         {
             try
             {
-
+                
 
                 var orderCustomer = _context.Order
                     .Include(x => x.UserOrders)
@@ -159,7 +159,7 @@ namespace Supermarket.Controllers
                     .Where(x=>x.UserOrders.Any(x=>x.Product.ProductName.Equals(productName)) && x.OrderDate >= startTime && x.OrderDate <= endTime)
                     .GroupBy(x=>x.Customer.CustomerName)
                     .Select(x=>x.First())
-                    .ToList();
+                 .ToList();
 
                 return View(orderCustomer);
             }

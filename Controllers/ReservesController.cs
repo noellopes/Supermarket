@@ -45,7 +45,7 @@ namespace Supermarket.Controllers
             }
 
             var vm = new ReserveViewModel
-            {
+        {
                 Reserve = await reserve
                     .OrderBy(r => r.ReserveId)
                     .Skip((paging.CurrentPage - 1) * paging.PageSize)

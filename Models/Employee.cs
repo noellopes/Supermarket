@@ -69,5 +69,8 @@ namespace Supermarket.Models
         public int IDDepartments { get; set; }
         public Department? Departments { get; set; }
 
+        public virtual ICollection<Hierarquias>? Superiores { get; set; }
+        public List<Hierarquias> Subordinados { get; set; } = new List<Hierarquias>();
+
     }
 }

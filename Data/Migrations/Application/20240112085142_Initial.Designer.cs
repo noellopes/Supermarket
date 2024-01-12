@@ -12,7 +12,11 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Application
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<<< HEAD:Data/Migrations/Application/20240112085142_Initial.Designer.cs
     [Migration("20240112085142_Initial")]
+========
+    [Migration("20240108234334_Initial")]
+>>>>>>>> HierarquiasCRUD:Data/Migrations/Application/20240108234334_Initial.Designer.cs
     partial class Initial
     {
         /// <inheritdoc />

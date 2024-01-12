@@ -39,7 +39,7 @@ namespace Supermarket.Data
             PopulateTakeAwayProducts(db);
             //PopulateCustomer(db);
             //PopulateEmployees(db);
-           
+            PopulateHierarquias(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
             PopulateMealCards(db);
@@ -496,7 +496,7 @@ namespace Supermarket.Data
         private static void PopulateWarehouseSection_Product(SupermarketDbContext db)
         {
             if (db.WarehouseSection_Product.Any()) return;
-
+            
             db.WarehouseSection_Product.AddRange(
                     new WarehouseSection_Product
                     {

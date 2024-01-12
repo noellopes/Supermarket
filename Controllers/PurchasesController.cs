@@ -184,6 +184,8 @@ namespace Supermarket.Controllers
                         {
                             expiredProduct.ProductId = purchase.ProductId;
                             expiredProduct.ExpirationDate = purchase.ExpirationDate;
+                            expiredProduct.SupplierId = purchase.SupplierId;
+                            expiredProduct.EmployeeId = purchase.EmployeeId;
                             expiredProduct.BatchNumber = purchase.BatchNumber;
 
                             _context.Update(expiredProduct);
