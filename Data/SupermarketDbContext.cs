@@ -30,7 +30,14 @@ namespace Supermarket.Data
             modelBuilder.Entity<Employee>().HasKey(e => e.EmployeeId);
             modelBuilder.Entity<Employee>().Property(e => e.EmployeeId).UseIdentityColumn();
 
+            modelBuilder.Entity<ExpiredProducts>()
+                .HasKey(e => e.ExpiredProductId);
 
+            modelBuilder.Entity<ExpiredProducts>()
+                .HasOne(e => e.Purchase)
+                .WithMany()
+                .HasForeignKey(e => e.PurchaseId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
  
         public DbSet<Folga> Folga { get; set; } = default!;
