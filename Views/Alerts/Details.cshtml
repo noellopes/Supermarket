@@ -3,6 +3,48 @@
 @{
     ViewData["Title"] = "Details";
 }
+<style>
+    body {
+        padding: 20px;
+        background-color: white;
+    }
+
+    h1 {
+        color: blue;
+        margin-top: 20px;
+    }
+
+    h2 {
+        color: #007bff;
+        margin-top: 20px;
+    }
+
+    .tbconfig {
+        background-color: whitesmoke;
+        border: 1px solid rgba(10, 10, 10, 0.15);
+        border-radius: 0.25rem;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .table tr {
+        border: 1px solid rgba(10, 10, 10, 0.15);
+    }
+
+    .table th, .table td {
+        background-color: white;
+        color: black;
+        border: none;
+    }
+
+    .form-group {
+        margin-top: 20px;
+    }
+
+        .form-group label {
+            font-weight: bold;
+        }
+</style>
 
 <h1>Details</h1>
 
@@ -37,14 +79,14 @@
     </dl>
     @if (@ViewBag.Search!=null && ViewBag.Page!=null)
     {
-        <a asp-controller="@ViewBag.Func" asp-action="@ViewBag.Page" asp-route-name=@ViewBag.Search>Function</a>
+        <a asp-controller="@ViewBag.Func" asp-action="@ViewBag.Page" asp-route-name=@ViewBag.Search class="btn btn-secondary">Function </a>
+        <a asp-action = "Edit" asp - route - id = "@Model?.AlertId" class="btn btn-secondary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     }
 
 else{
-    <a asp-controller="@ViewBag.Func" asp-action="Index">Function</a>
+        <a asp-controller="@ViewBag.Func" asp-action="Index" class="btn btn-secondary">Function</a>
+       <a asp-action = "Edit" asp - route - id = "@Model?.AlertId" class="btn btn-secondary">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 }
-</div>
-<div>
-    <a  asp-action="Edit" asp-route-id="@Model?.AlertId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
 </div>
