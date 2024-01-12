@@ -533,6 +533,10 @@ namespace Supermarket.Data {
             {
                 await userManager!.AddToRoleAsync(manager, "Avaliar_Funcionarios");
             }
+            if(!await userManager!.IsInRoleAsync(manager, "Manager"))
+            {
+                await userManager!.AddToRoleAsync(manager, "Manager");
+            }
         }
 
         private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password) {
@@ -550,6 +554,7 @@ namespace Supermarket.Data {
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
             await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
+            await EnsureRoleIsCreatedAsync(roleManager!, "Manager");
         }
 
         private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name) {
