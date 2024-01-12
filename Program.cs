@@ -53,7 +53,7 @@ var app = builder.Build();
 
 var reqServScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
 var roleManager = reqServScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-//SeedData.PopulateRolesAsync(roleManager).Wait();
+SeedData.PopulateRolesAsync(roleManager).Wait();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

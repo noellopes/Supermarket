@@ -12,8 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Application
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240108234334_Initial")]
-    partial class Initial
+    [Migration("20240112000721_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

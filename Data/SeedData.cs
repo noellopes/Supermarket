@@ -38,7 +38,7 @@ namespace Supermarket.Data
             PopulateTakeAwayCategories(db);
             PopulateTakeAwayProducts(db);
             //PopulateCustomer(db);
-            //PopulateEmployees(db);
+            PopulateEmployees(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
             PopulateMealCards(db);
@@ -1249,7 +1249,7 @@ namespace Supermarket.Data
             {
                 await userManager!.AddToRoleAsync(manager, "Edit_Del_Reports");
             }
-            if (!await userManager!.IsInRoleAsync(manager, "Employeer"))
+            if (await userManager!.IsInRoleAsync(manager, "Employeer")==false)
             {
                 await userManager!.AddToRoleAsync(manager, "Employeer");
             }
