@@ -247,6 +247,8 @@ namespace Supermarket.Controllers
             }
             _context.SaveChanges();
 
+            _memoryCache.Remove(CacheProductKey);
+
             return RedirectToAction("Index","Order");
         }
 
