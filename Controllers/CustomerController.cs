@@ -150,14 +150,16 @@ namespace Supermarket.Controllers
         {
             try
             {
-                
 
-                var orderCustomer = _context.Customers
-                .Include(c => c.Orders)
-                 .ThenInclude(o => o.Products)
-                   .Where(c => c.Orders.Any(o => o.Products.Any(p => p.ProductName.Equals(productName))
-                     && o.OrderDate >= startTime && o.OrderDate <= endTime))
-                 .ToList();
+
+                var orderCustomer = _context.Order
+                    .Include(x => x.UserOrders)
+                    .Include("UserOrders.Product")
+                    .Include("Customer")
+                    .Where(x=>x.UserOrders.Any(x=>x.Product.ProductName.Equals(productName)) && x.OrderDate >= startTime && x.OrderDate <= endTime)
+                    .GroupBy(x=>x.Customer.CustomerName)
+                    .Select(x=>x.First())
+                    .ToList();
 
                 return View(orderCustomer);
             }
