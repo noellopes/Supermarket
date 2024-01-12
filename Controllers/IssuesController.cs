@@ -72,6 +72,7 @@ namespace Supermarket.Controllers
                     SearchSupplier = supplier
                 }
             );
+            //return View(await supermarketDbContext.ToListAsync());
         }
 
         // GET: Issues/Details/5
@@ -231,6 +232,7 @@ namespace Supermarket.Controllers
             }
 
             await _context.SaveChangesAsync();
+            //return RedirectToAction(nameof(Index));
             return View("DeleteCompleted", issues);
         }
 

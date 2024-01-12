@@ -53,7 +53,7 @@ var app = builder.Build();
 
 var reqServScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
 var roleManager = reqServScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-SeedData.PopulateRolesAsync(roleManager).Wait();
+//SeedData.PopulateRolesAsync(roleManager).Wait();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -61,10 +61,10 @@ if (app.Environment.IsDevelopment())
     app.UseMigrationsEndPoint();
     using var serviceScope = app.Services.CreateScope();
     var db = serviceScope.ServiceProvider.GetService<SupermarketDbContext>();
-    SeedData.Populate(db!);
+    //SeedData.Populate(db!);
 
     var userManager = reqServScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-    SeedData.PopulateDevUsers(userManager);
+    //SeedData.PopulateDevUsers(userManager);
 
 }
 else
@@ -100,7 +100,7 @@ void UpdateExpirationStatusForAllPurchases()
     var purchasesController = new PurchasesController(serviceScope.ServiceProvider.GetRequiredService<SupermarketDbContext>());
 
     // Chama o m�todo UpdateExpirationStatusForAllPurchases() no controller
-    purchasesController.UpdateExpirationStatusForAllPurchases();
+   // purchasesController.UpdateExpirationStatusForAllPurchases();
 }
 
 app.Run();

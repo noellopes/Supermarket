@@ -14,7 +14,6 @@ namespace Supermarket.Models
         [Display(Name = "Issue Category Description")]
         public string IssueDescription { get; set; } = string.Empty; // Issue Type Category Description   
 
-        public ICollection<Issues>? Issue { get; set; }
-
+        public ICollection<IssueType>? IssueTypes { get; set; }
     }
 }

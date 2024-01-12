@@ -128,7 +128,6 @@ namespace Supermarket.Controllers
         public IActionResult Create()
         {
             ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments");
-            ViewData["Funcoes"] = new SelectList(_context.Set<Funcao>(), "FuncaoId", "NomeFuncao");
             return View();
         }
 
@@ -138,7 +137,7 @@ namespace Supermarket.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Employeer")]
-        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,Employee_Time_Bank,Funcao_FK,IDDepartments")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,IDDepartments")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -188,7 +187,6 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
             ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", employee.IDDepartments);
-            ViewData["Funcoes"] = new SelectList(_context.Set<Funcao>(), "FuncaoId", "NomeFuncao");
             return View(employee);
         }
 
@@ -198,7 +196,7 @@ namespace Supermarket.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Employeer")]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,Employee_Time_Bank,Funcao_FK")] Employee employee)
+        public async Task<IActionResult> Edit(int id, Employee employee)
         {
             if (id != employee.EmployeeId)
             {
@@ -245,7 +243,6 @@ namespace Supermarket.Controllers
                 }
             }
             ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", employee.IDDepartments);
-            ViewData["Funcoes"] = new SelectList(_context.Set<Funcao>(), "FuncaoId", "NomeFuncao");
             return View(employee);
         }
 
@@ -280,17 +277,7 @@ namespace Supermarket.Controllers
             var employee = await _context.Employee.FindAsync(id);
             if (employee != null)
             {
-                try
-                {
-                    _context.Employee.Remove(employee);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    ViewBag.ErrorDeleting = "The Employee cannot be deleted because it is associated with an Purchase.";
-                    return View();
-                }
-
+                _context.Employee.Remove(employee);
             }
             
             await _context.SaveChangesAsync();

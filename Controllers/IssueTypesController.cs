@@ -157,19 +157,11 @@ namespace Supermarket.Controllers
             var issueType = await _context.IssueType.FindAsync(id);
             if (issueType != null)
             {
-                try
-                {
-                    _context.IssueType.Remove(issueType);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    ViewBag.ErrorDeleting = "The Issue Type cannot be deleted because it is associated with an issue.";
-                    return View();
-                }
+                _context.IssueType.Remove(issueType);
             }
 
             await _context.SaveChangesAsync();
+            //return RedirectToAction(nameof(Index));
             return View("DeleteCompleted", issueType);
         }
 

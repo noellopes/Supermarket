@@ -20,6 +20,7 @@
         border-radius: 0.25rem;
         padding: 20px;
         margin-bottom: 20px;
+        
     }
 
     .button-group {
@@ -39,6 +40,7 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.5s, color 0.5s, border-color 0.5s;
+        margin-top:20px;
     }
 
         .btn:hover {
@@ -99,8 +101,12 @@
                 <a asp-controller="TakeAwayProduct" asp-action="Index" class="btn btn-secondary">Take Away Product</a>
                 <a asp-controller="TakeAwayProduct" asp-action="Basket" class="btn btn-secondary">Basket</a>
                 <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">Product</a>
+                <a asp-controller="Formations" asp-action="Index" class="btn btn-info">Formation</a>
+                <a asp-controller="FormationEmployees" asp-action="Index" class="btn btn-info">FormationEmployee</a>
+                <a asp-controller="Reserves" asp-action="Index" class="btn btn-info">Reserve</a>
+                <a asp-controller="ReserveDepartment1" asp-action="Index" class="btn btn-info">ReserveDepartment</a>
                 <a asp-controller="Funcao" asp-action="Index" class="btn btn-secondary">Funcao</a>
-            <a asp-controller="GrupoProjeto" asp-action="Index" class="btn btn-secondary">Projetos em Grupo por função</a>
+                <a asp-controller="GrupoProjeto" asp-action="Index" class="btn btn-secondary">Projetos em Grupo por função</a>
                 <a asp-controller="Folgas" asp-action="Index" class="btn btn-info">Folgas</a>
          
 

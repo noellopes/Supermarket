@@ -27,8 +27,7 @@ namespace Supermarket.Controllers
 
             var expiredproducts = from i in _context.ExpiredProducts
                     .Include(p => p.Product)
-                    .Include(pr => pr.Purchase)
-                                  select i;
+            select i;
 
             if (product != "") expiredproducts = expiredproducts.Where(x => x.Product!.Name.Contains(product));
 
@@ -46,7 +45,6 @@ namespace Supermarket.Controllers
             return View(
                 new ExpiredProductsListViewModel
                 {
-                    ExpiredProducts = expiredproducts.OrderByDescending(i => i.ExpirationDate).Skip((page - 1) * pagination.PageSize).Take(pagination.PageSize),
                     Pagination = pagination,
                     SearchProduct = product,
                     SearchBatchNumber = batchnumber
@@ -63,10 +61,8 @@ namespace Supermarket.Controllers
                 return NotFound();
 
             var expiredProducts = await _context.ExpiredProducts
-                .Include(e => e.Employee)
                 .Include(e => e.Product)
-                .Include(e => e.Supplier)
-                .FirstOrDefaultAsync(m => m.ExpiredProductId == id);
+                .FirstOrDefaultAsync(m => m.ProductId == id);
 
             if (expiredProducts == null)
                 return View("ExpiredProductDeleted");
@@ -76,7 +72,7 @@ namespace Supermarket.Controllers
 
         private bool ExpiredProductsExists(int id)
         {
-            return (_context.ExpiredProducts?.Any(e => e.ExpiredProductId == id)).GetValueOrDefault();
+          return (_context.ExpiredProducts?.Any(e => e.ProductId == id)).GetValueOrDefault();
         }
     }
 }

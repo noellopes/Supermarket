@@ -58,11 +58,7 @@
                     {
                         <a asp-action="Edit" class="btn btn-warning btn-smm" asp-route-id="@item.EmployeeId">Edit</a>
                         <a asp-action="Details" class="btn btn-info btn-smm" asp-route-id = "@item.EmployeeId"> Details </a>
-                    }
-                    @if (User.IsInRole("Avaliar_Funcionarios"))
-                    {
-                        <a asp-controller="EmployeeEvaluations" asp-action="index" asp-route-employeeId="@item.EmployeeId" class="btn btn-outline-info">View employee evaluations</a>
-                    }
+                    } 
 
 
                 </td>

@@ -59,8 +59,7 @@ namespace Supermarket.Controllers
                 evaluationsFiltered = evaluationsFiltered.Where(ee => ee.Employee!.EmployeeId == employeeId);
                 ViewBag.EmployeeName = _context.Employee.Find(employeeId)!.Employee_Name;
                 ViewBag.EmployeeId = employeeId;
-                ViewBag.AvgGrade = (float)EmployeeGradeAsync(employeeId);
-                ViewBag.Assiduidade = (float)GetAssiduidade(employeeId);
+                ViewBag.AvgGrade = EmployeeGradeAsync(employeeId);
             }
 
             var pagination = new PagingInfo
@@ -259,7 +258,7 @@ namespace Supermarket.Controllers
 
         private float EmployeeGradeAsync(int? EmployeeId)
         {
-            var assiduidade = GetAssiduidade(EmployeeId);
+            var assiduidade = 1.0;
             if (EmployeeId == null || _context.Employee == null)
             {
                 //The employee doesn't exist!
@@ -281,44 +280,19 @@ namespace Supermarket.Controllers
             }
             else
             {
+                //TO-DO calcular assiduidade
                 var sum = 0;
                 foreach (var evaluation in Evaluations)
                 {
                     sum += evaluation.GradeNumber;
                 }
 
-                var mean = (float)(sum / Evaluations.Count);
+                var mean = sum / Evaluations.Count;
 
-                mean = (float)(mean * assiduidade);
+                mean = (int)(mean * assiduidade);
                 return mean;
             }
-        }
-
-        private float GetAssiduidade(int? EmployeeId)
-        {
-            if (EmployeeId == null || _context.Employee == null)
-            {
-                //The employee doesn't exist!
-                return 0;
-            }
-
-            var Employee = _context.Employee.Find(EmployeeId);
-            if (Employee == null)
-            {
-                //The employee doesn't exist!
-                return 0;
-            }
-
-            var pontos = _context.Ponto.Where(p=> p.EmployeeId==Employee.EmployeeId).ToList();
-            if(pontos.Count < 1)
-            {
-                //the employee has'nt registered any workday
-                return 0;
-            }
-
-            var faltas = pontos.Where(p => p.Status.Equals("Negado")).ToList();
-            float porcentFaltas = (float)faltas.Count / (float)pontos.Count;
-            return (float)(1 - porcentFaltas);
+            
         }
     }
 }

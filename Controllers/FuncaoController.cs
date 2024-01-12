@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,37 +20,26 @@ namespace Supermarket.Controllers
         }
 
         // GET: Funcao
-        public async Task<IActionResult> Index(int page = 1, string descricao ="", string funcao="" )
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var filtros = _context.Funcao.AsQueryable();
-           
-
-            if (descricao != "")
-            {
-                filtros = filtros.Where(f => f.DescricaoFuncao.Contains(descricao));
-            }
-            if (funcao != "")
-            {
-                filtros = filtros.Where(f => f.NomeFuncao.Contains(funcao));
-            }
-            
-
-            ViewBag.FiltroDescricao = descricao;
-            ViewBag.FiltroFuncao = funcao;
             var pagination = new PagingInfo
             {
                 CurrentPage = page,
                 PageSize = PagingInfo.DEFAULT_PAGE_SIZE,
-                TotalItems = filtros.Count()
+                TotalItems = _context.Funcao.Count()
             };
+
             return View(
                 new FuncaoListViewModel {
-                    funcao = filtros.OrderBy( f => f.NomeFuncao)
+                    funcao = _context.Funcao.OrderBy( f => f.NomeFuncao)
                         .Skip((page-1)*pagination.PageSize).Take(pagination.PageSize),
                     Pagination = pagination 
                 }
             );
 
+              return _context.Funcao != null ? 
+                          View(await _context.Funcao.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
         }
 
         // GET: Funcao/Details/5
@@ -83,10 +71,8 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create([Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao funcao)
         {
-            
             if (ModelState.IsValid)
             {
                 try
@@ -122,7 +108,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: Funcao/Edit/5
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Funcao == null)
@@ -143,7 +128,6 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("FuncaoId,NomeFuncao,DescricaoFuncao")] Funcao funcao)
         {
             if (id != funcao.FuncaoId)
@@ -155,28 +139,49 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-
-
                     bool funcaoExiste = await _context.Funcao.AnyAsync(
-                        f => f.NomeFuncao == funcao.NomeFuncao && f.FuncaoId != funcao.FuncaoId);
+                        f => f.NomeFuncao == funcao.NomeFuncao || f.FuncaoId == funcao.FuncaoId);
+
+                    bool funcaoIgual = await _context.Funcao.AnyAsync(
+                        f => (f.NomeFuncao == funcao.NomeFuncao || f.FuncaoId == funcao.FuncaoId) && f.DescricaoFuncao == funcao.DescricaoFuncao);
                     if (funcaoExiste)
                     {
-                        if (!funcaoExiste)
+                        if (!funcaoIgual)
+                        {
+                            _context.Update(funcao);
+                            /*bool funcaoExiste = await _context.Funcao.AnyAsync(
+                            f => f.NomeFuncao == Funcao.NomeFuncao || f.FuncaoId == Funcao.FuncaoId);
+
+                            bool funcaoIgual = await _context.Funcao.AnyAsync(
+                            f => (f.NomeFuncao == Funcao.NomeFuncao || f.FuncaoId == Funcao.FuncaoId) && f.DescricaoFuncao == Funcao.DescricaoFuncao);*/
+                        }
+                        if (funcaoExiste)
+                        {
+                            if (!funcaoIgual)
+                            {
+                                _context.Update(funcao);
+                                await _context.SaveChangesAsync();
+                                TempData["MensagemPositiva"] = "Edicao de uma funcao ja existente com sucesso";
+                                return RedirectToAction(nameof(Index));
+                            }
+                            else
+                            {
+                                TempData["Mensagem"] = "funcao identica";
+                                return RedirectToAction(nameof(Index));
+                            }
+                        }
+                        else
                         {
                             _context.Update(funcao);
                             await _context.SaveChangesAsync();
                             TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
                             return View("Details", funcao);
-                        }
-                        else
-                        {
-                            
-                            TempData["Mensagem"] = "Fução já existe";
-                            return View(funcao);
-
+                            _context.Update(funcao);
+                            await _context.SaveChangesAsync();
+                            TempData["MensagemPositiva"] = "Edicao realizada com sucesso";
+                            return View("Details", funcao);
                         }
                     }
-                    return View(funcao);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -195,7 +200,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: Funcao/Delete/5
-        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Funcao == null)
@@ -217,7 +221,6 @@ namespace Supermarket.Controllers
         // POST: Funcao/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Funcao == null)

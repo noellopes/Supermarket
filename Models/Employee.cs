@@ -58,14 +58,7 @@ namespace Supermarket.Models
         [Required]
         public required string Standard_Lunch_Time { get; set; }
 
-      
-        //Ligação N para 1 com Função
-        public Funcao? Funcao { get; set; }
-        public int? Funcao_FK { get; set; }
 
-        //Ligação N para 1 com Função
-        public GrupoProjeto? GrupoProjeto { get; set; }
-        public int ProjetoId {  get; set; } = 0;
 
         [DisplayFormat(DataFormatString = "{0:hh\\:mm}")]
         public TimeSpan Employee_Time_Bank { get; set; }
@@ -76,7 +69,5 @@ namespace Supermarket.Models
         public int IDDepartments { get; set; }
         public Department? Departments { get; set; }
 
-       
-        public ICollection<Purchase>? Purchases { get; set; }
     }
 }

@@ -378,37 +378,50 @@ namespace Supermarket.Controllers
             }
 
             foreach (var kvp in warehouseSectionProductsDictionary)
-            {             
+            {
+                int warehouseSectionProductId = kvp.Key;
+                int quantity = kvp.Value;
 
-                if (selectedProductId > 0)
+
+                var warehouseSectionProduct = await _context.WarehouseSection_Product.FindAsync(warehouseSectionProductId);
+
+                if (warehouseSectionProduct != null)
                 {
-                    if (Selectproduct != selectedProductId)
+                    warehouseSectionProduct.Quantity = quantity;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+
+
+            if (selectedProductId > 0)
+            {
+                if (Selectproduct != selectedProductId)
+                {
+                    Selectproduct = selectedProductId;
+                    iniciate2 = 0;
+                    warehouseSectionProductsDictionary.Clear();
+                }
+
+                if (iniciate2 == 0)
+                {
+
+
+                    if (IdShelves > 0 && quantityShelves > -1)
                     {
-                        Selectproduct = selectedProductId;
-                        iniciate2 = 0;
-                        warehouseSectionProductsDictionary.Clear();
-                    }
+                        iniciate2 = 1;
 
-                    if (iniciate2 == 0)
-                    {
-
-
-                        if (IdShelves > 0 && quantityShelves > -1)
+                        if (selftProductsDictionary.ContainsKey(IdShelves.Value))
                         {
-                            iniciate2 = 1;
-
-                            if (selftProductsDictionary.ContainsKey(IdShelves.Value))
-                            {
-                                selftProductsDictionary[IdShelves.Value] = quantityShelves.Value;
-                            }
-                            else
-                            {
-                                selftProductsDictionary[IdShelves.Value] = quantityShelves.Value;
-                            }
+                            selftProductsDictionary[IdShelves.Value] = quantityShelves.Value;
+                        }
+                        else
+                        {
+                            selftProductsDictionary[IdShelves.Value] = quantityShelves.Value;
                         }
                     }
-
                 }
+
             }
 
             foreach (var kvp in selftProductsDictionary)

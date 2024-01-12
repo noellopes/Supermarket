@@ -129,7 +129,7 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
-            
+            // Modifique esta linha para usar um array de valores para a chave primária composta
             var reserveDepartment1 = await _context.ReserveDepartment.FindAsync(new object[] { id, id1 });
 
             if (reserveDepartment1 == null)
