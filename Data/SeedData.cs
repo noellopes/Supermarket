@@ -83,14 +83,16 @@ namespace Supermarket.Data {
             // Instantiate random number generator using system-supplied value as seed.
             var rand = new Random();
 
-            for (int i = 0; i < 200; i++)
+            //Geração aleatoria para testes
+            for (int i = 0; i <= 5000; i++)
             {
+                var DataAleatoria = new DateTime(2023, 1, 1).AddMonths(rand.Next(1, 13)).AddDays(rand.Next(1, 31)).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
                 var randomBool = rand.Next(2) == 1;
                 db.Add(
                     new Ticket
                     {
-                        DataEmissao = DateTime.Now,
-                        DataAtendimento = DateTime.Now.AddMinutes(rand.Next(5,20)),
+                        DataEmissao = DataAleatoria,
+                        DataAtendimento = DataAleatoria.AddMinutes(rand.Next(0,20)),
                         NumeroDaSenha = i,
                         Estado = true,
                         Prioritario = randomBool,
@@ -98,8 +100,42 @@ namespace Supermarket.Data {
                     }
                     );
             }
+            //Geração aleatoria para testes de afluencia no mesmo mes
+            for (int i = 0; i <= 300; i++)
+            {
+                var DataAleatoria = new DateTime(2023, 1, 1).AddMonths(rand.Next(1, 13)).AddDays(rand.Next(1, 31)).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
+                var randomBool = rand.Next(2) == 1;
+                db.Add(
+                    new Ticket
+                    {
+                        DataEmissao = DataAleatoria,
+                        DataAtendimento = DataAleatoria.AddMinutes(rand.Next(0, 20)),
+                        NumeroDaSenha = 5000+i,
+                        Estado = true,
+                        Prioritario = randomBool,
+                        IDDepartments = rand.Next(1, db.Departments.Count())
+                    }
+                    );
+            }
+            //Geração para testes de afluencia no mesmo dia
+            for (int i = 0; i <= 150; i++)
+            {
+                var DataAleatoria = new DateTime(2023, 1, 11).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
+                var randomBool = rand.Next(2) == 1;
+                db.Add(
+                    new Ticket
+                    {
+                        DataEmissao = DataAleatoria,
+                        DataAtendimento = DataAleatoria.AddMinutes(rand.Next(0, 20)),
+                        NumeroDaSenha = 5300 + i,
+                        Estado = true,
+                        Prioritario = randomBool,
+                        IDDepartments = rand.Next(1, db.Departments.Count())
+                    }
+                    );
+            }
 
-       
+
             db.SaveChanges();
         }
 
@@ -815,6 +851,8 @@ namespace Supermarket.Data {
 
 
 
+
+
             
 
             if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
@@ -938,13 +976,13 @@ namespace Supermarket.Data {
             var clienteAlberto = await EnsureUserIsCreatedAsync(userManager!, "zealberto@gmail.com", "Alberto#123");
             if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN3))
             {
-                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN3);
+                await userManager!.AddToRoleAsync(clienteAlberto, ROLE_ADMIN3);
             }
 
             var funcAndre = await EnsureUserIsCreatedAsync(userManager!, "andre@gmail.com", "Andre#123");
-            if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN1))
+            if (!await userManager!.IsInRoleAsync(funcAndre, ROLE_ADMIN1))
             {
-                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN1);
+                await userManager!.AddToRoleAsync(funcAndre, ROLE_ADMIN1);
             }
         }
 

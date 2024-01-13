@@ -15,7 +15,7 @@ namespace Supermarket.Controllers
 {
     public class TicketsController : Controller
     {
-        
+
         private readonly SupermarketDbContext _context;
 
         public TicketsController(SupermarketDbContext context)
@@ -27,13 +27,21 @@ namespace Supermarket.Controllers
 
         // GET: Tickets
         [Authorize(Roles = "Gestor,Funcionário,Cliente")]
-        public async Task<IActionResult> Index(int page = 1, int departmentName = 0)
+        public async Task<IActionResult> Index(int page = 1, int departmentName = 0, Boolean verHistorico = false)
         {
-
 
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
             var tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
+
+            if (verHistorico == true)
+            {
+                tickets = from b in _context.Tickets.Include(b => b.Departments) select b;
+            }
+            else
+            {
+                tickets = from b in _context.Tickets.Include(b => b.Departments).Where(b => b.DataAtendimento == null) select b;
+            }
 
 
             if (departmentName != 0)
@@ -62,6 +70,7 @@ namespace Supermarket.Controllers
             var tm = new TicketViewModel
             {
                 Tickets = await tickets
+                // .Where(b => b.DataAtendimento == null)
                 .OrderBy(b => b.TicketId)
                 .Skip((paging.CurrentPage - 1) * paging.PageSize)
                    .Take(paging.PageSize)
@@ -72,7 +81,7 @@ namespace Supermarket.Controllers
                 //SearchButtonDepartment = departmentButtonName,
             };
 
-           return View(tm);
+            return View(tm);
 
         }
 
@@ -85,7 +94,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Tickets/Details/5
-        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
+        //[Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Tickets == null)
@@ -147,10 +156,10 @@ namespace Supermarket.Controllers
         //    return View("Details",tickets);
         //}
         //return View(tickets);
-        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
+        //[Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public IActionResult Create()
         {
- 
+
             //{
             //    DataEmissao = DateTime.Now,
             //    DataAtendimento = null,
@@ -163,20 +172,24 @@ namespace Supermarket.Controllers
 
             return View();
         }
-        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
+        //[Authorize(Roles = "Gestor,Funcionário,Cliente")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket, int departmentId =0)
+        public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket, int departmentId = 0)
         {
-           
+
             var ticketlista = await _context.Tickets.ToListAsync();
 
-            var schedules = await _context.Schedule.Where(b => b.IDDepartments == departmentId).FirstOrDefaultAsync();
+            var schedules = _context.Schedule
+     .Include(b => b.Departments)
+     .Where(b => b.IDDepartments == departmentId)
+     .FirstOrDefault();
+
 
             // Perform validation and save the new ticket to the database
 
             //  if (ModelState.IsValid && (DateTime.Now.Date<= schedules.EndDate.Value.Date&& DateTime.Now.Date >= schedules.StartDate.Date) && (DateTime.Now.Hour <= schedules.DailyFinishTime.Hour && DateTime.Now.Hour >= schedules.DailyStartTime.Hour && DateTime.Now.Minute <= schedules.DailyFinishTime.Minute && DateTime.Now.Minute >= schedules.DailyStartTime.Minute))
-            if (ModelState.IsValid && DateTime.Now >= schedules.StartDate.Date && DateTime.Now <= schedules.EndDate.Value.Date)
+            if (ModelState.IsValid && schedules != null && DateTime.Now >= schedules.StartDate.Date && DateTime.Now <= schedules.EndDate.Value.Date)
             {
                 // Check if the current time is within the daily time range
                 TimeSpan currentTimeOfDay = DateTime.Now.TimeOfDay;
@@ -194,7 +207,7 @@ namespace Supermarket.Controllers
                     _context.Tickets.Add(ticket);
                     _context.SaveChanges();
 
-                    TempData["NoDataMessage"] = "Senha : " + ticket.TicketId + " Criada com sucesso!" ;
+                    TempData["NoDataMessage"] = "Senha : " + ticket.TicketId + " Criada com sucesso!";
                     return RedirectToAction("Index"); // Redirect to the ticket list or another action
                     // Redirect to the ticket list or another action
                 }
@@ -214,7 +227,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: TicketsPriority/Create
-        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
+        // [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public IActionResult CreatePriority()
         {
 
@@ -222,10 +235,10 @@ namespace Supermarket.Controllers
         }
 
         // POST: TicketsPriority/Create
-  
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
+        // [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> CreatePriority([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket, int departmentId = 0)
         {
 
@@ -273,7 +286,7 @@ namespace Supermarket.Controllers
 
         }
 
-        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
+        // [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Edit(int? id)
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
@@ -295,7 +308,7 @@ namespace Supermarket.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
+        // [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Edit(int id, [Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket tickets)
         {
             if (id != tickets.TicketId)
@@ -326,7 +339,7 @@ namespace Supermarket.Controllers
             return View(tickets);
         }
 
-        [Authorize(Roles = "Gestor,Funcionário")]
+        //[Authorize(Roles = "Gestor,Funcionário")]
         public IActionResult Atender(int id)
         {
             // Retrieve the ticket with the given ID from the database
@@ -407,7 +420,7 @@ namespace Supermarket.Controllers
         //}
 
         // GET: Tickets/Delete/5
-        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
+        //[Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Tickets == null)
@@ -428,7 +441,7 @@ namespace Supermarket.Controllers
         // POST: Tickets/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Gestor,Funcionário,Cliente")]
+        //[Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Tickets == null)
@@ -440,14 +453,14 @@ namespace Supermarket.Controllers
             {
                 _context.Tickets.Remove(tickets);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TicketsExists(int id)
         {
-          return (_context.Tickets?.Any(e => e.TicketId == id)).GetValueOrDefault();
+            return (_context.Tickets?.Any(e => e.TicketId == id)).GetValueOrDefault();
         }
     }
 }

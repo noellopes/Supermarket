@@ -27,10 +27,10 @@
 
     <div class="mt-3">
         <input class="btn btn-primary" type="submit" value="Search" />
-        <a class="btn btn-secondary" asp-action="Afluencias">Cancel</a>
+        <a class="btn btn-secondary" asp-action="Afluencias">Clear filter</a>
     </div>
 </form>
-
+@* 
 @if (ViewData["NoDataMessage"] != null)
 {
     <h3 class="mt-5">@ViewData["NoDataMessage"]</h3>
@@ -81,7 +81,57 @@ else {
 
     
 </div>
+} *@
+
+
+
+
+
+<h2 class="mt-5">Afluencias Report (The amount of tickets in last 10 minutes must surpass the limit) </h2>
+@if (Model != null && Model.Count > 0)
+{
+    var contadordoSpike = 0;
+    @foreach (var departmentModel in Model)
+    {
+        contadordoSpike = 0;
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Department</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Spike Start Time</th>
+                    <th scope="col">Spike End Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (departmentModel.Tickets != null && departmentModel.Tickets.Any())
+                {
+                    @foreach (var spike in departmentModel.Tickets)
+                    {
+
+                        contadordoSpike++;
+                        <tr>
+                            <th scope="row"> @departmentModel.Department.NameDepartments  </th>
+                            <td>@contadordoSpike</td>
+                            <td>@spike.DataEmissao.ToString("dd-MM-yyyy HH:mm:ss")</td>
+                            <td>@spike.DataAtendimento?.ToString("dd-MM-yyyy HH:mm:ss")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <th scope="row">@departmentModel.Department.NameDepartments</th>
+                        <td colspan="2">N / A</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+else
+{
+    <h3 class="mt-5">@ViewData["NoDataMessage"]</h3>
 }
 
-
-<a class="btn btn-secondary mt-5" asp-area="Schedules" asp-action="Index">Return</a>
+                                            <a class="btn btn-secondary mt-5" asp-area="Schedules" asp-action="Index">Return</a>
