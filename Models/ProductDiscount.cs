@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+=======
+﻿using System.ComponentModel.DataAnnotations;
+>>>>>>> FolgasPendentesAprovadas
 
 namespace Supermarket.Models
 {
@@ -23,4 +27,3 @@ namespace Supermarket.Models
         public DateTime EndDate { get; set; }
     }
 }
-    

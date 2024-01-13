@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 ﻿using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+>>>>>>> FolgasPendentesAprovadas
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -391,6 +395,13 @@ namespace Supermarket.Controllers
                     await _context.SaveChangesAsync();
                 }
             }
+<<<<<<< HEAD
+=======
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+>>>>>>> FolgasPendentesAprovadas
 
 
 

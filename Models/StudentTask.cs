@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Supermarket.Models {
+namespace Supermarket.Models
+{
 
     [PrimaryKey(nameof(StudentId), nameof(TaskId))]
-    public class StudentTask {
+    public class StudentTask
+    {
         public int StudentId { get; set; }
         public Student? Student { get; set; }
 

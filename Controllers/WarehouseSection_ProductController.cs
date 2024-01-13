@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+>>>>>>> FolgasPendentesAprovadas
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -179,7 +183,11 @@ namespace Supermarket.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
+<<<<<<< HEAD
             if (id == null || _context.WarehouseSection_Product == null)
+=======
+            if (productId == null || warehouseSectionId == null)
+>>>>>>> FolgasPendentesAprovadas
             {
                 return NotFound();
             }
@@ -189,8 +197,14 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
+<<<<<<< HEAD
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", warehouseSection_Product.ProductId);
             ViewData["SupplierID"] = new SelectList(_context.Suppliers, "SupplierId", "Name", warehouseSection_Product.SupplierID);
+=======
+
+
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", warehouseSection_Product.ProductId);
+>>>>>>> FolgasPendentesAprovadas
             ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description", warehouseSection_Product.WarehouseSectionId);
             return View(warehouseSection_Product);
         }
@@ -218,6 +232,7 @@ namespace Supermarket.Controllers
 
                 if (WarehouseSectionProductsExists)
                 {
+<<<<<<< HEAD
                     ModelState.AddModelError("", "Another Warehouse Section Product  with the same BatchNumber, Product and Warehouse Section already exists.");
                 }
                     try
@@ -242,6 +257,25 @@ namespace Supermarket.Controllers
 
                     return View("Details", warehouseSection_Product);
                     
+=======
+
+                    if (warehouseSection_Product.ReservedQuantity > warehouseSection_Product.Quantity)
+                    {
+
+                        ModelState.AddModelError("", "The quantity must always be greater than or equal to the reserved quantity");
+
+                    }
+                    else
+                    {
+                        _context.Update(warehouseSection_Product);
+                        await _context.SaveChangesAsync();
+
+                        //ViewBag.Message = "Warehouse Section Product successfully edited.";
+                        TempData["Message"] = "Warehouse Section Product successfully created.";
+                        return RedirectToAction("Details", new { productId = warehouseSection_Product.ProductId, warehouseSectionId = warehouseSection_Product.WarehouseSectionId });
+
+                    }
+>>>>>>> FolgasPendentesAprovadas
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -254,7 +288,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-               // return RedirectToAction(nameof(Index));
+                // return RedirectToAction(nameof(Index));
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", warehouseSection_Product.ProductId);
             ViewData["SupplierID"] = new SelectList(_context.Suppliers, "SupplierId", "Name", warehouseSection_Product.SupplierID);
@@ -262,6 +296,11 @@ namespace Supermarket.Controllers
             return View(warehouseSection_Product);
         }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> FolgasPendentesAprovadas
         // GET: WarehouseSection_Product/Delete/5
         [Authorize(Roles = "Stock Administrator")]
 
@@ -280,7 +319,11 @@ namespace Supermarket.Controllers
 
             if (warehouseSection_Product.Quantity != 0)
             {
+<<<<<<< HEAD
                 ViewBag.Message = "Batch number cannot be eliminated because it has a quantity greater than 0";
+=======
+                ViewBag.Message = "Warehouse Section Product cannot be eliminated because it has a quantity greater than 0";
+>>>>>>> FolgasPendentesAprovadas
                 return View("Delete", warehouseSection_Product);
             }
             if (warehouseSection_Product == null)

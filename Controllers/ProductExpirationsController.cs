@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -22,9 +17,9 @@ namespace Supermarket.Controllers
         // GET: ProductExpirations
         public async Task<IActionResult> Index()
         {
-              return _context.ProductExpiration != null ? 
-                          View(await _context.ProductExpiration.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.ProductExpiration'  is null.");
+            return _context.ProductExpiration != null ?
+                        View(await _context.ProductExpiration.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.ProductExpiration'  is null.");
         }
 
         // GET: ProductExpirations/Details/5
@@ -150,14 +145,14 @@ namespace Supermarket.Controllers
             {
                 _context.ProductExpiration.Remove(productExpiration);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExpirationExists(int id)
         {
-          return (_context.ProductExpiration?.Any(e => e.BatchId == id)).GetValueOrDefault();
+            return (_context.ProductExpiration?.Any(e => e.BatchId == id)).GetValueOrDefault();
         }
     }
 }

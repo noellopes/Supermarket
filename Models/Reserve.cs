@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models
 {
-    public class Reserve 
+    public class Reserve
     {
         //PRIMARY KEY
         [Required]

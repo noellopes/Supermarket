@@ -11,7 +11,7 @@ namespace Supermarket.Models
         [StringLength(30, MinimumLength = 3)]
         public required string NomeFuncao { get; set; }
         [StringLength(100, MinimumLength = 3)]
-        public string? DescricaoFuncao { get; set;}
+        public string? DescricaoFuncao { get; set; }
 
 
 

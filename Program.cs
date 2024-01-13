@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
+<<<<<<< HEAD
 using Microsoft.Extensions.DependencyInjection;
 using static System.Formats.Asn1.AsnWriter;
 using Supermarket.Controllers;
+=======
+>>>>>>> FolgasPendentesAprovadas
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMemoryCache();
@@ -26,7 +29,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(
-    options => {
+    options =>
+    {
         // Sign in
         options.SignIn.RequireConfirmedAccount = false;
 
@@ -65,11 +69,17 @@ if (app.Environment.IsDevelopment())
 
     var userManager = reqServScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     SeedData.PopulateDevUsers(userManager);
+<<<<<<< HEAD
 
 }
 else
 {
 
+=======
+}
+else
+{
+>>>>>>> FolgasPendentesAprovadas
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();

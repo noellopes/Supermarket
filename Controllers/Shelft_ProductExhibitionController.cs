@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+>>>>>>> FolgasPendentesAprovadas
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
@@ -130,7 +134,7 @@ namespace Supermarket.Controllers
                .Include(s => s.Shelf)
                .FirstOrDefaultAsync(m => m.ProductId == productId && m.ShelfId == shelfId);
 
-    
+
             if (shelft_ProductExhibition == null)
             {
                 return NotFound();
@@ -153,7 +157,7 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
-            if (productId != shelft_ProductExhibition.ProductId|| shelfId!= shelft_ProductExhibition.ShelfId)
+            if (productId != shelft_ProductExhibition.ProductId || shelfId != shelft_ProductExhibition.ShelfId)
             {
                 return NotFound();
             }
@@ -202,7 +206,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-               // return RedirectToAction(nameof(Index));
+                // return RedirectToAction(nameof(Index));
             }
             ViewData["ProductId"] = new SelectList(_context.Set<Product>(), "ProductId", "Name", shelft_ProductExhibition.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", shelft_ProductExhibition.ShelfId);
@@ -226,7 +230,7 @@ namespace Supermarket.Controllers
             if (shelft_ProductExhibition.Quantity != 0)
             {
                 ViewBag.Message = "Shelft Product Exhibition cannot be eliminated because it has a quantity greater than 0";
-                return View("Delete", shelft_ProductExhibition); 
+                return View("Delete", shelft_ProductExhibition);
             }
             if (shelft_ProductExhibition == null)
             {
@@ -252,14 +256,14 @@ namespace Supermarket.Controllers
             {
                 _context.Shelft_ProductExhibition.Remove(shelft_ProductExhibition);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction("ShelfProducts", "Shelves", new { shelfId = shelft_ProductExhibition.ShelfId });
         }
 
         private bool Shelft_ProductExhibitionExists(int id)
         {
-          return (_context.Shelft_ProductExhibition?.Any(e => e.ProductId == id)).GetValueOrDefault();
+            return (_context.Shelft_ProductExhibition?.Any(e => e.ProductId == id)).GetValueOrDefault();
         }
     }
 }

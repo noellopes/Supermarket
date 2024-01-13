@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
@@ -6,6 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+>>>>>>> FolgasPendentesAprovadas
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -25,6 +29,7 @@ namespace Supermarket.Controllers
         // GET: Categories
         public async Task<IActionResult> Index(int page = 1, string name = "")
         {
+<<<<<<< HEAD
             var categories = _context.Category.AsQueryable();
 
             if (name != "")
@@ -101,6 +106,11 @@ namespace Supermarket.Controllers
             //return _context.Category != null ? 
             //              View(await _context.Category.OrderBy(c => c.Name).ToListAsync()) :
             //              Problem("Entity set 'SupermarketDbContext.Category'  is null.");
+=======
+            return _context.Category != null ?
+                        View(await _context.Category.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Category'  is null.");
+>>>>>>> FolgasPendentesAprovadas
         }
 
         // GET: Categories/Details/5
@@ -238,14 +248,14 @@ namespace Supermarket.Controllers
             {
                 _context.Category.Remove(category);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-          return (_context.Category?.Any(e => e.CategoryId == id)).GetValueOrDefault();
+            return (_context.Category?.Any(e => e.CategoryId == id)).GetValueOrDefault();
         }
     }
 }

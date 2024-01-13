@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -25,9 +20,9 @@ namespace Supermarket.Controllers
         // GET: Clients
         public async Task<IActionResult> Index()
         {
-              return _context.Client != null ? 
-                          View(await _context.Client.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Client'  is null.");
+            return _context.Client != null ?
+                        View(await _context.Client.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Client'  is null.");
         }
 
         // GET: Clients/Details/5
@@ -153,14 +148,14 @@ namespace Supermarket.Controllers
             {
                 _context.Client.Remove(client);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ClientExists(int id)
         {
-          return (_context.Client?.Any(e => e.ClientId == id)).GetValueOrDefault();
+            return (_context.Client?.Any(e => e.ClientId == id)).GetValueOrDefault();
         }
     }
 }

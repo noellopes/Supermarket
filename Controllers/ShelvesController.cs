@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+>>>>>>> FolgasPendentesAprovadas
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
@@ -176,7 +180,7 @@ namespace Supermarket.Controllers
                 try
                 {
                     bool ShelvesExists = await _context.Shelf.AnyAsync(
-                    b => b.Name == shelf.Name && b.HallwayId == shelf.HallwayId && b.ShelfId!=shelf.ShelfId);
+                    b => b.Name == shelf.Name && b.HallwayId == shelf.HallwayId && b.ShelfId != shelf.ShelfId);
                     if (ShelvesExists)
                     {
                         ModelState.AddModelError("", "Another Shelf with the same Name and Hallway already exists.");
@@ -202,7 +206,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-              //  return RedirectToAction(nameof(Index));
+                //  return RedirectToAction(nameof(Index));
             }
             ViewData["HallwayId"] = new SelectList(_context.Hallway, "HallwayId", "Description", shelf.HallwayId);
             return View(shelf);
@@ -257,7 +261,7 @@ namespace Supermarket.Controllers
             {
                 _context.Shelf.Remove(shelf);
             }
-            
+
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index", new { hallwaysId = shelf?.HallwayId });
@@ -308,7 +312,7 @@ namespace Supermarket.Controllers
 
         private bool ShelfExists(int id)
         {
-          return (_context.Shelf?.Any(e => e.ShelfId == id)).GetValueOrDefault();
+            return (_context.Shelf?.Any(e => e.ShelfId == id)).GetValueOrDefault();
         }
     }
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+>>>>>>> FolgasPendentesAprovadas
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -27,6 +31,7 @@ namespace Supermarket.Controllers
         // GET: EmployeeEvaluation
         public async Task<IActionResult> IndexAsync(int page = 1, string description = "", string employeeName = "", int employeeId = 0)
         {
+<<<<<<< HEAD
             var evaluationsFiltered = _context.EmployeeEvaluation.Include(ee => ee.Employee).AsQueryable();
 
             IdentityUser? user = _userManager!.GetUserAsync(User).Result;
@@ -80,6 +85,12 @@ namespace Supermarket.Controllers
                     Pagination = pagination
                 }
             );
+=======
+            var Evaluations = _context.EmployeeEvaluation.Include(ee => ee.Employee);
+            return Evaluations != null ?
+                          View(await Evaluations.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.EmployeeEvaluation'  is null.");
+>>>>>>> FolgasPendentesAprovadas
         }
 
         // GET: EmployeeEvaluation/Details/5
@@ -235,7 +246,7 @@ namespace Supermarket.Controllers
             {
                 _context.EmployeeEvaluation.Remove(employeeEvaluation);
             }
-            
+
             await _context.SaveChangesAsync();
 
             TempData["Message"] = "The employee evaluation has successfully been deleted!";
@@ -245,15 +256,23 @@ namespace Supermarket.Controllers
 
         private bool EmployeeEvaluationExists(int id)
         {
-          return (_context.EmployeeEvaluation?.Any(e => e.EmployeeEvaluationId == id)).GetValueOrDefault();
+            return (_context.EmployeeEvaluation?.Any(e => e.EmployeeEvaluationId == id)).GetValueOrDefault();
         }
 
         // GET: EmployeeEvaluation/EmployeeView
         public async Task<IActionResult> EmployeeListView()
         {
+<<<<<<< HEAD
             return _context.Employee != null ?
                         View(await _context.Employee.ToListAsync()) :
                         Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
+=======
+            var Employees = _context.Employee.Include(f => EmployeeGradeAsync(f.EmployeeId));
+
+            return Employees != null ?
+                          View(await Employees.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.EmployeeEvaluation'  is null.");
+>>>>>>> FolgasPendentesAprovadas
         }
 
         private float EmployeeGradeAsync(int? EmployeeId)
@@ -265,15 +284,21 @@ namespace Supermarket.Controllers
                 return 0;
             }
 
-            var Employee =  _context.Employee.Find(EmployeeId);
+            var Employee = _context.Employee.Find(EmployeeId);
             if (Employee == null)
             {
                 //The employee doesn't exist!
                 return 0;
             }
 
+<<<<<<< HEAD
             var Evaluations = _context.EmployeeEvaluation.Where(af => af.EmployeeId==Employee.EmployeeId).ToList();
             if (Evaluations.Count < 1)
+=======
+            var Evaluations = _context.EmployeeEvaluation.Where(af => af.EmployeeId == Employee.EmployeeId).ToList();
+            var sum = 0;
+            foreach (var evaluation in Evaluations)
+>>>>>>> FolgasPendentesAprovadas
             {
                 //There are no evaluations for this employee
                 return 0;
@@ -287,12 +312,17 @@ namespace Supermarket.Controllers
                     sum += evaluation.GradeNumber;
                 }
 
+<<<<<<< HEAD
                 var mean = sum / Evaluations.Count;
 
                 mean = (int)(mean * assiduidade);
                 return mean;
             }
             
+=======
+            var mean = sum / Evaluations.Count;
+            return mean;
+>>>>>>> FolgasPendentesAprovadas
         }
     }
 }

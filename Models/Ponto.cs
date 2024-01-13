@@ -6,7 +6,7 @@ namespace Supermarket.Models
     {
         [Key]
         [Required]
-        public int PontoId {  get; set; }
+        public int PontoId { get; set; }
 
         [Required]
         public int EmployeeId { get; set; }
@@ -39,7 +39,26 @@ namespace Supermarket.Models
 
         [Required]
         [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
+<<<<<<< HEAD
         public string? RealCheckOutTime { get; set; }
+=======
+        public required string RealCheckOutTime { get; set; }
+
+
+
+
+
+        //vai ser uma picklist, onde vai ser selecionado depois quando o josefino entrar no supermercado:
+        //por exemplo, o josefino entra as 9h, e por sorte, ele entrou antes da hora, por isso, na picklist vai ser selecionado 
+        //a opção de "Ponto registrado"
+        //mas, se o josefino so entrar por volta das 9h30, vai aparecer a opção de "ponto irregular" sendo assim
+        //o josefino tem de fazer um documentário para justificar o seu atraso de 30min.
+        [Required]
+        public string Status { get; set; } = "Pendente";
+
+        public string Justificative { get; set; } = "";
+
+>>>>>>> FolgasPendentesAprovadas
 
         //vai ser uma picklist, onde vai ser selecionado depois quando o josefino entrar no supermercado:
         //por exemplo, o josefino entra as 9h, e por sorte, ele entrou antes da hora, por isso, na picklist vai ser selecionado 

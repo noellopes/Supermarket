@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -238,7 +234,7 @@ namespace Supermarket.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PontoId"] = new SelectList(_context.Ponto, "PontoId", "Status", subsidyCalculation.PontoId);
-          //  ViewData["SubsidySetupId"] = new SelectList(_context.SubsidySetup, "SubsidySetupId", "SubsidySetupId", subsidyCalculation.SubsidySetupId);
+            //  ViewData["SubsidySetupId"] = new SelectList(_context.SubsidySetup, "SubsidySetupId", "SubsidySetupId", subsidyCalculation.SubsidySetupId);
             return View(subsidyCalculation);
         }
 
@@ -256,7 +252,7 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
             ViewData["PontoId"] = new SelectList(_context.Ponto, "PontoId", "Status", subsidyCalculation.PontoId);
-          //  ViewData["SubsidySetupId"] = new SelectList(_context.SubsidySetup, "SubsidySetupId", "SubsidySetupId", subsidyCalculation.SubsidySetupId);
+            //  ViewData["SubsidySetupId"] = new SelectList(_context.SubsidySetup, "SubsidySetupId", "SubsidySetupId", subsidyCalculation.SubsidySetupId);
             return View(subsidyCalculation);
         }
 
@@ -307,7 +303,7 @@ namespace Supermarket.Controllers
 
             var subsidyCalculation = await _context.SubsidyCalculation
                 .Include(s => s.Ponto)
-               // .Include(s => s.SubsidySetup)
+                // .Include(s => s.SubsidySetup)
                 .FirstOrDefaultAsync(m => m.SubsidyCalculationId == id);
             if (subsidyCalculation == null)
             {
@@ -331,14 +327,14 @@ namespace Supermarket.Controllers
             {
                 _context.SubsidyCalculation.Remove(subsidyCalculation);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool SubsidyCalculationExists(int id)
         {
-          return (_context.SubsidyCalculation?.Any(e => e.SubsidyCalculationId == id)).GetValueOrDefault();
+            return (_context.SubsidyCalculation?.Any(e => e.SubsidyCalculationId == id)).GetValueOrDefault();
         }
     }
 }

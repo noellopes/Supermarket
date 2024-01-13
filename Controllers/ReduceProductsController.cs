@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,6 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+>>>>>>> FolgasPendentesAprovadas
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -463,7 +467,7 @@ namespace Supermarket.Controllers
 
         private bool ReduceProductExists(int id)
         {
-          return (_context.ReduceProduct?.Any(e => e.ReduceProductId == id)).GetValueOrDefault();
+            return (_context.ReduceProduct?.Any(e => e.ReduceProductId == id)).GetValueOrDefault();
         }
     }
 }

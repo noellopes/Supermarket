@@ -1,16 +1,14 @@
-﻿using Microsoft.VisualBasic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models
 {
     public class Folga
     {
-        
+
         public int FolgaId { get; set; }
 
-        
-        
+
+
         public int EmployeeId { get; set; }
         public Employee? Employee { get; set; }
 
@@ -19,7 +17,7 @@ namespace Supermarket.Models
 
 
         public int? GestorId { get; set; }
-        public enum  FolgaStatus
+        public enum FolgaStatus
         {
             Aprovada,
             Rejeitada,
@@ -33,7 +31,7 @@ namespace Supermarket.Models
 
 
         [DataType(DataType.Date)]
-        public DateTime? DataPedido { get; set; }
+        public DateTime DataPedido { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? DataResultado { get; set; }
@@ -43,7 +41,7 @@ namespace Supermarket.Models
         [Required]
 
         [DataType(DataType.Date)]
-        
+
         public DateTime DataInicio { get; set; }
 
         [Required]
@@ -55,7 +53,7 @@ namespace Supermarket.Models
 
 
 
-        
+
 
 
 

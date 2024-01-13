@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Supermarket.Models {
-    public class Group {
-        public int GroupId {  get; set; }
+namespace Supermarket.Models
+{
+    public class Group
+    {
+        public int GroupId { get; set; }
 
         public int Number { get; set; }
 

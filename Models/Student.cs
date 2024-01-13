@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Supermarket.Models {
-    public class Student {
+namespace Supermarket.Models
+{
+    public class Student
+    {
         public int StudentId { get; set; }
 
         [Required]
@@ -15,6 +17,6 @@ namespace Supermarket.Models {
         public int GroupId { get; set; }
         public Group? Group { get; set; }
 
-        public ICollection<StudentTask>? Task {  get; set; }
+        public ICollection<StudentTask>? Task { get; set; }
     }
 }

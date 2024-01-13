@@ -7,7 +7,7 @@ namespace Supermarket.Models
         public int CategoryId { get; set; }
 
         [Required]
-        [StringLength(30,MinimumLength = 3)]
+        [StringLength(30, MinimumLength = 3)]
         public required string Name { get; set; }
     }
 }

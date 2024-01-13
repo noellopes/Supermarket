@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -22,10 +17,16 @@ namespace Supermarket.Controllers
         // GET: Groups
         public async Task<IActionResult> Index()
         {
+<<<<<<< HEAD
               return _context.Group != null ? 
                           View(await _context.Group
                        .ToListAsync()) :
                           Problem("Entity set 'GroupsDbContext.Group'  is null.");
+=======
+            return _context.Group != null ?
+                        View(await _context.Group.ToListAsync()) :
+                        Problem("Entity set 'GroupsDbContext.Group'  is null.");
+>>>>>>> FolgasPendentesAprovadas
         }
 
         // GET: Groups/Details/5
@@ -151,14 +152,14 @@ namespace Supermarket.Controllers
             {
                 _context.Group.Remove(@group);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GroupExists(int id)
         {
-          return (_context.Group?.Any(e => e.GroupId == id)).GetValueOrDefault();
+            return (_context.Group?.Any(e => e.GroupId == id)).GetValueOrDefault();
         }
     }
 }

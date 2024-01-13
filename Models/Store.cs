@@ -5,7 +5,7 @@ namespace Supermarket.Models
     public class Store
     {
         public int StoreId { get; set; }
-        [Required (ErrorMessage = "Please enter a Store Name")]
+        [Required(ErrorMessage = "Please enter a Store Name")]
         [StringLength(30, MinimumLength = 3, ErrorMessage = "Please enter your Store Name bigger than 3 leters")]
         public required string Name { get; set; }
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+>>>>>>> FolgasPendentesAprovadas
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -26,6 +30,7 @@ namespace Supermarket.Controllers
         // GET: Warehouses
         public async Task<IActionResult> Index(int page = 1, string name = "", string adress = "")
         {
+<<<<<<< HEAD
             var warehouses = from b in _context.Warehouse select b;
             
             if (name != "")
@@ -66,6 +71,11 @@ namespace Supermarket.Controllers
             };
 
             return View(vm);
+=======
+            return _context.Warehouse != null ?
+                        View(await _context.Warehouse.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Warehouse'  is null.");
+>>>>>>> FolgasPendentesAprovadas
         }
 
         // GET: Warehouses/Details/5
@@ -184,7 +194,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-               // return RedirectToAction(nameof(Index));
+                // return RedirectToAction(nameof(Index));
             }
             return View(warehouse);
         }
@@ -235,7 +245,7 @@ namespace Supermarket.Controllers
             {
                 _context.Warehouse.Remove(warehouse);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -288,7 +298,7 @@ namespace Supermarket.Controllers
 
         private bool WarehouseExists(int id)
         {
-          return (_context.Warehouse?.Any(e => e.WarehouseId == id)).GetValueOrDefault();
+            return (_context.Warehouse?.Any(e => e.WarehouseId == id)).GetValueOrDefault();
         }
     }
 }

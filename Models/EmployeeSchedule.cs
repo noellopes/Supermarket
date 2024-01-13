@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Supermarket.Models
+﻿namespace Supermarket.Models
 {
     public class EmployeeSchedule
     {
+<<<<<<< HEAD
         [Key]
         [Required]
         public int EmployeeScheduleId {  get; set; }
@@ -26,6 +25,12 @@ namespace Supermarket.Models
 
         [Required]
         public required int LunchTime { get; set; }
+=======
+        public int EmployeeScheduleId { get; set; }
+
+
+        public int EmployeeId { get; set; }
+>>>>>>> FolgasPendentesAprovadas
 
         public Employee? Employee { get; set; }
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+>>>>>>> FolgasPendentesAprovadas
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -24,9 +28,9 @@ namespace Supermarket.Controllers
         // GET: Stores
         public async Task<IActionResult> Index()
         {
-              return _context.Store != null ? 
-                          View(await _context.Store.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Store'  is null.");
+            return _context.Store != null ?
+                        View(await _context.Store.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Store'  is null.");
         }
 
         // GET: Stores/Details/5
@@ -116,11 +120,11 @@ namespace Supermarket.Controllers
                 try
                 {
                     bool StoreExists = await _context.Store.AnyAsync(
-                    b => b.Name == store.Name && b.Adress == store.Adress&&b.StoreId!=store.StoreId);
+                    b => b.Name == store.Name && b.Adress == store.Adress && b.StoreId != store.StoreId);
 
                     if (StoreExists)
                     {
-                     ModelState.AddModelError("", "Another Store with the same Name and Adress already exists.");
+                        ModelState.AddModelError("", "Another Store with the same Name and Adress already exists.");
                     }
                     else
                     {
@@ -129,7 +133,7 @@ namespace Supermarket.Controllers
                         ViewBag.Message = "Store successfully edited.";
                         return View("Details", store);
                     }
-                    
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -142,7 +146,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-               // return RedirectToAction(nameof(Index));
+                // return RedirectToAction(nameof(Index));
             }
             return View(store);
         }
@@ -173,7 +177,7 @@ namespace Supermarket.Controllers
                 return View("Delete");
             }
 
-            
+
 
             return View(store);
         }
@@ -193,7 +197,7 @@ namespace Supermarket.Controllers
                 _context.Store.Remove(store);
             }
 
-            
+
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -243,7 +247,7 @@ namespace Supermarket.Controllers
         
         private bool StoreExists(int id)
         {
-          return (_context.Store?.Any(e => e.StoreId == id)).GetValueOrDefault();
+            return (_context.Store?.Any(e => e.StoreId == id)).GetValueOrDefault();
         }
     }
 }

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using Supermarket.Data;
 using Supermarket.Models;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -77,6 +71,7 @@ namespace Supermarket.Controllers
         // GET: ProductDiscounts
         public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
+<<<<<<< HEAD
             //variavel para a data do aniversário
             var today = DateTime.Today;
             //obter uma lista de clientes que fazem aniversário
@@ -89,6 +84,10 @@ namespace Supermarket.Controllers
             //obter os descontos de produtos
             var productDiscounts = from b in _context.ProductDiscount.Include(b => b.ClientCard).Include(b => b.Product) select b; ;
             //pesquisa dos descontos produto
+=======
+            var productDiscounts = from b in _context.ProductDiscount.Include(b => b.ClientCard).Include(b => b.Product) select b;
+
+>>>>>>> FolgasPendentesAprovadas
             if (product != "")
             {
                 productDiscounts = productDiscounts.Where(b => b.Product.Name.Contains(product));
@@ -172,6 +171,7 @@ namespace Supermarket.Controllers
         {
             if (ModelState.IsValid)
             {
+<<<<<<< HEAD
                 //obter os clientCards Ativos
                 var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
                 bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
@@ -181,6 +181,10 @@ namespace Supermarket.Controllers
                     ModelState.AddModelError("StartDate", "Start date must be equal to or later than today.");
                     duplicatedDiscounts = true;
                 }
+=======
+                var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
+                bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
+>>>>>>> FolgasPendentesAprovadas
 
                 // Verificação para garantir que o valor do desconto seja maior que 0
                 if (productDiscount.Value <= 0)

@@ -5,7 +5,7 @@ namespace Supermarket.Data
 {
     public class SupermarketDbContext : DbContext
     {
-        public SupermarketDbContext (DbContextOptions<SupermarketDbContext> options)
+        public SupermarketDbContext(DbContextOptions<SupermarketDbContext> options)
             : base(options)
         {
         }

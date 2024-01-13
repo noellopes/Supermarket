@@ -6,7 +6,7 @@ namespace Supermarket.Models
     {
         public int SubsidySetupId { get; set; }
         [Required]
-        
+
 
         public float HorasMinTrabalhadas { get; set; }
         [Required]

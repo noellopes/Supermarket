@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+=======
+﻿using Microsoft.AspNetCore.Mvc;
+>>>>>>> FolgasPendentesAprovadas
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -127,12 +131,13 @@ namespace Supermarket.Controllers
             if (ModelState.IsValid)
             {
                 bool WarehouseSectionExists = await _context.WarehouseSection.AnyAsync(
-                   b => b.Description == warehouseSection.Description && b.WarehouseId == warehouseSection.WarehouseId && b.WarehouseSectionId!=warehouseSection.WarehouseSectionId);
+                   b => b.Description == warehouseSection.Description && b.WarehouseId == warehouseSection.WarehouseId && b.WarehouseSectionId != warehouseSection.WarehouseSectionId);
 
                 if (WarehouseSectionExists)
                 {
                     TempData["ErrorMessage2"] = "Another Warehouse Section with the same Description and Warehouse already exists.";
                 }
+<<<<<<< HEAD
                 else {
                     try
                     {
@@ -146,6 +151,16 @@ namespace Supermarket.Controllers
                         TempData["ErrorMessage2"] = "DataBase conection Error ";
                        
                     }
+=======
+                else
+                {
+                    _context.Add(warehouseSection);
+                    await _context.SaveChangesAsync();
+                    ViewBag.Message = "Warehouse Section successfully created.";
+                    warehouseSection.Warehouse = await _context.Warehouse.FindAsync(warehouseSection.WarehouseId);
+
+                    return View("Details", warehouseSection);
+>>>>>>> FolgasPendentesAprovadas
                 }
             }
             ViewData["WarehouseId"] = new SelectList(_context.Set<Warehouse>(), "WarehouseId", "Name", warehouseSection.WarehouseId);
@@ -214,7 +229,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-               
+
                 //return RedirectToAction(nameof(Index));
             }
             ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Name", warehouseSection.WarehouseId);
@@ -270,6 +285,7 @@ namespace Supermarket.Controllers
                 _context.WarehouseSection.Remove(warehouseSection);
                 await _context.SaveChangesAsync();
             }
+<<<<<<< HEAD
             
             return RedirectToAction("Index", "WarehouseSections", new { warehouseId =warehouseSection?.WarehouseId });
         }
@@ -313,11 +329,16 @@ namespace Supermarket.Controllers
             ViewBag.Products = products;
 
             return View();
+=======
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+>>>>>>> FolgasPendentesAprovadas
         }
 
         private bool WarehouseSectionExists(int id)
         {
-          return (_context.WarehouseSection?.Any(e => e.WarehouseSectionId == id)).GetValueOrDefault();
+            return (_context.WarehouseSection?.Any(e => e.WarehouseSectionId == id)).GetValueOrDefault();
         }
     }
 }
