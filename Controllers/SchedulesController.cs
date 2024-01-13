@@ -27,18 +27,11 @@ namespace Supermarket.Controllers
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
-
             var schedules = from b in _context.Schedule.Include(b => b.Departments)
                             select b;
 
-
             if (BotaoHistorico == false)
             {
-
-                schedules = schedules.Where(x => x.DeptID==departmentDrop);
-            }
-
-
        
                 schedules = schedules.Where(b => b.StartDate.Date <= DateTime.Now.Date && b.EndDate.Value.Date >= DateTime.Now.Date);
 
@@ -102,7 +95,7 @@ namespace Supermarket.Controllers
             }
             // Fetch the department name based on IDDepartments
             var departmentName = _context.Departments
-                .Where(d => d.IDDepartments == schedule.DeptID)
+                .Where(d => d.IDDepartments == schedule.IDDepartments)
                 .Select(d => d.NameDepartments)
                 .FirstOrDefault();
 

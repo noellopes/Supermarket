@@ -241,8 +241,6 @@ namespace Supermarket.Controllers
 
 
 
-            _memoryCache.Remove(CacheProductKey);
-
             return RedirectToAction("Index","Order");
         }
 

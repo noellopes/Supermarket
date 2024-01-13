@@ -366,11 +366,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Data/Migrations/Supermarket/SupermarketDbContextModelSnapshot.cs
-<<<<<<< HEAD
 /Controllers/PontoesController.cs
-=======
->>>>>>> DB
-/Data/Migrations/Supermarket/20240109191159_Teste.cs
-/Data/Migrations/Supermarket/20240109191159_Teste.Designer.cs
-/Data/Migrations/Supermarket/20240109191159_Teste.cs
-/Data/Migrations/Supermarket/20240109191159_Teste.Designer.cs

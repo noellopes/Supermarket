@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Numerics;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +22,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: Pontoes
-        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Index(int page = 1, DateTime? searchMonth = null)
         {
             // Obtém todos os pontos sem modificar a lista completa
@@ -101,7 +99,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: Pontoes/Details/5
-        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Ponto == null)
@@ -132,39 +129,14 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Create([Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,RealCheckOutTime,Status,Justificative,ExtraHours")] Ponto ponto)
         {
             if (ModelState.IsValid)
             {
-                //StringComparison = Não é necessário escrever igual ao nome, pode ser tudo em letra minuscula ou maiuscula
-                if (string.Equals(ponto.Status, "workOvertime", StringComparison.OrdinalIgnoreCase))
-                {
-                   
-                    ponto.Justificative = "Don't need justification";
-                }
-                else if (string.Equals(ponto.Status, "notworkOvertime", StringComparison.OrdinalIgnoreCase))
-                {
-                    
-                    if (string.IsNullOrEmpty(ponto.Justificative))
-                    {
-                        ModelState.AddModelError("Justificative", "Justificative is required.");
-                        ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
-                        return View(ponto);
-                    }
-                }
-                var employee = await _context.Employee.FindAsync(ponto.EmployeeId);
-                if(employee.Employee_Termination_Date != null && ponto.Date > employee.Employee_Termination_Date)
-                {
-                    ModelState.AddModelError("Date", "The employee is no longer working.");
-                    ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
-                    return View(ponto);
-                }
                 _context.Add(ponto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", ponto.EmployeeId);
             return View(ponto);
         }
@@ -191,7 +163,6 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Edit(int id, [Bind("PontoId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchEndTime,RealCheckOutTime,Status,Justificative,ExtraHours")] Ponto ponto)
         {
             if (id != ponto.PontoId)
@@ -245,7 +216,6 @@ namespace Supermarket.Controllers
         // POST: Pontoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Ponto == null)

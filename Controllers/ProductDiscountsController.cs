@@ -1,10 +1,14 @@
-﻿using System.Data;
-using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using Supermarket.Data;
 using Supermarket.Models;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -18,7 +22,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts/CreateBirthdayDiscount
-        [Authorize(Roles = "Administrator")]
         public IActionResult CreateBirthdayDiscount()
         {
             ViewData["ProductList"] = new SelectList(_context.Product, "ProductId", "Name");
@@ -27,15 +30,14 @@ namespace Supermarket.Controllers
         //Novo create para os desconto de aniversário
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
         public async Task <IActionResult> CreateBirthdayDiscount(ProductDiscount productDiscount)
         {
             if (ModelState.IsValid)
             {
                 //Verificar se um desconto com o mesmo nome e valor existe 
                 bool discountExists = _context.ProductDiscount
-                    .Any(b => b.ProductId == productDiscount.ProductId 
-                    && b.Value == productDiscount.Value);
+                    .Any(pd => pd.ProductId == productDiscount.ProductId 
+                    && pd.Value == productDiscount.Value);
 
                 if (discountExists)
                 {
@@ -73,8 +75,7 @@ namespace Supermarket.Controllers
             return View(productDiscount);
         }
         // GET: ProductDiscounts
-        [Authorize(Roles = "Client")]
-        public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null, bool? applicable = null)
+        public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
             //variavel para a data do aniversário
             var today = DateTime.Today;
@@ -89,7 +90,7 @@ namespace Supermarket.Controllers
             var productDiscounts = from b in _context.ProductDiscount.Include(b => b.ClientCard).Include(b => b.Product) select b; ;
             //pesquisa dos descontos produto
             if (product != "")
-            {   
+            {
                 productDiscounts = productDiscounts.Where(b => b.Product.Name.Contains(product));
             }
             if (value.HasValue)
@@ -103,12 +104,6 @@ namespace Supermarket.Controllers
             if (endDate.HasValue)
             {
                 productDiscounts = productDiscounts.Where(b => b.EndDate <= endDate.Value.Date);
-            }
-            // filtrar os descontos par asaber se sao aplicaveis ou nao
-            if (applicable.HasValue)
-            {
-                bool isApplicable = applicable.Value;
-                productDiscounts = isApplicable? productDiscounts.Where(b => b.StartDate <= DateTime.Today && b.EndDate >= DateTime.Today) : productDiscounts.Where(b => !(b.StartDate <= DateTime.Today && b.EndDate >= DateTime.Today));
             }
 
             PagingInfo paging = new PagingInfo
@@ -135,13 +130,11 @@ namespace Supermarket.Controllers
                     .ToListAsync(),
                 PagingInfo = paging,
                 ClientsWithBirthday = clientsWithBirthday,
-                Applicable = applicable,
             };
             return View(vm);
         }
 
         // GET: ProductDiscounts/Details/5
-        [Authorize(Roles = "Client")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.ProductDiscount == null)
@@ -163,7 +156,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts/Create
-        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber");
@@ -176,7 +168,6 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (ModelState.IsValid)
@@ -253,7 +244,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts/Edit/5
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.ProductDiscount == null)
@@ -276,7 +266,6 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (id != productDiscount.ProductDiscountId)
@@ -312,7 +301,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: ProductDiscounts/Delete/5
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.ProductDiscount == null)
@@ -335,7 +323,6 @@ namespace Supermarket.Controllers
         // POST: ProductDiscounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.ProductDiscount == null)

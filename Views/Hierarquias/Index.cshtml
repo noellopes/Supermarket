@@ -1,8 +1,7 @@
-﻿@model IEnumerable<Supermarket.Models.Hierarquias>;
+﻿@model List<HierarquiasModel>
 
 @{
-    ViewData["Title"] = "Relacoes Hierarquicas";
-    var employeesViewModel = ViewData["EmployeesViewModel"] as Supermarket.Models.EmployeesViewModel;
+    ViewData["Title"] = "Hierarquias";
 }
 
 @if (ViewBag.MensagemExclusao != null)
@@ -15,65 +14,34 @@
     </div>
 }
 
-<h2>Lista de Relacoes Hierarquicas</h2>
+<h2>Lista de Hierarquias</h2>
 
 <p>
-@*     @if (User.IsInRole("Administrator"))
-        { *@
-    <a asp-action="Create" class="btn btn-success">Nova Relacao Hierarquica</a>
-    <a asp-controller="Employees" asp-action="Index" class="btn btn-primary">Gerenciar Funcionarios</a>
-@*         } *@
-    <a asp-action="SearchSubordinados" class="btn btn-info">Pesquisar Subordinados</a>
-    <a asp-action="SearchSuperiores" class="btn btn-warning">Pesquisar Superiores</a>
+    <a asp-action="Create" class="btn btn-success">Nova Hierarquias</a>
 </p>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Funcionário</th>
-            <th>Superior</th>
+            <th>ID</th>
+            <th>Nome</th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var Hierarquias in Model)
         {
             <tr>
+                <td>@Hierarquias.Id</td>
+                <td>@Hierarquias.Nome</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Subordinados.Employee_Name)
+                    <a asp-action="Details" asp-route-id="@Hierarquias.Id" class="btn btn-info">Detalhes</a>
+                    <a asp-action="Edit" asp-route-id="@Hierarquias.Id" class="btn btn-warning">Editar</a>
+                    <a asp-action="Delete" asp-route-id="@Hierarquias.Id" class="btn btn-danger">Deletar</a>
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Superiores.Employee_Name)
-                </td>
-@*                 @if (User.IsInRole("Administrator"))
-                { *@
-                    <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detalhes</a> |
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Deletar</a>
-                    </td>
-@*                 } else
-                {
-                    <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detalhes</a>
-                    </td>
-                } *@
             </tr>
         }
     </tbody>
-        <tr class="table-separator">
-            <th colspan="3">Todos os funcionários</th>
-        </tr>
-        @if (employeesViewModel != null)
-        {
-            foreach (var employee in employeesViewModel.Employees)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => employee.Employee_Name)</td>
-                    @* <td>@Html.DisplayFor(modelItem => employee.Employee_NIF)</td> *@
-                </tr>
-            }
-        }
 </table>
 
 <style>
@@ -89,8 +57,7 @@
     }
 </style>
 
-<script>
-    var progressBar = document.getElementById('progressBar');
+<script>var progressBar = document.getElementById('progressBar');
     var mensagemExclusao = document.getElementById('mensagemExclusao');
 
     progressBar.style.width = '100%';
@@ -107,5 +74,4 @@
                 mensagemExclusao.style.display = 'none';
             }, duracaoAnimacao);
         }
-    }, duracaoAnimacao / 1000);
-</script>
+    }, duracaoAnimacao / 1000);</script>

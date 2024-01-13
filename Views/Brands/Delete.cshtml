@@ -4,64 +4,10 @@
     ViewData["Title"] = "Delete";
 }
 
-<style>
-     body {
-         padding: 20px;
-         background-color: #f8f9fa;
-         color: #343a40;
-     }
+<h1>Delete</h1>
 
-     h1 {
-         color: #007bff;
-         margin-top: 20px;
-     }
-
-     .card {
-         background-color: #fff;
-         border: 1px solid rgba(0, 0, 0, 0.125);
-         border-radius: 0.25rem;
-         padding: 20px;
-         margin-bottom: 20px;
-     }
-
-     .form-group {
-         margin-bottom: 20px;
-     }
-
-     label {
-         font-weight: bold;
-     }
-
-     .btn-primary {
-         background-color: #007bff;
-         color: #fff;
-     }
-
-     .btn-secondary {
-         background-color: #6c757d;
-         color: #fff;
-     }
-
-     .select-card {
-         display: inline-block;
-         width: 100%;
-         box-sizing: border-box;
-         margin-top: 6px;
-         margin-bottom: 16px;
-         cursor: pointer;
-     }
-
-         .select-card:hover {
-             background-color: #f8f8f8;
-         }
-</style>
-<div class="card">
-    <h1>Delete</h1>
-</div>
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-<div class="card">
 <h3>Are you sure you want to delete this?</h3>
-    <div>
+<div>
     <h4>Brand</h4>
     <hr />
     <dl class="row">
@@ -75,8 +21,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="BrandId" />
-        <input type="submit" value="Delete" class="btn btn-danger" />   
-            <a asp-action="Index" class="btn btn-primary">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
     </form>
-    </div>
 </div>

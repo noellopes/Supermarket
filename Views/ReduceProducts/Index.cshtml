@@ -1,71 +1,37 @@
-﻿@model ReduceProductViewModel
+﻿@model IEnumerable<Supermarket.Models.ReduceProduct>
 
 @{
     ViewData["Title"] = "Index";
 }
-<style>
-    body {
-        padding: 20px;
-        background-color: #f8f9fa; /* Cor de fundo mais clara */
-        color: #343a40; /* Cor do texto mais escura */
-    }
 
-    h1 {
-        color: #007bff; /* Azul Bootstrap */
-        margin-top: 20px; /* Margem superior maior */
-    }
-
-    .card {
-        background-color: #fff; /* Cor de fundo do cartão */
-        border: 1px solid rgba(0, 0, 0, 0.125); /* Borda do cartão */
-        border-radius: 0.25rem; /* Borda arredondada */
-        padding: 20px; /* Espaçamento interno do cartão */
-        margin-bottom: 20px; /* Margem inferior do cartão */
-    }
-
-    .btn-group a {
-        margin-right: 5px; /* Espaçamento à direita entre os botões do grupo */
-    }
-
-    .table th,
-    .table td {
-        background-color: #f8f8f8; /* Cor de fundo alternativa (cinza mais claro) para as células da tabela */
-        color: #000; /* Cor do texto na tabela */
-        border: none; /* Remove bordas das células da tabela */
-    }
-</style>
-
-<div class="card">
-    <h1>Index</h1>
-</div>
+<h1>Index</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-success">Create New</a>
-    <a class="btn btn-success" asp-action="IndexA">See Confirmed and Rejected</a>
+    <a asp-action="Create">Create New</a>
 </p>
-<table class="table table-bordered table-striped">
+<table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ReduceProduct[0].Reason)
+                @Html.DisplayNameFor(model => model.Reason)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReduceProduct[0].Status)
+                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReduceProduct[0].Date)
+                @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReduceProduct[0].Quantity)
+                @Html.DisplayNameFor(model => model.Quantity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReduceProduct[0].Product)
+                @Html.DisplayNameFor(model => model.Product)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.ReduceProduct) {
+@foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Reason)
@@ -80,68 +46,14 @@
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Product!.Name)
+                @Html.DisplayFor(modelItem => item.Product.Name)
             </td>
-            <td >
-                <div class="btn-group" role="group" aria-label="Actions">
-                <a asp-action="Edit" asp-route-id="@item.ReduceProductId" class="btn btn-secondary">Edit</a>
-                <a asp-action="Details" asp-route-id="@item.ReduceProductId" class="btn btn-secondary">Details</a>
-                <a asp-action="ConfirmStatus" asp-route-id="@item.ReduceProductId" class="btn btn-secondary">ConfirmStatus</a>
-                </div>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ReduceProductId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ReduceProductId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ReduceProductId">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
-<nav aria-label="ReduceProduct">
-    <ul class="pagination">
-        @if (Model.PagingInfoProduct.CurrentPage == 1)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" href="#">First</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-page="1">First</a>
-            </li>
-        }
-
-        @{
-            int first = Model.PagingInfoProduct.CurrentPage - PagingInfoProduct.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-            if (first < 1) first = 1;
-
-            int last = Model.PagingInfoProduct.CurrentPage + PagingInfoProduct.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-            if (last > Model.PagingInfoProduct.TotalPages) last = Model.PagingInfoProduct.TotalPages;
-        }
-
-        @for (int p = first; p <= last; p++)
-        {
-            @if (p == Model.PagingInfoProduct.CurrentPage)
-            {
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="#">@p</a>
-                </li>
-            }
-            else
-            {
-                <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
-                </li>
-            }
-        }
-        @if (Model.PagingInfoProduct.CurrentPage == Model.PagingInfoProduct.TotalPages)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" href="#">Last</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfoProduct.TotalPages">Last</a>
-            </li>
-        }
-    </ul>
-    </nav>

@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +11,10 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    //[Authorize]
     public class EmployeesController : Controller
     {
         private readonly SupermarketDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public EmployeesController(SupermarketDbContext context)
         {
@@ -31,21 +30,13 @@ namespace Supermarket.Controllers
                           Problem("Entity set 'SupermarketDbContext.Employee'  is null.");
         }
         */
-
-        //[Authorize(Roles = "Administrator")]
-        [Authorize(Roles = "Employeer")]
-        public async Task<IActionResult> Index(int page = 1, string employee_name = "", string employee_nif = "")
+        public async Task<IActionResult> Index(int page = 1, string employee_name = "")
         {
             var employees = from b in _context.Employee select b;
 
             if (!string.IsNullOrEmpty(employee_name))
             {
                 employees = employees.Where(x => x.Employee_Name.Contains(employee_name));
-            }
-
-            if (!string.IsNullOrEmpty(employee_nif))
-            {
-                employees = employees.Where(x => x.Employee_NIF.Contains(employee_nif));
             }
 
             PagingInfo paging = new PagingInfo
@@ -71,7 +62,7 @@ namespace Supermarket.Controllers
                     .Take(paging.PageSize)
                     .ToListAsync(),
                 PagingInfo = paging,
-                SearchName = employee_name
+                SearchName = employee_name,
             };
 
             return View(vm);
@@ -79,7 +70,6 @@ namespace Supermarket.Controllers
 
 
         // GET: Employees/Details/5
-        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Employee == null)
@@ -88,9 +78,7 @@ namespace Supermarket.Controllers
             }
 
             var employee = await _context.Employee
-                .Include(e => e.Departments)
                 .FirstOrDefaultAsync(m => m.EmployeeId == id);
-
 
             if (employee == null)
             {
@@ -123,11 +111,24 @@ namespace Supermarket.Controllers
 
 
 
-        // GET: Employees/Create
+        private async Task<bool> IsEmailUnique(string email)
+        {
+            return await _context.Employee.AllAsync(e => e.Employee_Email != email);
+        }
+        private async Task<bool> IsPhoneUnique(string phone)
+        {
+            return await _context.Employee.AllAsync(e => e.Employee_Phone != phone);
+        }
 
+        private async Task<bool> IsNIFUnique(string nif)
+        {
+            return await _context.Employee.AllAsync(e => e.Employee_NIF != nif);
+        }
+
+
+        // GET: Employees/Create
         public IActionResult Create()
         {
-            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments");
             return View();
         }
 
@@ -136,40 +137,32 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Employeer")]
-        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,IDDepartments")] Employee employee)
+        public async Task<IActionResult> Create([Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time")] Employee employee)
         {
             if (ModelState.IsValid)
             {
-                bool emailExists = await _context.Employee.AnyAsync(b => b.Employee_Email == employee.Employee_Email);
-                bool phoneExists = await _context.Employee.AnyAsync(b => b.Employee_Phone == employee.Employee_Phone);
-                bool nifExists = await _context.Employee.AnyAsync(b => b.Employee_NIF == employee.Employee_NIF);
-                if (emailExists)
+                if (!await IsEmailUnique(employee.Employee_Email))
                 {
                     ModelState.AddModelError("Employee_Email", "Email is already in use.");
+                    return View(employee);
                 }
 
-                if (phoneExists)
+                if (!await IsPhoneUnique(employee.Employee_Phone))
                 {
                     ModelState.AddModelError("Employee_Phone", "Phone number is already in use.");
+                    return View(employee);
                 }
 
-                if (nifExists)
+                if (!await IsNIFUnique(employee.Employee_NIF))
                 {
                     ModelState.AddModelError("Employee_NIF", "NIF is already in use.");
-                }
-
-                if (emailExists || phoneExists || nifExists)
-                {
                     return View(employee);
                 }
 
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
-
-                return View("Details", employee);
+                return RedirectToAction(nameof(Index));
             }
-            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", employee.IDDepartments);
             return View(employee);
         }
 
@@ -186,7 +179,6 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", employee.IDDepartments);
             return View(employee);
         }
 
@@ -195,8 +187,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Employeer")]
-        public async Task<IActionResult> Edit(int id, Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("EmployeeId,Employee_Name,Employee_Email,Employee_Password,Employee_Phone,Employee_NIF,Employee_Address,Employee_Birth_Date,Employee_Admission_Date,Employee_Termination_Date,Standard_Check_In_Time,Standard_Check_Out_Time,Standard_Lunch_Hour,Standard_Lunch_Time,Employee_Time_Bank")] Employee employee)
         {
             if (id != employee.EmployeeId)
             {
@@ -207,28 +198,8 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    bool emailExists = await _context.Employee.AnyAsync(b => b.Employee_Email == employee.Employee_Email && b.EmployeeId != employee.EmployeeId);
-                    bool phoneExists = await _context.Employee.AnyAsync(b => b.Employee_Phone == employee.Employee_Phone && b.EmployeeId != employee.EmployeeId);
-                    bool nifExists = await _context.Employee.AnyAsync(b => b.Employee_NIF == employee.Employee_NIF && b.EmployeeId != employee.EmployeeId);
-
-                    if (emailExists)
-                    {
-                        ModelState.AddModelError("Employee_Email", "Email is already in use.");
-                    }
-
-                    if (phoneExists)
-                    {
-                        ModelState.AddModelError("Employee_Phone", "Phone number is already in use.");
-                    }
-
-                    if (nifExists)
-                    {
-                        ModelState.AddModelError("Employee_NIF", "NIF is already in use.");
-                    }
-                   
                     _context.Update(employee);
                     await _context.SaveChangesAsync();
-                    return View("Details", employee);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -241,8 +212,8 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
+                return RedirectToAction(nameof(Index));
             }
-            ViewData["IDDepartments"] = new SelectList(_context.Departments, "IDDepartments", "NameDepartments", employee.IDDepartments);
             return View(employee);
         }
 
@@ -267,7 +238,6 @@ namespace Supermarket.Controllers
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Employeer")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Employee == null)

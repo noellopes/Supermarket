@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,6 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    [Authorize(Roles = "Stock Administrator, Stock Operator")]
     public class WarehouseSectionsController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -22,61 +20,11 @@ namespace Supermarket.Controllers
         }
 
         // GET: WarehouseSections
-        public async Task<IActionResult> Index(int warehouseId, int page = 1, string descripition = "")
+        public async Task<IActionResult> Index()
         {
-            TempData["CancelWarehouseId"] = warehouseId;
-
-            var warehouseSections =  _context.WarehouseSection
-             .Where(h => h.WarehouseId == warehouseId);
-           
-
-            var WarehouseName = _context.Warehouse.Find(warehouseId)?.Name;
-
-            if (descripition != "")
-            {
-                warehouseSections = warehouseSections.Where(x => x.Description.Contains(descripition));
-            }
-            
-            
-            ViewBag.WarehouseId = warehouseId;
-            ViewBag.WarehouseName = WarehouseName;
-            ViewBag.WarehouseSections = warehouseSections;
-            
-
-
-            var totalWarehouseSection = await warehouseSections.CountAsync();
-            PagingInfoProduct paging = new PagingInfoProduct
-            {
-                CurrentPage = page,
-                TotalItems = totalWarehouseSection,
-            };
-
-            if (paging.CurrentPage <= 1)
-            {
-                paging.CurrentPage = 1;
-            }
-            else if (paging.CurrentPage > paging.TotalPages)
-            {
-                paging.CurrentPage = paging.TotalPages;
-            }
-
-            var vm = new WarehouseSectionViewModel
-            {
-                WarehouseSection = await warehouseSections
-                    .OrderBy(b => b.Description)
-                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
-                    .Take(paging.PageSize)
-                    .ToListAsync(),
-                PagingInfoProduct = paging,
-                SearchDescription = descripition,
-               
-            };
-            ViewBag.WarehouseSection = vm.WarehouseSection;
-            ViewBag.TotalWarehouseSections = vm.PagingInfoProduct.TotalItems;
-
-            return View(vm);
+            var supermarketDbContext = _context.WarehouseSection.Include(w => w.Warehouse);
+            return View(await supermarketDbContext.ToListAsync());
         }
-    
 
         // GET: WarehouseSections/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -97,20 +45,10 @@ namespace Supermarket.Controllers
             return View(warehouseSection);
         }
 
-        [Authorize(Roles = "Stock Administrator")]
         // GET: WarehouseSections/Create
-        public IActionResult Create(int? warehouseId)
+        public IActionResult Create()
         {
-            if (warehouseId.HasValue)
-            {
-                ViewBag.ErrorMessage2 = TempData["ErrorMessage2"] as string;
-                ViewBag.WarehouseId2 = warehouseId.Value;
-                ViewBag.warehouseName = _context.Warehouse.Find(warehouseId.Value)?.Name;
-                TempData["WarehouseId2"] = warehouseId;
-            }
-            else
-                return NotFound();
-
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Name");
             return View();
         }
 
@@ -119,11 +57,8 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Stock Administrator")]
-        public async Task<IActionResult> Create([Bind("WarehouseSectionId,Description")] WarehouseSection warehouseSection)
+        public async Task<IActionResult> Create([Bind("WarehouseSectionId,Description,WarehouseId")] WarehouseSection warehouseSection)
         {
-            warehouseSection.WarehouseId = (int)TempData["WarehouseId2"];
-
             if (ModelState.IsValid)
             {
                 bool WarehouseSectionExists = await _context.WarehouseSection.AnyAsync(
@@ -131,29 +66,22 @@ namespace Supermarket.Controllers
 
                 if (WarehouseSectionExists)
                 {
-                    TempData["ErrorMessage2"] = "Another Warehouse Section with the same Description and Warehouse already exists.";
+                    ModelState.AddModelError("", "Another Warehouse Section with the same Description and Warehouse already exists.");
                 }
-                else {
-                    try
-                    {
-                        _context.Add(warehouseSection);
-                        await _context.SaveChangesAsync();
-                        TempData["Message"] = "Warehouse Section successfully created.";
-                        return RedirectToAction("Details", new { id = warehouseSection.WarehouseId, warehouseId = warehouseSection.WarehouseId });
-                    }
-                    catch (DbUpdateException)
-                    {
-                        TempData["ErrorMessage2"] = "DataBase conection Error ";
-                       
-                    }
+                else { 
+                    _context.Add(warehouseSection);
+                    await _context.SaveChangesAsync();
+                    ViewBag.Message = "Warehouse Section successfully created.";
+                    warehouseSection.Warehouse = await _context.Warehouse.FindAsync(warehouseSection.WarehouseId);
+
+                    return View("Details", warehouseSection);
                 }
             }
-            ViewData["WarehouseId"] = new SelectList(_context.Set<Warehouse>(), "WarehouseId", "Name", warehouseSection.WarehouseId);
-            return RedirectToAction("Create", new { warehouseId = TempData["WarehouseId2"] });
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Name", warehouseSection.WarehouseId);
+            return View(warehouseSection);
         }
 
         // GET: WarehouseSections/Edit/5
-        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.WarehouseSection == null)
@@ -166,7 +94,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["WarehouseId"] = new SelectList(_context.Set<Warehouse>(), "WarehouseId", "Name", warehouseSection.WarehouseId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Name", warehouseSection.WarehouseId);
             return View(warehouseSection);
         }
 
@@ -175,7 +103,6 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("WarehouseSectionId,Description,WarehouseId")] WarehouseSection warehouseSection)
         {
             if (id != warehouseSection.WarehouseSectionId)
@@ -222,7 +149,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: WarehouseSections/Delete/5
-        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.WarehouseSection == null)
@@ -248,16 +174,14 @@ namespace Supermarket.Controllers
                     .Where(wp => wp.WarehouseSectionId == id)
                     .ToListAsync();
 
-                return View("Delete", warehouseSection);
+                return View("Delete");
             }
             return View(warehouseSection);
         }
 
-
         // POST: WarehouseSections/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.WarehouseSection == null)
@@ -268,51 +192,10 @@ namespace Supermarket.Controllers
             if (warehouseSection != null)
             {
                 _context.WarehouseSection.Remove(warehouseSection);
-                await _context.SaveChangesAsync();
             }
             
-            return RedirectToAction("Index", "WarehouseSections", new { warehouseId =warehouseSection?.WarehouseId });
-        }
-
-        [Authorize(Roles = "Stock Administrator, Stock Operator")]
-        public IActionResult WarehouseSectionProducts(int warehouseSectionId)
-        {
-            var sectionInfo = _context.WarehouseSection
-                .Where(ws => ws.WarehouseSectionId == warehouseSectionId)
-                .Select(ws => new
-                {
-                    SectionName = ws.Description,
-                    WarehouseId = ws.WarehouseId
-                })
-                .FirstOrDefault();
-
-            if (sectionInfo == null)
-            {
-                return NotFound();
-            }
-
-            var products = _context.WarehouseSection_Product
-                .Where(wp => wp.WarehouseSectionId == warehouseSectionId && wp.Product.Name != null)
-                .Include(wp => wp.Product)
-                .ThenInclude(p => p.Brand)
-                .GroupBy(wp => wp.ProductId)
-                .Select(group => new
-                {
-                    ProductId = group.Key,
-                    ProductName = group.First().Product.Name,
-                    ProductDescription = group.First().Product.Description,
-                    BrandName = group.First().Product.Brand != null ? group.First().Product.Brand.Name : "No Brand",
-                    Quantity = group.Sum(p => p.Quantity)
-                })
-                .ToList();
-
-            ViewBag.WarehouseSectionId = warehouseSectionId;
-            ViewBag.WarehouseId = sectionInfo.WarehouseId;
-            ViewBag.SectionName = sectionInfo.SectionName;
-            ViewBag.TotalProducts = products.Count;
-            ViewBag.Products = products;
-
-            return View();
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool WarehouseSectionExists(int id)

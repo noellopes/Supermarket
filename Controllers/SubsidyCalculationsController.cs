@@ -19,100 +19,41 @@ namespace Supermarket.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int page = 1, string employee_name="")
+        // GET: SubsidyCalculations
+        public async Task<IActionResult> Index()
         {
-           
-            var allPoints = await _context.Ponto.Include(p => p.Employee).ToListAsync();
-       
-            var employees = _context.Ponto.AsQueryable();  
-            if (!string.IsNullOrEmpty(employee_name))
-            {
-                employees = employees.Where(x => x.Employee.Employee_Name.Contains(employee_name));
-            }
+            var supermarketDbContext = _context.SubsidyCalculation.Include(s => s.Ponto);
 
-
-            PagingInfo paging = new PagingInfo
-            {
-                CurrentPage = page,
-                TotalItems = await employees.CountAsync(),  
-            };
-
-            if (paging.CurrentPage <= 1)
-            {
-                paging.CurrentPage = 1;
-            }
-            else if (paging.CurrentPage > paging.TotalPages)
-            {
-                paging.CurrentPage = paging.TotalPages;
-            }
-           
-
-           
-            var vm = new SubsidyCalculationViewModel
-            {
-               
-                Pontos = await employees
-                    .OrderBy(x => x.Employee.Employee_Name)
-
-                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
-                    .Take(paging.PageSize)
-                    .ToListAsync(),  // Agora, 'ToListAsync' deve funcionar corretamente
-                PagingInfo = paging,
-                SearchName = employee_name,
-            };
-
-          
-
-            return View(vm);
+            return View(await supermarketDbContext.ToListAsync());
         }
-
-
 
         // GET: SubsidyCalculations/Details/5
-        public async Task<IActionResult> Details(int? id, int page = 1)
+        public async Task<IActionResult> Details(int? id)
         {
-            // Obtém todos os pontos sem modificar a lista completa
-            var allPoints = await _context.Ponto.Include(p => p.Employee).ToListAsync();
-           
-            var employees = _context.Ponto.AsQueryable();  // Certifique-se de que 'date' seja IQueryable<Ponto>
-
-         
-
-            PagingInfo paging = new PagingInfo
+            if (id == null || _context.SubsidyCalculation == null)
             {
-                CurrentPage = page,
-                TotalItems = await employees.CountAsync(),  // Agora, 'CountAsync' deve funcionar corretamente
-            };
-
-            if (paging.CurrentPage <= 1)
-            {
-                paging.CurrentPage = 1;
-            }
-            else if (paging.CurrentPage > paging.TotalPages)
-            {
-                paging.CurrentPage = paging.TotalPages;
+                return NotFound();
             }
 
-
-
-            var vm = new SubsidyCalculationViewModel
+            var subsidyCalculation = await _context.SubsidyCalculation
+                .Include(s => s.Ponto)
+                //.Include(s => s.SubsidySetup)
+                .FirstOrDefaultAsync(m => m.SubsidyCalculationId == id);
+            if (subsidyCalculation == null)
             {
+                return NotFound();
+            }
 
-                Pontos = await employees
-                    .OrderBy(x => x.Employee.Employee_Name)
-                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
-                    .Take(paging.PageSize)
-                    .ToListAsync(),  // Agora, 'ToListAsync' deve funcionar corretamente
-                PagingInfo = paging,
-               
-            };
-
-          
-
-            return View(vm);
+            return View(subsidyCalculation);
         }
 
-
+        // GET: SubsidyCalculations/Create
+        public IActionResult Create()
+        {
+            ViewData["PontoId"] = new SelectList(_context.Ponto, "PontoId", "Status");
+            ViewData["SubsidySetupId"] = new SelectList(_context.SubsidySetup, "SubsidySetupId", "SubsidySetupId");
+            return View();
+        }
 
         // POST: SubsidyCalculations/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.

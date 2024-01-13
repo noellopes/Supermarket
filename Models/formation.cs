@@ -1,15 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models
 {
     public class Formation
     {
-        [Key]
-        public int FormationId { get; set; }
-
-        [StringLength(50, MinimumLength = 3)]
+        //PRIMARY KEY
         [Required]
-        public string Formation_Name { get; set; }
+        int FormationId { get; set; }
+
+
+        public required string PontuacaoFormation { get; set; }
+
+
+        // FK EMPLOYEE
+        public int EmployeeId { get; set; }
+
+        public Employee? Employee { get; set; }
 
     }
 }
+

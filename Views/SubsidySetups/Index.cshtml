@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>SubsidySetups</h1>
+<h1>Index</h1>
 
 <h2>
     <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
@@ -28,12 +28,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-               
-                    @($"{item.HorasMinTrabalhadas}h:00")
+                @Html.DisplayFor(modelItem => item.HorasMinTrabalhadas)
             </td>
             <td>
-                    @($"{item.ValorSubsidioDiario}{"€"}")
-               
+                @Html.DisplayFor(modelItem => item.ValorSubsidioDiario)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DataEntradaVigor)

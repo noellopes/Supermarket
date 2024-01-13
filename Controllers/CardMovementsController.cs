@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -48,7 +47,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: CardMovements/Create
-        [Authorize(Roles = "Cash Register")]
         public IActionResult Create(int mealCardId)
         {
             ViewData["MealCardId"] = new SelectList(_context.MealCard.Include(mc => mc.Employee), "MealCardId", "Employee.Employee_Name");
@@ -61,7 +59,6 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Cash Register")]
         public async Task<IActionResult> Create([Bind("CardMovementId,Movement_Date,Value,Description,MealCardId")] CardMovement cardMovement)
         {
             var mealCard = await _context.MealCard.FindAsync(cardMovement.MealCardId);

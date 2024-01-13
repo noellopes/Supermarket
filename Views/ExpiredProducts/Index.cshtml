@@ -50,7 +50,7 @@
         @foreach (var item in Model.ExpiredProducts) {
                 <tr>
                     <td>
-                        @* <a href="/Purchases/Details/@item.PurchaseId">Purchase @item.PurchaseId </a> *@
+                        <a href="/Purchases/Details/@item.PurchaseId">Purchase @item.PurchaseId </a>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Product.Name)

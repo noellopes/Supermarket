@@ -3,100 +3,46 @@
 @{
     ViewData["Title"] = "Edit";
 }
-<style>
-    body {
-        padding: 20px;
-        background-color: #f8f9fa;
-        color: #343a40;
-    }
-
-    h1 {
-        color: #007bff;
-        margin-top: 20px;
-    }
-
-    .card {
-        background-color: #fff;
-        border: 1px solid rgba(0, 0, 0, 0.125);
-        border-radius: 0.25rem;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    label {
-        font-weight: bold;
-    }
-
-    input[type="text"],
-    select {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-        margin-top: 6px;
-        margin-bottom: 16px;
-        resize: vertical;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        color: #fff;
-    }
-
-    .btn-secondary {
-        background-color: #6c757d;
-        color: #fff;
-    }
-
-    .select-card {
-        display: inline-block;
-        width: 100%;
-        box-sizing: border-box;
-        margin-top: 6px;
-        margin-bottom: 16px;
-        cursor: pointer;
-    }
-
-        .select-card:hover {
-            background-color: #f8f8f8;
-        }
-
-</style>
 
 <h1>Edit</h1>
 
+
+
 <hr />
 <div class="row">
-    <div class="card">
-        <div class="col-md-4">
-            <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="ProductId" />
-                <input type="hidden" asp-for="ShelfId" />
-                <div class="form-group">
-                    <label asp-for="ProductId" class="control-label">Product</label>
-                    <span asp-for="ProductId" class="form-control" readonly> @Model.Product.Name</span>
-                </div>
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ProductId" />
+            <input type="hidden" asp-for="ShelfId" />
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label">Product</label>
+                <span asp-for="ProductId" class="form-control" readonly> @Model.Product.Name</span>
+            </div>
 
-                <div class="form-group">
-                    <label asp-for="ShelfId" class="control-label">Shelf</label>
-                    <span asp-for="ShelfId" class="form-control" readonly>@Model.Shelf.Name</span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="MinimumQuantity" class="control-label"></label>
-                    <input asp-for="MinimumQuantity" class="form-control" />
-                    <span asp-validation-for="MinimumQuantity" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
-                    <a asp-controller="Shelves" asp-action="ShelfProducts" asp-route-shelfId="@Model.ShelfId" class="btn btn-secondary">Back to List</a>
-                </div>
-            </form>
-        </div>
+            <div class="form-group">
+                <label asp-for="ShelfId" class="control-label">Shelf</label>
+                <span asp-for="ShelfId" class="form-control" readonly>@Model.Shelf.Name</span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MinimumQuantity" class="control-label"></label>
+                <input asp-for="MinimumQuantity" class="form-control" />
+                <span asp-validation-for="MinimumQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

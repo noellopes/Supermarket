@@ -1,194 +1,26 @@
-﻿@model SubsidyCalculationViewModel
+﻿@model Supermarket.Models.SubsidyCalculation
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>subsidy calculation details</h1>
+<h1>Details</h1>
 
 <div>
-
-
-    <table class="table table-success table-striped">
-        <thead>
-            <tr>
-
-                <th>
-                    <p>Empregado</p>
-                </th>
-
-                <th>
-                    <p> Hora de Entrada </p>
-                </th>
-                <th>
-                    <p> Hora de Saída </p>
-                </th>
-                <th>
-                    <p>Total Horas</p>
-                </th>
-                <th>
-                    <p>Valor diario a receber</p>
-                </th>
-                <th>
-                    <p>Data</p>
-                </th>
-
-
-
-
-
-
-
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Pontos)
-            {
-                <tr>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
-
-                    </td>
-
-
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CheckInTime)
-                    </td>
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CheckOutTime)
-                    </td>
-
-
-                    <td>
-
-                        @{
-                           
-                            string diffFormatted;
-
-                          
-                            TimeSpan entrada = TimeSpan.Parse(item.CheckInTime);
-
-                            TimeSpan saida = TimeSpan.Parse(item.CheckOutTime);
-                            TimeSpan diff = saida - entrada;
-                         
-
-
-                            diffFormatted = $"{(int)diff.TotalHours}h{diff.Minutes:D2}";
-
-                            @diffFormatted
-                        }
-
-
-                    </td>
-
-                    <td>
-                        @{
-
-                            double VALOR_DIARIO_RECEBER = 6;
-                            double VALOR_DIARIO_RECEB = 5;
-                            double soma = 0;
-                            double diferencaEmHoras = diff.TotalHours;
-                            string SEM_VALOR_DIARIO = " valor a receber: 0€";
-
-                            if (diferencaEmHoras > 4 && item.Date.Value.Year == DateTime.Today.Year)
-
-                            {
-
-                                @($" valor a recebr: {VALOR_DIARIO_RECEBER}{"€"}")
-                                ;
-
-
-
-                            }
-                            else if (diferencaEmHoras > 3 && item.Date.Value.Year < DateTime.Today.Year)
-                            {
-                                @($" valor a recebr: {VALOR_DIARIO_RECEB}{"€"}")
-                                ;
-
-
-                            }
-                            else
-                            {
-                                @SEM_VALOR_DIARIO
-                            }
-
-
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-
-
-
-
-                </tr>
-
-
-
-
-
-            }
-        </tbody>
-    </table>
-
-
-
-<nav aria-label="subsidyCalculation">
-    <ul class="pagination">
-            @if (Model.PagingInfo.CurrentPage == 1)
-            {
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">First</a>
-                </li>
-            }
-            else
-            {
-                <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-asp-page="1">First</a>
-                </li>
-            }
-
-            @{
-                int first = Model.PagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-                if (first < 1) first = 1;
-
-                int last = Model.PagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-                if (last > Model.PagingInfo.TotalPages) last = Model.PagingInfo.TotalPages;
-            }
-
-            @for (int p = first; p <= last; p++)
-            {
-                @if (p == Model.PagingInfo.CurrentPage)
-                {
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">@p</a>
-                        </li>
-                }
-                else
-                {
-                        <li class="page-item">
-                            <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
-                        </li>
-                }
-            }
-            @if (Model.PagingInfo.CurrentPage == Model.PagingInfo.TotalPages)
-            {
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">Last</a>
-                </li>
-            }
-            else
-            {
-                <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages">Last</a>
-                </li>
-            }
-
-    </ul>
-
-
-</nav>
+    <h4>SubsidyCalculation</h4>
+    <hr />
+    <dl class="row">
+ 
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ponto)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ponto.Status)
+        </dd>
+       
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.SubsidyCalculationId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

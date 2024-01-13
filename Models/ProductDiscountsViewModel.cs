@@ -9,7 +9,6 @@
         public DateTime? SearchStartDate { get; set; } = null;
         public DateTime? SearchEndDate { get; set; } = null;
         public List<ClientCard> ClientsWithBirthday { get; set; }
-        public bool? Applicable { get; set; }
 
     }
 }

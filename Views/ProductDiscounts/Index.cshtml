@@ -16,168 +16,131 @@
 <div class="card mb-3">
     <div class="card-body">
         <form asp-action="Index" method="get">
-            <p><strong>Search Discounts</strong></p>
-            @if (User.IsInRole("Administrator"))
-            {
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="product" class="control-label">Product</label>
-                            <input name="product" type="search" class="form-control" value="@Model.SearchProduct" />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="startDate" class="control-label">Start Date</label>
-                            <input name="startDate" type="date" class="form-control" value="@Model.SearchStartDate?.ToString("yyyy-MM-dd")" />
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="endDate" class="control-label">End Date</label>
-                            <input name="endDate" type="date" class="form-control" value="@Model.SearchEndDate?.ToString("yyyy-MM-dd")" />
-                        </div>
-                    </div>
-                </div>
+            <p><strong>Search books</strong></p>
 
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="value" class="control-label">Value</label>
-                            <input name="value" type="search" class="form-control" value="@Model.SearchValue" />
-                        </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="product" class="control-label">Product</label>
+                        <input name="product" type="search" class="form-control" value="@Model.SearchProduct" />
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="startDate" class="control-label">Start Date</label>
+                        <input name="startDate" type="date" class="form-control" value="@Model.SearchStartDate?.ToString("yyyy-MM-dd")" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="endDate" class="control-label">End Date</label>
+                        <input name="endDate" type="date" class="form-control" value="@Model.SearchEndDate?.ToString("yyyy-MM-dd")" />
+                    </div>
+                </div>
+            </div>
 
-                <div class="mt-3">
-                    <input class="btn btn-primary" type="submit" value="Search" />
-                    <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
-                </div>
-            }
-            else
-            {
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="product" class="control-label">Product</label>
-                            <input name="product" type="search" class="form-control" value="@Model.SearchProduct" />
-                        </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="value" class="control-label">Value</label>
+                        <input name="value" type="search" class="form-control" value="@Model.SearchValue" />
                     </div>
                 </div>
-                <div class="mt-3">
-                    <input class="btn btn-primary" type="submit" value="Search" />
-                    <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
-                </div>
-            }
+            </div>
+
+            <div class="mt-3">
+                <input class="btn btn-primary" type="submit" value="Search" />
+                <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+            </div>
         </form>
     </div>
 </div>
-@if (User.IsInRole("Administrator"))
+@if (Model.ClientsWithBirthday != null && Model.ClientsWithBirthday.Any())
 {
-    @if (Model.ClientsWithBirthday != null && Model.ClientsWithBirthday.Any())
-    {
-        <h3>Clients with Birthday Today</h3>
-        <a asp-action="CreateBirthdayDiscount" asp-controller="ProductDiscounts" class="btn btn-outline-success">Create Birthday Discount</a>
-        <table class="table table-striped mt-4 table-sm">
-            <thead class="table-dark">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ClientsWithBirthday[0].Client.ClientName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ClientsWithBirthday[0].ClientCardNumber)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.ClientsWithBirthday)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Client.ClientName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ClientCardNumber)
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-}
-<div class="mt-4">
-    @if (User.IsInRole("Administrator"))
-        {
-        <a asp-action="Create" class="btn btn-outline-success">Create New</a>
-        }
-</div>
-<div class="mt-3">
-    <a class="btn btn-outline-primary" asp-action="Index">All</a>
-    <a class="btn btn-outline-success" asp-action="Index" asp-route-applicable="true">Applicable</a>
-    <a class="btn btn-outline-danger" asp-action="Index" asp-route-applicable="false">Not Applicable</a>
-</div>
-<div class="border border-dark rounded">
-    <table class="table table-borderless mt-4">
-        <thead class="">
+    <h3>Clients with Birthday Today</h3>
+    <a asp-action="CreateBirthdayDiscount" asp-controller="ProductDiscounts" class="btn btn-outline-success">Create Birthday Discount</a>
+    <table class="table table-striped mt-4">
+        <thead class="table-dark">
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.ProductDiscounts[0].Product)
+                    @Html.DisplayNameFor(model => model.ClientsWithBirthday[0].Client.ClientName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ProductDiscounts[0].Value)
+                    @Html.DisplayNameFor(model => model.ClientsWithBirthday[0].ClientCardNumber)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProductDiscounts[0].StartDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProductDiscounts[0].EndDate)
-                </th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.ProductDiscounts)
+            @foreach (var item in Model.ClientsWithBirthday)
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Product.Name)
+                        @Html.DisplayFor(modelItem => item.Client.ClientName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Value)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EndDate)
-                    </td>
-                    <td>
-                        @if (item.StartDate <= DateTime.Today && item.EndDate >= DateTime.Today)
-                        {
-                            <span style="color: green;">Applicable</span>
-                        }
-                        else
-                        {
-                            <span style="color: red;">Not Applicable</span>
-                        }
-                    </td>
-                    <td>
-                        @if (User.IsInRole("Administrator"))
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.ProductDiscountId" class="btn btn-outline-info">Edit</a>
-                            <a asp-action="Details" asp-route-id="@item.ProductDiscountId" class="btn btn-outline-warning">Details</a>
-                            <a asp-action="Delete" asp-route-id="@item.ProductDiscountId" class="btn btn-danger">Delete</a>
-                        }
-                        else
-                        {
-                            <a asp-action="Details" asp-route-id="@item.ProductDiscountId" class="btn btn-outline-warning">Details</a>
-                        }
+                        @Html.DisplayFor(modelItem => item.ClientCardNumber)
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+}
+<div class="mt-4">
+    <a asp-action="Create" class="btn btn-outline-success">Create New</a>
 </div>
+<table class="table table-striped mt-4">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDiscounts[0].Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDiscounts[0].Value)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDiscounts[0].StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDiscounts[0].EndDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ProductDiscounts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @if (item.StartDate <= DateTime.Today && item.EndDate >= DateTime.Today)
+                    {
+                        <span style="color: green;">Applicable</span>
+                    }
+                    else
+                    {
+                        <span style="color: red;">Not Applicable</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ProductDiscountId" class="btn btn-info">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.ProductDiscountId" class="btn btn-warning">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.ProductDiscountId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 <nav aria-label="ProductDiscount">
     <ul class="pagination justify-content-center">

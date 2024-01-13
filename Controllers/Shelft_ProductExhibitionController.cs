@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
@@ -12,7 +11,6 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    [Authorize(Roles = "Stock Administrator, Stock Operator")]
     public class Shelft_ProductExhibitionController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -50,14 +48,10 @@ namespace Supermarket.Controllers
         }
 
         // GET: Shelft_ProductExhibition/Create
-        [Authorize(Roles = "Stock Administrator")]
-        public IActionResult Create(int? shelfId)
+        public IActionResult Create()
         {
-            ViewBag.ErrorMessage = TempData["ErrorMessage"] as string;
-            ViewBag.ShelfId2 = shelfId;
-            ViewBag.ShelfIdName = _context.Shelf.Find(shelfId.Value)?.Name;
-            ViewBag.ProductIdOptions = new SelectList(_context.Product, "ProductId", "Name");
-
+            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
+            ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name");
             return View();
         }
 
@@ -66,59 +60,38 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Create([Bind("ProductId,ShelfId,Quantity,MinimumQuantity")] Shelft_ProductExhibition shelft_ProductExhibition)
         {
             if (ModelState.IsValid)
             {
                 bool Shelft_ProductExhibitionExists = await _context.Shelft_ProductExhibition.AnyAsync(
-                    s => s.ProductId == shelft_ProductExhibition.ProductId
-                    && s.ShelfId == shelft_ProductExhibition.ShelfId);
-
+               s => s.ProductId == shelft_ProductExhibition.ProductId
+               && s.ShelfId == shelft_ProductExhibition.ShelfId);
                 if (Shelft_ProductExhibitionExists)
                 {
-
-                    TempData["ErrorMessage"] = "Another Shelft Product Exhibition Exists with the same Product and Shelf already exists.";
+                    ModelState.AddModelError("", "Another Shelft Product Exhibition Exists with the same Product and Shelf already exists.");
                 }
                 else
                 {
-                    try
-                    {
-                        _context.Add(shelft_ProductExhibition);
-                        await _context.SaveChangesAsync();
-
-                        // Load references
-                        await _context.Entry(shelft_ProductExhibition)
-                            .Reference(wp => wp.Product)
-                            .LoadAsync();
-                        await _context.Entry(shelft_ProductExhibition)
-                            .Reference(wp => wp.Shelf)
-                            .LoadAsync();
-
-                        ViewBag.Message = "Shelft Product Exhibition successfully created.";
-
-                        // Redirect to the "Details" action with the associated shelf ID
-                        return RedirectToAction("Details", "Shelves", new { id = shelft_ProductExhibition.ShelfId });
-                    }
-                    catch (DbUpdateException)
-                    {
-                        // Handle any exceptions that might occur during saving changes
-                        // You can log the exception or show an error message to the user
-                        ModelState.AddModelError("", "An error occurred while saving the data.");
-                    }
+                    _context.Add(shelft_ProductExhibition);
+                    _context.Add(shelft_ProductExhibition);
+                    await _context.Entry(shelft_ProductExhibition)
+                    .Reference(wp => wp.Product)
+                    .LoadAsync();
+                    await _context.Entry(shelft_ProductExhibition)
+                    .Reference(wp => wp.Shelf)
+                    .LoadAsync();
+                    await _context.SaveChangesAsync();
+                    ViewBag.Message = "Shelft Product Exhibition successfully created.";
+                    return View("Details", shelft_ProductExhibition);
                 }
             }
-
-            // If ModelState is not valid or there was an exception, return to the "Create" view with errors and the same shelf ID
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", shelft_ProductExhibition.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", shelft_ProductExhibition.ShelfId);
-
-        
-            return RedirectToAction("Create", "shelft_ProductExhibition", new { shelfId = shelft_ProductExhibition.ShelfId });
+            return View(shelft_ProductExhibition);
         }
 
         // GET: Shelft_ProductExhibition/Edit/5
-        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int? productId, int? shelfId)
         {
             if (productId == null || shelfId == null || _context.Shelft_ProductExhibition == null)
@@ -145,7 +118,6 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int productId, int shelfId, [Bind("ProductId,ShelfId,Quantity,MinimumQuantity")] Shelft_ProductExhibition shelft_ProductExhibition)
         {
             if (productId == null || shelfId == null || shelft_ProductExhibition == null)
@@ -162,33 +134,11 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-
-                    // Buscar a entidade existente
-                    var existingShelft_ProductExhibition = await _context.Shelft_ProductExhibition
-                        .FirstOrDefaultAsync(wp => wp.ProductId == shelft_ProductExhibition.ProductId && wp.ShelfId == shelft_ProductExhibition.ShelfId);
-
-                    if (existingShelft_ProductExhibition != null)
-                    {
-                        // Manter o valor existente da propriedade Quantity
-                        shelft_ProductExhibition.Quantity = existingShelft_ProductExhibition.Quantity;
-
-                        // Atualizar todas as propriedades
-                        _context.Entry(existingShelft_ProductExhibition).CurrentValues.SetValues(shelft_ProductExhibition);
-                    }
-                    else
-                    {
-                        // Se a entidade não existe, adicioná-la ao contexto
-                        _context.Shelft_ProductExhibition.Update(shelft_ProductExhibition);
-                    }
-
-
+                    _context.Update(shelft_ProductExhibition);
                     await _context.SaveChangesAsync();
 
-
-
-
                     //ViewBag.Message = "Shelft Product Exhibition successfully edited.";
-                    TempData["Message"] = "Shelft Product Exhibition successfully edited";
+                    TempData["Message"] = "Warehouse Section Product successfully created.";
                     return RedirectToAction("Details", new { productId = shelft_ProductExhibition.ProductId, shelfId = shelft_ProductExhibition.ShelfId });
                 }
                 catch (DbUpdateConcurrencyException)
@@ -210,7 +160,6 @@ namespace Supermarket.Controllers
         }
 
         // GET: Shelft_ProductExhibition/Delete/5
-        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Delete(int? productId, int? shelfId)
         {
             if (productId == null || shelfId == null || _context.Shelft_ProductExhibition == null)
@@ -239,7 +188,6 @@ namespace Supermarket.Controllers
         // POST: Shelft_ProductExhibition/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int productId, int shelfId)
         {
             if (_context.Shelft_ProductExhibition == null)
@@ -254,7 +202,7 @@ namespace Supermarket.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction("ShelfProducts", "Shelves", new { shelfId = shelft_ProductExhibition.ShelfId });
+            return RedirectToAction(nameof(Index));
         }
 
         private bool Shelft_ProductExhibitionExists(int id)

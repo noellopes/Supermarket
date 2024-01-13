@@ -37,7 +37,7 @@
 
 
                     <select id="selectedDepartment" name="departmentDrop"
-                    asp-items="@(new SelectList(Model.Departments, "DeptID", "NameDepartments"))"
+                    asp-items="@(new SelectList(Model.Departments, "IDDepartments", "NameDepartments"))"
                     class="form-control">
                         <option value="0">-- All Departments --</option>
                     </select>
@@ -63,22 +63,22 @@
         @foreach (var item in Model.Schedules)
         {
             Console.WriteLine($"Schedule ID: {item.ScheduleId}");
-            Console.WriteLine($"Department ID: {item.DeptID}");
+            Console.WriteLine($"Department ID: {item.IDDepartments}");
             <div class="col mt-3">
                 <div class="card text-center" style="width: 18rem;">
                     @* <img class="card-img-top" src="..." alt="Card image cap">*@
                     <div class="card-body">
                         <h5 class="card-title">Schedule @Html.DisplayFor(modelItem => item.ScheduleId) </h5>
                         <p>Department name:</p>
-                        @if (item.DeptID == 0)
+                        @if (item.IDDepartments == 0)
                         {
 
                             <p class="card-text">No department associated</p>
                         }
-                        else if (item.Department != null)
+                        else if (item.Departments != null)
                         {
 
-                            <p class="card-text">@item.Department.NameDepartments</p>
+                            <p class="card-text">@item.Departments.NameDepartments</p>
                         }
                         @* <p class="card-text">@Html.DisplayFor(modelItem => item.Departments.NameDepartments)</p> *@
                     </div>

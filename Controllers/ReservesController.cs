@@ -20,44 +20,12 @@ namespace Supermarket.Controllers
         }
 
         // GET: Reserves
-        public async Task<IActionResult> Index(int page = 1, int numeroDeFunc = 0)
+        public async Task<IActionResult> Index()
         {
-            var reserve = _context.Reserve.AsQueryable();
-
-            if (numeroDeFunc != 0)
-            {
-                reserve = reserve.Where(r => r.NumeroDeFunc == numeroDeFunc);
-            }
-
-            PagingInfo paging = new PagingInfo
-            {
-                CurrentPage = page,
-                TotalItems = await reserve.CountAsync(),
-            };
-
-            if (paging.CurrentPage <= 1)
-            {
-                paging.CurrentPage = 1;
-            }
-            else if (paging.CurrentPage > paging.TotalPages)
-            {
-                paging.CurrentPage = paging.TotalPages;
-            }
-
-            var vm = new ReserveViewModel
-        {
-                Reserve = await reserve
-                    .OrderBy(r => r.ReserveId)
-                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
-                    .Take(paging.PageSize)
-                    .ToListAsync(),
-                PagingInfo = paging,
-                SearchNumeroFunc = numeroDeFunc,
-            };
-
-            return View(vm);
+              return _context.Reserve != null ? 
+                          View(await _context.Reserve.ToListAsync()) :
+                          Problem("Entity set 'SupermarketDbContext.Reserve'  is null.");
         }
-
 
         // GET: Reserves/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -88,7 +56,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReserveId,NumeroDeFunc")] Reserve reserve)
+        public async Task<IActionResult> Create([Bind("ReserveId")] Reserve reserve)
         {
             if (ModelState.IsValid)
             {
@@ -120,7 +88,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReserveId,NumeroDeFunc")] Reserve reserve)
+        public async Task<IActionResult> Edit(int id, [Bind("ReserveId")] Reserve reserve)
         {
             if (id != reserve.ReserveId)
             {

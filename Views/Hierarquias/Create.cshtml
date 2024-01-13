@@ -1,102 +1,18 @@
-﻿@model Supermarket.Models.Hierarquias;
+﻿@model HierarquiasModel
 
 @{
-    ViewData["Title"] = "Criar Relacão Hierarquica";
+    ViewData["Title"] = "Criar Hierarquias";
 }
 
-@if (ViewBag.MensagemErro != null)
-{
-    <div id="mensagemErro" class="alert alert-danger" role="alert" style="width: 33%;">
-        @ViewBag.MensagemErro
-        <div class="progress" style="height: 10px; margin-top: 5px;">
-            <div id="progressBar" class="progress-bar bg-danger" role="progressbar"></div>
-        </div>
-    </div>
-}
+<h2>Criar Nova Hierarquia</h2>
 
-<h2>Criar Relacão Hierarquica</h2>
-
-<form asp-action="Create" id="createForm" onsubmit="return validateForm()">
+<form asp-action="Create" method="post">
     <div class="form-group">
-        <label asp-for="SubordinadoId" class="control-label">Subordinado</label>
-        <select asp-for="SubordinadoId" class="form-control" asp-items="ViewBag.SubordinadoId">
-            <option value="">Selecione...</option>
-        </select>
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label asp-for="SuperiorId" class="control-label">Superior</label>
-        <select asp-for="SuperiorId" class="form-control" asp-items="ViewBag.SuperiorId">
-            <option value="">Selecione...</option>
-        </select>
-    </div>
-    <hr />
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-success" id="createButton" />
-
-        <a asp-action="Index" class="btn btn-primary">Voltar a Lista</a>
-    </div>
+    <p></p>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
 </form>
-
-@section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#SuperiorId').change(function () {
-                var selectedSuperiorId = $(this).val();
-                $('#SubordinadoId option[value="' + selectedSuperiorId + '"]').hide();
-            });
-
-            $('#SubordinadoId').change(function () {
-                var selectedSubordinadoId = $(this).val();
-                $('#SuperiorId option[value="' + selectedSubordinadoId + '"]').hide();
-            });
-        });
-
-        function validateForm() {
-            var subordinadoId = document.getElementById('SubordinadoId').value;
-            var superiorId = document.getElementById('SuperiorId').value;
-
-            if (subordinadoId === "" || superiorId === "") {
-                alert("Por favor, selecione um Subordinado e um Superior.");
-                return false;
-            }
-
-            return true;
-        }
-    </script>
-    <style>
-        .progress {
-            height: 10px;
-            margin-top: 5px;
-        }
-
-        #progressBar {
-            width: 100%;
-            height: 100%;
-            transition: width 3s linear;
-        }
-    </style>
-
-    <script>
-        var progressBar = document.getElementById('progressBar');
-        var mensagemErro = document.getElementById('mensagemErro');
-
-        progressBar.style.width = '100%';
-
-        var duracaoAnimacao = 3000;
-
-        var interval = setInterval(function () {
-            var width = parseFloat(progressBar.style.width);
-            if (width > 0) {
-                progressBar.style.width = (width - (1 / 30) * 100, 0) + '%'; // 1/30 para 30 atualizações por segundo
-            } else {
-                clearInterval(interval);
-                setTimeout(function () {
-                    mensagemErro.style.display = 'none';
-                }, duracaoAnimacao);
-            }
-        }, duracaoAnimacao / 1000);
-
-    </script>
-
-}

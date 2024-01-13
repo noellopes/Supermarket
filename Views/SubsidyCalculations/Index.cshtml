@@ -1,4 +1,4 @@
-﻿@model Supermarket.Models.SubsidyCalculationViewModel
+﻿@model IEnumerable<Supermarket.Models.SubsidyCalculation>
 
 
 @{
@@ -7,129 +7,111 @@
 
 <h1> Subsidy Calculation</h1>
 
+<p>
+    <a asp-action="Create" class="btn btn-success btn-sm">Create New</a>
 
+</p>
+<table class="table table-success table-striped">
+    <thead>
+        <tr>
 
-<div class="card mb-3">
-    <div class="card-body">
-        <form asp-action="Index" method="get">
-            <p><strong>Search Employee</strong></p>
-
-            <label for="Name" class="control-label">Name</label>
-            <input name="employee_name" type="search" class="form-control" value="@Model.SearchName" />
-
-            <div class="mt-3">
-                <input class="btn btn-primary" type="submit" value="Search"/>
-                <a class="btn btn-secondary" asp-action="Index">Cancel</a>
-            </div>
-
+            <th>
+                <p>Data</p>
+            </th>
             
+            <th>
+                <p> Hora de Entrada </p>
+            </th>
+            <th>
+                <p> Hora de Saída </p>
+            </th>
+            <th>
+                <p>Empregado</p>
+            </th>
+            <th>
+                <p>Total Horas</p>
+            </th>
 
-        </form>
-    </div>
-</div>
+            <th>
+                <p>Valor diario a receber</p>
+            </th>
 
+         
 
-    <table class="table">
-        <thead>
-            <tr>
+           
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+         
+            <td>
+                @Html.DisplayFor(modelItem => item.Ponto.Date)
+            </td>
 
                
-                <th>
-                    <p>Employee </p>
-                </th>
-            <th>
-                <p>Email </p>
-            </th>
-            <th>
-                <p>Contacto </p>
-            </th>
-            <th>
-                <p>Calcular Subdidio Diaria </p>
-            </th>
-            </tr>
-        </thead>
 
-        <tbody>
-        @foreach (var item in Model.Pontos)
-        {
-            <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ponto.CheckInTime)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ponto.CheckOutTime)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ponto.EmployeeId)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Employee.Employee_Email)      
+                    @{
+                       
 
-                </td>
-                <td>
-                        @Html.DisplayFor(modelItem => item.Employee.Employee_Phone)     
+                        TimeSpan entrada = TimeSpan.Parse(item.Ponto.CheckInTime);
+                        TimeSpan saida = TimeSpan.Parse(item.Ponto.CheckOutTime);
+                        TimeSpan diff = saida - entrada;
 
+
+                        string diffFormatted = $"{(int)diff.TotalHours}h{diff.Minutes:D2}";
+
+                        @diffFormatted
+                    }
                 </td>
+
                 <td>
-                <a asp-action="Details" asp-controller="SubsidyCalculations" asp-route-id="@item.Employee.Employee_Name" class="btn btn-dark btn-sm">Calcular</a>
+                    @{
+
+                        double VALOR_DIARIO_RECEBER = 6;
+
+                        double diferencaEmHoras = diff.TotalHours;
+                        string SEM_VALOR_DIARIO = " valor a receber: 0€";
+
+                        if (diferencaEmHoras > 4 )
+
+                        {
+                           
+                            @($"{VALOR_DIARIO_RECEBER}{"€"}")
+                            ;
+
+                            //    @Html.DisplayFor(modelItem => item.SubsidySetup.ValorSubsidioDiario)
+                           
+                        }
+                        else
+                        {
+                            @SEM_VALOR_DIARIO;
+
+                        }
+
+
+                    }
                 </td>
-            
-            </tr>
-        }
+
+                
+                  <td>
+                       <a asp-action="Edit" asp-route-id="@item.SubsidyCalculationId" class="btn btn-warning btn-smm">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.SubsidyCalculationId" class="btn btn-info btn-smm">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.SubsidyCalculationId" class="btn btn-danger btn-smm">Delete</a>
+                </td>
+        </tr>
+}
     </tbody>
-
-    </table>
-
-
-
-<nav aria-label="subsidyCalculation">
-    <ul class="pagination">
-        @if (Model.PagingInfo.CurrentPage == 1)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" href="#">First</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-asp-page="1">First</a>
-            </li>
-        }
-
-        @{
-            int first = Model.PagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-            if (first < 1) first = 1;
-
-            int last = Model.PagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-            if (last > Model.PagingInfo.TotalPages) last = Model.PagingInfo.TotalPages;
-        }
-
-        @for (int p = first; p <= last; p++)
-        {
-            @if (p == Model.PagingInfo.CurrentPage)
-            {
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="#">@p</a>
-                </li>
-            }
-            else
-            {
-                <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
-                </li>
-            }
-        }
-        @if (Model.PagingInfo.CurrentPage == Model.PagingInfo.TotalPages)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" href="#">Last</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages">Last</a>
-            </li>
-        }
-
-    </ul>
-
-
-</nav>
-
-
+</table>

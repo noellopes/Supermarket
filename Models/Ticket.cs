@@ -2,8 +2,7 @@
 
 namespace Supermarket.Models
 {
-    public class Ticket
-    {
+    public class Ticket { 
 
         // Chave primária da entidade. O atributo [Key] é usado para marcar a chave primária.
         [Key]

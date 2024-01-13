@@ -5,16 +5,7 @@
 }
 
 <h1>MealCard</h1>
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success" role="alert">
-        @TempData["SuccessMessage"]
-    </div>
-}
-@if (User.IsInRole("Manager") && !User.IsInRole("Administrator")){
-    <a class="btn btn-outline-secondary" asp-action="IndexTop">Show Top</a>
-}
-
+<a class="btn btn-outline-secondary" asp-action="IndexTop">Show Top</a>
 <hr />
 
 <div class="card mb-3">
@@ -33,14 +24,10 @@
         </form>
     </div>
 </div>
-@if (User.IsInRole("Administrator"))
-{
-    <div>
-        <a class="btn btn-outline-success" asp-action="Index" asp-route-sOEwithMC="true">Show Employees With MealCard</a>
-        <a class="btn btn-outline-danger" asp-action="Index" asp-route-sOEwithoutMC="true">Show Employees Without MealCard</a>
-    </div>
-}
-
+<div>
+    <a class="btn btn-outline-success" asp-action="Index" asp-route-sOEwithMC="true">Show Employees With MealCard</a>
+    <a class="btn btn-outline-danger" asp-action="Index" asp-route-sOEwithoutMC="true">Show Employees Without MealCard</a>
+</div>
 
 <table class="table">
     <thead>
@@ -61,22 +48,14 @@
                 <td>
                     @if (employee.MealCard == null)
                     {
-                        @if (User.IsInRole("Administrator"))
-                        {
-                            <form asp-action="Create" asp-controller="MealCards">
-                                <input type="hidden" name="employeeId" value="@employee.EmployeeId" />
-                                <button type="submit" class="btn btn-success btn-sm">Create MealCard</button>
-                            </form>
-                        }
+                        <form asp-action="Create" asp-controller="MealCards">
+                            <input type="hidden" name="employeeId" value="@employee.EmployeeId" />
+                            <button type="submit" class="btn btn-success btn-sm">Create MealCard</button>
+                        </form>
                     }
                     else
                     {
-                        @if (User.IsInRole("Employeer") && !User.IsInRole("Manager"))
-                        {
-                            <a asp-action="Details" asp-controller="MealCards" asp-route-id="@employee.MealCard.MealCardId" class="btn btn-dark btn-sm">View MealCard</a>
-
-                        }
-
+                        <a asp-action="Details" asp-controller="MealCards" asp-route-id="@employee.MealCard.MealCardId" class="btn btn-dark btn-sm">View MealCard</a>
                     }
                 </td>
             </tr>
