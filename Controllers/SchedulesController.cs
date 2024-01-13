@@ -32,7 +32,7 @@ namespace Supermarket.Controllers
 
             if (BotaoHistorico == false)
             {
-                // Your current logic for filtering valid schedules based on start and end dates
+       
                 schedules = schedules.Where(b => b.StartDate.Date <= DateTime.Now.Date && b.EndDate.Value.Date >= DateTime.Now.Date);
 
                 if (departmentDrop != 0)

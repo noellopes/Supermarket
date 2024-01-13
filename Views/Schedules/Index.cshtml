@@ -102,8 +102,8 @@
                             }
 
                         </li>
-                        <li class="list-group-item">Daily start hour: <p>@item.DailyStartTime.ToString("hh:mm")</p> </li>
-                        <li class="list-group-item">Daily finish hour: <p>@item.DailyFinishTime.ToString("hh:mm")</p> </li>
+                        <li class="list-group-item">Daily start hour: <p>@item.DailyStartTime.ToString("HH:mm")</p> </li>
+                        <li class="list-group-item">Daily finish hour: <p>@item.DailyFinishTime.ToString("HH:mm")</p> </li>
                     </ul>
                     <div class="card-body">
                         <a asp-action="Edit" asp-route-id="@item.ScheduleId" class="card-link">Edit</a>
