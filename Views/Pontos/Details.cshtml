@@ -1,73 +1,55 @@
-﻿@model Supermarket.Models.Ponto
+﻿@model PontoDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>@Model.Ponto.Date.Value.Date.ToString("dd/MM/yyyy")</h1>
 
 <div>
-    <h4>Ponto</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Employee)
+            @Html.DisplayNameFor(model => model.Ponto.CheckInTime)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Employee.Employee_Name)
+            @Html.DisplayFor(model => model.Ponto.CheckInTime) - @Html.DisplayFor(model => model.Escala.CheckInTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.DisplayNameFor(model => model.Ponto.LunchStartTime)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Date)
+            @Html.DisplayFor(model => model.Ponto.LunchStartTime) - @Html.DisplayFor(model => model.Escala.LunchStartTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CheckInTime)
+            @Html.DisplayNameFor(model => model.Ponto.LunchEndTime)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CheckInTime)
+            @Html.DisplayFor(model => model.Ponto.LunchEndTime) - @TimeSpan.Parse(Model.Escala.LunchStartTime).Add(TimeSpan.FromMinutes(Model.Escala.LunchTime))
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CheckOutTime)
+            @Html.DisplayNameFor(model => model.Ponto.CheckOutTime)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CheckOutTime)
-        </dd>
+            @Html.DisplayFor(model => model.Ponto.CheckOutTime) - @Html.DisplayNameFor(model => model.Escala.CheckOutTime)
+        </dt>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LunchStartTime)
+            @Html.DisplayNameFor(model => model.Ponto.Status)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LunchStartTime)
+            @Html.DisplayFor(model => model.Ponto.Status)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LunchEndTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LunchEndTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.RealCheckOutTime)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.RealCheckOutTime)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Justificative)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Justificative)
-        </dd>
-
+        @if (Model.Ponto.Status == "Negado" || Model.Ponto.Status == "Aprovado" || Model.Ponto.Status == "Irregular")
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Ponto.Justificative)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Ponto.Justificative)
+            </dd>
+        }
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.PontoId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

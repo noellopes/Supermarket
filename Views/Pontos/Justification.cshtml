@@ -1,0 +1,15 @@
+﻿@model Ponto
+
+@{
+    ViewData["Title"] = "Justification";
+}
+<h1>Justifique o ponto irregular</h1>
+<form asp-action="RegistrarJustificativa">
+    <div class="form-group">
+        <input type="hidden" asp-for="PontoId" />
+        <textarea rows="10" asp-for="Justificative" class="form-control" type="text">@Model.Justificative</textarea>
+        <div class="form-group mt-3">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+        </div>
+    </div>
+</form>

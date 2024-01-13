@@ -3,200 +3,85 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-
-<h1>@ViewData["Title"]</h1>
-
-
-<h1>Top 5 Funcionários com Mais Horas Extras</h1>
-
-@if (Model.SearchMonth.HasValue)
-{
-
-    @if (Model.Pontos != null && Model.Pontos.Any())
-    {
-        var topEmployees = Model.Pontos
-            .Where(p => TimeSpan.Parse(p.RealCheckOutTime) > TimeSpan.Parse(p.CheckOutTime) && p.Status.Equals("workOvertime", StringComparison.OrdinalIgnoreCase))
-            .OrderByDescending(p => p.ExtraHours)
-            .Take(5);
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Funcionário</th>
-                    <th>Total de Horas Extras</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in topEmployees)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Employee.Employee_Name)</td>
-                        <td>@item.ExtraHours.ToString(@"hh\:mm")</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<style>
+    .vermelho{
+        color: red
     }
-
-
-    else
-    {
-        <p>Nenhum dado disponível para a data pesquisada.</p>
+    .verde {
+        color: green
     }
-}
-else
-{
-    <p>Enter a month and year to show the top 5 Employees </p>
-}
-<div class="card mb-3">
-    <div class="card-body">
-        <form asp-action="Index" method="get">
-            <p><strong>Search Month</strong></p>
+    .amarelo {
+        color: darkgoldenrod
+    }
+</style>
 
-            <label for="Date" class="control-label">Month</label>
-            <input name="searchMonth" type="search" class="form-control" value="@Model.SearchMonth?.ToString("MM/yyyy")" />
-
-            <div class="mt-3">
-                <input class="btn btn-primary" type="submit" value="Search" />
-                <a class="btn btn-secondary" asp-action="Index">Cancel</a>
-            </div>
-        </form>
-    </div>
+<div class="d-flex flex-row-reverse justify-content-between">
+    <form asp-action="RegistrarPonto">
+        <div class="form-group">
+            <input type="submit" value="Registrar Ponto" class="btn btn-primary" />
+        </div>
+    </form>
+    <h1>
+        Day Hours Balance: @if (!Model.PontoDia.DayBalancePositive)
+        {
+            <div class="vermelho d-inline">- @Model.PontoDia.DayBalance.ToString(@"hh\:mm")</div>
+        }
+        else
+        {
+            <div class="verde d-inline">@Model.PontoDia.DayBalance.ToString(@"hh\:mm")</div>
+        }
+    </h1>
 </div>
+<h6>Check in time -    @Model.PontoDia.CheckInTime</h6>
+<h6>Lunch start time - @Model.PontoDia.LunchStartTime</h6>
+<h6>Check end time -   @Model.PontoDia.LunchEndTime</h6>
+<h6>Check out time -   @Model.PontoDia.CheckOutTime</h6>
 
-
-<h1>Lista de Todos os Pontos</h1>
-<form asp-action="Create">
-    <div class="form-group">
-        <input type="submit" value="Registrar Ponto" class="btn btn-primary" />
-    </div>
-</form>
 <table class="table">
     <thead>
         <tr>
-            <th>
-
-                @Html.DisplayNameFor(model => model.Pontos[0].Date)
-            </th>
-
-            <th></th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Day Balance</th>
+            <th>Details</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th>Employe Name:</th>
-            <th>Date:</th>
-            <th>Check-In Time:</th>
-            <th>Check-Out Time:</th>
-            <th>Real Check-Out Time:</th>
-            <th>Extra Hours:</th>
-
-        </tr>
         @foreach (var item in Model.Pontos)
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.CheckInTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CheckOutTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RealCheckOutTime)
-                </td>
-                <td>
-                    @{
-                        string formattedExtraHours;
-
-                        // Converte as strings para TimeSpan
-                        TimeSpan realcheckOutTime = TimeSpan.Parse(item.RealCheckOutTime);
-                        TimeSpan checkOutTime = TimeSpan.Parse(item.CheckOutTime);
-
-                        // Verifica se realcheckOutTime é maior que CheckOutTime
-                        if (realcheckOutTime > checkOutTime)
-                        {
-                            // Se verdadeiro, exibe com sinal "+"
-                            formattedExtraHours = item.ExtraHours.ToString(@"\+hh\:mm");
-                        }
-                        else
-                        {
-                            // Se falso, exibe com sinal "-"
-                            formattedExtraHours = item.ExtraHours.ToString(@"\-hh\:mm");
-                        }
+                    @switch (item.Status)
+                    {
+                        case "Registrado":
+                            <div>Regular</div>
+                            break;
+                        case "Irregular":
+                            <div class="amarelo">Irregular</div>
+                            break;
+                        case "Aprovado":
+                            <div class="verde">Aprovado</div>
+                            break;
+                        case "Negado":
+                            <div class="vermelho">Negado</div>
+                            break;
+                        default:
+                            break;
                     }
-                    @formattedExtraHours
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.PontoId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.PontoId">Details</a> |
-                    @* <a asp-action="Delete" asp-route-id="@item.PontoId">Delete</a> *@
+                    @if (!Model.PontoDia.DayBalancePositive)
+                    {
+                        <text>-</text>
+                    }@Model.PontoDia.DayBalance.ToString(@"hh\:mm")
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.PontoId">Details</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-<nav aria-label="date">
-    <ul class="pagination">
-        @if (Model.PagingInfo.CurrentPage == 1)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" href="#">First</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-asp-page="1">First</a>
-            </li>
-        }
-
-        @{
-            int first = Model.PagingInfo.CurrentPage - PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-            if (first < 1) first = 1;
-
-            int last = Model.PagingInfo.CurrentPage + PagingInfo.NUMBER_PAGES_SHOW_BEFORE_AFTER;
-            if (last > Model.PagingInfo.TotalPages) last = Model.PagingInfo.TotalPages;
-        }
-
-        @for (int p = first; p <= last; p++)
-        {
-            @if (p == Model.PagingInfo.CurrentPage)
-            {
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="#">@p</a>
-                </li>
-            }
-            else
-            {
-                <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-page="@p">@p</a>
-                </li>
-            }
-        }
-        @if (Model.PagingInfo.CurrentPage == Model.PagingInfo.TotalPages)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" href="#">Last</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item">
-                <a class="page-link" asp-action="Index" asp-route-page="@Model.PagingInfo.TotalPages">Last</a>
-            </li>
-        }
-
-    </ul>
-
-
-</nav>
-
-

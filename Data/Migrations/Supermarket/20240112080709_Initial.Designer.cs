@@ -12,7 +12,7 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Supermarket
 {
     [DbContext(typeof(SupermarketDbContext))]
-    [Migration("20240111215657_Initial")]
+    [Migration("20240112080709_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -719,13 +719,17 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Date")
+                        .IsRequired()
                         .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("DayBalance")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("DayBalancePositive")
+                        .HasColumnType("bit");
 
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
-
-                    b.Property<TimeSpan>("ExtraHours")
-                        .HasColumnType("time");
 
                     b.Property<string>("Justificative")
                         .HasColumnType("nvarchar(max)");
@@ -737,7 +741,6 @@ namespace Supermarket.Data.Migrations.Supermarket
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RealCheckOutTime")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")

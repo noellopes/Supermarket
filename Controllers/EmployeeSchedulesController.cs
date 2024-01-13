@@ -21,69 +21,84 @@ namespace Supermarket.Controllers
         }
 
         [Authorize(Roles = "Funcionário")]
-        public async Task<IActionResult> HRHome()
+        public async Task<IActionResult> HRHome(bool? funcionario)
         {
-            return View("HRHome");
+            if (User.IsInRole("Gestor") && (funcionario is null || funcionario == false))
+            {
+                return View("HRHomeAdmin");
+            }
+            else
+            {
+                return View("HRHome");
+            }
+        }
+        
+        [Authorize(Roles = "Funcionário")]
+        public async Task<IActionResult> Index(DateTime? startDate, DateTime? endDate, int page = 1)
+        {
+            var funcionario = await _context.Employee.Where(x => x.Employee_Email == User.Identity.Name).FirstOrDefaultAsync();
+            if(funcionario is not null)
+            {
+                var employeeSchedulesQuery = _context.EmployeeSchedule.AsQueryable();
+
+                if (startDate.HasValue && endDate.HasValue)
+                {
+                    employeeSchedulesQuery = employeeSchedulesQuery.Where(e => e.Date >= startDate && e.Date <= endDate);
+                }
+
+                var list = await employeeSchedulesQuery.Where(s=>s.EmployeeId==funcionario.EmployeeId).ToListAsync();
+                var vm = new EmployeeSchedulesViewModel
+                {
+                    EmployeeSchedules = list.Skip((page - 1) * 10).Take(10).ToList(),
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    PageIndex = page,
+                    TotalPages = (int)Math.Ceiling(list.Count() / 10.0)
+                };
+
+                ViewData["Employee"] = funcionario.Employee_Name;
+                return View("Index", vm);
+            }
+            else
+            {
+                return View("HRHome");
+            }
         }
 
-        // GET: EmployeeSchedules
-        [Authorize(Roles = "Funcionário")]
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "Gestor")]
+        public async Task<IActionResult> IndexAdmin(int? employeeId, DateTime? startDate, DateTime? endDate, int page = 1)
         {
-            var supermarketDbContext = _context.EmployeeSchedule.Include(e => e.Employee);
+            var employeeSchedulesQuery = _context.EmployeeSchedule.AsQueryable();
+
+            if (employeeId.HasValue)
+            {
+                employeeSchedulesQuery = employeeSchedulesQuery.Where(e => e.EmployeeId == employeeId);
+            }
+
+            if (startDate.HasValue && endDate.HasValue)
+            {
+                employeeSchedulesQuery = employeeSchedulesQuery.Where(e => e.Date >= startDate && e.Date <= endDate);
+            }
+
+            var list = await employeeSchedulesQuery.Include(e => e.Employee).ToListAsync();
+
             var vm = new EmployeeSchedulesViewModel
             {
-                EmployeeSchedules = await supermarketDbContext.ToListAsync(),
+                EmployeeSchedules = list.Skip((page - 1) * 10).Take(10).ToList(),
+                EmployeeId = employeeId,
+                StartDate = startDate,
+                EndDate = endDate,
+                PageIndex = page,
+                TotalPages = (int)Math.Ceiling(list.Count() / 10.0)
             };
 
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
+            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", employeeId);
+
             return View(vm);
         }
 
-        // GET: EmployeeSchedules/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.EmployeeSchedule == null)
-            {
-                return NotFound();
-            }
 
-            var employeeSchedule = await _context.EmployeeSchedule
-                .Include(e => e.Employee)
-                .FirstOrDefaultAsync(m => m.EmployeeScheduleId == id);
-            if (employeeSchedule == null)
-            {
-                return NotFound();
-            }
-
-            return View(employeeSchedule);
-        }
-
-        // GET: EmployeeSchedules/Create
-        public IActionResult Create()
-        {
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
-            return View("Create");
-        }
-
-        // POST: EmployeeSchedules/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EmployeeScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(employeeSchedule);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", employeeSchedule.EmployeeId);
-            return View(employeeSchedule);
-        }
-
-        // GET: EmployeeSchedules/Edit/5
+        [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.EmployeeSchedule == null)
@@ -96,16 +111,14 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", employeeSchedule.EmployeeId);
+            ViewData["Employee"] = _context.Employee.Where(s=>s.EmployeeId==employeeSchedule.EmployeeId).FirstOrDefault()?.Employee_Name ?? "Funcioário X";
             return View(employeeSchedule);
         }
 
-        // POST: EmployeeSchedules/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EmployeeScheduleId,EmployeeId,Date,CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
+        [Authorize(Roles = "Gestor")]
+        public async Task<IActionResult> Edit(int id, [Bind("CheckInTime,CheckOutTime,LunchStartTime,LunchTime")] EmployeeSchedule employeeSchedule)
         {
             if (id != employeeSchedule.EmployeeScheduleId)
             {
@@ -133,25 +146,6 @@ namespace Supermarket.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", employeeSchedule.EmployeeId);
-            return View(employeeSchedule);
-        }
-
-        // GET: EmployeeSchedules/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.EmployeeSchedule == null)
-            {
-                return NotFound();
-            }
-
-            var employeeSchedule = await _context.EmployeeSchedule
-                .Include(e => e.Employee)
-                .FirstOrDefaultAsync(m => m.EmployeeScheduleId == id);
-            if (employeeSchedule == null)
-            {
-                return NotFound();
-            }
-
             return View(employeeSchedule);
         }
 

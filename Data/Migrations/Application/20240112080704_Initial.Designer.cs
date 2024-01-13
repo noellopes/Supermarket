@@ -12,8 +12,12 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Application
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<< HEAD:Data/Migrations/Application/20240111215647_Initial.Designer.cs
 <<<<<<<< HEAD:Data/Migrations/Application/20240111215647_Initial.Designer.cs
     [Migration("20240111215647_Initial")]
+=======
+    [Migration("20240112080704_Initial")]
+>>>>>>> 736de2404e9ecf82fd39e19fe017d233d07df1d4:Data/Migrations/Application/20240112080704_Initial.Designer.cs
     partial class Initial
 ========
     [Migration("20240105141911_InitialCreate")]

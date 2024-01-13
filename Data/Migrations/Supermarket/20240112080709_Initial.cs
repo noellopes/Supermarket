@@ -514,15 +514,16 @@ namespace Supermarket.Data.Migrations.Supermarket
                     PontoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CheckInTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CheckOutTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LunchStartTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LunchEndTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RealCheckOutTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RealCheckOutTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Justificative = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ExtraHours = table.Column<TimeSpan>(type: "time", nullable: false)
+                    DayBalance = table.Column<TimeSpan>(type: "time", nullable: false),
+                    DayBalancePositive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

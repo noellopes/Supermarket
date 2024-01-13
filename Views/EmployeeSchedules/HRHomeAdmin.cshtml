@@ -1,8 +1,6 @@
-﻿
-@{
-    ViewData["Title"] = "HRHome";
+﻿@{
+    ViewData["Title"] = "HRHomeAdmin";
 }
-
 <style>
     .welcome-container {
         text-align: center;
@@ -19,10 +17,13 @@
         color: #555;
     }
 </style>
-<div class="welcome-container">
-    <h1>Welcome to the Human Resouces Module</h1>
-        <p>Ask for day-offs, register your presence in the company and see your future schedules</p>
-</div>
+@if (User.IsInRole("Gestor"))
+{
+    <div class="welcome-container">
+        <h1>Welcome to the Human Resouces Module</h1>
+        <p>Manage day-offs, schedules and logs of your employees</p>
+    </div>
+}
 <div class="album py-5">
     <div class="container">
         <div class="row">
@@ -30,7 +31,10 @@
                 <div class="card mb-4 box-shadow">
                     <div class="card-body">
                         <p class="card-text">
-                            <text>"Aqui é onde você pode gerenciar as suas folgas, pedir novas folgas, e ver resultados das mesmas."</text>
+                            @if (User.IsInRole("Gestor"))
+                            {
+                                <text>"Aqui é onde você pode gerenciar as folgas dos funcionarios, e aprovar solicitações."</text>
+                            }
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
@@ -44,11 +48,17 @@
                 <div class="card mb-4 box-shadow">
                     <div class="card-body">
                         <p class="card-text">
-                            <text>"Aqui é onde você pode visualizar suas escalas."</text>
+                            @if (User.IsInRole("Gestor"))
+                            {
+                                <text>"Aqui é onde você pode gerenciar as escalas dos funcionarios, e editar as mesmas de acordo com a necessidade."</text>
+                            }
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a asp-controller="EmployeeSchedules" asp-action="Index" class="btn btn-primary">Schedules</a>
+                                @if (User.IsInRole("Gestor"))
+                                {
+                                    <a asp-controller="EmployeeSchedules" asp-action="IndexAdmin" class="btn btn-primary">Schedules</a>
+                                }
                             </div>
                         </div>
                     </div>
@@ -58,7 +68,10 @@
                 <div class="card mb-4 box-shadow">
                     <div class="card-body">
                         <p class="card-text">
-                            <text>"Aqui é onde você pode vizualizar os seus pontos."</text>
+                            @if (User.IsInRole("Gestor"))
+                            {
+                                <text>"Aqui é onde você pode gerenciar os pontos funcionarios, e gerenciar pontos irregulares."</text>
+                            }
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
@@ -71,23 +84,11 @@
         </div>
     </div>
 </div>
-
-
 <div class="container d-flex flex-row-reverse justify-content-between">
-    <form method="post" asp-action="RegistrarPonto">
-        <input type="hidden" name="funcionario" value="false" />
-        <div class="form-group mt-3">
-            <input type="submit" value="Register Time" class="btn btn-primary" />
-        </div>
-    </form>
-
     <form method="get" asp-action="HRHome">
-        <input type="hidden" name="funcionario" value="false" />
-        @if (User.IsInRole("Gestor"))
-        {
-            <div class="form-group mt-3">
-                <input type="submit" value="Change to manager view" class="btn btn-primary" />
-            </div>
-        }
+        <input type="hidden" name="funcionario" value="true" />
+        <div class="form-group mt-3">
+            <input type="submit" value="Change to employee view" class="btn btn-primary" />
+        </div>
     </form>
 </div>
