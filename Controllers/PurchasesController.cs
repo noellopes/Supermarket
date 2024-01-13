@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,7 +25,7 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index(int page = 1, string product = "", string supplier = "", DateTime? deliverydate = null)
         {
             // Call the method to update expiration status
-            UpdateExpirationStatusForAllPurchases();
+            //UpdateExpirationStatusForAllPurchases();
 
             var purchase = from i in _context.Purchase.Include(p => p.Product)                                      
                                                       .Include(s => s.Supplier)  
@@ -175,7 +175,7 @@ namespace Supermarket.Controllers
                     // Encontra a purchase original
                     // Update information in ExpiredProducts
                     var expiredProduct = await _context.ExpiredProducts
-                        .FirstOrDefaultAsync(ep => ep.PurchaseId == purchase.PurchaseId);
+                        .FirstOrDefaultAsync(ep => ep.ProductId == purchase.ProductId);
 
                     // Para checar se o produto não está mais expirado
                     if (expiredProduct != null)
@@ -184,8 +184,8 @@ namespace Supermarket.Controllers
                         {
                             expiredProduct.ProductId = purchase.ProductId;
                             expiredProduct.ExpirationDate = purchase.ExpirationDate;
-                            expiredProduct.SupplierId = purchase.SupplierId;
-                            expiredProduct.EmployeeId = purchase.EmployeeId;
+                            //expiredProduct.SupplierId = purchase.SupplierId;
+                            //expiredProduct.EmployeeId = purchase.EmployeeId;
                             expiredProduct.BatchNumber = purchase.BatchNumber;
 
                             _context.Update(expiredProduct);
@@ -261,7 +261,7 @@ namespace Supermarket.Controllers
             {
                 // Faz uma query para pegar o associado na tabela ExpiredProducts
                 var expiredProducts = _context.ExpiredProducts
-                    .Where(ep => ep.PurchaseId == purchase.PurchaseId);
+                    .Where(ep => ep.ProductId == purchase.ProductId);
 
                 // Remove de ExpiredProducts antes de remover de Purchase
                 _context.ExpiredProducts.RemoveRange(expiredProducts);
@@ -285,45 +285,42 @@ namespace Supermarket.Controllers
         }
 
         // Verifica se os produtos estão expirados
-        internal void UpdateExpirationStatusForAllPurchases()
-        {
-            var allPurchases = _context.Purchase;
+        //internal void UpdateExpirationStatusForAllPurchases()
+        //{
+        //    var allPurchases = _context.Purchase;
 
-            foreach (var purchase in allPurchases)
-            {
-                if (IsProductExpired(purchase.ExpirationDate))
-                {
-                    // Update the expiration status for the product in the purchase
-                    purchase.ProductExpired = true;
+        //    foreach (var purchase1 in allPurchases)
+        //    {
+        //        if (IsProductExpired(purchase1.ExpirationDate))
+        //        {
+        //            // Update the expiration status for the product in the purchase1
+        //            purchase1.ProductExpired = true;
 
-                    // Checa se o produto está expirado e ainda não está na tabela de ExpiredProducts
-                    if (purchase.ProductExpired &&
-                        !_context.ExpiredProducts.Any(ep => ep.PurchaseId == purchase.PurchaseId))
-                    {
+        //            // Checa se o produto está expirado e ainda não está na tabela de ExpiredProducts
+        //            if (purchase1.ProductExpired &&
+        //                !_context.ExpiredProducts.Any(ep => ep.ProductId == purchase1.ProductId))
+        //            {
 
-                        //Escrever na tabela de produtos expirados
-                        var expiredProduct = new ExpiredProducts
-                        {
-                            PurchaseId = purchase.PurchaseId,
-                            ProductId = purchase.ProductId,
-                            ExpirationDate = purchase.ExpirationDate,
-                            SupplierId = purchase.SupplierId,
-                            EmployeeId = purchase.EmployeeId,
-                            // Set other properties as needed
-                            BatchNumber = purchase.BatchNumber
-                        };
+        //                //Escrever na tabela de produtos expirados
+        //                var productExpired = new ProductExpiration
+        //                {
+        //                    ProductId = purchase1.ProductId,
+        //                    BatchNumber = purchase1.BatchNumber,
+        //                    ExpirationDate = purchase1.ExpirationDate,
+        //                    Quantity = purchase1.DeliveredQuantity
+        //                };
 
-                        _context.ExpiredProducts.Add(expiredProduct);
-                    }
-                }
-                else
-                {
-                    purchase.ProductExpired = false;
-                }
-            }
+        //                _context.ExpiredProducts.Add(productExpired);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            purchase1.ProductExpired = false;
+        //        }
+        //    }
 
-            _context.SaveChanges();
-        }
+        //    _context.SaveChanges();
+        //}
 
         [Authorize(Roles = "View_Reports")]
         public IActionResult CloseToExpire(int page = 1, string product = "", string supplier = "", DateTime? expirationdate = null)
@@ -361,7 +358,7 @@ namespace Supermarket.Controllers
             return View(
                 new PurchaseListViewModel
                 {
-                    Purchase = purchase.OrderByDescending(i => i.ExpirationDate)
+                    Purchase = purchase.OrderBy(i => i.ExpirationDate)
                                        .Skip((page - 1) * pagination.PageSize)
                                                  .Take(pagination.PageSize),
                     Pagination = pagination,
@@ -376,7 +373,7 @@ namespace Supermarket.Controllers
         public IActionResult OnApplicationStart()
         {
             // Chama o método para atualizar o status de expiração para todas as compras
-            UpdateExpirationStatusForAllPurchases();
+            //UpdateExpirationStatusForAllPurchases();
 
             // Redireciona para a ação "Index" do controlador atual
             return RedirectToAction(nameof(Index));

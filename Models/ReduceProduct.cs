@@ -11,8 +11,10 @@ namespace Supermarket.Models
         public required string Reason { get; set; }
 
         [Required]
-        [RegularExpression("^(Pending|Confirmed|Refused)$", ErrorMessage = "Invalid status")]
+        //[RegularExpression("^(Pending|Confirmed|Refused)$", ErrorMessage = "Invalid status")]
         public required string Status { get; set; } = "Pending";
+
+        public static List<string> StatusList = new List<string> { "Pending", "Confirmed", "Refused" };
 
         public DateTime Date { get; set;} = DateTime.Now;
 

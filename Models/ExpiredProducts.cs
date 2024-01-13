@@ -49,7 +49,7 @@ namespace Supermarket.Models
         public Employee? Employee { get; set; }
 
         [Display(Name = "Purchase")]
-        public int? PurchaseId { get; set; }
+        //public int PurchaseId { get; set; }
         public Purchase? Purchase { get; set; }
     }
 }

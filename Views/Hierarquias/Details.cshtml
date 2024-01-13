@@ -1,33 +1,50 @@
-﻿@model HierarquiasModel
+﻿@model Supermarket.Models.Hierarquias;
 
 @{
-    ViewData["Title"] = "Detalhes do Hierarquias";
+    ViewData["Title"] = "Detalhes da Relacão Hierarquica";
 }
 
 @if (ViewBag.MensagemCriadoSuccess != null)
 {
-    <div id="mensagemCriadoSuccess" class="alert alert-success" role="alert" style="width: 33%;">
+    <div id="mensagem" class="alert alert-success" role="alert" style="width: 33%;">
         @ViewBag.MensagemCriadoSuccess
         <div class="progress" style="height: 10px; margin-top: 5px;">
             <div id="progressBar" class="progress-bar bg-success" role="progressbar"></div>
         </div>
     </div>
 }
+@if (ViewBag.MensagemEditadoSuccess != null)
+{
+    <div id="mensagem" class="alert alert-success" role="alert" style="width: 33%;">
+        @ViewBag.MensagemEditadoSuccess
+        <div class="progress" style="height: 10px; margin-top: 5px;">
+            <div id="progressBar" class="progress-bar alert-success" role="progressbar"></div>
+        </div>
+    </div>
+}
 
-<h2>Detalhes do Hierarquias</h2>
+<h2>Detalhes da Relacão Hierarquica</h2>
 
 <div>
     <dl class="row">
-        <dt class="col-sm-2">ID:</dt>
-        <dd class="col-sm-10">@Model.Id</dd>
-
-        <dt class="col-sm-2">Nome:</dt>
-        <dd class="col-sm-10">@Model.Nome</dd>
+        <dt class="col-sm-2">
+            Subordinado:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Subordinados.Employee_Name)
+        </dd>
+        <dt class="col-sm-2">
+            Superiores:
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Superiores.Employee_Name)
+        </dd>
     </dl>
 </div>
 
 <p>
-    <a asp-action="Index" class="btn btn-primary">Voltar para a Lista</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a> |
+    <a asp-action="Index" class="btn btn-primary">Voltar a Lista</a>
 </p>
 
 <style>
@@ -45,7 +62,7 @@
 
 <script>
     var progressBar = document.getElementById('progressBar');
-    var mensagemCriadoSuccess = document.getElementById('mensagemCriadoSuccess');
+    var mensagem = document.getElementById('mensagem');
 
     progressBar.style.width = '100%';
 
@@ -58,7 +75,7 @@
         } else {
             clearInterval(interval);
             setTimeout(function () {
-                mensagemCriadoSuccess.style.display = 'none';
+                mensagem.style.display = 'none';
             }, duracaoAnimacao);
         }
     }, duracaoAnimacao / 1000);

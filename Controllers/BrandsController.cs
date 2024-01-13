@@ -11,7 +11,7 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles = "Stock Administrator, Stock Operator")]
     public class BrandsController : Controller
     {
         private readonly SupermarketDbContext _context;
@@ -22,11 +22,44 @@ namespace Supermarket.Controllers
         }
 
         // GET: Brands
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, string name = "")
         {
-              return _context.Brand != null ? 
-                          View(await _context.Brand.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Brand'  is null.");
+            var brands = from b in _context.Brand select b;
+
+            if (name != "")
+            {
+                brands = brands.Where(x => x.Name.Contains(name));
+            }
+
+            PagingInfoProduct paging = new PagingInfoProduct
+            {
+                CurrentPage = page,
+                TotalItems = await brands.CountAsync(),
+            };
+
+            if (paging.CurrentPage <= 1)
+            {
+                paging.CurrentPage = 1;
+            }
+            else if (paging.CurrentPage > paging.TotalPages)
+            {
+                paging.CurrentPage = paging.TotalPages;
+            }
+
+            var vm = new BrandViewModel
+            {
+                Brands = await brands
+                    .OrderBy(b => b.Name)
+                    .Skip((paging.CurrentPage - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .ToListAsync(),
+                PagingInfoProduct = paging,
+                SearchName = name,
+            };
+
+            ViewBag.totalBrands = vm.PagingInfoProduct.TotalItems;
+
+            return View(vm);
         }
 
         // GET: Brands/Details/5
@@ -48,7 +81,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Brands/Create
-        //[Authorize]
+        [Authorize(Roles = "Stock Administrator")]
         public IActionResult Create()
         {
             return View();
@@ -60,6 +93,7 @@ namespace Supermarket.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         //[Authorize]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Create([Bind("BrandId,Name")] Brand brand)
         {
             if (ModelState.IsValid)
@@ -72,6 +106,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Brands/Edit/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Brand == null)
@@ -92,6 +127,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Edit(int id, [Bind("BrandId,Name")] Brand brand)
         {
             if (id != brand.BrandId)
@@ -123,6 +159,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Brands/Delete/5
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Brand == null)
@@ -143,6 +180,7 @@ namespace Supermarket.Controllers
         // POST: Brands/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Brand == null)
@@ -150,7 +188,12 @@ namespace Supermarket.Controllers
                 return Problem("Entity set 'SupermarketDbContext.Brand'  is null.");
             }
             var brand = await _context.Brand.FindAsync(id);
-            if (brand != null)
+            var product = await _context.Product.Where(p => p.BrandId == id).FirstOrDefaultAsync();
+            if (product != null)
+            {
+                ModelState.AddModelError(string.Empty, "There is a product with this brand, can't be deleted.");
+                return View(brand);
+            }else if(brand != null)
             {
                 _context.Brand.Remove(brand);
             }

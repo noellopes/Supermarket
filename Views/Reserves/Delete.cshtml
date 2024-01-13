@@ -1,4 +1,4 @@
-﻿@model Supermarket.Models.SubsidyCalculation
+﻿@model Supermarket.Models.Reserve
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,21 +8,19 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>SubsidyCalculation</h4>
+    <h4>Reserve</h4>
     <hr />
     <dl class="row">
-    
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ponto)
+            @Html.DisplayNameFor(model => model.NumeroDeFunc)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ponto.Status)
+            @Html.DisplayFor(model => model.NumeroDeFunc)
         </dd>
-        
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="SubsidyCalculationId" />
+        <input type="hidden" asp-for="ReserveId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

@@ -1,5 +1,5 @@
 ﻿
-@model List<Customer>
+@model List<Order>
 
 
 @if (Model != null)
@@ -11,7 +11,7 @@
         {
             <tr>
                 <td>
-                    @item.CustomerName
+                    @item.Customer.CustomerName
                 </td>
 
             </tr>

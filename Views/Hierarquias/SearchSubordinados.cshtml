@@ -1,0 +1,23 @@
+﻿@model List<Supermarket.Models.Hierarquias>
+
+@{
+    ViewData["Title"] = "Pesquisar Subordinados";
+}
+
+<h2>Pesquisar Subordinados</h2>
+
+<form asp-action="SearchSubordinados" method="post">
+    <div class="form-group">
+        <label for="selectedHierarquiaId">Selecione um Funcionário:</label>
+        <select class="form-control" name="selectedHierarquiaId" id="selectedHierarquiaId">
+            <option value="">Selecione...</option>
+            @foreach (var hierarquia in (List<Supermarket.Models.Hierarquias>)ViewData["Hierarquias"])
+            {
+                <option value="@hierarquia.SuperiorId">@hierarquia.Superiores.Employee_Name</option>
+            }
+        </select>
+    </div>
+    <p></p>
+    <button type="submit" class="btn btn-primary">Pesquisar</button>
+</form>
+

@@ -7,5 +7,7 @@
         public PagingInfo PagingInfo { get; set;}
 
         public string SearchName { get; set;} = string.Empty;
+
+        public string SearchNIF { get; set;} = string.Empty;
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Supermarket.Models;
 
 namespace Supermarket.Data
@@ -19,13 +19,28 @@ namespace Supermarket.Data
             modelBuilder.Entity<MealCard>().HasKey(MC => MC.MealCardId);
             //Relação entre Schedule e Departments
             modelBuilder.Entity<Schedule>()
-                .HasOne(s => s.Departments)
+                .HasOne(s => s.Department)
                 .WithMany()
-                .HasForeignKey(s => s.IDDepartments);
+                .HasForeignKey(s => s.DeptID);
             modelBuilder.Entity<Ticket>()
                 .HasOne(s => s.Departments)
                 .WithMany()
                 .HasForeignKey(s => s.IDDepartments);
+
+            modelBuilder.Entity<Hierarquias>()
+                .HasKey(h => h.Id);
+
+            modelBuilder.Entity<Hierarquias>()
+                .HasOne(h => h.Superiores)
+                .WithMany(e => e.Subordinados)
+                .HasForeignKey(h => h.SuperiorId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Hierarquias>()
+                .HasOne(h => h.Subordinados)
+                .WithMany(e => e.Superiores)
+                .HasForeignKey(h => h.SubordinadoId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Employee>().HasKey(e => e.EmployeeId);
             modelBuilder.Entity<Employee>().Property(e => e.EmployeeId).UseIdentityColumn();
@@ -41,16 +56,22 @@ namespace Supermarket.Data
 
         public DbSet<Employee> Employee { get; set; } = default!;
 
+        public DbSet<Hierarquias> Hierarquias { get; set; }
+
         public DbSet<Supermarket.Models.IssueType> IssueType { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Issues> Issues { get; set; } = default!;
 
         public DbSet<Supermarket.Models.ProductExpiration> ProductExpiration { get; set; } = default!;
+        public DbSet<Supermarket.Models.ProductExpiration> ExpiredProducts { get; set; } = default!;
+
 
         public DbSet<Supermarket.Models.Funcao> Funcao { get; set; } = default!;
 
         public DbSet<EmployeeEvaluation> EmployeeEvaluation { get; set; } = default!;
+        public DbSet<FormationEmployee> FormationEmployees { get; set; } = default!;
 
+        //public DbSet<Supermarket.Models.Employee> Employee { get; set; } = default!;
 
         public DbSet<Supermarket.Models.ProductDiscount> ProductDiscount { get; set; } = default!;
 
@@ -76,9 +97,11 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
+        public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
+
         public DbSet<Schedule> Schedule { get; set; }      
 
-        public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }
+        public DbSet<CategoryDiscounts> CategoryDiscounts { get; set; }
 
         public DbSet<Department> Departments { get; set; }
 
@@ -89,9 +112,10 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Client> Client { get; set; } = default!;
 
 
-        //public DbSet<Supermarket.Models.ReserveDepartment> ReserveDepartment { get; set; } = default!;
+        public DbSet<Supermarket.Models.ReserveDepartment1> ReserveDepartment { get; set; } = default!;
 
-        public DbSet<Supermarket.Models.Reserve> Reserve { get; set; } = default!;
+        public DbSet<Supermarket.Models.Reserve> Reserves { get; set; } = default!;
+
 
         public DbSet<MealCard> MealCard { get; set; } = default!;
 
@@ -102,21 +126,33 @@ namespace Supermarket.Data
 
         public DbSet<SubsidySetup> SubsidySetup { get; set; } = default!;
 
-        public DbSet<HierarquiasModel> Hierarquias { get; set; } = default!;
+
+        public DbSet<Supermarket.Models.Formation> Formation { get; set; } = default!;
+
+
+        public DbSet<Orders> Orders { get; set; } = default!;
 
         public DbSet<Supermarket.Models.Supplier> Suppliers { get; set; } = default!;
 
         public DbSet<Supermarket.Models.MealCard> MealCards { get; set; } = default!;
         
-        public DbSet<Supermarket.Models.ExpiredProducts> ExpiredProducts { get; set; } = default!;
-        
         public DbSet<Supermarket.Models.Purchase> Purchase { get; set; } = default!;
 
         public object Pontos { get; internal set; }
+
+
+        ///public object Pontos { get; internal set; }
         public DbSet<TakeAwayCategory> TakeAwayCategory { get; set; } = default!;
         public DbSet<TakeAwayProduct> TakeAwayProduct { get; set; } = default!;
         public DbSet<User_Order> User_Order { get; set; } = default!;
         public DbSet<Order> Order { get; set; } = default!;
+        public DbSet<Supermarket.Models.Alert> Alert { get; set; } = default!;
 
+        //public DbSet<Orders> Orders { get; set; } = default!;
+
+
+        public DbSet<Supermarket.Models.Qualification> Qualification { get; set; }
+
+        public DbSet<Supermarket.Models.Department> Department { get; set; } = default!;
     }
 }

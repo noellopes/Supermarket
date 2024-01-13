@@ -180,10 +180,12 @@ namespace Supermarket.Controllers
 
             var ticketlista = await _context.Tickets.ToListAsync();
 
+
             var schedules = _context.Schedule
      .Include(b => b.Departments)
      .Where(b => b.IDDepartments == departmentId)
      .FirstOrDefault();
+
 
 
             // Perform validation and save the new ticket to the database
@@ -244,7 +246,7 @@ namespace Supermarket.Controllers
 
             var ticketlista = await _context.Tickets.ToListAsync();
 
-            var schedules = await _context.Schedule.Where(b => b.IDDepartments == departmentId).FirstOrDefaultAsync();
+            var schedules = await _context.Schedule.Where(b => b.DeptID == departmentId).FirstOrDefaultAsync();
 
             // Perform validation and save the new ticket to the database
 
