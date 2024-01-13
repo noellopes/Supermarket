@@ -169,7 +169,10 @@ namespace Supermarket.Controllers
                                 {
                                     Role = "Stock Administrator",
                                     Description = str,
-                                    Function = "reduceProducts"
+                                    Function = "reduceProducts",
+                                    Page="",
+                                    Search=""
+
                                 };
                                 _context.Add(alert);
                                 await _context.SaveChangesAsync();
