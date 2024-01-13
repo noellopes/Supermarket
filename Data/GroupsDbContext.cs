@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Supermarket.Models;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Supermarket.Data
 {
     public class GroupsDbContext : DbContext
     {
-        public GroupsDbContext (DbContextOptions<GroupsDbContext> options)
+        public GroupsDbContext(DbContextOptions<GroupsDbContext> options)
             : base(options)
         {
         }

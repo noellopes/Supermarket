@@ -5,6 +5,10 @@
 }
 
 <h1>Folgas</h1>
+@using(Html.BeginForm("Index","Folgas",FormMethod.Get))
+{
+
+
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert_success" role="alert">@TempData["SuccessMessage"]</div>
@@ -14,7 +18,36 @@
     <a asp-action="Create">Criar Novo Pedido de Folga</a><br />
     <a asp-action="FolgasPendentes">Folgas Pendentes</a><br />
     <a asp-action="FolgasAprovadas">Folgas Aprovadas</a><br />
-</p>
+        @if (ViewData["Message"] != null)
+        {
+            <div class="alert alert-info" role="alert">@ViewData["Message"]</div>
+        }
+    </p>
+    @if (User.IsInRole("Funcionário"))
+    {
+        <div class="form-group">
+            <label for="dataPedido">Pesquisar por Data do Pedido</label>
+            <input type="date" name="dataPedido" class="form-control"/>
+            <button type="submit" class="btn btn-primary">Pesquisar</button>
+        </div>
+    }
+
+      @if(!User.IsInRole("Funcionário") )
+      {
+<div class="form-group">
+    <label for="employeeId">Pesquisar por funcionário:</label>
+    <select name="employeeId" class="form-control">
+        <option value="">Todos os funcionários</option>
+            @foreach(var employee in (SelectList)ViewData["EmployeeId"])
+            {
+                <option value="@employee.Value">@employee.Text</option>
+            }
+        </select>
+</div>
+<button type="submit" class="btn btn-primary">Pesquisar</button>
+}
+}
+
 <table class="table">
     <thead>
         <tr>

@@ -7,7 +7,7 @@ namespace Supermarket.Models
         public int ClientId { get; set; }
 
         [Required]
-        [StringLength(50),MinLength(3)]
+        [StringLength(50), MinLength(3)]
         required public string ClientName { get; set; }
         [Required]
         [StringLength(50), MinLength(3)]
@@ -16,7 +16,7 @@ namespace Supermarket.Models
         [StringLength(50), MinLength(3)]
         required public string ClientEmail { get; set; }
         [Required]
-        required public DateTime ClientBirth {  get; set; }
+        required public DateTime ClientBirth { get; set; }
         public Boolean Estado { get; set; } = true;
 
 

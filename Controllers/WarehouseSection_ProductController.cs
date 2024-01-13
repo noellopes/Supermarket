@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -98,7 +94,7 @@ namespace Supermarket.Controllers
         // GET: WarehouseSection_Product/Edit/5
         public async Task<IActionResult> Edit(int? productId, int? warehouseSectionId)
         {
-            if (productId == null || warehouseSectionId == null )
+            if (productId == null || warehouseSectionId == null)
             {
                 return NotFound();
             }
@@ -112,7 +108,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            
+
 
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", warehouseSection_Product.ProductId);
             ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description", warehouseSection_Product.WarehouseSectionId);
@@ -142,12 +138,12 @@ namespace Supermarket.Controllers
             {
                 try
                 {
-                    
+
                     if (warehouseSection_Product.ReservedQuantity > warehouseSection_Product.Quantity)
                     {
-            
+
                         ModelState.AddModelError("", "The quantity must always be greater than or equal to the reserved quantity");
-                       
+
                     }
                     else
                     {
@@ -171,7 +167,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-               // return RedirectToAction(nameof(Index));
+                // return RedirectToAction(nameof(Index));
             }
             warehouseSection_Product.Product = await _context.Product.FindAsync(warehouseSection_Product.ProductId);
             warehouseSection_Product.WarehouseSection = await _context.WarehouseSection.FindAsync(warehouseSection_Product.WarehouseSectionId);
@@ -180,7 +176,7 @@ namespace Supermarket.Controllers
             return View(warehouseSection_Product);
         }
 
-       
+
 
         // GET: WarehouseSection_Product/Delete/5
         public async Task<IActionResult> Delete(int? productId, int? warehouseSectionId)
@@ -198,7 +194,7 @@ namespace Supermarket.Controllers
             if (warehouseSection_Product.Quantity != 0)
             {
                 ViewBag.Message = "Warehouse Section Product cannot be eliminated because it has a quantity greater than 0";
-                return View("Delete", warehouseSection_Product); 
+                return View("Delete", warehouseSection_Product);
             }
 
 
@@ -209,7 +205,7 @@ namespace Supermarket.Controllers
 
             return View(warehouseSection_Product);
         }
-       
+
         // POST: WarehouseSection_Product/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

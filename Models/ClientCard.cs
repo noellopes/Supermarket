@@ -1,7 +1,4 @@
-﻿using Microsoft.Build.Framework;
-using System.ComponentModel.DataAnnotations;
-
-namespace Supermarket.Models
+﻿namespace Supermarket.Models
 {
     public class ClientCard
     {
@@ -9,7 +6,7 @@ namespace Supermarket.Models
         public int ClientCardId { get; set; }
 
         public int ClientId { get; set; }
-        public Client? Client {get;  set;}
+        public Client? Client { get; set; }
 
         public int ClientCardNumber { get; set; }
 

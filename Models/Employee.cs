@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Configuration;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models
 {
@@ -47,7 +45,7 @@ namespace Supermarket.Models
         public required string Standard_Check_In_Time { get; set; }
 
         [Required]
-        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]        
+        [RegularExpression(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$", ErrorMessage = "Invalid time format. Use HH:mm.")]
         public required string Standard_Check_Out_Time { get; set; }
 
 
@@ -65,12 +63,12 @@ namespace Supermarket.Models
 
 
         //Ligação de 1 para 1 com Meal_Card
-        
+
 
         //Ligação de 1 para 1 com Meal_Card
         public MealCard? MealCard { get; set; }
 
-       
+
 
     }
 }

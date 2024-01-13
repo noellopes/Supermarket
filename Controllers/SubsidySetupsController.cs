@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -22,9 +17,9 @@ namespace Supermarket.Controllers
         // GET: SubsidySetups
         public async Task<IActionResult> Index()
         {
-              return _context.SubsidySetup != null ? 
-                          View(await _context.SubsidySetup.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.SubsidySetup'  is null.");
+            return _context.SubsidySetup != null ?
+                        View(await _context.SubsidySetup.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.SubsidySetup'  is null.");
         }
 
         // GET: SubsidySetups/Details/5
@@ -107,7 +102,7 @@ namespace Supermarket.Controllers
                     await _context.SaveChangesAsync();
                     ViewBag.Message = "Setup successfully edited.";
 
-                  
+
 
                     return View("Details", subsidySetup);
                 }
@@ -159,7 +154,7 @@ namespace Supermarket.Controllers
             {
                 _context.SubsidySetup.Remove(subsidySetup);
             }
-            
+
             await _context.SaveChangesAsync();
             // return RedirectToAction(nameof(Index));
             return View("DeleteConfirmed", subsidySetup);
@@ -167,7 +162,7 @@ namespace Supermarket.Controllers
 
         private bool SubsidySetupExists(int id)
         {
-          return (_context.SubsidySetup?.Any(e => e.SubsidySetupId == id)).GetValueOrDefault();
+            return (_context.SubsidySetup?.Any(e => e.SubsidySetupId == id)).GetValueOrDefault();
         }
     }
 }

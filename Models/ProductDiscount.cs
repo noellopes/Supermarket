@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Supermarket.Models
 {
@@ -19,4 +18,3 @@ namespace Supermarket.Models
         public DateTime EndDate { get; set; }
     }
 }
-    

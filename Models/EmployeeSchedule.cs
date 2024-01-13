@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Supermarket.Models
+﻿namespace Supermarket.Models
 {
     public class EmployeeSchedule
     {
-        public int EmployeeScheduleId {  get; set; }
+        public int EmployeeScheduleId { get; set; }
 
-        
+
         public int EmployeeId { get; set; }
 
         public Employee? Employee { get; set; }

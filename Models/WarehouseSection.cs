@@ -13,6 +13,6 @@ namespace Supermarket.Models
         public int WarehouseId { get; set; }
         public Warehouse? Warehouse { get; set; }
 
-        public ICollection<WarehouseSection_Product>? Products{ get; set; }
+        public ICollection<WarehouseSection_Product>? Products { get; set; }
     }
 }

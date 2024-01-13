@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -23,7 +19,7 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index()
         {
             var Evaluations = _context.EmployeeEvaluation.Include(ee => ee.Employee);
-            return Evaluations != null ? 
+            return Evaluations != null ?
                           View(await Evaluations.ToListAsync()) :
                           Problem("Entity set 'SupermarketDbContext.EmployeeEvaluation'  is null.");
         }
@@ -162,7 +158,7 @@ namespace Supermarket.Controllers
             {
                 _context.EmployeeEvaluation.Remove(employeeEvaluation);
             }
-            
+
             await _context.SaveChangesAsync();
 
             TempData["Message"] = "The employee evaluation has successfully been deleted!";
@@ -171,13 +167,13 @@ namespace Supermarket.Controllers
 
         private bool EmployeeEvaluationExists(int id)
         {
-          return (_context.EmployeeEvaluation?.Any(e => e.EmployeeEvaluationId == id)).GetValueOrDefault();
+            return (_context.EmployeeEvaluation?.Any(e => e.EmployeeEvaluationId == id)).GetValueOrDefault();
         }
 
         // GET: EmployeeEvaluation/EmployeeView
         public async Task<IActionResult> EmployeeView()
         {
-            var Employees = _context.Employee.Include(f=>EmployeeGradeAsync(f.EmployeeId));
+            var Employees = _context.Employee.Include(f => EmployeeGradeAsync(f.EmployeeId));
 
             return Employees != null ?
                           View(await Employees.ToListAsync()) :
@@ -192,21 +188,21 @@ namespace Supermarket.Controllers
                 return 0;
             }
 
-            var Employee =  _context.Employee.Find(EmployeeId);
+            var Employee = _context.Employee.Find(EmployeeId);
             if (Employee == null)
             {
                 //The employee doesn't exist!
                 return 0;
             }
 
-            var Evaluations = _context.EmployeeEvaluation.Where(af => af.EmployeeId==Employee.EmployeeId).ToList();
+            var Evaluations = _context.EmployeeEvaluation.Where(af => af.EmployeeId == Employee.EmployeeId).ToList();
             var sum = 0;
-            foreach (var evaluation in Evaluations) 
+            foreach (var evaluation in Evaluations)
             {
                 sum += evaluation.GradeNumber;
             }
 
-            var mean = sum/ Evaluations.Count;
+            var mean = sum / Evaluations.Count;
             return mean;
         }
     }

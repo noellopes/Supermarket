@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 using Supermarket.Data;
 using Supermarket.Models;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -25,7 +19,7 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Index(int page = 1, string product = "", float? value = null, DateTime? startDate = null, DateTime? endDate = null)
         {
             var productDiscounts = from b in _context.ProductDiscount.Include(b => b.ClientCard).Include(b => b.Product) select b;
-            
+
             if (product != "")
             {
                 productDiscounts = productDiscounts.Where(b => b.Product.Name.Contains(product));
@@ -106,9 +100,9 @@ namespace Supermarket.Controllers
         public async Task<IActionResult> Create([Bind("ProductDiscountId,ProductId,ClientCardId,Value,StartDate,EndDate")] ProductDiscount productDiscount)
         {
             if (ModelState.IsValid)
-        {
-            var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
-            bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
+            {
+                var clientCards = await _context.ClientCard.Where(b => b.Estado == true).ToListAsync();
+                bool duplicatedDiscounts = false; //To detect if the discounts are duplicated
 
                 foreach (var clientCard in clientCards)
                 {
@@ -147,7 +141,7 @@ namespace Supermarket.Controllers
                     TempData["SuccessMessage"] = "product successfully created!";
                     return RedirectToAction(nameof(Index));
                 }
-        }
+            }
             ViewData["ClientCardId"] = new SelectList(_context.ClientCard, "ClientCardId", "ClientCardNumber", productDiscount.ClientCardId);
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", productDiscount.ProductId);
             return View(productDiscount);
@@ -247,14 +241,14 @@ namespace Supermarket.Controllers
 
                 TempData["SuccessMessage"] = "product sucessful deleted";
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductDiscountExists(int id)
         {
-          return (_context.ProductDiscount?.Any(e => e.ProductDiscountId == id)).GetValueOrDefault();
+            return (_context.ProductDiscount?.Any(e => e.ProductDiscountId == id)).GetValueOrDefault();
         }
     }
 }

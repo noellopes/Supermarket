@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -202,7 +198,7 @@ namespace Supermarket.Controllers
             {
                 _context.Product.Remove(product);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -249,7 +245,7 @@ namespace Supermarket.Controllers
         }
         private bool ProductExists(int id)
         {
-          return (_context.Product?.Any(e => e.ProductId == id)).GetValueOrDefault();
+            return (_context.Product?.Any(e => e.ProductId == id)).GetValueOrDefault();
         }
     }
 }

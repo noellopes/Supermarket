@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -22,9 +17,9 @@ namespace Supermarket.Controllers
         // GET: Reserves
         public async Task<IActionResult> Index()
         {
-              return _context.Reserve != null ? 
-                          View(await _context.Reserve.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Reserve'  is null.");
+            return _context.Reserve != null ?
+                        View(await _context.Reserve.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Reserve'  is null.");
         }
 
         // GET: Reserves/Details/5
@@ -150,14 +145,14 @@ namespace Supermarket.Controllers
             {
                 _context.Reserve.Remove(reserve);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ReserveExists(int id)
         {
-          return (_context.Reserve?.Any(e => e.ReserveId == id)).GetValueOrDefault();
+            return (_context.Reserve?.Any(e => e.ReserveId == id)).GetValueOrDefault();
         }
     }
 }

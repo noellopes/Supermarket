@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using System.Threading.Tasks;
-
-namespace Supermarket.Models
+﻿namespace Supermarket.Models
 {
 
     public class CardMovement

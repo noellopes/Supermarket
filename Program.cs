@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
-using Microsoft.Extensions.DependencyInjection;
-using static System.Formats.Asn1.AsnWriter;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<GroupsDbContext>(options =>
@@ -18,7 +16,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(
-    options => {
+    options =>
+    {
         // Sign in
         options.SignIn.RequireConfirmedAccount = false;
 
@@ -35,7 +34,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(
         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
         options.Lockout.MaxFailedAccessAttempts = 5;
     })
-    
+
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultUI();
 
@@ -48,7 +47,8 @@ var roleManager = reqServScope.ServiceProvider.GetRequiredService<RoleManager<Id
 SeedData.PopulateRolesAsync(roleManager).Wait();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
+if (app.Environment.IsDevelopment())
+{
     app.UseMigrationsEndPoint();
     using var serviceScope = app.Services.CreateScope();
     var db = serviceScope.ServiceProvider.GetService<SupermarketDbContext>();
@@ -56,11 +56,13 @@ if (app.Environment.IsDevelopment()) {
 
     var userManager = reqServScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
     SeedData.PopulateDevUsers(userManager);
-} else {
+}
+else
+{
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-    
+
 }
 
 app.UseHttpsRedirection();

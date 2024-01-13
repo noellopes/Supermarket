@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -68,7 +64,8 @@ namespace Supermarket.Controllers
                 {
                     ModelState.AddModelError("", "Another hallway with the same description and store already exists.");
                 }
-                else{
+                else
+                {
                     _context.Add(hallway);
                     await _context.SaveChangesAsync();
 
@@ -116,18 +113,19 @@ namespace Supermarket.Controllers
                 try
                 {
                     bool HallwaysExists = await _context.Hallway.AnyAsync(
-                    b => b.Description == hallway.Description && b.StoreId == hallway.StoreId && b.HallwayId!=hallway.HallwayId);
+                    b => b.Description == hallway.Description && b.StoreId == hallway.StoreId && b.HallwayId != hallway.HallwayId);
 
                     if (HallwaysExists)
                     {
                         ModelState.AddModelError("", "Another Hallways with the same Description and Store already exists.");
                     }
-                    else{
+                    else
+                    {
                         _context.Update(hallway);
                         await _context.SaveChangesAsync();
 
                         ViewBag.Message = "Hallways successfully edited.";
-                       
+
                         hallway.Store = await _context.Store.FindAsync(hallway.StoreId);
                         return View("Details", hallway);
                     }
@@ -143,7 +141,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-               // return RedirectToAction(nameof(Index));
+                // return RedirectToAction(nameof(Index));
             }
             ViewData["StoreId"] = new SelectList(_context.Set<Store>(), "StoreId", "Name", hallway.StoreId);
             return View(hallway);
@@ -192,14 +190,14 @@ namespace Supermarket.Controllers
             {
                 _context.Hallway.Remove(hallway);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool HallwayExists(int id)
         {
-          return (_context.Hallway?.Any(e => e.HallwayId == id)).GetValueOrDefault();
+            return (_context.Hallway?.Any(e => e.HallwayId == id)).GetValueOrDefault();
         }
     }
 }

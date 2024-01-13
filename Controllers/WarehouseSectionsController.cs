@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -62,13 +58,14 @@ namespace Supermarket.Controllers
             if (ModelState.IsValid)
             {
                 bool WarehouseSectionExists = await _context.WarehouseSection.AnyAsync(
-                   b => b.Description == warehouseSection.Description && b.WarehouseId == warehouseSection.WarehouseId && b.WarehouseSectionId!=warehouseSection.WarehouseSectionId);
+                   b => b.Description == warehouseSection.Description && b.WarehouseId == warehouseSection.WarehouseId && b.WarehouseSectionId != warehouseSection.WarehouseSectionId);
 
                 if (WarehouseSectionExists)
                 {
                     ModelState.AddModelError("", "Another Warehouse Section with the same Description and Warehouse already exists.");
                 }
-                else { 
+                else
+                {
                     _context.Add(warehouseSection);
                     await _context.SaveChangesAsync();
                     ViewBag.Message = "Warehouse Section successfully created.";
@@ -141,7 +138,7 @@ namespace Supermarket.Controllers
                         throw;
                     }
                 }
-               
+
                 //return RedirectToAction(nameof(Index));
             }
             ViewData["WarehouseId"] = new SelectList(_context.Warehouse, "WarehouseId", "Name", warehouseSection.WarehouseId);
@@ -193,14 +190,14 @@ namespace Supermarket.Controllers
             {
                 _context.WarehouseSection.Remove(warehouseSection);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool WarehouseSectionExists(int id)
         {
-          return (_context.WarehouseSection?.Any(e => e.WarehouseSectionId == id)).GetValueOrDefault();
+            return (_context.WarehouseSection?.Any(e => e.WarehouseSectionId == id)).GetValueOrDefault();
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -22,9 +17,9 @@ namespace Supermarket.Controllers
         // GET: Funcao
         public async Task<IActionResult> Index()
         {
-              return _context.Funcao != null ? 
-                          View(await _context.Funcao.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
+            return _context.Funcao != null ?
+                        View(await _context.Funcao.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
         }
 
         // GET: Funcao/Details/5
@@ -70,7 +65,7 @@ namespace Supermarket.Controllers
                         await _context.SaveChangesAsync();
 
                         ViewBag.Mensagem = "Funcao Criada com sucesso";
-                        
+
                         return View("Details", funcao);
                     }
                     else //funcao existe
@@ -78,10 +73,10 @@ namespace Supermarket.Controllers
                         TempData["Mensagem"] = "Este Funcao ja existe";
                         //ModelState.AddModelError("", "Este Funcao ja existe");
                     }
-                    
+
                     return RedirectToAction(nameof(Index));
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     //return ex;
                 }
@@ -219,14 +214,14 @@ namespace Supermarket.Controllers
                 TempData["MensagemPositiva"] = "A funcao foi deletada com sucesso";
                 _context.Funcao.Remove(Funcao);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool FuncaoExists(int id)
         {
-          return (_context.Funcao?.Any(e => e.FuncaoId == id)).GetValueOrDefault();
+            return (_context.Funcao?.Any(e => e.FuncaoId == id)).GetValueOrDefault();
         }
     }
 }

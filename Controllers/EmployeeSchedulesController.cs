@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -155,14 +151,14 @@ namespace Supermarket.Controllers
             {
                 _context.EmployeeSchedule.Remove(employeeSchedule);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EmployeeScheduleExists(int id)
         {
-          return (_context.EmployeeSchedule?.Any(e => e.EmployeeScheduleId == id)).GetValueOrDefault();
+            return (_context.EmployeeSchedule?.Any(e => e.EmployeeScheduleId == id)).GetValueOrDefault();
         }
     }
 }

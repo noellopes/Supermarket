@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -24,9 +18,9 @@ namespace Supermarket.Controllers
         // GET: Brands
         public async Task<IActionResult> Index()
         {
-              return _context.Brand != null ? 
-                          View(await _context.Brand.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Brand'  is null.");
+            return _context.Brand != null ?
+                        View(await _context.Brand.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Brand'  is null.");
         }
 
         // GET: Brands/Details/5
@@ -154,14 +148,14 @@ namespace Supermarket.Controllers
             {
                 _context.Brand.Remove(brand);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BrandExists(int id)
         {
-          return (_context.Brand?.Any(e => e.BrandId == id)).GetValueOrDefault();
+            return (_context.Brand?.Any(e => e.BrandId == id)).GetValueOrDefault();
         }
     }
 }

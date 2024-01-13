@@ -14,10 +14,10 @@ namespace Supermarket.Models
         [RegularExpression("^(Pending|Confirmed|Refused)$", ErrorMessage = "Invalid status")]
         public required string Status { get; set; } = "Pending";
 
-        public DateTime Date { get; set;} = DateTime.Now;
+        public DateTime Date { get; set; } = DateTime.Now;
 
         [Range(0, 999, ErrorMessage = "The quantity must be greater than zero")]
-        public int Quantity { get; set;}
+        public int Quantity { get; set; }
 
         //Error when creating scaffolding of ReduceProduct 
         //public int EmployeeId { get; set; }
