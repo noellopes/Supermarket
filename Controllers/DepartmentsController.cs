@@ -23,16 +23,16 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments
-        [Authorize(Roles = "Gestor")]
+       // [Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Index(string searchTerm, int page = 1, int pageSize = 2)
         {
             IQueryable<Department> departmentsQuery = _context.Departments;
-
+            
             var pageSizes = new List<int> { 2, 8, 12, 16, int.MaxValue };
             // Filtra apenas os departamentos ativos
             departmentsQuery = departmentsQuery
                 .Where(d => d.StateDepartments.Equals(true));
-
+                
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 departmentsQuery = departmentsQuery
@@ -62,29 +62,32 @@ namespace Supermarket.Controllers
                 Departments = departments,
                 Pagination = pagination,
                 SelectedPageSize = pageSize,
-                TimeDifferences = new List<TimeSpan>()
+                TimeDifferences = new List<TimeSpan>(),
+                AverageTimes = new List<DepAverageTimeViewModel>(),
+                
             };
-            // Aqui você pode percorrer os departamentos e calcular a diferença de tempo para cada ticket
+
             foreach (var department in departments)
             {
-                // Procura o primeiro ticket associado ao departamento
-                var firstTicket = _context.Tickets.FirstOrDefault(t => t.IDDepartments == department.IDDepartments);
-                // Verifica se existe um ticket associado e se a data de atendimento tem valor
-                if (firstTicket != null && firstTicket.DataAtendimento.HasValue)
+                // Procura o último ticket associado ao departamento
+                var departmentTickets = _context.Tickets
+                    .Where(t => t.IDDepartments == department.IDDepartments)
+                    .OrderByDescending(t => t.DataAtendimento)
+                    .ToList();
+
+                // Obtém o último ticket válido
+                var lastValidTicket = departmentTickets.LastOrDefault(t => t.DataAtendimento.HasValue);
+
+                // Calcula a diferença de tempo e adiciona à lista no viewModel
+                viewModel.TimeDifferences.Add(CalculateTimeDifference(lastValidTicket, departmentTickets));
+                // Calcula a média e adiciona à lista no viewModel
+                var averageTime = CalculateAverageTime(departmentTickets.Select(t => CalculateTimeDifference(t, departmentTickets)).ToList());
+
+                viewModel.AverageTimes.Add(new DepAverageTimeViewModel
                 {
-                    // Obtém as datas de início (DataAtendimento) e fim (DataEmissao)
-                    DateTime dataInicio = firstTicket.DataAtendimento.Value;
-                    DateTime dataFim = firstTicket.DataEmissao;
-                    // Calcula a diferença de tempo entre as duas datas
-                    TimeSpan diferenca = dataInicio - dataFim;
-                    // Adiciona a diferença de tempo à lista de diferenças de tempo no viewModel
-                    viewModel.TimeDifferences.Add(diferenca);
-                }
-                else
-                {
-                    // Se não existir ticket ou se a data de atendimento não tiver valor, adiciona TimeSpan.Zero à lista
-                    viewModel.TimeDifferences.Add(TimeSpan.Zero);
-                }
+                    DepartmentId = department.IDDepartments,
+                    AverageTime = averageTime
+                });
             }
 
             ViewData["SearchTerm"] = searchTerm;
@@ -93,7 +96,70 @@ namespace Supermarket.Controllers
 
             return View(viewModel);
         }
-        [Authorize(Roles = "Gestor")]
+        private TimeSpan CalculateAverageTime(List<TimeSpan> timeDifferences)
+        {
+            if (timeDifferences.Any())
+            {
+                double averageTicks = timeDifferences.Average(t => t.Ticks);
+                return TimeSpan.FromTicks((long)averageTicks);
+            }
+            else
+            {
+                return TimeSpan.Zero;
+            }
+        }
+        // Função para calcular a média das diferenças de tempo por departamento
+        private List<int> CalculateAverageNumberOfTickets(List<Ticket> departmentTickets)
+        {
+            var averages = new List<int>();
+
+                foreach (var departmentTicket in departmentTickets)
+                {
+                // Considera todos os tickets com DataAtendimento válida
+                var validTickets = departmentTickets
+                    .Where(t => t.DataAtendimento.HasValue && t.IDDepartments == departmentTicket.IDDepartments)
+                    //.Take(departmentTicket.QuatDepMed)
+                    .ToList();
+
+                int average = validTickets.Any() ? (int)Math.Ceiling(validTickets.Average(t => t.NumeroDaSenha)) : 0;
+                averages.Add(average);
+            }
+
+            return averages;
+        }
+
+        private TimeSpan CalculateTimeDifference(Ticket lastValidTicket, List<Ticket> departmentTickets)
+        {
+            if (lastValidTicket != null)
+            {
+                DateTime dataInicio = lastValidTicket.DataEmissao;
+                DateTime dataFim = lastValidTicket.DataAtendimento ?? GetPreviousValidDate(lastValidTicket, departmentTickets);
+                return dataFim - dataInicio;
+            }
+            else
+            {
+                return TimeSpan.Zero;
+            }
+        }
+
+        // Função para obter a data de atendimento do ticket anterior válido
+        private DateTime GetPreviousValidDate(Ticket currentTicket, List<Ticket> departmentTickets)
+        {
+            int currentIndex = departmentTickets.IndexOf(currentTicket);
+
+            for (int i = currentIndex + 1; i < departmentTickets.Count; i++)
+            {
+                if (departmentTickets[i].DataAtendimento.HasValue)
+                {
+                    return departmentTickets[i].DataAtendimento.Value;
+                }
+            }
+
+            // Se nenhum ticket anterior válido for encontrado, retorna DateTime.Now
+            return DateTime.Now;
+        }
+    
+    //[Authorize(Roles = "Gestor")]
         // GET: DepartmentsInop
         public IActionResult IndexInop(string searchTerm, int page = 1, int pageSize = 2)
         {
@@ -147,7 +213,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Departments/Details/
-        [Authorize(Roles = "Gestor")]
+        //[Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Departments == null)
@@ -176,7 +242,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Gestor")]
+        //[Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Create([Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department departments)
         {
             if (ModelState.IsValid)
@@ -222,7 +288,7 @@ namespace Supermarket.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Gestor")]
+        //[Authorize(Roles = "Gestor")]
         public async Task<IActionResult> Edit(int id, [Bind("IDDepartments,NameDepartments,DescriptionDepartments,StateDepartments,SkillsDepartments,QuatDepMed")] Department departments)
         {
             if (id != departments.IDDepartments)
@@ -287,7 +353,7 @@ namespace Supermarket.Controllers
         // POST: Departments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Gestor")]
+        //[Authorize(Roles = "Gestor")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Departments == null)
