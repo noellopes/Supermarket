@@ -28,7 +28,7 @@ namespace Supermarket.Controllers
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
 
-            var schedules = from b in _context.Schedule.Include(b => b.Departments)
+            var schedules = from b in _context.Schedule.Include(b => b.Department)
                             select b;
 
 
@@ -44,11 +44,11 @@ namespace Supermarket.Controllers
 
                 if (departmentDrop != 0)
                 {
-                    schedules = schedules.Where(x => x.IDDepartments == departmentDrop);
+                    schedules = schedules.Where(x => x.DeptID == departmentDrop);
                 }
 
                 
-            }
+            
 
             PagingInfo paging = new PagingInfo
             {

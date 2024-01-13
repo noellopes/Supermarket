@@ -16,6 +16,8 @@ namespace Supermarket.Models
         [DataType(DataType.Time)]
         [DisplayName("Daily starting hour")]
         public DateTime DailyStartTime { get; set; } = new DateTime(2099, 04, 30, 09, 00, 0);
+        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Time)]
         [Required(ErrorMessage = "The Daily Finish Date is mandatory.")]
         public DateTime DailyFinishTime { get; set; }
         public int DeptID { get; set; }

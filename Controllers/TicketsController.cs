@@ -182,8 +182,8 @@ namespace Supermarket.Controllers
 
 
             var schedules = _context.Schedule
-     .Include(b => b.Departments)
-     .Where(b => b.IDDepartments == departmentId)
+     .Include(b => b.Department)
+     .Where(b => b.DeptID == departmentId)
      .FirstOrDefault();
 
 
