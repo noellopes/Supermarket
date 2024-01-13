@@ -6,7 +6,7 @@
 <h1>ClientCard</h1>
 
 <p>
-    <a class="btn btn-primary"asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
 </p>
 <div class="card mb-3">
     <div class="card-body">
@@ -39,24 +39,25 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.ClientCards) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClientCardNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Balance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ClientCardId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ClientCardId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ClientCardId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.ClientCards)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientCardNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Balance)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ClientCardId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ClientCardId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ClientCardId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 <nav aria-label="ClientCards">
@@ -111,4 +112,3 @@
         }
     </ul>
 </nav>
-
