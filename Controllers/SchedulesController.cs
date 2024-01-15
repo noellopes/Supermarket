@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -23,19 +16,19 @@ namespace Supermarket.Controllers
             _context = context;
         }
         [Authorize(Roles = "Gestor")]
-        public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0 )
+        public async Task<IActionResult> Index(int page = 1, int departmentDrop = 0)
         {
             ViewData["IDDepartments"] = new SelectList(_context.Set<Department>(), "IDDepartments", "NameDepartments");
 
             var schedules = from b in _context.Schedule.Include(b => b.Departments) select b;
-           
 
-            if (departmentDrop!=0)
+
+            if (departmentDrop != 0)
             {
-                schedules = schedules.Where(x => x.IDDepartments==departmentDrop);
+                schedules = schedules.Where(x => x.IDDepartments == departmentDrop);
             }
 
-       
+
 
             PagingInfo paging = new PagingInfo
             {
@@ -54,7 +47,7 @@ namespace Supermarket.Controllers
             }
 
             // Retrieve all departments from the database
-            var Departments = await _context.Departments.ToListAsync() ;
+            var Departments = await _context.Departments.ToListAsync();
 
             var vm = new SchedulesViewModel
             {
@@ -91,7 +84,7 @@ namespace Supermarket.Controllers
 
             var schedule = await _context.Schedule
                 .FirstOrDefaultAsync(m => m.ScheduleId == id);
-           
+
             if (schedule == null)
             {
                 return NotFound();
@@ -241,7 +234,7 @@ namespace Supermarket.Controllers
 
         [Authorize(Roles = "Gestor")]
 
-        public async Task<IActionResult> Afluencias(int procuraLimiteAfluencia = 0,DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null )
+        public async Task<IActionResult> Afluencias(int procuraLimiteAfluencia = 0, DateTime? procuraDataInicial = null, DateTime? procuraDataFinal = null)
         {
             var departmentsWithTicketCount = _context.Departments
         .Select(d => new { Department = d, TicketsCount = _context.Tickets.Count(t => t.IDDepartments == d.IDDepartments) })
@@ -281,7 +274,7 @@ namespace Supermarket.Controllers
             // Check if any filters are present
             if (procuraDataInicial != null || procuraDataFinal != null || procuraLimiteAfluencia > 0)
             {
-                return View("Afluencias",model);
+                return View("Afluencias", model);
             }
             else
             {
@@ -292,5 +285,5 @@ namespace Supermarket.Controllers
         }
 
     }
-    }
+}
 

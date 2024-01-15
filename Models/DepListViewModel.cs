@@ -1,6 +1,4 @@
 ﻿using Supermarket.Models;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 public class DepListViewModel
 {

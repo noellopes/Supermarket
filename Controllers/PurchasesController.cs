@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -27,15 +23,15 @@ namespace Supermarket.Controllers
             // Call the method to update expiration status
             UpdateExpirationStatusForAllPurchases();
 
-            var purchase = from i in _context.Purchase.Include(p => p.Product)                                      
-                                                      .Include(s => s.Supplier)  
+            var purchase = from i in _context.Purchase.Include(p => p.Product)
+                                                      .Include(s => s.Supplier)
                                                       .Include(e => e.Employee)
-                         select i;
+                           select i;
             if (product != "")
             {
                 purchase = purchase.Where(x => x.Product!.Name.Contains(product));
             }
-                        
+
             if (supplier != "")
             {
                 purchase = purchase.Where(x => x.Supplier!.Name.Contains(supplier));
@@ -97,7 +93,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Purchases/Create
-        [Authorize(Roles = "Create_Reports")]        
+        [Authorize(Roles = "Create_Reports")]
         public IActionResult Create()
         {
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name");
@@ -275,7 +271,7 @@ namespace Supermarket.Controllers
 
         private bool PurchaseExists(int id)
         {
-          return (_context.Purchase?.Any(e => e.PurchaseId == id)).GetValueOrDefault();
+            return (_context.Purchase?.Any(e => e.PurchaseId == id)).GetValueOrDefault();
         }
 
 
@@ -336,7 +332,7 @@ namespace Supermarket.Controllers
                             .Include(s => s.Supplier)
                             .Include(e => e.Employee)
                             .Where(x => x.ExpirationDate > currentDate && x.ExpirationDate <= NextExpirationDate)
-                            select i;
+                           select i;
 
             if (product != "")
             {

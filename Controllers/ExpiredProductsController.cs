@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -28,7 +23,7 @@ namespace Supermarket.Controllers
             var expiredproducts = from i in _context.ExpiredProducts
                     .Include(p => p.Product)
                     .Include(pr => pr.Purchase)
-            select i;
+                                  select i;
 
             if (product != "") expiredproducts = expiredproducts.Where(x => x.Product!.Name.Contains(product));
 
@@ -76,7 +71,7 @@ namespace Supermarket.Controllers
 
         private bool ExpiredProductsExists(int id)
         {
-          return (_context.ExpiredProducts?.Any(e => e.ExpiredProductId == id)).GetValueOrDefault();
+            return (_context.ExpiredProducts?.Any(e => e.ExpiredProductId == id)).GetValueOrDefault();
         }
     }
 }

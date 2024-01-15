@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +9,7 @@ namespace Supermarket.Controllers
 {
     public class TicketsController : Controller
     {
-        
+
         private readonly SupermarketDbContext _context;
 
         public TicketsController(SupermarketDbContext context)
@@ -72,7 +66,7 @@ namespace Supermarket.Controllers
                 //SearchButtonDepartment = departmentButtonName,
             };
 
-           return View(tm);
+            return View(tm);
 
         }
 
@@ -150,7 +144,7 @@ namespace Supermarket.Controllers
         [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         public IActionResult Create()
         {
- 
+
             //{
             //    DataEmissao = DateTime.Now,
             //    DataAtendimento = null,
@@ -166,9 +160,9 @@ namespace Supermarket.Controllers
         [Authorize(Roles = "Gestor,Funcionário,Cliente")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket, int departmentId =0)
+        public async Task<IActionResult> Create([Bind("TicketId,DataEmissao,DataAtendimento,NumeroDaSenha,Estado,Prioritario,IDDepartments")] Ticket ticket, int departmentId = 0)
         {
-           
+
             var ticketlista = await _context.Tickets.ToListAsync();
 
             var schedules = await _context.Schedule.Where(b => b.IDDepartments == departmentId).FirstOrDefaultAsync();
@@ -194,7 +188,7 @@ namespace Supermarket.Controllers
                     _context.Tickets.Add(ticket);
                     _context.SaveChanges();
 
-                    TempData["NoDataMessage"] = "Senha : " + ticket.TicketId + " Criada com sucesso!" ;
+                    TempData["NoDataMessage"] = "Senha : " + ticket.TicketId + " Criada com sucesso!";
                     return RedirectToAction("Index"); // Redirect to the ticket list or another action
                     // Redirect to the ticket list or another action
                 }
@@ -222,7 +216,7 @@ namespace Supermarket.Controllers
         }
 
         // POST: TicketsPriority/Create
-  
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Gestor,Funcionário,Cliente")]
@@ -440,14 +434,14 @@ namespace Supermarket.Controllers
             {
                 _context.Tickets.Remove(tickets);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TicketsExists(int id)
         {
-          return (_context.Tickets?.Any(e => e.TicketId == id)).GetValueOrDefault();
+            return (_context.Tickets?.Any(e => e.TicketId == id)).GetValueOrDefault();
         }
     }
 }

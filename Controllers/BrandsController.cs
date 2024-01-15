@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -18,7 +19,7 @@ namespace Supermarket.Controllers
         // GET: Brands
         public async Task<IActionResult> Index(int page = 1, string name = "")
         {
-<<<<<<< HEAD
+
             var brands = from b in _context.Brand select b;
 
             if (name != "")
@@ -55,11 +56,11 @@ namespace Supermarket.Controllers
             ViewBag.totalBrands = vm.PagingInfoProduct.TotalItems;
 
             return View(vm);
-=======
+
             return _context.Brand != null ?
                         View(await _context.Brand.ToListAsync()) :
                         Problem("Entity set 'SupermarketDbContext.Brand'  is null.");
->>>>>>> FolgasPendentesAprovadas
+
         }
 
         // GET: Brands/Details/5
@@ -193,7 +194,8 @@ namespace Supermarket.Controllers
             {
                 ModelState.AddModelError(string.Empty, "There is a product with this brand, can't be deleted.");
                 return View(brand);
-            }else if(brand != null)
+            }
+            else if (brand != null)
             {
                 _context.Brand.Remove(brand);
             }

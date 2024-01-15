@@ -17,7 +17,7 @@ namespace Supermarket.Controllers
         // GET: Funcao
         public async Task<IActionResult> Index(int page = 1)
         {
-<<<<<<< HEAD
+
             var pagination = new PagingInfo
             {
                 CurrentPage = page,
@@ -26,21 +26,22 @@ namespace Supermarket.Controllers
             };
 
             return View(
-                new FuncaoListViewModel {
-                    funcao = _context.Funcao.OrderBy( f => f.NomeFuncao)
-                        .Skip((page-1)*pagination.PageSize).Take(pagination.PageSize),
-                    Pagination = pagination 
+                new FuncaoListViewModel
+                {
+                    funcao = _context.Funcao.OrderBy(f => f.NomeFuncao)
+                        .Skip((page - 1) * pagination.PageSize).Take(pagination.PageSize),
+                    Pagination = pagination
                 }
             );
 
-              return _context.Funcao != null ? 
-                          View(await _context.Funcao.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
-=======
             return _context.Funcao != null ?
                         View(await _context.Funcao.ToListAsync()) :
                         Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
->>>>>>> FolgasPendentesAprovadas
+
+            return _context.Funcao != null ?
+                        View(await _context.Funcao.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Funcao'  is null.");
+
         }
 
         // GET: Funcao/Details/5

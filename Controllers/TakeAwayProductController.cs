@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -35,12 +34,12 @@ namespace Supermarket.Controllers
 
         //guard clause
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("ProductName","CategoryId","Quantity","Price","EstimatedPreparationTimeAsMinutes")] TakeAwayProduct takeAwayProduct)
+        public async Task<IActionResult> Create([Bind("ProductName", "CategoryId", "Quantity", "Price", "EstimatedPreparationTimeAsMinutes")] TakeAwayProduct takeAwayProduct)
         {
-            bool isExist = _context.TakeAwayProduct.Any(x=> x.ProductName == takeAwayProduct.ProductName);
+            bool isExist = _context.TakeAwayProduct.Any(x => x.ProductName == takeAwayProduct.ProductName);
             if (!ModelState.IsValid)
             {
-                ViewData["CategoryId"] = new SelectList(_context.Set<TakeAwayCategory>(), "Id", "Name",takeAwayProduct.CategoryId);
+                ViewData["CategoryId"] = new SelectList(_context.Set<TakeAwayCategory>(), "Id", "Name", takeAwayProduct.CategoryId);
                 return View(takeAwayProduct);
             }
 
@@ -57,7 +56,7 @@ namespace Supermarket.Controllers
             var data = _context.TakeAwayProduct
                         .Include("Category")
                         .FirstOrDefault(x => x.ProductName == takeAwayProduct.ProductName);
-            return View("Details",data);
+            return View("Details", data);
         }
 
         public IActionResult Details(int id)
@@ -67,7 +66,7 @@ namespace Supermarket.Controllers
                         .FirstOrDefault(x => x.Id == id);
             return View(data);
         }
-        
+
         public IActionResult Edit(int? id)
         {
             if (id == null || _context.TakeAwayProduct == null)
@@ -75,7 +74,7 @@ namespace Supermarket.Controllers
                 return NotFound();
             }
 
-            var takeAwayProduct = _context.TakeAwayProduct.Include("Category").FirstOrDefault(x=> x.Id == id);
+            var takeAwayProduct = _context.TakeAwayProduct.Include("Category").FirstOrDefault(x => x.Id == id);
             if (takeAwayProduct == null)
             {
                 return NotFound();
@@ -85,7 +84,7 @@ namespace Supermarket.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int? id, [Bind("Id","ProductName","CategoryId","Quantity","Price","EstimatedPreparationTimeAsMinutes")] TakeAwayProduct takeAwayProduct)
+        public IActionResult Edit(int? id, [Bind("Id", "ProductName", "CategoryId", "Quantity", "Price", "EstimatedPreparationTimeAsMinutes")] TakeAwayProduct takeAwayProduct)
         {
 
             if (!ModelState.IsValid)
@@ -96,7 +95,7 @@ namespace Supermarket.Controllers
             var data = _context.TakeAwayProduct.Update(takeAwayProduct);
             _context.SaveChanges();
             ViewBag.Message = "Product succesfully updated";
-            return View("Details",_context.TakeAwayProduct.Include("Category").FirstOrDefault(x=> x.Id == id));
+            return View("Details", _context.TakeAwayProduct.Include("Category").FirstOrDefault(x => x.Id == id));
         }
 
         // GET: Products/Delete/5
@@ -135,7 +134,7 @@ namespace Supermarket.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
+
         public async Task<IActionResult> AddBasket(int id)
         {
             float data1 = _context.Order.Include(x => x.UserOrders)
@@ -150,7 +149,7 @@ namespace Supermarket.Controllers
 
             TakeAwayProduct newProduct = new TakeAwayProduct();
             int? reservedQuantity = 1;
-            var product = _context.TakeAwayProduct.Include("Category").AsNoTracking().FirstOrDefault(x=> x.Id == id);
+            var product = _context.TakeAwayProduct.Include("Category").AsNoTracking().FirstOrDefault(x => x.Id == id);
             if (product == null)
             {
                 return NotFound();
@@ -165,9 +164,9 @@ namespace Supermarket.Controllers
 
             var basket = _memoryCache.Get<Basket>(CacheProductKey) ?? new Models.Basket();
 
-            if (basket.Products.Any(x=> x.ProductName == newProduct.ProductName))
+            if (basket.Products.Any(x => x.ProductName == newProduct.ProductName))
             {
-                var data = basket.Products.Find(x=> x.ProductName == newProduct.ProductName);
+                var data = basket.Products.Find(x => x.ProductName == newProduct.ProductName);
                 reservedQuantity = data!.QuantityReserved + 1;
                 basket.Products.Remove(data!);
             }
@@ -176,9 +175,9 @@ namespace Supermarket.Controllers
             basket.Products.Add(newProduct);
             basket.TotalProductQuantityInBasket = basket.Products.Sum(x => x.QuantityReserved);
             basket.EstimatedPreparationTimeAsMinutes = (int)basket.Products.Select(x => x.EstimatedPreparationTimeAsMinutes * x.QuantityReserved).Sum();
-            basket.TotalPrice = (double) basket.Products.Select(x => x.Price * x.QuantityReserved).Sum();
+            basket.TotalPrice = (double)basket.Products.Select(x => x.Price * x.QuantityReserved).Sum();
             basket.PreparingOrders = _context.Order.Where(x => x.Status == "Preparing").Count();
-            basket.OrdersCanPrepareSimultaneously = _context.EmployeeSchedule.Where(x => DateTime.Parse(x.CheckInTime, System.Globalization.CultureInfo.CurrentCulture).Hour < DateTime.Now.Hour && DateTime.Parse(x.CheckOutTime, System.Globalization.CultureInfo.CurrentCulture).Hour > DateTime.Now.Hour).Count();
+
             basket.GuessProducts = guessProducts;
             _memoryCache.Set(CacheProductKey, basket);
 
@@ -188,16 +187,16 @@ namespace Supermarket.Controllers
         public IActionResult Basket()
         {
             var basket = _memoryCache.Get<Basket>(CacheProductKey) ?? new Models.Basket();
-            return View("Basket",basket);
+            return View("Basket", basket);
         }
 
 
-        
+
         public IActionResult Login()
         {
             //Response.Redirect("https://localhost:7232/Customer/LoginCustomer");
             var customerId = _memoryCache.Get<int?>("customerId");
-            if (_memoryCache.TryGetValue(CacheProductKey,out _))
+            if (_memoryCache.TryGetValue(CacheProductKey, out _))
             {
 
                 if (customerId == null)
@@ -207,7 +206,7 @@ namespace Supermarket.Controllers
 
                 return RedirectToAction("PlaceOrder", "TakeAwayProduct", new { id = customerId });
             }
-            return RedirectToAction("Basket","TakeAwayProduct");
+            return RedirectToAction("Basket", "TakeAwayProduct");
         }
 
 
@@ -218,7 +217,7 @@ namespace Supermarket.Controllers
             return View(basket);
         }
 
-        
+
         public IActionResult ConfirmOrder(int customerId)
         {
             var basket = _memoryCache.Get<Basket>(CacheProductKey) ?? new Models.Basket();
@@ -241,7 +240,7 @@ namespace Supermarket.Controllers
 
 
 
-            return RedirectToAction("Index","Order");
+            return RedirectToAction("Index", "Order");
         }
 
     }

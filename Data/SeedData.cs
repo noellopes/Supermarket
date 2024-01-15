@@ -1,30 +1,24 @@
 using Microsoft.AspNetCore.Identity;
 using Supermarket.Models;
-<<<<<<< HEAD
-using System;
-=======
->>>>>>> FolgasPendentesAprovadas
 
 namespace Supermarket.Data
 {
     public class SeedData
     {
-<<<<<<< HEAD
         private const string ROLE_ADMIN = "Administrator";
-=======
->>>>>>> FolgasPendentesAprovadas
+        private const string ROLE_CLIENT = "Client";
         private const string ROLE_ADMIN1 = "Funcionário";
         private const string ROLE_ADMIN2 = "Gestor";
         private const string ROLE_ADMIN3 = "Cliente";
         private const string ROLE_STOCK_ADMIN = "Stock Administrator";
         private const string ROLE_STOCK_OP = "Stock Operator";
+        private const string ROLE_MANAGER = "Manager";
+        private const string ROLE_EMPLOYEER = "Employeer";
+        private const string ROLE_REGISTER = "Cash Register";
 
         internal static void Populate(SupermarketDbContext db)
         {
-<<<<<<< HEAD
             PopulateSupplier(db);
-=======
->>>>>>> FolgasPendentesAprovadas
             PopulateBrand(db);
             PopulateCategory(db);
             PopulateProduct(db);
@@ -42,8 +36,9 @@ namespace Supermarket.Data
             PopulateProductDiscounts(db);
             PopulateTakeAwayCategories(db);
             PopulateTakeAwayProducts(db);
-            PopulateCustomer(db);
+            //PopulateCustomer(db);
             //PopulateEmployees(db);
+            //PopulateHierarquias(db);
             PopulateConfSub(db);
             PopulateEmployee(db);
             PopulateMealCards(db);
@@ -53,13 +48,52 @@ namespace Supermarket.Data
             PopulateIssueType(db);
             PopulatePurchase(db);
             PopulateIssue(db);
-            PopulateAlerts(db);
+            //PopulateAlerts(db);
             PopulateDepartment(db);
             PopulateSchedules(db);
             PopulateTickets(db);
-            LoadWeekEmployeeSchedules(db);
+
+            PopulatePonto(db);
+            PopulateReserve(db);
+
+
         }
-        
+
+        //internal static void PopulateHierarquias(SupermarketDbContext db)
+        //{
+        //    if (db.Hierarquias.Any()) return;
+        //    db.Hierarquias.AddRange(
+        //    new Hierarquias { SuperiorId = 1, SubordinadoId = 2 },
+        //    new Hierarquias { SuperiorId = 1, SubordinadoId = 3 },
+        //    new Hierarquias { SuperiorId = 1, SubordinadoId = 4 },
+        //    new Hierarquias { SuperiorId = 1, SubordinadoId = 5 },
+        //    new Hierarquias { SuperiorId = 2, SubordinadoId = 3 },
+        //    new Hierarquias { SuperiorId = 2, SubordinadoId = 4 },
+        //    new Hierarquias { SuperiorId = 3, SubordinadoId = 6 },
+        //    new Hierarquias { SuperiorId = 3, SubordinadoId = 7 }
+        //    );
+        //    db.SaveChanges();
+        //}
+        private static void PopulateReserve(SupermarketDbContext db)
+        {
+            if (db.Reserve.Any())
+            {
+                return;
+            }
+
+            db.Reserve.AddRange(
+                new Models.Reserve { NumeroDeFunc = 10 },
+                new Models.Reserve { NumeroDeFunc = 20 },
+                new Models.Reserve { NumeroDeFunc = 30 },
+                new Models.Reserve { NumeroDeFunc = 40 },
+                new Models.Reserve { NumeroDeFunc = 50 },
+                new Models.Reserve { NumeroDeFunc = 60 },
+                new Models.Reserve { NumeroDeFunc = 70 },
+                new Models.Reserve { NumeroDeFunc = 80 }
+                );
+
+            db.SaveChanges();
+        }
         private static void PopulateDepartment(SupermarketDbContext db)
         {
             if (db.Departments.Any()) return;
@@ -76,7 +110,6 @@ namespace Supermarket.Data
                 );
             db.SaveChanges();
         }
-        
         private static void PopulateSchedules(SupermarketDbContext db)
         {
             if (db.Schedule.Any()) return;
@@ -85,28 +118,64 @@ namespace Supermarket.Data
                     new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2028, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 18, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Peixaria").Select(a => a.IDDepartments).FirstOrDefault() },
                     new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2025, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 15, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Talho").Select(a => a.IDDepartments).FirstOrDefault() },
                     new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2028, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 10, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Take-Way").Select(a => a.IDDepartments).FirstOrDefault() },
-                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2029, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 23, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Congelados").Select(a => a.IDDepartments).FirstOrDefault() },
-                    new Schedule { StartDate = DateTime.Now, EndDate = null, DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 22, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Armazem").Select(a => a.IDDepartments).FirstOrDefault() }
+                    new Schedule { StartDate = DateTime.Now, EndDate = new DateTime(2029, 04, 30, 12, 30, 0), DailyStartTime = DateTime.Now, DailyFinishTime = new DateTime(2028, 04, 30, 23, 30, 0), IDDepartments = db.Departments.Where(a => a.NameDepartments == "Congelados").Select(a => a.IDDepartments).FirstOrDefault() }
+
                 );
 
             db.SaveChanges();
         }
-        
         private static void PopulateTickets(SupermarketDbContext db)
         {
             if (db.Tickets.Any()) return;
             // Instantiate random number generator using system-supplied value as seed.
             var rand = new Random();
 
-            for (int i = 0; i < 200; i++)
+            //Geração aleatoria para testes
+            for (int i = 0; i <= 5000; i++)
             {
+                var DataAleatoria = new DateTime(2023, 1, 1).AddMonths(rand.Next(1, 13)).AddDays(rand.Next(1, 31)).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
                 var randomBool = rand.Next(2) == 1;
                 db.Add(
                     new Ticket
                     {
-                        DataEmissao = DateTime.Now,
-                        DataAtendimento = DateTime.Now.AddMinutes(rand.Next(5, 20)),
+
+                        DataEmissao = DataAleatoria,
+                        DataAtendimento = DataAleatoria.AddMinutes(rand.Next(0, 20)),
                         NumeroDaSenha = i,
+                        Estado = true,
+                        Prioritario = randomBool,
+                        IDDepartments = rand.Next(1, db.Departments.Count())
+                    }
+                    );
+            }
+            //Geração aleatoria para testes de afluencia no mesmo mes
+            for (int i = 0; i <= 300; i++)
+            {
+                var DataAleatoria = new DateTime(2023, 1, 1).AddMonths(rand.Next(1, 13)).AddDays(rand.Next(1, 31)).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
+                var randomBool = rand.Next(2) == 1;
+                db.Add(
+                    new Ticket
+                    {
+                        DataEmissao = DataAleatoria,
+                        DataAtendimento = DataAleatoria.AddMinutes(rand.Next(0, 20)),
+                        NumeroDaSenha = 5000 + i,
+                        Estado = true,
+                        Prioritario = randomBool,
+                        IDDepartments = rand.Next(1, db.Departments.Count())
+                    }
+                    );
+            }
+            //Geração para testes de afluencia no mesmo dia
+            for (int i = 0; i <= 150; i++)
+            {
+                var DataAleatoria = new DateTime(2023, 1, 11).AddHours(rand.Next(1, 24)).AddMinutes(rand.Next(0, 60)).AddSeconds(rand.Next(0, 60));
+                var randomBool = rand.Next(2) == 1;
+                db.Add(
+                    new Ticket
+                    {
+                        DataEmissao = DataAleatoria,
+                        DataAtendimento = DataAleatoria.AddMinutes(rand.Next(0, 20)),
+                        NumeroDaSenha = 5300 + i,
                         Estado = true,
                         Prioritario = randomBool,
                         IDDepartments = rand.Next(1, db.Departments.Count())
@@ -115,19 +184,17 @@ namespace Supermarket.Data
             }
 
 
+
             db.SaveChanges();
         }
 
         private static void PopulateBrand(SupermarketDbContext db)
         {
-<<<<<<< HEAD
 
-=======
->>>>>>> FolgasPendentesAprovadas
             if (db.Brand.Any()) return;
 
             db.Brand.AddRange(
-                    
+
                     new Brand { Name = "Coca-Cola" },
                     new Brand { Name = "Colgate" },
                     new Brand { Name = "Dove" },
@@ -153,10 +220,7 @@ namespace Supermarket.Data
 
         private static void PopulateCategory(SupermarketDbContext db)
         {
-<<<<<<< HEAD
 
-=======
->>>>>>> FolgasPendentesAprovadas
             if (db.Category.Any()) return;
 
             db.Category.AddRange(
@@ -185,16 +249,14 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
+
         private static void PopulateProduct(SupermarketDbContext db)
         {
-<<<<<<< HEAD
             DateTime specificLastCountDate = new DateTime(2024, 1, 2);
             DateTime specificLastCountDate1 = new DateTime(2023, 12, 29);
             DateTime specificLastCountDate2 = new DateTime(2024, 1, 5);
             DateTime specificLastCountDate3 = new DateTime(2023, 3, 1);
 
-=======
->>>>>>> FolgasPendentesAprovadas
             if (db.Product.Any()) return;
 
             db.Product.AddRange(
@@ -210,7 +272,6 @@ namespace Supermarket.Data
                         Status = "Unavailable",
                         LastCountDate = specificLastCountDate1
                     },
-<<<<<<< HEAD
 
                     new Product
                     {
@@ -236,8 +297,6 @@ namespace Supermarket.Data
                         Status = "Available",
                         LastCountDate = specificLastCountDate
                     },
-=======
->>>>>>> FolgasPendentesAprovadas
                     new Product
                     {
                         Category = db.Category.FirstOrDefault(a => a.Name == "Canned")!,
@@ -276,19 +335,6 @@ namespace Supermarket.Data
                     {
                         Name = "Store Guarda",
                         Adress = "Street Number 1"
-<<<<<<< HEAD
-=======
-                    },
-                    new Store
-                    {
-                        Name = "Store Algarve",
-                        Adress = "Street Number 2"
-                    },
-                    new Store
-                    {
-                        Name = "Store Paris",
-                        Adress = "Street Number 3"
->>>>>>> FolgasPendentesAprovadas
                     }
                 );
 
@@ -330,15 +376,12 @@ namespace Supermarket.Data
                         Name = "Shelft 11",
                         Hallway = db.Hallway.FirstOrDefault(a => a.Description == "Hallway A1")!,
                     },
-<<<<<<< HEAD
 
                      new Shelf
                      {
                          Name = "Shelft 21",
                          Hallway = db.Hallway.FirstOrDefault(a => a.Description == "Hallway A1")!,
                      },
-=======
->>>>>>> FolgasPendentesAprovadas
                     new Shelf
                     {
                         Name = "Shelft 12",
@@ -354,7 +397,6 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-<<<<<<< HEAD
         private static void PopulateSupplier(SupermarketDbContext db)
         {
             if (db.Suppliers.Any()) return;
@@ -379,29 +421,20 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-=======
->>>>>>> FolgasPendentesAprovadas
         private static void PopulateShelft_ProductExhibition(SupermarketDbContext db)
         {
             if (db.Shelft_ProductExhibition.Any()) return;
 
             db.Shelft_ProductExhibition.AddRange(
-<<<<<<< HEAD
 
                     new Shelft_ProductExhibition
                     {
                         Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream")!,
 
-=======
-                    new Shelft_ProductExhibition
-                    {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream.")!,
->>>>>>> FolgasPendentesAprovadas
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
                         Quantity = 0,
                         MinimumQuantity = 20
                     },
-<<<<<<< HEAD
 
                      new Shelft_ProductExhibition
                      {
@@ -423,26 +456,15 @@ namespace Supermarket.Data
                     {
                         Product = db.Product.FirstOrDefault(a => a.Name == "Monopoly Chance" && a.Description == "Family Game")!,
 
-=======
-                    new Shelft_ProductExhibition
-                    {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
->>>>>>> FolgasPendentesAprovadas
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
                         Quantity = 11,
                         MinimumQuantity = 10
                     },
-<<<<<<< HEAD
 
                     new Shelft_ProductExhibition
                     {
                         Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips")!,
 
-=======
-                    new Shelft_ProductExhibition
-                    {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
->>>>>>> FolgasPendentesAprovadas
                         Shelf = db.Shelf.FirstOrDefault(a => a.Name == "Shelft 11")!,
                         Quantity = 15,
                         MinimumQuantity = 10
@@ -479,10 +501,7 @@ namespace Supermarket.Data
 
         private static void PopulateWarehouseSection(SupermarketDbContext db)
         {
-<<<<<<< HEAD
 
-=======
->>>>>>> FolgasPendentesAprovadas
             if (db.WarehouseSection.Any()) return;
 
             db.WarehouseSection.AddRange(
@@ -509,16 +528,12 @@ namespace Supermarket.Data
         private static void PopulateWarehouseSection_Product(SupermarketDbContext db)
         {
             if (db.WarehouseSection_Product.Any()) return;
-            
+
             db.WarehouseSection_Product.AddRange(
                     new WarehouseSection_Product
                     {
-<<<<<<< HEAD
                         Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream")!,
 
-=======
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Cream" && a.Description == "Skin cream.")!,
->>>>>>> FolgasPendentesAprovadas
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section A1")!,
                         BatchNumber = "D45",
                         ExpirationDate = DateTime.Now,
@@ -526,7 +541,6 @@ namespace Supermarket.Data
                         ReservedQuantity = 0,
                         Suppliers = db.Suppliers.FirstOrDefault(a => a.Name == "Sunny Farms Dairy")
                     },
-<<<<<<< HEAD
 
                      new WarehouseSection_Product
                      {
@@ -577,11 +591,6 @@ namespace Supermarket.Data
                     {
                         Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages")!,
 
-=======
-                    new WarehouseSection_Product
-                    {
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Sausages" && a.Description == "German Sausages.")!,
->>>>>>> FolgasPendentesAprovadas
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section B4")!,
                         BatchNumber = "B65",
                         ExpirationDate = DateTime.Now,
@@ -591,13 +600,9 @@ namespace Supermarket.Data
                     },
                     new WarehouseSection_Product
                     {
-<<<<<<< HEAD
                         Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips")!,
 
 
-=======
-                        Product = db.Product.FirstOrDefault(a => a.Name == "Chips" && a.Description == "Ham-flavored chips.")!,
->>>>>>> FolgasPendentesAprovadas
                         WarehouseSection = db.WarehouseSection.FirstOrDefault(a => a.Description == "Warehouse Section D6")!,
                         BatchNumber = "A45",
                         ExpirationDate = DateTime.Now,
@@ -610,6 +615,7 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
+
 
         private static void PopulateReduceProduct(SupermarketDbContext db)
         {
@@ -645,7 +651,6 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-<<<<<<< HEAD
         private static void PopulateAlerts(SupermarketDbContext db)
         {
             DateTime specificDate = new DateTime(2023, 1, 2);
@@ -711,17 +716,13 @@ namespace Supermarket.Data
 
         }
 
-=======
->>>>>>> FolgasPendentesAprovadas
+
         private static void PopulateEmployees(SupermarketDbContext db)
         {
             if (db.Employee.Any()) return;
 
             // db.Employee.AddRange(
-<<<<<<< HEAD
 
-=======
->>>>>>> FolgasPendentesAprovadas
             // new Employee
             //        Employee_Address= "Rua das Oliveiras",
             //        Employee_Admission_Date= DateTime.Now,
@@ -774,6 +775,7 @@ namespace Supermarket.Data
             //db.SaveChanges();
         }
 
+
         private static void PopulateEmployeeEvaluations(SupermarketDbContext db)
         {
             if (db.EmployeeEvaluation.Any()) return;
@@ -781,36 +783,23 @@ namespace Supermarket.Data
             db.EmployeeEvaluation.AddRange(
                 new EmployeeEvaluation
                 {
-<<<<<<< HEAD
 
-=======
->>>>>>> FolgasPendentesAprovadas
                     Description = "Atendimento excelente!",
                     EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 8,
                 },
-<<<<<<< HEAD
 
                 new EmployeeEvaluation
                 {
 
-=======
-                new EmployeeEvaluation
-                {
->>>>>>> FolgasPendentesAprovadas
                     Description = "Muito rude...",
                     EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 3,
                 },
-<<<<<<< HEAD
 
                 new EmployeeEvaluation
                 {
 
-=======
-                new EmployeeEvaluation
-                {
->>>>>>> FolgasPendentesAprovadas
                     Description = "Adorei. Muito prestativo!",
                     EmployeeId = db.Employee.First().EmployeeId,
                     GradeNumber = 10,
@@ -832,7 +821,6 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-<<<<<<< HEAD
         private static void PopulateFuncao(SupermarketDbContext db)
         {
             if (db.Funcao.Any()) return;
@@ -850,8 +838,6 @@ namespace Supermarket.Data
 
         }
 
-=======
->>>>>>> FolgasPendentesAprovadas
         private static void PopulateClients(SupermarketDbContext db)
         {
             if (db.Client.Any()) return;
@@ -859,55 +845,37 @@ namespace Supermarket.Data
             db.Client.AddRange(
                 new Client
                 {
-<<<<<<< HEAD
 
-=======
->>>>>>> FolgasPendentesAprovadas
                     ClientName = "João",
                     ClientAdress = "Largo do Poço",
                     ClientEmail = "joão@gmail.com",
                     ClientBirth = new DateTime(1980, 10, 20),
                     Estado = true
                 },
-<<<<<<< HEAD
 
                 new Client
                 {
 
-=======
-                new Client
-                {
->>>>>>> FolgasPendentesAprovadas
                     ClientName = "Rui",
                     ClientAdress = "Rua do Penedo",
                     ClientEmail = "rui@sapo.com",
                     ClientBirth = new DateTime(1970, 2, 12),
                     Estado = true
                 },
-<<<<<<< HEAD
 
                 new Client
                 {
 
-=======
-                new Client
-                {
->>>>>>> FolgasPendentesAprovadas
                     ClientName = "Jacinta",
                     ClientAdress = "Fundo da Vila",
                     ClientEmail = "jacintona@iol.com",
                     ClientBirth = new DateTime(2002, 7, 22),
                     Estado = true
                 },
-<<<<<<< HEAD
 
                 new Client
                 {
 
-=======
-                new Client
-                {
->>>>>>> FolgasPendentesAprovadas
                     ClientName = "Hugo",
                     ClientAdress = "Casal do Rei",
                     ClientEmail = "hugo@outlook.com",
@@ -917,10 +885,8 @@ namespace Supermarket.Data
                 );
             db.SaveChanges();
         }
-<<<<<<< HEAD
 
-=======
->>>>>>> FolgasPendentesAprovadas
+
         private static void PopulateClientCard(SupermarketDbContext db)
         {
             if (db.ClientCard.Any()) return;
@@ -928,38 +894,25 @@ namespace Supermarket.Data
             db.ClientCard.AddRange(
                 new ClientCard
                 {
-<<<<<<< HEAD
 
-=======
->>>>>>> FolgasPendentesAprovadas
                     Client = db.Client.FirstOrDefault(b => b.ClientName == "Hugo")!,
                     ClientCardNumber = 123456,
                     Balance = 0,
                     Estado = true
                 },
-<<<<<<< HEAD
 
                 new ClientCard
                 {
 
-=======
-                new ClientCard
-                {
->>>>>>> FolgasPendentesAprovadas
                     Client = db.Client.FirstOrDefault(b => b.ClientName == "Jacinta")!,
                     ClientCardNumber = 987654,
                     Balance = 0,
                     Estado = true
                 },
-<<<<<<< HEAD
 
                 new ClientCard
                 {
 
-=======
-                new ClientCard
-                {
->>>>>>> FolgasPendentesAprovadas
                     Client = db.Client.FirstOrDefault(b => b.ClientName == "Rui")!,
                     ClientCardNumber = 111223,
                     Balance = 0,
@@ -969,10 +922,8 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-<<<<<<< HEAD
 
-=======
->>>>>>> FolgasPendentesAprovadas
+
         private static void PopulateProductDiscounts(SupermarketDbContext db)
         {
             if (db.ProductDiscount.Any()) return;
@@ -980,10 +931,7 @@ namespace Supermarket.Data
             db.ProductDiscount.AddRange(
                 new ProductDiscount
                 {
-<<<<<<< HEAD
 
-=======
->>>>>>> FolgasPendentesAprovadas
                     Product = db.Product.FirstOrDefault(b => b.Name == "Cream")!,
                     ClientCard = db.ClientCard.FirstOrDefault(b => b.ClientCardNumber == 123456)!,
                     Value = 10,
@@ -1000,15 +948,15 @@ namespace Supermarket.Data
 
             db.SubsidySetup.AddRange(
 
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) },
-                new SubsidySetup { HorasMinTrabalhadas = 8.5f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) }
+                new SubsidySetup { HorasMinTrabalhadas = 4f, ValorSubsidioDiario = 5, DataEntradaVigor = new DateTime(2023, 01, 01, 00, 00, 00, 500) },
+                new SubsidySetup { HorasMinTrabalhadas = 4f, ValorSubsidioDiario = 6, DataEntradaVigor = new DateTime(2024, 01, 01, 00, 00, 00, 500) }
 
                );
 
             db.SaveChanges();
         }
+
+
 
         private static void PopulateEmployee(SupermarketDbContext db)
         {
@@ -1016,47 +964,26 @@ namespace Supermarket.Data
 
             db.Employee.AddRange(
 
-<<<<<<< HEAD
-                new Employee { Employee_Name = "Afonso Almeida",    Employee_Email = "anasilva_pinhel@hotmail.com", Employee_Password = "Informatica_1706869",  Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
-                new Employee { Employee_Name = "Jessica Azevedo",   Employee_Email = "Jessica@gmail.com",           Employee_Password = "Jessica123",           Employee_Phone = "837462856", Employee_NIF = "875436712", Employee_Address = "Rua da direita",  Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
-                new Employee { Employee_Name = "Hugo Braga",        Employee_Email = "Hugo@gmail.com",              Employee_Password = "hugo123",              Employee_Phone = "975620559", Employee_NIF = "938475610", Employee_Address = "Rua da meio",     Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
-                new Employee { Employee_Name = "Alberto Barros",    Employee_Email = "Alberto1@gmail.com",          Employee_Password = "Alberto123",           Employee_Phone = "843257712", Employee_NIF = "098764084", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
-                new Employee { Employee_Name = "Afonso Campos",     Employee_Email = "Afonso1@gmail.com",           Employee_Password = "afonso123",            Employee_Phone = "123454789", Employee_NIF = "987655321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
-                new Employee { Employee_Name = "Jessica Cardoso",   Employee_Email = "Jessica1@gmail.com",          Employee_Password = "Jessica123",           Employee_Phone = "837468856", Employee_NIF = "872436712", Employee_Address = "Rua da direita",  Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
-                new Employee { Employee_Name = "Hugo Correia",      Employee_Email = "Hugo1@gmail.com",             Employee_Password = "hugo123",              Employee_Phone = "975620959", Employee_NIF = "238475610", Employee_Address = "Rua da meio",     Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
-                new Employee { Employee_Name = "Alberto Castro ",   Employee_Email = "Alberto1@gmail.com",          Employee_Password = "Alberto123",           Employee_Phone = "849252712", Employee_NIF = "394749084", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
-                new Employee { Employee_Name = "Afonso Costa",      Employee_Email = "Afonso2@gmail.com",           Employee_Password = "afonso123",            Employee_Phone = "143456789", Employee_NIF = "487654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
-                new Employee { Employee_Name = "Jessica Fontes",    Employee_Email = "Jessica2@gmail.com",          Employee_Password = "Jessica123",           Employee_Phone = "827462856", Employee_NIF = "575436712", Employee_Address = "Rua da direita",  Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
-                new Employee { Employee_Name = "Hugo Guimarães",    Employee_Email = "Hugo2@gmail.com",             Employee_Password = "hugo123",              Employee_Phone = "975120959", Employee_NIF = "738475610", Employee_Address = "Rua da meio",     Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
-                new Employee { Employee_Name = "Alberto Magalhães", Employee_Email = "Alberto2@gmail.com",          Employee_Password = "Alberto123",           Employee_Phone = "849257702", Employee_NIF = "898749084", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
-                new Employee { Employee_Name = "Afonso Macedo",     Employee_Email = "Afonso3@gmail.com",           Employee_Password = "afonso123",            Employee_Phone = "128256789", Employee_NIF = "444654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
-                new Employee { Employee_Name = "Jessica Matos",     Employee_Email = "Jessica3@gmail.com",          Employee_Password = "Jessica123",           Employee_Phone = "837238856", Employee_NIF = "875242712", Employee_Address = "Rua da direita",  Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
-                new Employee { Employee_Name = "Hugo Pedreira",     Employee_Email = "Hugo3@gmail.com",             Employee_Password = "hugo123",              Employee_Phone = "975620579", Employee_NIF = "345675610", Employee_Address = "Rua da meio",     Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 120 },
-                new Employee { Employee_Name = "Alberto Queirós",   Employee_Email = "Alberto3@gmail.com",          Employee_Password = "Alberto123",           Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
-                new Employee { Employee_Name = "Employee",          Employee_Email = "employee@ipg.pt",             Employee_Password = "Secret#123",           Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
-                new Employee { Employee_Name = "Sofia",             Employee_Email = "sofia@ipg.pt",                Employee_Password = "Sofia#123",            Employee_Phone = "111111111", Employee_NIF = "123456789", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 },
-                new Employee { Employee_Name = "Gabriel",           Employee_Email = "gabriel@ipg.pt",              Employee_Password = "Gabriel#123",          Employee_Phone = "222222222", Employee_NIF = "987654321", Employee_Address = "Rua de cima",     Employee_Birth_Date = new DateTime(2002, 11, 14), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = 60 }
-            );
+                new Employee { Employee_Name = "Afonso Almeida", Employee_Email = "Afonso@gmail.com", Employee_Password = "afonso123", Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
 
-=======
-                new Employee { Employee_Name = "Afonso Almeida", Employee_Email = "anasilva_pinhel@hotmail.com", Employee_Password = "Informatica_1706869", Employee_Phone = "123456789", Employee_NIF = "987654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
                 new Employee { Employee_Name = "Jessica Azevedo", Employee_Email = "Jessica@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837462856", Employee_NIF = "875436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Hugo Braga", Employee_Email = "Hugo@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620559", Employee_NIF = "938475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Alberto Barros", Employee_Email = "Alberto1@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843257712", Employee_NIF = "098764084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-                 new Employee { Employee_Name = "Afonso Campos", Employee_Email = "Afonso1@gmail.com", Employee_Password = "afonso123", Employee_Phone = "123454789", Employee_NIF = "987655321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+                new Employee { Employee_Name = "Afonso Campos", Employee_Email = "Afonso1@gmail.com", Employee_Password = "afonso123", Employee_Phone = "123454789", Employee_NIF = "987655321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
                 new Employee { Employee_Name = "Jessica Cardoso", Employee_Email = "Jessica1@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837468856", Employee_NIF = "872436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Hugo Correia", Employee_Email = "Hugo1@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620959", Employee_NIF = "238475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Alberto Castro ", Employee_Email = "Alberto1@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "849252712", Employee_NIF = "394749084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-                 new Employee { Employee_Name = "Afonso Costa", Employee_Email = "Afonso2@gmail.com", Employee_Password = "afonso123", Employee_Phone = "143456789", Employee_NIF = "487654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+                new Employee { Employee_Name = "Afonso Costa", Employee_Email = "Afonso2@gmail.com", Employee_Password = "afonso123", Employee_Phone = "143456789", Employee_NIF = "487654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
                 new Employee { Employee_Name = "Jessica Fontes", Employee_Email = "Jessica2@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "827462856", Employee_NIF = "575436712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Hugo Guimarães", Employee_Email = "Hugo2@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975120959", Employee_NIF = "738475610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Alberto Magalhães", Employee_Email = "Alberto2@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "849257702", Employee_NIF = "898749084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
-                 new Employee { Employee_Name = "Afonso Macedo", Employee_Email = "Afonso3@gmail.com", Employee_Password = "afonso123", Employee_Phone = "128256789", Employee_NIF = "444654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+                new Employee { Employee_Name = "Afonso Macedo", Employee_Email = "Afonso3@gmail.com", Employee_Password = "afonso123", Employee_Phone = "128256789", Employee_NIF = "444654321", Employee_Address = "Rua da esquerda", Employee_Birth_Date = new DateTime(1998, 04, 23), Employee_Admission_Date = new DateTime(2023, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
                 new Employee { Employee_Name = "Jessica Matos", Employee_Email = "Jessica3@gmail.com", Employee_Password = "Jessica123", Employee_Phone = "837238856", Employee_NIF = "875242712", Employee_Address = "Rua da direita", Employee_Birth_Date = new DateTime(2003, 04, 23), Employee_Admission_Date = new DateTime(2020, 12, 17), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
                 new Employee { Employee_Name = "Hugo Pedreira", Employee_Email = "Hugo3@gmail.com", Employee_Password = "hugo123", Employee_Phone = "975620579", Employee_NIF = "345675610", Employee_Address = "Rua da meio", Employee_Birth_Date = new DateTime(2000, 12, 23), Employee_Admission_Date = new DateTime(2019, 12, 17), Employee_Termination_Date = new DateTime(2022, 10, 03), Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "2" },
-                new Employee { Employee_Name = "Alberto Queirós", Employee_Email = "Alberto3@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" }
-                );
->>>>>>> FolgasPendentesAprovadas
+                new Employee { Employee_Name = "Alberto Queirós", Employee_Email = "Alberto3@gmail.com", Employee_Password = "Alberto123", Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" },
+                new Employee { Employee_Name = "Employee", Employee_Email = "employee@ipg.pt", Employee_Password = "Secret#123", Employee_Phone = "843467712", Employee_NIF = "045139084", Employee_Address = "Rua de cima", Employee_Birth_Date = new DateTime(2001, 04, 01), Employee_Admission_Date = new DateTime(2022, 01, 01), Employee_Termination_Date = null, Standard_Check_In_Time = "9:30", Standard_Check_Out_Time = "17:30", Standard_Lunch_Hour = "12:30", Standard_Lunch_Time = "1" }
+            );
+
             db.SaveChanges();
         }
 
@@ -1065,42 +992,48 @@ namespace Supermarket.Data
             if (db.MealCard.Any()) return;
 
             db.MealCard.AddRange(
-                new MealCard { EmployeeId = 1 }
+                new MealCard { EmployeeId = 1 },
+                new MealCard { EmployeeId = 3 },
+                new MealCard { EmployeeId = 2 },
+                new MealCard { EmployeeId = 4 },
+                new MealCard { EmployeeId = 6 },
+                new MealCard { EmployeeId = 7 },
+                new MealCard { EmployeeId = 5 },
+                new MealCard { EmployeeId = 10 },
+                new MealCard { EmployeeId = 9 },
+                new MealCard { EmployeeId = 8 }
             );
 
             db.SaveChanges();
         }
+
 
         private static void PopulateCardMovements(SupermarketDbContext db)
         {
             if (db.CardMovement.Any()) return;
 
             db.CardMovement.AddRange(
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200, Type = "Credit" },
-                new CardMovement { MealCardId = 1, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -200, Type = "Debit" }
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200 },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 150 },
+                new CardMovement { MealCardId = 1, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 180 },
+                new CardMovement { MealCardId = 2, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 250 },
+                new CardMovement { MealCardId = 1, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -100 },
+                new CardMovement { MealCardId = 1, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -120 },
+                new CardMovement { MealCardId = 4, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200 },
+                new CardMovement { MealCardId = 3, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 180 },
+                new CardMovement { MealCardId = 4, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -90 },
+                new CardMovement { MealCardId = 5, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 200 },
+                new CardMovement { MealCardId = 6, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 120 },
+                new CardMovement { MealCardId = 6, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -110 },
+                new CardMovement { MealCardId = 7, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 170 },
+                new CardMovement { MealCardId = 8, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 210 },
+                new CardMovement { MealCardId = 9, Description = "Pagamento Subsidio", Movement_Date = DateTime.Now, Value = 230 },
+                new CardMovement { MealCardId = 9, Description = "Compra Supermercado", Movement_Date = DateTime.Now, Value = -130 }
             );
 
             db.SaveChanges();
         }
 
-<<<<<<< HEAD
         private static void PopulateTakeAwayCategories(SupermarketDbContext db)
         {
             if (db.TakeAwayCategory.Any()) return;
@@ -1129,7 +1062,6 @@ namespace Supermarket.Data
                 );
             db.SaveChanges();
         }
-        
         private static void PopulateTakeAwayProducts(SupermarketDbContext db)
         {
             if (db.TakeAwayProduct.Any()) return;
@@ -1149,102 +1081,7 @@ namespace Supermarket.Data
             db.SaveChanges();
         }
 
-        internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager)
-        {
-            var user1  = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
-            var user2  = await EnsureUserIsCreatedAsync(userManager!, "anasilva_pinhel@hotmail.com", "Informatica_123");
-            var user3  = await EnsureUserIsCreatedAsync(userManager!, "Afonso@gmail.com", "Afonso#123");
-            var user4  = await EnsureUserIsCreatedAsync(userManager!, "Hugo@gmail.com", "Hugo#123");
-            var user5  = await EnsureUserIsCreatedAsync(userManager!, "Alberto1@gmail.com", "Alberto#123");
-            var user6  = await EnsureUserIsCreatedAsync(userManager!, "Afonso1@gmail.com", "AfonsoI#123");
-            var user7  = await EnsureUserIsCreatedAsync(userManager!, "Jessica1@gmail.com", "JessicaI#123");
-            var user8  = await EnsureUserIsCreatedAsync(userManager!, "Hugo1@gmail.com", "HugoI#123");
-            var user9  = await EnsureUserIsCreatedAsync(userManager!, "Alberto2@gmail.com", "AlbertoI#123");
-            var user10 = await EnsureUserIsCreatedAsync(userManager!, "Afonso2@gmail.com", "AfonsoII#123");
-            var user11 = await EnsureUserIsCreatedAsync(userManager!, "Jessica2@gmail.com", "JessicaII#123");
-            var user12 = await EnsureUserIsCreatedAsync(userManager!, "Hugo2@gmail.com", "HugoII#123");
-            var user13 = await EnsureUserIsCreatedAsync(userManager!, "Afonso3@gmail.com", "AfonsoIII#123");
-            var user14 = await EnsureUserIsCreatedAsync(userManager!, "Jessica3@gmail.com", "JessicaIII#123");
-            var user15 = await EnsureUserIsCreatedAsync(userManager!, "Hugo3@gmail.com", "HugoIII#123");
 
-            //Group4----------------------------------------------------------------
-            var userJoaoStockAdmin = await EnsureUserIsCreatedAsync(userManager!, "joaostockadmin@ipg.pt", "Secret#123");
-            var userAndreStockOp = await EnsureUserIsCreatedAsync(userManager!, "andrestockop@ipg.pt", "Secret#123");
-            var userIvoStockOp = await EnsureUserIsCreatedAsync(userManager!, "ivostockop@ipg.pt", "Secret#123");
-
-            if (!await userManager!.IsInRoleAsync(user1, ROLE_ADMIN))
-            {
-                await userManager!.AddToRoleAsync(user1, ROLE_ADMIN);
-            }
-            if (!await userManager!.IsInRoleAsync(userJoaoStockAdmin, ROLE_STOCK_ADMIN))
-            {
-                await userManager!.AddToRoleAsync(userJoaoStockAdmin, ROLE_STOCK_ADMIN);
-            }
-            if (!await userManager!.IsInRoleAsync(userAndreStockOp, ROLE_STOCK_OP))
-            {
-                await userManager!.AddToRoleAsync(userAndreStockOp, ROLE_STOCK_OP);
-            }
-            if (!await userManager!.IsInRoleAsync(userIvoStockOp, ROLE_STOCK_OP))
-            {
-                await userManager!.AddToRoleAsync(userIvoStockOp, ROLE_STOCK_OP);
-            }
-            
-            //Group2----------------------------------------------------------------
-            var userSofiaGest   = await EnsureUserIsCreatedAsync(userManager!, "sofia@ipg.pt",   "Sofia#123"   );
-            var userGabrielFunc = await EnsureUserIsCreatedAsync(userManager!, "gabriel@ipg.pt", "Gabriel#123");
-
-            if (!await userManager!.IsInRoleAsync(userSofiaGest,   ROLE_ADMIN2))
-            {
-                await userManager!.AddToRoleAsync(userSofiaGest, ROLE_ADMIN2);
-            }
-            if (!await userManager!.IsInRoleAsync(userSofiaGest,   ROLE_ADMIN1))
-            {
-                await userManager!.AddToRoleAsync(userSofiaGest, ROLE_ADMIN1);
-            }
-            if (!await userManager!.IsInRoleAsync(userGabrielFunc, ROLE_ADMIN1))
-            {
-                await userManager!.AddToRoleAsync(userGabrielFunc, ROLE_ADMIN1);
-            }
-
-            //--------------------------------------------------------------------
-            if (!await userManager!.IsInRoleAsync(user1,  "Gestor"))
-            {
-                await userManager!.AddToRoleAsync(user1, "Gestor");
-            }
-            if (!await userManager!.IsInRoleAsync(user2,  "Funcionário"))
-            {
-                await userManager!.AddToRoleAsync(user2, "Funcionário");
-            }
-            if (!await userManager!.IsInRoleAsync(user3,  "Funcionário"))
-            {
-                await userManager!.AddToRoleAsync(user3, "Funcionário");
-            }
-            if (!await userManager!.IsInRoleAsync(user4,  "Funcionário"))
-            {
-                await userManager!.AddToRoleAsync(user4, "Funcionário");
-            }
-            if (!await userManager!.IsInRoleAsync(user5,  "Funcionário"))
-            {
-                await userManager!.AddToRoleAsync(user5, "Funcionário");
-            }
-            if (!await userManager!.IsInRoleAsync(user6,  "Funcionário"))
-            {
-                await userManager!.AddToRoleAsync(user6, "Funcionário");
-            }
-            if (!await userManager!.IsInRoleAsync(user5,  "Funcionário"))
-            {
-                await userManager!.AddToRoleAsync(user5, "Funcionário");
-            }
-            if (!await userManager!.IsInRoleAsync(user7,  "Funcionário"))
-            {
-                await userManager!.AddToRoleAsync(user7, "Funcionário");
-            }
-            if (!await userManager!.IsInRoleAsync(user8,  "Funcionário"))
-            {
-                await userManager!.AddToRoleAsync(user8, "Funcionário");
-            }
-            if (!await userManager!.IsInRoleAsync(user9,  "Funcionário"))
-=======
         internal static async void PopulateDevUsers(UserManager<IdentityUser>? userManager)
         {
             var user1 = await EnsureUserIsCreatedAsync(userManager!, "admin@ipg.pt", "Secret#123");
@@ -1264,19 +1101,119 @@ namespace Supermarket.Data
             var user15 = await EnsureUserIsCreatedAsync(userManager!, "Hugo3@gmail.com", "HugoIII#123");
             var user17 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
             var user18 = await EnsureUserIsCreatedAsync(userManager!, "Jessica@gmail.com", "Jessica#123");
+            var user19 = await EnsureUserIsCreatedAsync(userManager!, "admin2@gmail.com", "Secret#2");
+            
+
+            //Group4----------------------------------------------------------------
+            var userJoaoStockAdmin = await EnsureUserIsCreatedAsync(userManager!, "joaostockadmin@ipg.pt", "Secret#123");
+            var userAndreStockOp = await EnsureUserIsCreatedAsync(userManager!, "andrestockop@ipg.pt", "Secret#123");
+            var userIvoStockOp = await EnsureUserIsCreatedAsync(userManager!, "ivostockop@ipg.pt", "Secret#123");
 
 
-
-
-
-            if (!await userManager!.IsInRoleAsync(user1, "Gestor"))
+            
+            if (!await userManager!.IsInRoleAsync(userJoaoStockAdmin, ROLE_STOCK_ADMIN))
             {
-                await userManager!.AddToRoleAsync(user1, "Gestor");
+                await userManager!.AddToRoleAsync(userJoaoStockAdmin, ROLE_STOCK_ADMIN);
             }
+            if (!await userManager!.IsInRoleAsync(userAndreStockOp, ROLE_STOCK_OP))
+            {
+                await userManager!.AddToRoleAsync(userAndreStockOp, ROLE_STOCK_OP);
+            }
+            if (!await userManager!.IsInRoleAsync(userIvoStockOp, ROLE_STOCK_OP))
+            {
+                await userManager!.AddToRoleAsync(userIvoStockOp, ROLE_STOCK_OP);
+            }
+            //Group3----------------------------------------------------------------
+
+            var adminGroup3 = await EnsureUserIsCreatedAsync(userManager!, "admingroup3@ipg.pt", "Secret#123");
+            var employeeGroup3 = await EnsureUserIsCreatedAsync(userManager!, "employeegroup3@ipg.pt", "Secret#123");
+
+
+            if (!await userManager!.IsInRoleAsync(adminGroup3, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(adminGroup3, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(adminGroup3, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(adminGroup3, ROLE_EMPLOYEER);
+            }
+            if (!await userManager!.IsInRoleAsync(employeeGroup3, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(employeeGroup3, ROLE_EMPLOYEER);
+            }
+
+
+            //Group7----------------------------------------------------------------
+
+            var adminGroup7 = await EnsureUserIsCreatedAsync(userManager!, "adminGroup7@ipg.pt", "Secret#123");
+            var employeeGroup7 = await EnsureUserIsCreatedAsync(userManager!, "employeeGroup7@ipg.pt", "Secret#123");
+            var managerGroup7 = await EnsureUserIsCreatedAsync(userManager!, "managerGroup7@ipg.pt", "Secret#123");
+            var registerGroup7 = await EnsureUserIsCreatedAsync(userManager!, "registerGroup7@ipg.pt", "Secret#123");
+
+            if (!await userManager!.IsInRoleAsync(adminGroup7, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(adminGroup7, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(adminGroup7, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(adminGroup7, ROLE_EMPLOYEER);
+            }
+            if (!await userManager!.IsInRoleAsync(adminGroup7, ROLE_MANAGER))
+            {
+                await userManager!.AddToRoleAsync(adminGroup7, ROLE_MANAGER);
+            }
+            if (!await userManager!.IsInRoleAsync(employeeGroup7, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(employeeGroup7, ROLE_EMPLOYEER);
+            }
+            if (!await userManager!.IsInRoleAsync(managerGroup7, ROLE_MANAGER))
+            {
+                await userManager!.AddToRoleAsync(managerGroup7, ROLE_MANAGER);
+            }
+            if (!await userManager!.IsInRoleAsync(managerGroup7, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(managerGroup7, ROLE_EMPLOYEER);
+            }
+            if (!await userManager!.IsInRoleAsync(registerGroup7, ROLE_EMPLOYEER))
+            {
+                await userManager!.AddToRoleAsync(registerGroup7, ROLE_EMPLOYEER);
+            }
+            if (!await userManager!.IsInRoleAsync(registerGroup7, ROLE_REGISTER))
+            {
+                await userManager!.AddToRoleAsync(registerGroup7, ROLE_REGISTER);
+            }
+
+
+
+            //Group6----------------------------------------------------------------
+            var adminGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "adminGrupo6@ipg.pt", "Secret#123");
+            var clientGrupo6 = await EnsureUserIsCreatedAsync(userManager!, "clientGrupo6@ipg.pt", "Secret#123");
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_ADMIN))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_ADMIN);
+            }
+            if (!await userManager!.IsInRoleAsync(adminGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(adminGrupo6, ROLE_CLIENT);
+            }
+            if (!await userManager!.IsInRoleAsync(clientGrupo6, ROLE_CLIENT))
+            {
+                await userManager!.AddToRoleAsync(clientGrupo6, ROLE_CLIENT);
+            }
+            //--------------------------------------------------------------------
 
             if (!await userManager!.IsInRoleAsync(user2, "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user2, "Funcionário");
+            }
+            if (!await userManager!.IsInRoleAsync(user2, "Gestor"))
+            {
+                await userManager!.AddToRoleAsync(user2, "Gestor");
+            }
+
+            if (!await userManager!.IsInRoleAsync(user2, "Gestor"))
+            {
+                await userManager!.AddToRoleAsync(user2, "Gestor");
             }
             if (!await userManager!.IsInRoleAsync(user3, "Funcionário"))
             {
@@ -1312,7 +1249,6 @@ namespace Supermarket.Data
                 await userManager!.AddToRoleAsync(user8, "Funcionário");
             }
             if (!await userManager!.IsInRoleAsync(user9, "Funcionário"))
->>>>>>> FolgasPendentesAprovadas
             {
                 await userManager!.AddToRoleAsync(user9, "Funcionário");
             }
@@ -1328,10 +1264,7 @@ namespace Supermarket.Data
             {
                 await userManager!.AddToRoleAsync(user12, "Funcionário");
             }
-<<<<<<< HEAD
-=======
 
->>>>>>> FolgasPendentesAprovadas
             if (!await userManager!.IsInRoleAsync(user13, "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user13, "Funcionário");
@@ -1343,8 +1276,19 @@ namespace Supermarket.Data
             if (!await userManager!.IsInRoleAsync(user15, "Funcionário"))
             {
                 await userManager!.AddToRoleAsync(user15, "Funcionário");
-<<<<<<< HEAD
             }
+
+            if (!await userManager!.IsInRoleAsync(user19, "Gestor"))
+            {
+                await userManager!.AddToRoleAsync(user19, "Gestor");
+            }
+
+
+            if (!await userManager!.IsInRoleAsync(user17, "Funcionário"))
+            {
+                await userManager!.AddToRoleAsync(user17, "Funcionário");
+            }
+
 
             var costumer = await EnsureUserIsCreatedAsync(userManager!, "costumer@ipg.pt", "Secret#123");
             if (!await userManager!.IsInRoleAsync(costumer, "Avaliar_Funcionarios"))
@@ -1369,6 +1313,7 @@ namespace Supermarket.Data
             {
                 await userManager!.AddToRoleAsync(employee, "Create_Reports");
             }
+
 
             var manager = await EnsureUserIsCreatedAsync(userManager!, "manager@ipg.pt", "Secret#123");
             if (!await userManager!.IsInRoleAsync(manager, "Avaliar_Funcionarios"))
@@ -1395,17 +1340,22 @@ namespace Supermarket.Data
             var clienteAlberto = await EnsureUserIsCreatedAsync(userManager!, "zealberto@gmail.com", "Alberto#123");
             if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN3))
             {
-                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN3);
+                await userManager!.AddToRoleAsync(clienteAlberto, ROLE_ADMIN3);
             }
 
             var funcAndre = await EnsureUserIsCreatedAsync(userManager!, "andre@gmail.com", "Andre#123");
-            if (!await userManager!.IsInRoleAsync(clienteAlberto, ROLE_ADMIN1))
+            if (!await userManager!.IsInRoleAsync(funcAndre, ROLE_ADMIN1))
             {
-                await userManager!.AddToRoleAsync(manager, ROLE_ADMIN1);
-=======
->>>>>>> FolgasPendentesAprovadas
+                await userManager!.AddToRoleAsync(funcAndre, ROLE_ADMIN1);
+            }
+
+            if (!await userManager!.IsInRoleAsync(manager, ROLE_MANAGER))
+            {
+                await userManager!.AddToRoleAsync(manager, ROLE_MANAGER);
             }
         }
+
+
 
         private static async Task<IdentityUser> EnsureUserIsCreatedAsync(UserManager<IdentityUser> userManager, string username, string password)
         {
@@ -1413,38 +1363,38 @@ namespace Supermarket.Data
 
             if (user == null)
             {
-<<<<<<< HEAD
 
-=======
->>>>>>> FolgasPendentesAprovadas
                 user = new IdentityUser(username);
                 await userManager.CreateAsync(user, password);
             }
 
             return user;
+
         }
 
         internal static async System.Threading.Tasks.Task PopulateRolesAsync(RoleManager<IdentityRole> roleManager)
         {
-<<<<<<< HEAD
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN);
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_CLIENT);
             await EnsureRoleIsCreatedAsync(roleManager!, "Avaliar_Funcionarios");
             await EnsureRoleIsCreatedAsync(roleManager!, "Role_Funcionario");
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_ADMIN3);
-
-=======
->>>>>>> FolgasPendentesAprovadas
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_MANAGER);
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_EMPLOYEER);
             await EnsureRoleIsCreatedAsync(roleManager!, "Funcionário");
             await EnsureRoleIsCreatedAsync(roleManager!, "Gestor");
             await EnsureRoleIsCreatedAsync(roleManager!, "View_Reports");
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Edit_Del_IssueType");
-
+            await EnsureRoleIsCreatedAsync(roleManager!, ROLE_REGISTER);
             await EnsureRoleIsCreatedAsync(roleManager!, "Create_Reports");
             await EnsureRoleIsCreatedAsync(roleManager!, "Edit_Del_Reports");
 
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_STOCK_ADMIN);
             await EnsureRoleIsCreatedAsync(roleManager!, ROLE_STOCK_OP);
         }
+
+
+
 
         private static async System.Threading.Tasks.Task EnsureRoleIsCreatedAsync(RoleManager<IdentityRole> roleManager, string name)
         {
@@ -1456,6 +1406,8 @@ namespace Supermarket.Data
                 await roleManager.CreateAsync(role);
             }
         }
+
+
 
         private static void PopulateType(SupermarketDbContext db)
         {
@@ -1513,34 +1465,33 @@ namespace Supermarket.Data
 
             db.SaveChanges();
         }
-        
-        private static void LoadWeekEmployeeSchedules(SupermarketDbContext db)
+
+
+        private static void PopulatePonto(SupermarketDbContext db)
         {
-            if (db.EmployeeSchedule.Where(s => s.Date.Date == DateTime.Now.Date).FirstOrDefault() is null)
-            {
-                foreach (var employee in db.Employee.ToList())
-                {
-                    db.EmployeeSchedule.AddRange(
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(1)  },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(2)  },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(3)  },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(4)  },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(5)  },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(6)  },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(7)  },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(8)  },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(9)  },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(10) },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(11) },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(12) },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(13) },
-                        new EmployeeSchedule { EmployeeId = employee.EmployeeId, CheckInTime = employee.Standard_Check_In_Time, CheckOutTime = employee.Standard_Check_Out_Time, LunchStartTime = employee.Standard_Lunch_Hour, LunchTime = employee.Standard_Lunch_Time, Date = DateTime.Now.Date.AddDays(14) }
-                    );
-                }
-            }
+            if (db.Ponto.Any()) return;
+
+            db.Ponto.AddRange(
+                new Ponto { CheckInTime = "07:30", CheckOutTime = "16:30", Date = DateTime.Now, LunchStartTime = "12:00", LunchEndTime = "13:00", RealCheckOutTime = "17:00", EmployeeId = 1, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "08:00", CheckOutTime = "17:00", Date = DateTime.Now, LunchStartTime = "12:30", LunchEndTime = "13:30", RealCheckOutTime = "18:00", EmployeeId = 2, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "07:45", CheckOutTime = "16:45", Date = DateTime.Now, LunchStartTime = "12:15", LunchEndTime = "13:15", RealCheckOutTime = "17:30", EmployeeId = 3, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "08:15", CheckOutTime = "17:15", Date = DateTime.Now, LunchStartTime = "12:45", LunchEndTime = "13:45", RealCheckOutTime = "18:15", EmployeeId = 4, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "07:30", CheckOutTime = "16:30", Date = DateTime.Now, LunchStartTime = "12:00", LunchEndTime = "13:00", RealCheckOutTime = "17:00", EmployeeId = 5, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "08:00", CheckOutTime = "17:00", Date = DateTime.Now, LunchStartTime = "12:30", LunchEndTime = "13:30", RealCheckOutTime = "18:00", EmployeeId = 6, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "07:45", CheckOutTime = "16:45", Date = DateTime.Now, LunchStartTime = "12:15", LunchEndTime = "13:15", RealCheckOutTime = "17:30", EmployeeId = 7, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "08:15", CheckOutTime = "17:15", Date = DateTime.Now, LunchStartTime = "12:45", LunchEndTime = "13:45", RealCheckOutTime = "18:15", EmployeeId = 8, Status = "workOvertime", Justificative = "" },
+                new Ponto { CheckInTime = "07:30", CheckOutTime = "16:30", Date = DateTime.Now, LunchStartTime = "12:00", LunchEndTime = "13:00", RealCheckOutTime = "15:00", EmployeeId = 9, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "08:00", CheckOutTime = "17:00", Date = DateTime.Now, LunchStartTime = "12:30", LunchEndTime = "13:30", RealCheckOutTime = "14:00", EmployeeId = 10, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "07:45", CheckOutTime = "16:45", Date = DateTime.Now, LunchStartTime = "12:15", LunchEndTime = "13:15", RealCheckOutTime = "15:30", EmployeeId = 11, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "08:15", CheckOutTime = "17:15", Date = DateTime.Now, LunchStartTime = "12:45", LunchEndTime = "13:45", RealCheckOutTime = "14:25", EmployeeId = 12, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "07:30", CheckOutTime = "16:30", Date = DateTime.Now, LunchStartTime = "12:00", LunchEndTime = "13:00", RealCheckOutTime = "15:00", EmployeeId = 13, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "08:00", CheckOutTime = "17:00", Date = DateTime.Now, LunchStartTime = "12:30", LunchEndTime = "13:30", RealCheckOutTime = "16:00", EmployeeId = 14, Status = "notworkOvertime", Justificative = "Médico" },
+                new Ponto { CheckInTime = "07:45", CheckOutTime = "16:45", Date = DateTime.Now, LunchStartTime = "12:15", LunchEndTime = "13:15", RealCheckOutTime = "15:30", EmployeeId = 15, Status = "notworkOvertime", Justificative = "Médico" }
+            );
 
             db.SaveChanges();
         }
+
+
     }
 }

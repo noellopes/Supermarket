@@ -24,9 +24,7 @@
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ponto.LunchEndTime)
         </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Ponto.LunchEndTime) - @TimeSpan.Parse(Model.Escala.LunchStartTime).Add(TimeSpan.FromMinutes(Model.Escala.LunchTime))
-        </dd>
+        
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Ponto.CheckOutTime)
         </dt>

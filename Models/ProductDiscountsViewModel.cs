@@ -8,10 +8,8 @@
         public float? SearchValue { get; set; }
         public DateTime? SearchStartDate { get; set; } = null;
         public DateTime? SearchEndDate { get; set; } = null;
-<<<<<<< HEAD
         public List<ClientCard> ClientsWithBirthday { get; set; }
-=======
->>>>>>> FolgasPendentesAprovadas
+        public bool? Applicable { get; set; }
 
     }
 }

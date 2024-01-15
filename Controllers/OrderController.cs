@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Supermarket.Data;
 using Supermarket.Models;
-using static NuGet.Packaging.PackagingConstants;
 
 namespace Supermarket.Controllers
 {
@@ -78,7 +77,7 @@ namespace Supermarket.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update(int orderId,string Selected)
+        public IActionResult Update(int orderId, string Selected)
         {
             var data = _context.Order.Where(x => x.Id == orderId).First();
             if (Selected.Equals("Delivered"))
@@ -88,7 +87,7 @@ namespace Supermarket.Controllers
             data.Status = Selected;
             _context.Order.Update(data);
             _context.SaveChanges();
-            return RedirectToAction("Index","Order");
+            return RedirectToAction("Index", "Order");
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -118,7 +117,7 @@ namespace Supermarket.Controllers
             {
                 return Problem("Entity set 'SupermarketDbContext.Product'  is null.");
             }
-            var product = _context.Order.Include(x=>x.UserOrders).FirstOrDefault(x=>x.Id == id);
+            var product = _context.Order.Include(x => x.UserOrders).FirstOrDefault(x => x.Id == id);
             if (product != null)
             {
                 _context.Order.Remove(product);
@@ -130,7 +129,7 @@ namespace Supermarket.Controllers
 
         public IActionResult Details(int id)
         {
-            var data = _context.Order.Include(x=> x.UserOrders)
+            var data = _context.Order.Include(x => x.UserOrders)
                                             .Include("UserOrders.Product")
                                             .Include("UserOrders.Product.Category")
                                             .Include("Customer")

@@ -1,18 +1,9 @@
-<<<<<<< HEAD
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-=======
-﻿using Microsoft.AspNetCore.Mvc;
->>>>>>> FolgasPendentesAprovadas
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Supermarket.Controllers
 {
@@ -34,7 +25,7 @@ namespace Supermarket.Controllers
         .Include(wp => wp.Product)
         .Include(wp => wp.WarehouseSection)
         .Where(h => h.WarehouseSectionId == warehouseSectionId);
-            
+
             var WarehouseSectionName = _context.WarehouseSection.Find(warehouseSectionId)?.Description;
 
             ViewBag.WarehouseSectionId = warehouseSectionId;
@@ -42,7 +33,7 @@ namespace Supermarket.Controllers
             ViewBag.WarehouseId = _context.WarehouseSection.Find(warehouseSectionId)?.WarehouseId;
             ViewBag.WarehouseSectionName = WarehouseSectionName;
 
-    
+
 
             if (product != "")
             {
@@ -86,8 +77,8 @@ namespace Supermarket.Controllers
             return View(vm);
         }
 
-            // GET: WarehouseSection_Product/Details/5
-            public async Task<IActionResult> Details(int? id)
+        // GET: WarehouseSection_Product/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.WarehouseSection_Product == null)
             {
@@ -124,7 +115,7 @@ namespace Supermarket.Controllers
                 return NotFound();
 
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description");
-          //  ViewData["SupplierID"] = new SelectList(_context.Supplier, "SupplierId", "Name");
+            //  ViewData["SupplierID"] = new SelectList(_context.Supplier, "SupplierId", "Name");
             ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description");
             return View();
         }
@@ -175,19 +166,15 @@ namespace Supermarket.Controllers
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", warehouseSection_Product.ProductId);
             ViewData["SupplierID"] = new SelectList(_context.Suppliers, "SupplierId", "Name", warehouseSection_Product.SupplierID);
             ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description", warehouseSection_Product.WarehouseSectionId);
-                return RedirectToAction("Create", new { warehouseSectionId = TempData["WarehouseSectionId2"] });
-            }
+            return RedirectToAction("Create", new { warehouseSectionId = TempData["WarehouseSectionId2"] });
+        }
 
         // GET: WarehouseSection_Product/Edit/5
         [Authorize(Roles = "Stock Administrator")]
 
         public async Task<IActionResult> Edit(int? id)
         {
-<<<<<<< HEAD
             if (id == null || _context.WarehouseSection_Product == null)
-=======
-            if (productId == null || warehouseSectionId == null)
->>>>>>> FolgasPendentesAprovadas
             {
                 return NotFound();
             }
@@ -197,14 +184,8 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-<<<<<<< HEAD
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Description", warehouseSection_Product.ProductId);
             ViewData["SupplierID"] = new SelectList(_context.Suppliers, "SupplierId", "Name", warehouseSection_Product.SupplierID);
-=======
-
-
-            ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", warehouseSection_Product.ProductId);
->>>>>>> FolgasPendentesAprovadas
             ViewData["WarehouseSectionId"] = new SelectList(_context.WarehouseSection, "WarehouseSectionId", "Description", warehouseSection_Product.WarehouseSectionId);
             return View(warehouseSection_Product);
         }
@@ -228,14 +209,13 @@ namespace Supermarket.Controllers
                 bool WarehouseSectionProductsExists = await _context.WarehouseSection_Product.AnyAsync(
                    b => b.BatchNumber == warehouseSection_Product.BatchNumber
                 && b.WarehouseSectionId == warehouseSection_Product.WarehouseSectionId
-                && b.ProductId == warehouseSection_Product.ProductId && b.WarehouseSection_ProductId!= warehouseSection_Product.WarehouseSection_ProductId);
+                && b.ProductId == warehouseSection_Product.ProductId && b.WarehouseSection_ProductId != warehouseSection_Product.WarehouseSection_ProductId);
 
                 if (WarehouseSectionProductsExists)
                 {
-<<<<<<< HEAD
                     ModelState.AddModelError("", "Another Warehouse Section Product  with the same BatchNumber, Product and Warehouse Section already exists.");
                 }
-                    try
+                try
                 {
                     var existingWarehouseSection_Product = await _context.WarehouseSection_Product
                     .AsNoTracking()
@@ -256,26 +236,7 @@ namespace Supermarket.Controllers
                     .FirstOrDefaultAsync(m => m.WarehouseSection_ProductId == id);
 
                     return View("Details", warehouseSection_Product);
-                    
-=======
 
-                    if (warehouseSection_Product.ReservedQuantity > warehouseSection_Product.Quantity)
-                    {
-
-                        ModelState.AddModelError("", "The quantity must always be greater than or equal to the reserved quantity");
-
-                    }
-                    else
-                    {
-                        _context.Update(warehouseSection_Product);
-                        await _context.SaveChangesAsync();
-
-                        //ViewBag.Message = "Warehouse Section Product successfully edited.";
-                        TempData["Message"] = "Warehouse Section Product successfully created.";
-                        return RedirectToAction("Details", new { productId = warehouseSection_Product.ProductId, warehouseSectionId = warehouseSection_Product.WarehouseSectionId });
-
-                    }
->>>>>>> FolgasPendentesAprovadas
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -296,11 +257,6 @@ namespace Supermarket.Controllers
             return View(warehouseSection_Product);
         }
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> FolgasPendentesAprovadas
         // GET: WarehouseSection_Product/Delete/5
         [Authorize(Roles = "Stock Administrator")]
 
@@ -319,11 +275,7 @@ namespace Supermarket.Controllers
 
             if (warehouseSection_Product.Quantity != 0)
             {
-<<<<<<< HEAD
                 ViewBag.Message = "Batch number cannot be eliminated because it has a quantity greater than 0";
-=======
-                ViewBag.Message = "Warehouse Section Product cannot be eliminated because it has a quantity greater than 0";
->>>>>>> FolgasPendentesAprovadas
                 return View("Delete", warehouseSection_Product);
             }
             if (warehouseSection_Product == null)
@@ -350,14 +302,14 @@ namespace Supermarket.Controllers
             {
                 _context.WarehouseSection_Product.Remove(warehouseSection_Product);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", new { warehouseSectionId = warehouseSection_Product.WarehouseSectionId });
         }
 
         private bool WarehouseSection_ProductExists(int id)
         {
-          return (_context.WarehouseSection_Product?.Any(e => e.WarehouseSection_ProductId == id)).GetValueOrDefault();
+            return (_context.WarehouseSection_Product?.Any(e => e.WarehouseSection_ProductId == id)).GetValueOrDefault();
         }
     }
 }

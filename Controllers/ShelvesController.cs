@@ -1,15 +1,7 @@
-<<<<<<< HEAD
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-=======
-﻿using Microsoft.AspNetCore.Mvc;
->>>>>>> FolgasPendentesAprovadas
+
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -29,7 +21,7 @@ namespace Supermarket.Controllers
         // GET: Shelves
         public async Task<IActionResult> Index(int hallwaysId)
         {
-            
+
             var hallways = await _context.Hallway.FindAsync(hallwaysId);
 
             if (hallways == null)
@@ -43,7 +35,7 @@ namespace Supermarket.Controllers
                 .ToListAsync();
 
             var hallway = _context.Hallway
-            .Include(h => h.Store) 
+            .Include(h => h.Store)
             .FirstOrDefault(h => h.HallwayId == hallwaysId);
 
             ViewBag.StoreId = hallway.StoreId;
@@ -81,15 +73,15 @@ namespace Supermarket.Controllers
         [Authorize(Roles = "Stock Administrator")]
         public IActionResult Create(int? hallwaysId)
         {
-            
-            
+
+
 
 
             ViewBag.ErrorMessage = TempData["ErrorMessage"] as string;
             TempData["HallwaysId2"] = hallwaysId;
             ViewBag.HallwaysId2 = hallwaysId;
             ViewBag.HallwaysName = _context.Hallway.Find(hallwaysId)?.Description;
-            
+
 
             return View();
         }
@@ -98,27 +90,27 @@ namespace Supermarket.Controllers
         [Authorize(Roles = "Stock Administrator")]
         public async Task<IActionResult> Create([Bind("ShelfId,Name")] Shelf shelf)
         {
-            
+
             shelf.HallwayId = (int)TempData["HallwaysId2"];
-     
-        
+
+
             if (ModelState.IsValid)
             {
-                
+
                 Console.WriteLine("ModelState is Valid");
 
                 bool ShelfExists = await _context.Shelf.AnyAsync(s => s.Name == shelf.Name && s.HallwayId == shelf.HallwayId);
 
                 if (ShelfExists)
                 {
-                   
+
                     TempData["ErrorMessage"] = "Another Shelf with the same Name and Hallway already exists.";
                 }
                 else
                 {
                     try
                     {
-                        
+
                         Console.WriteLine("Adding Shelf to the context");
                         _context.Add(shelf);
                         await _context.SaveChangesAsync();
@@ -130,14 +122,14 @@ namespace Supermarket.Controllers
                     }
                     catch (DbUpdateException)
                     {
-                       
+
                         TempData["ErrorMessage"] = "DataBase conection Error ";
                     }
                 }
             }
-           
 
-           
+
+
             ViewData["HallwayId"] = new SelectList(_context.Shelf, "HallwayId", "Name", shelf.HallwayId);
 
             return RedirectToAction("Create", new { hallwaysId = TempData["HallwaysId2"] });
@@ -233,14 +225,14 @@ namespace Supermarket.Controllers
 
             if (hasProductsAssociated)
             {
-                
+
                 ViewBag.ErrorMessage = "It is not possible to delete the shelfts  as there are products associated with it";
                 ViewBag.hasProductsAssociated = await _context.Shelft_ProductExhibition
                     .Include(wp => wp.Product)
                     .Where(wp => wp.ShelfId == id)
                     .ToListAsync();
 
-                return View("Delete",shelf);
+                return View("Delete", shelf);
             }
 
             return View(shelf);
@@ -292,7 +284,7 @@ namespace Supermarket.Controllers
                 .GroupBy(sp => sp.ProductId)
                 .Select(group => new
                 {
-                    ProductId = group.Key, 
+                    ProductId = group.Key,
                     ProductName = group.First().Product.Name,
                     ProductDescription = group.First().Product.Description,
                     BrandName = group.First().Product.Brand != null ? group.First().Product.Brand.Name : "No Brand",

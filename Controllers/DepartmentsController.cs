@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
-using System.Linq;
-using System.Net.Sockets;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,20 +15,20 @@ namespace Supermarket.Controllers
         {
             _context = context;
         }
-    //pesquisa por nome do departamento 
-            public IActionResult pesqNomeTrue(string searchTerm)
-    {
-        var results = _context.Departments
-        .Where(d => (d.StateDepartments.Equals(true)) && d.NameDepartments.Contains(searchTerm))
-        .ToList();
+        //pesquisa por nome do departamento 
+        public IActionResult pesqNomeTrue(string searchTerm)
+        {
+            var results = _context.Departments
+            .Where(d => (d.StateDepartments.Equals(true)) && d.NameDepartments.Contains(searchTerm))
+            .ToList();
 
             if (results.Count == 0)
-        {
-          ViewBag.Message = "Nenhum resultado encontrado para a pesquisa.";
-        }
+            {
+                ViewBag.Message = "Nenhum resultado encontrado para a pesquisa.";
+            }
 
-        return View("Index", results);
-    }
+            return View("Index", results);
+        }
         //pesquisa por nome do departamentoInop 
         public IActionResult pesqNomeFalse(string searchTerm)
         {
@@ -210,7 +204,8 @@ namespace Supermarket.Controllers
             {
                 bool DepartmentsExists = await _context.Departments.AnyAsync(
                 d => d.NameDepartments == departments.NameDepartments);
-                if (DepartmentsExists) {
+                if (DepartmentsExists)
+                {
                     ModelState.AddModelError("", "Another Departments with the same Name already exists.");
                 }
                 else
@@ -262,7 +257,7 @@ namespace Supermarket.Controllers
                 try
                 {
                     bool boolExists = await _context.Departments.AnyAsync(
-                    d => d.NameDepartments == departments.NameDepartments &&d.IDDepartments != departments.IDDepartments);
+                    d => d.NameDepartments == departments.NameDepartments && d.IDDepartments != departments.IDDepartments);
                     if (boolExists)
                     {
                         ModelState.AddModelError("", "Another Department with same Name Department already exist");
@@ -274,7 +269,7 @@ namespace Supermarket.Controllers
                         ViewBag.Message = "Department sucessfully edit.";
                         return View("Details", departments);
                     }
-    
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -326,16 +321,16 @@ namespace Supermarket.Controllers
             {
                 _context.Departments.Remove(departments);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool DepartmentsExists(int id)
         {
-          return (_context.Departments?.Any(e => e.IDDepartments == id)).GetValueOrDefault();
+            return (_context.Departments?.Any(e => e.IDDepartments == id)).GetValueOrDefault();
         }
- 
-    
+
+
     }
 }

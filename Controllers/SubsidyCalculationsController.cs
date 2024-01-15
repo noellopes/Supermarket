@@ -146,7 +146,7 @@ namespace Supermarket.Controllers
         }
 */
 
-        public async Task<IActionResult> Index(int page = 1, string employee_name="")
+        public async Task<IActionResult> Index(int page = 1, string employee_name = "")
         {
             // Obtém todos os pontos sem modificar a lista completa
             var allPoints = await _context.Ponto.Include(p => p.Employee).ToListAsync();

@@ -5,13 +5,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
-<<<<<<< HEAD
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-=======
->>>>>>> FolgasPendentesAprovadas
 
 namespace Supermarket.Controllers
 {
@@ -31,10 +24,6 @@ namespace Supermarket.Controllers
 
         // GET: Folgas
         [Authorize]
-<<<<<<< HEAD
-        public async Task<IActionResult> Index()
-        {
-=======
         public async Task<IActionResult> Index(int? page, DateTime? dataPedido, int? employeeId)
         {
             int pageSize = 100;
@@ -56,7 +45,6 @@ namespace Supermarket.Controllers
             ViewData["PageIndex"] = pageNumber;
             ViewData["TotalPages"] = totalPages;
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name");
->>>>>>> FolgasPendentesAprovadas
             var user = await _userManager.GetUserAsync(User);
 
             if (User.IsInRole("Funcionário"))
@@ -72,27 +60,6 @@ namespace Supermarket.Controllers
                 ViewBag.SuccessMessage = TempData["SuccessMessage"] as string;
 
 
-<<<<<<< HEAD
-                var folgasFuncionario = await _context.Folga.Where(f => f.EmployeeId == employee.EmployeeId).Include(f => f.Employee).ToListAsync();
-                return View(folgasFuncionario);
-
-            } else if (User.IsInRole("Gestor"))
-            {
-                var folgas = await _context.Folga.Include(f => f.Employee).ToListAsync();
-                return View(folgas);
-
-
-            }
-            return RedirectToAction(nameof(Index));
-        }
-
-
-    
-
-        
-
-        [Authorize(Roles ="Funcionário")]
-=======
                 var queryData = _context.Folga.Where(f => f.EmployeeId == employee.EmployeeId).Include(f => f.Employee).AsQueryable();
 
                 if (dataPedido.HasValue)
@@ -136,34 +103,7 @@ namespace Supermarket.Controllers
 
 
 
-
-
-
-
-
-
-
-
         [Authorize(Roles = "Funcionário")]
->>>>>>> FolgasPendentesAprovadas
-        public IActionResult FolgasFuncionario()
-        {
-            return View();
-        }
-
-<<<<<<< HEAD
-        
-
-
-
-        [Authorize(Roles ="Funcionário")]
-=======
-
-
-
-
-        [Authorize(Roles = "Funcionário")]
->>>>>>> FolgasPendentesAprovadas
         // GET: Folgas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -184,21 +124,12 @@ namespace Supermarket.Controllers
         }
 
         // GET: Folgas/Create
-<<<<<<< HEAD
-        [Authorize(Roles ="Funcionário")]
-        public async Task <IActionResult> Create()
-        {
-            var user = await _userManager.GetUserAsync(User);
-
-            if (user == null) 
-=======
         [Authorize(Roles = "Funcionário")]
         public async Task<IActionResult> Create()
         {
             var user = await _userManager.GetUserAsync(User);
 
             if (user == null)
->>>>>>> FolgasPendentesAprovadas
             {
                 ModelState.AddModelError(string.Empty, "Utilizador não autenticado");
                 return View();
@@ -238,23 +169,14 @@ namespace Supermarket.Controllers
             }
 
             ViewData["EmployeeId"] = new SelectList(_context.Employee, "EmployeeId", "Employee_Name", folga.EmployeeId);
-<<<<<<< HEAD
-            
-            
-=======
 
 
->>>>>>> FolgasPendentesAprovadas
             return View(folga);
         }
 
         // GET: Folgas/Edit/5
 
-<<<<<<< HEAD
-        [Authorize(Roles ="Funcionário")]
-=======
         [Authorize(Roles = "Funcionário")]
->>>>>>> FolgasPendentesAprovadas
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Folga == null)
@@ -271,19 +193,11 @@ namespace Supermarket.Controllers
 
             var employee = _context.Employee.FirstOrDefault(e => e.Employee_Email == user.UserName);
 
-<<<<<<< HEAD
-            if (employee==null|| folga.EmployeeId != employee.EmployeeId)
-            {
-                return NotFound();
-            }
-            ViewData["EmployeeId"] = new SelectList(_context.Employee.Where(e=>e.EmployeeId==employee.EmployeeId),"EmployeeId","Employee_Name");
-=======
             if (employee == null || folga.EmployeeId != employee.EmployeeId)
             {
                 return NotFound();
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employee.Where(e => e.EmployeeId == employee.EmployeeId), "EmployeeId", "Employee_Name");
->>>>>>> FolgasPendentesAprovadas
             return View(folga);
         }
 
@@ -326,11 +240,7 @@ namespace Supermarket.Controllers
         }
 
         // GET: Folgas/Delete/5
-<<<<<<< HEAD
-        [Authorize(Roles ="Funcionário")]
-=======
         [Authorize(Roles = "Funcionário")]
->>>>>>> FolgasPendentesAprovadas
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Folga == null)
@@ -370,11 +280,7 @@ namespace Supermarket.Controllers
         }
 
 
-<<<<<<< HEAD
-        [Authorize(Roles ="Gestor")]
-=======
         [Authorize(Roles = "Gestor")]
->>>>>>> FolgasPendentesAprovadas
         public async Task<IActionResult> FolgasPendentes()
         {
             var folgasPendentes = await _context.Folga.Where(f => f.Status == Folga.FolgaStatus.Pendente).Include(f => f.Employee).ToListAsync();
@@ -398,15 +304,6 @@ namespace Supermarket.Controllers
                     folga.Status = Folga.FolgaStatus.Aprovada;
                     folga.GestorId = GestorId;
                     folga.DataResultado = DataResultado;
-<<<<<<< HEAD
-
-                    await _context.SaveChangesAsync();
-
-                    
-                    
-                    
-=======
->>>>>>> FolgasPendentesAprovadas
 
                     await _context.SaveChangesAsync();
 
@@ -421,32 +318,19 @@ namespace Supermarket.Controllers
                     folga.GestorId = GestorId;
                     folga.DataResultado = DataResultado;
 
-<<<<<<< HEAD
-                   
-
-                    
-=======
 
 
 
->>>>>>> FolgasPendentesAprovadas
                     {
                         TempData["SuccessMessage"] = "Folga Rejeitada";
                     }
                 }
                 await _context.SaveChangesAsync();
-<<<<<<< HEAD
-=======
 
 
                 TempData["EmployeeId"] = folga.EmployeeId;
                 return RedirectToAction(nameof(FolgasPendentes));
->>>>>>> FolgasPendentesAprovadas
 
-
-                TempData["EmployeeId"] = folga.EmployeeId;
-                return RedirectToAction(nameof(FolgasPendentes));
-                
 
 
 
@@ -454,15 +338,9 @@ namespace Supermarket.Controllers
             return RedirectToAction(nameof(FolgasPendentes));
         }
 
-<<<<<<< HEAD
-       
-
-        [Authorize (Roles ="Funcionário")]
-=======
 
 
-        [Authorize(Roles = "Funcionário")]
->>>>>>> FolgasPendentesAprovadas
+        [Authorize(Roles ="Funcionário")]
         public async Task<IActionResult> FolgasAprovadas(int funcionarioId)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -480,15 +358,11 @@ namespace Supermarket.Controllers
                 return View();
             }
 
-<<<<<<< HEAD
-            var folgasAprovadas = await _context.Folga.Where(f => f.Status == Folga.FolgaStatus.Aprovada && f.EmployeeId==employee.EmployeeId).Include(f => f.Employee).ToListAsync();
-=======
             var folgasAprovadas = await _context.Folga.Where(f => f.Status == Folga.FolgaStatus.Aprovada && f.EmployeeId == employee.EmployeeId).Include(f => f.Employee).ToListAsync();
->>>>>>> FolgasPendentesAprovadas
             return View(folgasAprovadas);
         }
 
-        
+
 
         private bool FolgaExists(int id)
         {

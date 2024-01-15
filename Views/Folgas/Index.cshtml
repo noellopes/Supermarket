@@ -5,22 +5,19 @@
 }
 
 <h1>Folgas</h1>
-@using(Html.BeginForm("Index","Folgas",FormMethod.Get))
+@using (Html.BeginForm("Index", "Folgas", FormMethod.Get))
 {
 
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert_success" role="alert">@TempData["SuccessMessage"]</div>
-}
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert_success" role="alert">@TempData["SuccessMessage"]</div>
+    }
 
-<p>
-    <a asp-action="Create">Criar Novo Pedido de Folga</a><br />
-    <a asp-action="FolgasPendentes">Folgas Pendentes</a><br />
-    <a asp-action="FolgasAprovadas">Folgas Aprovadas</a><br />
-<<<<<<< HEAD
-</p>
-=======
+    <p>
+        <a asp-action="Create">Criar Novo Pedido de Folga</a><br />
+        <a asp-action="FolgasPendentes">Folgas Pendentes</a><br />
+        <a asp-action="FolgasAprovadas">Folgas Aprovadas</a><br />
         @if (ViewData["Message"] != null)
         {
             <div class="alert alert-info" role="alert">@ViewData["Message"]</div>
@@ -30,28 +27,27 @@
     {
         <div class="form-group">
             <label for="dataPedido">Pesquisar por Data do Pedido</label>
-            <input type="date" name="dataPedido" class="form-control"/>
+            <input type="date" name="dataPedido" class="form-control" />
             <button type="submit" class="btn btn-primary">Pesquisar</button>
         </div>
     }
 
-      @if(!User.IsInRole("Funcionário") )
-      {
-<div class="form-group">
-    <label for="employeeId">Pesquisar por funcionário:</label>
-    <select name="employeeId" class="form-control">
-        <option value="">Todos os funcionários</option>
-            @foreach(var employee in (SelectList)ViewData["EmployeeId"])
-            {
-                <option value="@employee.Value">@employee.Text</option>
-            }
-        </select>
-</div>
-<button type="submit" class="btn btn-primary">Pesquisar</button>
-}
+    @if (!User.IsInRole("Funcionário"))
+    {
+        <div class="form-group">
+            <label for="employeeId">Pesquisar por funcionário:</label>
+            <select name="employeeId" class="form-control">
+                <option value="">Todos os funcionários</option>
+                @foreach (var employee in (SelectList)ViewData["EmployeeId"])
+                {
+                    <option value="@employee.Value">@employee.Text</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Pesquisar</button>
+    }
 }
 
->>>>>>> FolgasPendentesAprovadas
 <table class="table">
     <thead>
         <tr>
@@ -59,10 +55,10 @@
                 GestorId
             </th>
             <th>
-                Status 
+                Status
             </th>
             <th>
-                Data do Pedido 
+                Data do Pedido
             </th>
             <th>
                 Data da Aprovação/Rejeição
@@ -83,55 +79,58 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.GestorId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataPedido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataResultado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataInicio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataFim)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.motivo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FolgaId">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.FolgaId">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.FolgaId">Eliminar</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GestorId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataPedido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataResultado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataInicio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataFim)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.motivo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.Employee_Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.FolgaId">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.FolgaId">Detalhes</a> |
+                    <a asp-action="Delete" asp-route-id="@item.FolgaId">Eliminar</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 <div class="pagination">
-    <nav aria-label=""><ul class="pagination">
-        <li class="page-item"@(ViewData["PageIndex"].ToString()=="1"?"disabled":"")"">
-            <a class="page-link" asp-action="Index"asp-route_page="1">1</a>
-        </li>
-        <li class="page-item"@(ViewData["PageIndex"].ToString()=="1"?"disabled":"")"">
-            <a class="page-link" asp-action="Index" asp_route_page="@(int.Parse(ViewData["PageIndex"].ToString())-1)">Anterior</a>
-
-        </li>
-        <li class="page-item"@(ViewData["PageIndex"].ToString()==ViewData["TotalPages"].ToString()?"disabled":"")"">
-            <a class="page-link" asp-action="Index" asp-route-page="@(int.Parse(ViewData["PageIndex"].ToString())+1)">Seguinte</a>
+    <nav aria-label="">
+        <ul class="pagination">
+            <li class="page-item" @(ViewData["PageIndex"].ToString() == "1" ? "disabled" : "")"">
+                <a class="page-link" asp-action="Index" asp-route_page="1">1</a>
             </li>
-            <li class="page-item"@(ViewData["PageIndex"].ToString()==ViewData["TotalPages"].ToString()?"disabled":"")"">
+            <li class="page-item" @(ViewData["PageIndex"].ToString() == "1" ? "disabled" : "")"">
+                <a class="page-link" asp-action="Index" asp_route_page="@(int.Parse(ViewData["PageIndex"].ToString())-1)">Anterior</a>
+
+            </li>
+            <li class="page-item" @(ViewData["PageIndex"].ToString() == ViewData["TotalPages"].ToString() ? "disabled" : "")"">
+                <a class="page-link" asp-action="Index" asp-route-page="@(int.Parse(ViewData["PageIndex"].ToString())+1)">Seguinte</a>
+            </li>
+            <li class="page-item" @(ViewData["PageIndex"].ToString() == ViewData["TotalPages"].ToString() ? "disabled" : "")"">
                 <a class="page-link" asp-action="Index" asp-route-page="@ViewData["TotalPages"]">Última</a>
-           </li>
-    </ul></nav>
+            </li>
+        </ul>
+    </nav>
 </div>

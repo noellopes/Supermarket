@@ -104,7 +104,7 @@ namespace Supermarket.Controllers
             }
         }
 
-        
+
 
         // GET: Employees/Create
         public IActionResult Create()
@@ -149,7 +149,7 @@ namespace Supermarket.Controllers
 
                 return View("Details", employee);
             }
-        
+
             return View(employee);
         }
 

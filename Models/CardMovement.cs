@@ -1,13 +1,6 @@
-<<<<<<< HEAD
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
 namespace Supermarket.Models
-=======
-﻿namespace Supermarket.Models
->>>>>>> FolgasPendentesAprovadas
 {
 
     public class CardMovement

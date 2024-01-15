@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
@@ -22,9 +17,9 @@ namespace Supermarket.Controllers
         // GET: Suppliers
         public async Task<IActionResult> Index()
         {
-              return _context.Suppliers != null ? 
-                          View(await _context.Suppliers.ToListAsync()) :
-                          Problem("Entity set 'SupermarketDbContext.Suppliers'  is null.");
+            return _context.Suppliers != null ?
+                        View(await _context.Suppliers.ToListAsync()) :
+                        Problem("Entity set 'SupermarketDbContext.Suppliers'  is null.");
         }
 
         // GET: Suppliers/Details/5
@@ -150,14 +145,14 @@ namespace Supermarket.Controllers
             {
                 _context.Suppliers.Remove(supplier);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool SupplierExists(int id)
         {
-          return (_context.Suppliers?.Any(e => e.SupplierId == id)).GetValueOrDefault();
+            return (_context.Suppliers?.Any(e => e.SupplierId == id)).GetValueOrDefault();
         }
     }
 }

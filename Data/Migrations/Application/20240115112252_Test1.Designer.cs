@@ -12,13 +12,8 @@ using Supermarket.Data;
 namespace Supermarket.Data.Migrations.Application
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Data/Migrations/Application/20240111215647_Initial.Designer.cs
-    [Migration("20240111215647_Initial")]
-    partial class Initial
-========
-    [Migration("20240105141911_InitialCreate")]
-    partial class InitialCreate
->>>>>>>> FolgasPendentesAprovadas:Data/Migrations/Application/20240105141911_InitialCreate.Designer.cs
+    [Migration("20240115112252_Test1")]
+    partial class Test1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

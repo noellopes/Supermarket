@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\Supermarket\SupermarketDbContextModelSnapshot.cs" />
     <Compile Remove="Models\Class.cs" />
     <Compile Remove="Models\Schedule - Cópia.cs" />
     <Compile Remove="Models\SchedulesViewModel - Cópia.cs" />

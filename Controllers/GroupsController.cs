@@ -17,16 +17,16 @@ namespace Supermarket.Controllers
         // GET: Groups
         public async Task<IActionResult> Index()
         {
-<<<<<<< HEAD
-              return _context.Group != null ? 
-                          View(await _context.Group
-                       .ToListAsync()) :
-                          Problem("Entity set 'GroupsDbContext.Group'  is null.");
-=======
+
+            return _context.Group != null ?
+                        View(await _context.Group
+                     .ToListAsync()) :
+                        Problem("Entity set 'GroupsDbContext.Group'  is null.");
+
             return _context.Group != null ?
                         View(await _context.Group.ToListAsync()) :
                         Problem("Entity set 'GroupsDbContext.Group'  is null.");
->>>>>>> FolgasPendentesAprovadas
+
         }
 
         // GET: Groups/Details/5

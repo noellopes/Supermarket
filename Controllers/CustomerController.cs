@@ -6,14 +6,14 @@ using Supermarket.Models;
 
 namespace Supermarket.Controllers
 {
-    
+
     public class CustomerController : Controller
     {
         private readonly SupermarketDbContext _context;
         private readonly ILogger<CustomerController> _logger;
         private readonly IMemoryCache _memoryCache;
 
-        public CustomerController(SupermarketDbContext context, ILogger<CustomerController> logger,IMemoryCache cache)
+        public CustomerController(SupermarketDbContext context, ILogger<CustomerController> logger, IMemoryCache cache)
         {
             _context = context;
             _logger = logger;
@@ -34,24 +34,24 @@ namespace Supermarket.Controllers
                 {
                     return Redirect("/Customer/Customer");
                 }
-                 _context.Customers.Add(customer);
+                _context.Customers.Add(customer);
                 _context.SaveChanges();
                 return Redirect("/Customer/LoginCustomer");
             }
             catch (Exception ex)
             {
-                _logger.LogError("Customer Controller +"+ex);
+                _logger.LogError("Customer Controller +" + ex);
                 return Redirect("/Customer/Customer");
             }
 
         }
 
         [HttpPost]
-        public IActionResult CustomerLogin(string email,string password)
+        public IActionResult CustomerLogin(string email, string password)
         {
-            var customer = _context.Customers.FirstOrDefault(c =>c.CustomerEmail.Equals(email) 
-             &&  c.Password.Equals(password));
-            
+            var customer = _context.Customers.FirstOrDefault(c => c.CustomerEmail.Equals(email)
+             && c.Password.Equals(password));
+
 
             if (customer != null)
             {
@@ -63,11 +63,11 @@ namespace Supermarket.Controllers
 
         public IActionResult LoginCustomer()
         {
-           
+
             return View();
         }
 
-      
+
 
 
         public IActionResult CustomerList()
@@ -76,9 +76,10 @@ namespace Supermarket.Controllers
             return View(customers);
         }
 
-        public IActionResult CustomerDetail(int id) {
+        public IActionResult CustomerDetail(int id)
+        {
 
-            var customer =  _context.Customers.FirstOrDefault(x => x.CustomerId == id);
+            var customer = _context.Customers.FirstOrDefault(x => x.CustomerId == id);
             if (customer == null)
             {
                 return NotFound();
@@ -102,7 +103,7 @@ namespace Supermarket.Controllers
         {
             try
             {
-                if (customer.CustomerId <1)
+                if (customer.CustomerId < 1)
                 {
                     return CustomerList();
                 }
@@ -130,7 +131,7 @@ namespace Supermarket.Controllers
 
         public IActionResult DeleteCustomer(int id)
         {
-            var customer = _context.Customers.FirstOrDefault(x=> x.CustomerId == id);
+            var customer = _context.Customers.FirstOrDefault(x => x.CustomerId == id);
             if (customer == null)
             {
                 return NotFound();
@@ -150,7 +151,7 @@ namespace Supermarket.Controllers
         {
             try
             {
-                
+
 
                 var orderCustomer = _context.Customers
                 .Include(c => c.Orders)
@@ -166,7 +167,7 @@ namespace Supermarket.Controllers
                 _logger.LogError("Customer Error: " + ex);
                 return RedirectToAction("Error");
             }
-            
+
         }
 
 

@@ -14,13 +14,9 @@ namespace Supermarket.Models
         //[RegularExpression("^(Pending|Confirmed|Refused)$", ErrorMessage = "Invalid status")]
         public required string Status { get; set; } = "Pending";
 
-<<<<<<< HEAD
         public static List<string> StatusList = new List<string> { "Pending", "Confirmed", "Refused" };
 
-        public DateTime Date { get; set;} = DateTime.Now;
-=======
         public DateTime Date { get; set; } = DateTime.Now;
->>>>>>> FolgasPendentesAprovadas
 
         [Range(0, 999, ErrorMessage = "The quantity must be greater than zero")]
         public int Quantity { get; set; }

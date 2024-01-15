@@ -1,20 +1,10 @@
-<<<<<<< HEAD
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-=======
-﻿using Microsoft.AspNetCore.Mvc;
->>>>>>> FolgasPendentesAprovadas
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Data;
 
 namespace Supermarket.Controllers
 {
@@ -139,7 +129,7 @@ namespace Supermarket.Controllers
             ViewData["WarehouseSectionId"] = new SelectList(_context.Set<WarehouseSection>(), "WarehouseSectionId", "Description");
             return View();
         }
-        
+
         // POST: ReduceProducts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -220,7 +210,7 @@ namespace Supermarket.Controllers
                         }
                     }
                 }
-               
+
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "ProductId", "Name", reduceProduct.ProductId);
             ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
@@ -261,7 +251,7 @@ namespace Supermarket.Controllers
             {
                 ViewData["ShelfId"] = new SelectList(_context.Shelf, "ShelfId", "Name", reduceProduct.ShelfId);
             }
-            
+
             ViewData["Status"] = new SelectList(ReduceProduct.StatusList, reduceProduct.Status);
 
             return View(reduceProduct);
@@ -369,7 +359,7 @@ namespace Supermarket.Controllers
             var productW = await _context.WarehouseSection_Product.Where(a => a.ProductId == reduceProduct.ProductId && a.WarehouseSectionId == reduceProduct.WarehouseSectionId && a.Quantity >= reduceProduct.Quantity).FirstOrDefaultAsync();
             var productS = await _context.Shelft_ProductExhibition.Where(a => a.ProductId == reduceProduct.ProductId && a.ShelfId == reduceProduct.ShelfId && a.Quantity >= reduceProduct.Quantity).FirstOrDefaultAsync();
 
-            
+
 
             if (id != reduceProduct.ReduceProductId)
             {
@@ -397,7 +387,7 @@ namespace Supermarket.Controllers
                             await _context.SaveChangesAsync();
                         }
                     }
-                    
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -1,9 +1,7 @@
-<<<<<<< HEAD
-﻿using Microsoft.AspNetCore.Authorization;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-=======
-﻿using Microsoft.AspNetCore.Mvc;
->>>>>>> FolgasPendentesAprovadas
+
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -20,7 +18,7 @@ namespace Supermarket.Controllers
             _context = context;
         }
 
-        [Authorize(Roles = "Funcionário")]
+        [Authorize]
         public async Task<IActionResult> HRHome(bool? funcionario)
         {
             if (User.IsInRole("Gestor") && (funcionario is null || funcionario == false))
@@ -32,12 +30,12 @@ namespace Supermarket.Controllers
                 return View("HRHome");
             }
         }
-        
+
         [Authorize(Roles = "Funcionário")]
         public async Task<IActionResult> Index(DateTime? startDate, DateTime? endDate, int page = 1)
         {
             var funcionario = await _context.Employee.Where(x => x.Employee_Email == User.Identity.Name).FirstOrDefaultAsync();
-            if(funcionario is not null)
+            if (funcionario is not null)
             {
                 var employeeSchedulesQuery = _context.EmployeeSchedule.AsQueryable();
 
@@ -46,7 +44,7 @@ namespace Supermarket.Controllers
                     employeeSchedulesQuery = employeeSchedulesQuery.Where(e => e.Date >= startDate && e.Date <= endDate);
                 }
 
-                var list = await employeeSchedulesQuery.Where(s=>s.EmployeeId==funcionario.EmployeeId).ToListAsync();
+                var list = await employeeSchedulesQuery.Where(s => s.EmployeeId == funcionario.EmployeeId).ToListAsync();
                 var vm = new EmployeeSchedulesViewModel
                 {
                     EmployeeSchedules = list.Skip((page - 1) * 10).Take(10).ToList(),
@@ -111,7 +109,7 @@ namespace Supermarket.Controllers
             {
                 return NotFound();
             }
-            ViewData["Employee"] = _context.Employee.Where(s=>s.EmployeeId==employeeSchedule.EmployeeId).FirstOrDefault()?.Employee_Name ?? "Funcioário X";
+            ViewData["Employee"] = _context.Employee.Where(s => s.EmployeeId == employeeSchedule.EmployeeId).FirstOrDefault()?.Employee_Name ?? "Funcioário X";
             return View(employeeSchedule);
         }
 

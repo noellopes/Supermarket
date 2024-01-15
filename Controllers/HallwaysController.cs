@@ -1,13 +1,6 @@
-<<<<<<< HEAD
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-=======
-﻿using Microsoft.AspNetCore.Mvc;
->>>>>>> FolgasPendentesAprovadas
+
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -99,14 +92,14 @@ namespace Supermarket.Controllers
                 }
                 else
                 {
-<<<<<<< HEAD
-                    try { 
-=======
->>>>>>> FolgasPendentesAprovadas
-                    _context.Add(hallway);
-                    await _context.SaveChangesAsync();
-                    TempData["Message"] = "Hallway successfully created.";
-                    return RedirectToAction("Details", new { id = hallway.HallwayId, storeId = hallway.StoreId});
+
+                    try
+                    {
+
+                        _context.Add(hallway);
+                        await _context.SaveChangesAsync();
+                        TempData["Message"] = "Hallway successfully created.";
+                        return RedirectToAction("Details", new { id = hallway.HallwayId, storeId = hallway.StoreId });
                     }
                     catch (DbUpdateException)
                     {
@@ -218,7 +211,7 @@ namespace Supermarket.Controllers
             {
                 ViewBag.ErrorMessage = "It is not possible to delete the hallway as there are shelves associated with it";
                 ViewBag.ShelfsAssociatedWithHallway = ShelfsAssociatedWithHallway;
-                return View("Delete", hallway); 
+                return View("Delete", hallway);
             }
 
             return View(hallway);
@@ -243,12 +236,12 @@ namespace Supermarket.Controllers
                 await _context.SaveChangesAsync();
             }
 
-<<<<<<< HEAD
+
             return RedirectToAction("Index", "Hallways", new { storeId = hallway?.StoreId });
-=======
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
->>>>>>> FolgasPendentesAprovadas
+
         }
 
         public IActionResult HallwayProducts(int hallwayId)
@@ -258,7 +251,7 @@ namespace Supermarket.Controllers
                 .Select(h => new
                 {
                     HallwayName = h.Description,
-                     StoreId = h.StoreId
+                    StoreId = h.StoreId
                 })
                 .FirstOrDefault();
 
@@ -285,8 +278,8 @@ namespace Supermarket.Controllers
             ViewBag.TotalProducts = products.Count;
             ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
             ViewBag.Products = products;
-          
-          
+
+
 
 
             return View();

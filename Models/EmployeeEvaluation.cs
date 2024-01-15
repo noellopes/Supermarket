@@ -17,13 +17,9 @@ namespace Supermarket.Models
         [Required]
         public int EmployeeId { get; set; }
 
-<<<<<<< HEAD
-        public Employee? Employee { get; set;}
+        public Employee? Employee { get; set; }
 
         [System.ComponentModel.DisplayName("Evaluation date")]
         public DateTime? EvaluationDate { get; set; } = DateTime.Now;
-=======
-        public Employee? Employee { get; set; }
->>>>>>> FolgasPendentesAprovadas
     }
 }

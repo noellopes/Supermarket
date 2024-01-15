@@ -32,7 +32,7 @@ namespace Supermarket.Data
 
 
         }
- 
+
         public DbSet<Folga> Folga { get; set; } = default!;
         public DbSet<Customer> Customers { get; set; } = default!;
         public DbSet<Supermarket.Models.SubsidyCalculation> SubsidyCalculation { get; set; } = default!;
@@ -76,7 +76,7 @@ namespace Supermarket.Data
 
         public DbSet<Supermarket.Models.Store> Store { get; set; } = default!;
 
-        public DbSet<Schedule> Schedule { get; set; }      
+        public DbSet<Schedule> Schedule { get; set; }
 
         public DbSet<CategoryDiscount> CategoryDiscounts { get; set; }
 
@@ -107,9 +107,9 @@ namespace Supermarket.Data
         public DbSet<Supermarket.Models.Supplier> Suppliers { get; set; } = default!;
 
         public DbSet<Supermarket.Models.MealCard> MealCards { get; set; } = default!;
-        
+
         public DbSet<Supermarket.Models.ExpiredProducts> ExpiredProducts { get; set; } = default!;
-        
+
         public DbSet<Supermarket.Models.Purchase> Purchase { get; set; } = default!;
 
         public object Pontos { get; internal set; }

@@ -1,13 +1,5 @@
-<<<<<<< HEAD
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-=======
-﻿using Microsoft.AspNetCore.Mvc;
->>>>>>> FolgasPendentesAprovadas
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
@@ -30,9 +22,9 @@ namespace Supermarket.Controllers
         {
             TempData["CancelWarehouseId"] = warehouseId;
 
-            var warehouseSections =  _context.WarehouseSection
+            var warehouseSections = _context.WarehouseSection
              .Where(h => h.WarehouseId == warehouseId);
-           
+
 
             var WarehouseName = _context.Warehouse.Find(warehouseId)?.Name;
 
@@ -40,12 +32,12 @@ namespace Supermarket.Controllers
             {
                 warehouseSections = warehouseSections.Where(x => x.Description.Contains(descripition));
             }
-            
-            
+
+
             ViewBag.WarehouseId = warehouseId;
             ViewBag.WarehouseName = WarehouseName;
             ViewBag.WarehouseSections = warehouseSections;
-            
+
 
 
             var totalWarehouseSection = await warehouseSections.CountAsync();
@@ -73,14 +65,14 @@ namespace Supermarket.Controllers
                     .ToListAsync(),
                 PagingInfoProduct = paging,
                 SearchDescription = descripition,
-               
+
             };
             ViewBag.WarehouseSection = vm.WarehouseSection;
             ViewBag.TotalWarehouseSections = vm.PagingInfoProduct.TotalItems;
 
             return View(vm);
         }
-    
+
 
         // GET: WarehouseSections/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -137,8 +129,8 @@ namespace Supermarket.Controllers
                 {
                     TempData["ErrorMessage2"] = "Another Warehouse Section with the same Description and Warehouse already exists.";
                 }
-<<<<<<< HEAD
-                else {
+                else
+                {
                     try
                     {
                         _context.Add(warehouseSection);
@@ -149,18 +141,8 @@ namespace Supermarket.Controllers
                     catch (DbUpdateException)
                     {
                         TempData["ErrorMessage2"] = "DataBase conection Error ";
-                       
-                    }
-=======
-                else
-                {
-                    _context.Add(warehouseSection);
-                    await _context.SaveChangesAsync();
-                    ViewBag.Message = "Warehouse Section successfully created.";
-                    warehouseSection.Warehouse = await _context.Warehouse.FindAsync(warehouseSection.WarehouseId);
 
-                    return View("Details", warehouseSection);
->>>>>>> FolgasPendentesAprovadas
+                    }
                 }
             }
             ViewData["WarehouseId"] = new SelectList(_context.Set<Warehouse>(), "WarehouseId", "Name", warehouseSection.WarehouseId);
@@ -285,9 +267,8 @@ namespace Supermarket.Controllers
                 _context.WarehouseSection.Remove(warehouseSection);
                 await _context.SaveChangesAsync();
             }
-<<<<<<< HEAD
-            
-            return RedirectToAction("Index", "WarehouseSections", new { warehouseId =warehouseSection?.WarehouseId });
+
+            return RedirectToAction("Index", "WarehouseSections", new { warehouseId = warehouseSection?.WarehouseId });
         }
 
         [Authorize(Roles = "Stock Administrator, Stock Operator")]
@@ -329,11 +310,6 @@ namespace Supermarket.Controllers
             ViewBag.Products = products;
 
             return View();
-=======
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
->>>>>>> FolgasPendentesAprovadas
         }
 
         private bool WarehouseSectionExists(int id)
